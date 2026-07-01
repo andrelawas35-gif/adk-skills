@@ -1,0 +1,4 @@
+interface:
+  display_name: "Google ADK Builder"
+  short_description: "Build local Google ADK agents"
+  default_prompt: "Use $google-adk-agent-builder to scaffold and extend a local Google ADK agent project."
