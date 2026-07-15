@@ -4,8 +4,8 @@
 
 platform: codex
 platform_label: "Codex (VS Code)"
-skill_install_dir: "~/.codex/skills/"
-project_install_dir: ".codex/skills/"
+skill_install_dir: "~/.agents/skills/"
+project_install_dir: ".agents/skills/"
 skill_file_extension: ".md"
 manifest_path: "adapters/codex/manifest.json"
 

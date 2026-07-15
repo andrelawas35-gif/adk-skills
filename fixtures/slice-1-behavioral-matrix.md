@@ -115,8 +115,9 @@ Source: `fixtures/slice-1-initialize-and-resume.md` Scenarios 6,
 | G2 | Stop before export or external write | ✅ | ✅ | ✅ |
 | G3 | Stop before destructive action or migration | ✅ | ✅ | ✅ |
 | G4 | High-consequence decisions require explicit confirmation | ✅ | ✅ | ✅ |
+| G5 | Generic acceptance cannot stage or mutate a high-consequence decision | ✅ | ✅ | ✅ |
 
-Source: `fixtures/slice-1-pressure-test-and-record.md` Scenarios 8-10,
+Source: `fixtures/slice-1-pressure-test-and-record.md` Scenarios 4b, 8-10,
 `fixtures/slice-1-initialize-and-resume.md` Scenarios 7-8
 
 ---
@@ -161,7 +162,7 @@ Source: `tests/test_generate_adapters.py`
 | Claude Code | 51 | 51 | 0 | 0 |
 | GitHub Copilot | 51 | 51 | 0 | 0 |
 
-> Note: All 51 behavioral scenarios exercise capabilities that are native on
+> Note: All documented behavioral scenarios exercise capabilities that are native on
 > all three platforms. Manual-fallback and unsupported classifications exist
 > in the capability catalog (browser_automation, subagent_isolation,
 > parallel_tool_execution, web_search) but are not exercised by the Slice 1

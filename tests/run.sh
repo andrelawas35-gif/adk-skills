@@ -12,5 +12,13 @@ echo "== installer behavior (sh) =="
 sh tests/test_install.sh
 
 echo ""
+echo "== Codex installation and precedence (sh) =="
+sh tests/test_codex_install.sh
+
+echo ""
+echo "== clean-checkout Codex reproducibility (sh) =="
+sh tests/test_clean_checkout.sh
+
+echo ""
 echo "== drift gate (generator --check) =="
 python3 tools/generate-adapters.py --check >/dev/null && echo "no drift"

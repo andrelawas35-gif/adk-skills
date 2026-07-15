@@ -17,4 +17,8 @@ __pycache__/
 .work-studio/active.md
 .work-studio/inbox.md
 .work-studio/objects/
+.work-studio/adapter.lock
 # .work-studio/config.md is tracked (workspace identity)
+
+# Generated runtime installation; canonical Codex artifacts live in adapters/
+.agents/skills/

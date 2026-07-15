@@ -6,12 +6,42 @@
     {
       "name": "conduct-work-object",
       "path": "adapters/codex/skills/conduct-work-object/SKILL.md",
-      "sha256": "dab6d781c6d2a51c8051066a3d6552b597381e8ee55c95f299f45ff6c6bc8ec8"
+      "sha256": "ba4d35a7749f1fcfdb733b1df01def8d73503bce11dddbf59ef814f2affb74a3"
+    },
+    {
+      "name": "conduct-work-object/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/codex/skills/conduct-work-object/references/CAPABILITY-DEGRADATION.md",
+      "sha256": "be1312e7a5776b0b667f44b40256ffa079fa6da12ad44eb34169f99a1102971a"
+    },
+    {
+      "name": "conduct-work-object/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/codex/skills/conduct-work-object/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "ff61f7796626f48d2036633b4faf76dcfd7233a24ee8e2b53d4a7080df9020a0"
+    },
+    {
+      "name": "conduct-work-object/references/SHARED-PROTOCOL.md",
+      "path": "adapters/codex/skills/conduct-work-object/references/SHARED-PROTOCOL.md",
+      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
     },
     {
       "name": "pressure-test-decision",
       "path": "adapters/codex/skills/pressure-test-decision/SKILL.md",
-      "sha256": "ef7a9cc568f961799097a55895cd0e0ddea606e8827582cc23ae6dbef00bdd58"
+      "sha256": "d7835a3c61baf7b70a7450198e98abdf05146550314088b34aecbc5417766e95"
+    },
+    {
+      "name": "pressure-test-decision/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/codex/skills/pressure-test-decision/references/CAPABILITY-DEGRADATION.md",
+      "sha256": "be1312e7a5776b0b667f44b40256ffa079fa6da12ad44eb34169f99a1102971a"
+    },
+    {
+      "name": "pressure-test-decision/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/codex/skills/pressure-test-decision/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "ff61f7796626f48d2036633b4faf76dcfd7233a24ee8e2b53d4a7080df9020a0"
+    },
+    {
+      "name": "pressure-test-decision/references/SHARED-PROTOCOL.md",
+      "path": "adapters/codex/skills/pressure-test-decision/references/SHARED-PROTOCOL.md",
+      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
     }
   ]
 }

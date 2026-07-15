@@ -23,6 +23,7 @@ The generator:
 import hashlib
 import json
 import os
+import shutil
 import sys
 from pathlib import Path
 
@@ -31,6 +32,11 @@ CORE_DIR = ROOT / "skills" / "core"
 ADAPTERS_DIR = ROOT / "adapters"
 VERSION_FILE = ROOT / "VERSION"
 PLATFORMS = ["codex", "claude-code", "github-copilot"]
+SHARED_REFERENCES = [
+    "CAPABILITY-DEGRADATION.md",
+    "CONSEQUENCE-AUTHORITY.md",
+    "SHARED-PROTOCOL.md",
+]
 
 
 def read_version() -> str:
@@ -186,17 +192,10 @@ def generate_frontmatter(core_skill_name, overlay):
 
     lines = ["---"]
     lines.append(f"name: {core_skill_name}")
-    lines.append(f"description: >")
-    # Wrap description at ~80 chars for YAML folded block
-    words = short_desc.split()
-    current = "  "
-    for w in words:
-        if len(current) + len(w) + 1 > 80:
-            lines.append(current.rstrip())
-            current = "  " + w
-        else:
-            current += " " + w
-    lines.append(current.rstrip())
+    # JSON strings are valid quoted YAML scalars. Keeping the generated value
+    # on one line avoids indentation-sensitive folded-block failures in skill
+    # loaders while preserving quotes and Unicode deterministically.
+    lines.append(f"description: {json.dumps(short_desc, ensure_ascii=False)}")
     for k, v in sorted(fm_add.items()):
         lines.append(f"{k}: {v}")
     lines.append("---")
@@ -243,9 +242,22 @@ def generate_adapter_section(overlay):
     lines.append("A **project-pinned** adapter always takes precedence over the global")
     lines.append("bootstrap install. The global install supplies conductor and bootstrap")
     lines.append("behavior everywhere, then defers to the version a project has pinned.")
-    lines.append("Precedence is recorded in `.work-studio/adapter.lock` and honored by")
-    lines.append(f"{platform_label}'s project-over-user skill resolution.")
+    lines.append("Precedence is recorded in `.work-studio/adapter.lock` and enforced by")
+    lines.append("the generated adapter's runtime pin-resolution contract.")
     lines.append("")
+
+    if overlay["platform"] == "codex":
+        lines.append("### Runtime pin resolution")
+        lines.append("")
+        lines.append("Codex can discover both user and repository skills with the same name.")
+        lines.append("Before applying this skill, search upward from the current directory for")
+        lines.append("`.work-studio/adapter.lock`, stopping at the repository or filesystem")
+        lines.append("boundary. If the lock declares `platform=codex`, read its `dest` value and")
+        lines.append("resolve `<dest>/<this-skill-name>/SKILL.md`. When that path differs from")
+        lines.append("the currently loaded copy, **load and follow the pinned copy** before")
+        lines.append("continuing. If the pinned file is unavailable, report the broken pin and")
+        lines.append("stop instead of silently falling back to the global copy.")
+        lines.append("")
 
     # Discovery
     discovery = overlay.get("discovery", {})
@@ -399,6 +411,26 @@ def generate_skill(core_skill_dir, overlay, output_dir):
     }
 
 
+def build_reference_entries(skill_name, output_dir, write=False):
+    """Include every shared reference declared by the generated core skills."""
+    entries = []
+    reference_dir = output_dir / "references"
+    if write:
+        reference_dir.mkdir(parents=True, exist_ok=True)
+    for filename in SHARED_REFERENCES:
+        source = ROOT / "references" / filename
+        destination = reference_dir / filename
+        content = source.read_bytes()
+        if write:
+            shutil.copyfile(source, destination)
+        entries.append({
+            "name": f"{skill_name}/references/{filename}",
+            "path": str(destination.relative_to(ROOT)),
+            "sha256": hashlib.sha256(content).hexdigest(),
+        })
+    return entries
+
+
 def generate_platform(platform_name):
     """Generate all adapter skills for one platform."""
     overlay_file = ADAPTERS_DIR / platform_name / "overlay.yaml"
@@ -421,6 +453,8 @@ def generate_platform(platform_name):
         if entry:
             manifest_entries.append(entry)
             print(f"  Generated: {entry['path']} ({entry['sha256'][:12]}...)")
+            manifest_entries.extend(
+                build_reference_entries(skill_dir.name, output_dir, write=True))
 
     return manifest_entries
 
@@ -514,6 +548,16 @@ def check_platform(platform_name):
             "path": str(output_file.relative_to(ROOT)),
             "sha256": hashlib.sha256(expected.encode()).hexdigest(),
         })
+
+        for entry in build_reference_entries(skill_name, output_file.parent):
+            reference_file = ROOT / entry["path"]
+            if not reference_file.exists():
+                print(f"  MISSING: {reference_file.relative_to(ROOT)}")
+                all_clean = False
+            elif hashlib.sha256(reference_file.read_bytes()).hexdigest() != entry["sha256"]:
+                print(f"  DRIFT: {reference_file.relative_to(ROOT)}")
+                all_clean = False
+            expected_entries.append(entry)
 
     # Check manifest
     manifest_path = ADAPTERS_DIR / platform_name / "manifest.json"

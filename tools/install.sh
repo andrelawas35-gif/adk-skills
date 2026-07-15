@@ -48,7 +48,7 @@ sha_check_cmd() {
 global_dir() {
   case "$1" in
     claude-code)    echo "${CLAUDE_HOME:-$HOME/.claude}/skills" ;;
-    codex)          echo "${CODEX_HOME:-$HOME/.codex}/skills" ;;
+    codex)          echo "$HOME/.agents/skills" ;;
     github-copilot) echo "${COPILOT_HOME:-$HOME/.copilot}/skills" ;;
     *) die "unknown platform: $1" ;;
   esac
@@ -57,7 +57,7 @@ global_dir() {
 project_subdir() {
   case "$1" in
     claude-code)    echo ".claude/skills" ;;
-    codex)          echo ".codex/skills" ;;
+    codex)          echo ".agents/skills" ;;
     github-copilot) echo ".copilot/skills" ;;
     *) die "unknown platform: $1" ;;
   esac

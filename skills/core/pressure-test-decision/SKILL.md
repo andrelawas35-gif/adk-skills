@@ -90,6 +90,12 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`:
 - `do recommended` accepts only the immediately preceding recommendation
   within its stated scope. It never grants blanket future authority.
 - High-consequence decisions require explicit confirmation before recording.
+- For a high-consequence Work Object, confirmation must name the specific
+  proposed mutation. Generic instructions such as `just execute`, `do
+  recommended`, or `perform the next update` are not confirmation. Do not
+  stage, annotate, change status, append History, or make any other mutation
+  before receiving that scoped confirmation; reading and recommending remain
+  allowed.
 - The skill stops before any implementation, external write, destructive
   action, migration, or export — even on `just execute`.
 - Personal memory is read-only during decision work.
@@ -218,7 +224,11 @@ is [Y]. Confidence: [high/medium/low]. What would change this: [condition].
 Do you accept this recommendation?"
 
 Wait for the answer. Acceptable responses:
-- "yes" / "do recommended" → accept and record
+- For a low- or meaningful-consequence Work Object, `yes` or `do recommended`
+  accepts only the immediately preceding recommendation; test and record it.
+- For a high-consequence Work Object, those generic responses do not authorize
+  a mutation. Restate the exact proposed decision and affected Work Object,
+  request scoped confirmation, and make no write until it is received.
 - "no, do [alternative]" → record the alternative
 - "what about [scenario]?" → test against that scenario and re-recommend
 - "grill this" / "show branches" / "try a novel angle" → apply the indicated

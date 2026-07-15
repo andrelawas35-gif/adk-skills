@@ -30,16 +30,16 @@ verifies checksums with the platform's `shasum`/`sha256sum` and requires **no
 Python at runtime**:
 
 ```sh
-# Global bootstrap — the conductor, available everywhere:
-tools/install.sh --platform claude-code --global
+# Codex user installation — available across repositories:
+tools/install.sh --platform codex --global
 
-# Project pin — takes precedence inside this project:
-tools/install.sh --platform claude-code --project .
+# Codex repository pin — takes precedence inside this project:
+tools/install.sh --platform codex --project .
 ```
 
 | Platform | Global path | Project pin path |
 |----------|-------------|------------------|
-| Codex (VS Code) | `~/.codex/skills/` | `.codex/skills/` |
+| Codex | `~/.agents/skills/` | `.agents/skills/` |
 | Claude Code | `~/.claude/skills/` | `.claude/skills/` |
 | GitHub Copilot | `~/.copilot/skills/` | `.copilot/skills/` |
 
@@ -50,13 +50,18 @@ install — the pin is recorded in `.work-studio/adapter.lock`. Inspect which
 install wins for a directory with:
 
 ```sh
-tools/install.sh --platform claude-code --resolve .
+tools/install.sh --platform codex --resolve .
 ```
+
+Codex may discover user and repository skills with the same name. Generated
+Codex adapters therefore read the lock and defer to its project-pinned copy at
+runtime; a broken pin stops with an explicit error instead of silently using
+the global copy.
 
 ### Verifying and testing
 
 ```sh
-tools/install.sh --platform claude-code --verify   # verify committed artifacts
+tools/install.sh --platform codex --verify          # verify committed artifacts
 sh tests/run.sh                                     # full generator + installer suite
 ```
 
@@ -90,7 +95,7 @@ that enforces cross-platform behavioral equivalence:
 
 - **Drift detection**: `python3 tools/generate-adapters.py --check` fails when
   committed artifacts diverge from source
-- **Behavioral matrix**: `tools/verify-conformance.py --all` checks that all 51
+- **Behavioral matrix**: `tools/verify-conformance.py --all` checks that all
   behavioral scenarios are documented and every platform has expected outcomes
 - **Structural verification**: All adapters contain required sections,
   degradation rules, and platform declarations
@@ -140,6 +145,12 @@ reasoning.
 | Fixture | Description |
 |---------|-------------|
 | [personal-institution-work-studio-contract.md](fixtures/personal-institution-work-studio-contract.md) | Privacy, provenance, personalization, and handoff behavior across the two packages |
+
+## Verification Evidence
+
+| Evidence | Description |
+|----------|-------------|
+| [codex-installed-workflow-evidence.md](docs/verification/codex-installed-workflow-evidence.md) | Codex installation, fresh-task loading, resumption, and decision-persistence evidence |
 
 ## Skill Structure
 

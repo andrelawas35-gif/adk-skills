@@ -101,6 +101,75 @@ class GeneratorContract(unittest.TestCase):
                 self.assertIn(f"platform: {platform}", frontmatter)
                 self.assertIn(f"name: {skill}", frontmatter)
 
+    def test_generated_description_is_a_single_line_quoted_scalar(self):
+        """Keep the generated description in a directly parseable YAML scalar."""
+        for platform in PLATFORMS:
+            for skill in core_skill_names():
+                adapter = (ADAPTERS_DIR / platform / "skills" / skill
+                           / "SKILL.md").read_text()
+                frontmatter = adapter.split("---", 2)[1].splitlines()
+                description_line = next(
+                    line for line in frontmatter if line.startswith("description: "))
+                encoded = description_line[len("description: "):]
+                description = json.loads(encoded)
+                self.assertIsInstance(description, str)
+                self.assertTrue(description.strip(), f"{platform}/{skill}: empty description")
+                self.assertNotIn("\n", description)
+
+    def test_installed_conductor_contains_the_minimum_work_object_schema(self):
+        required_fields = [
+            "schema_version: 1",
+            "id: <immutable-time-sortable-id>",
+            "title: <human-readable-title>",
+            "type: inquiry | project | change | incident",
+            "status: active | waiting | paused | blocked | closed",
+            "state: notice | frame | explore | decide | design | build | verify | release | observe | close",
+            "consequence: low | meaningful | high",
+            "sensitivity: ordinary | private | restricted",
+            "created_at: <RFC-3339-timestamp>",
+            "updated_at: <RFC-3339-timestamp>",
+            "next_action: <concrete-next-move>",
+        ]
+        for platform in PLATFORMS:
+            adapter = (ADAPTERS_DIR / platform / "skills"
+                       / "conduct-work-object" / "SKILL.md").read_text()
+            for field in required_fields:
+                self.assertIn(field, adapter, f"{platform}: missing {field}")
+
+    def test_high_consequence_objects_cannot_be_staged_without_confirmation(self):
+        required = (
+            "Do not stage, annotate, change status, append History, or make any "
+            "other mutation"
+        )
+        for platform in PLATFORMS:
+            for skill in core_skill_names():
+                adapter = (ADAPTERS_DIR / platform / "skills" / skill
+                           / "SKILL.md").read_text()
+                self.assertIn(
+                    required, " ".join(adapter.split()),
+                    f"{platform}/{skill}: weak authority gate")
+        local_flow = (
+            "For a low- or meaningful-consequence Work Object, `yes` or "
+            "`do recommended` accepts"
+        )
+        for platform in PLATFORMS:
+            adapter = (ADAPTERS_DIR / platform / "skills"
+                       / "pressure-test-decision" / "SKILL.md").read_text()
+            self.assertIn(local_flow, " ".join(adapter.split()))
+
+    def test_installed_skills_include_their_declared_references(self):
+        references = [
+            "CAPABILITY-DEGRADATION.md",
+            "CONSEQUENCE-AUTHORITY.md",
+            "SHARED-PROTOCOL.md",
+        ]
+        for platform in PLATFORMS:
+            for skill in core_skill_names():
+                for reference in references:
+                    path = (ADAPTERS_DIR / platform / "skills" / skill
+                            / "references" / reference)
+                    self.assertTrue(path.is_file(), f"missing installed reference: {path}")
+
     def test_manifest_checksums_match_files(self):
         for platform in PLATFORMS:
             manifest = json.loads(
@@ -153,6 +222,16 @@ class GeneratorContract(unittest.TestCase):
         self.assertIn("Declared Limitations", adapter)
         self.assertIn("### Installation and precedence", adapter)
         self.assertIn("takes precedence", adapter)
+
+    def test_codex_runtime_defers_to_the_project_pin(self):
+        """Codex may discover duplicate same-name skills, so either copy must
+        explicitly defer to the project-pinned artifact recorded by installer."""
+        for skill in core_skill_names():
+            adapter = (ADAPTERS_DIR / "codex" / "skills" / skill
+                       / "SKILL.md").read_text()
+            self.assertIn("### Runtime pin resolution", adapter)
+            self.assertIn(".work-studio/adapter.lock", adapter)
+            self.assertIn("load and follow the pinned copy", adapter)
 
     def test_drift_is_detected(self):
         """--check must fail (and then recover) when an artifact is edited."""

@@ -6,12 +6,42 @@
     {
       "name": "conduct-work-object",
       "path": "adapters/claude-code/skills/conduct-work-object/SKILL.md",
-      "sha256": "da7bb4e08d656eb2e9ab4cec27740ea79f349379b2bfabd6235b068036b7270c"
+      "sha256": "a0b5f255f6f1db52f7bed8e88feb9a69211d07c2e59397522ed62719de8379e2"
+    },
+    {
+      "name": "conduct-work-object/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/claude-code/skills/conduct-work-object/references/CAPABILITY-DEGRADATION.md",
+      "sha256": "be1312e7a5776b0b667f44b40256ffa079fa6da12ad44eb34169f99a1102971a"
+    },
+    {
+      "name": "conduct-work-object/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/claude-code/skills/conduct-work-object/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "ff61f7796626f48d2036633b4faf76dcfd7233a24ee8e2b53d4a7080df9020a0"
+    },
+    {
+      "name": "conduct-work-object/references/SHARED-PROTOCOL.md",
+      "path": "adapters/claude-code/skills/conduct-work-object/references/SHARED-PROTOCOL.md",
+      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
     },
     {
       "name": "pressure-test-decision",
       "path": "adapters/claude-code/skills/pressure-test-decision/SKILL.md",
-      "sha256": "d3fd394b24700119f7dfbb8d71f3af821223be8f644f2ef79c44bbc484c1dded"
+      "sha256": "ae91c0efca240d23b1ceef9914027d7449ba9e77b08d7c71080c93072918047c"
+    },
+    {
+      "name": "pressure-test-decision/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/claude-code/skills/pressure-test-decision/references/CAPABILITY-DEGRADATION.md",
+      "sha256": "be1312e7a5776b0b667f44b40256ffa079fa6da12ad44eb34169f99a1102971a"
+    },
+    {
+      "name": "pressure-test-decision/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/claude-code/skills/pressure-test-decision/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "ff61f7796626f48d2036633b4faf76dcfd7233a24ee8e2b53d4a7080df9020a0"
+    },
+    {
+      "name": "pressure-test-decision/references/SHARED-PROTOCOL.md",
+      "path": "adapters/claude-code/skills/pressure-test-decision/references/SHARED-PROTOCOL.md",
+      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
     }
   ]
 }

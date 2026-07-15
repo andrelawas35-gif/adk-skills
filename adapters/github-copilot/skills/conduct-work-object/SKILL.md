@@ -1,11 +1,6 @@
 ---
 name: conduct-work-object
-description: >
-   Detect, create, activate, resume, update, and close Work Objects — the
-  canonical continuity surface of Andrelawas Work Studio. Use when the user asks
-  to start or resume work, check what's active, move work forward, record a
-  decision, or close something out. This skill owns the Work Object lifecycle
-  and routes to specialists for domain-specific work.
+description: "Detect, create, activate, resume, update, and close Work Objects — the canonical continuity surface of Andrelawas Work Studio. Use when the user asks to start or resume work, check what's active, move work forward, record a decision, or close something out. This skill owns the Work Object lifecycle and routes to specialists for domain-specific work."
 platform: github-copilot
 ---
 # Conduct Work Object
@@ -98,6 +93,12 @@ Apply the rules in `references/CONSEQUENCE-AUTHORITY.md`:
 - Creating or updating a Work Object of **low** or **meaningful** consequence:
   proceed, append History.
 - Creating or updating a Work Object of **high** consequence: ask first.
+- For a high-consequence Work Object, confirmation must name the specific
+  proposed mutation. Generic instructions such as `just execute`, `do
+  recommended`, or `perform the next update` are not confirmation. Do not
+  stage, annotate, change status, append History, or make any other mutation
+  before receiving that scoped confirmation; reading and recommending remain
+  allowed.
 - Never export, share, deploy, or write outside `.work-studio/` without
   explicit human confirmation.
 - `just execute` accepts the current recommendation but never bypasses safety,
@@ -175,6 +176,23 @@ objects.
    - `state`: `notice` (initial state)
    - `status`: `active` (unless explicitly waiting)
    - `created_at` and `updated_at`: now (RFC-3339)
+   Use this minimum schema so the installed skill remains self-contained:
+
+   ```yaml
+   ---
+   schema_version: 1
+   id: <immutable-time-sortable-id>
+   title: <human-readable-title>
+   type: inquiry | project | change | incident
+   status: active | waiting | paused | blocked | closed
+   state: notice | frame | explore | decide | design | build | verify | release | observe | close
+   consequence: low | meaningful | high
+   sensitivity: ordinary | private | restricted
+   created_at: <RFC-3339-timestamp>
+   updated_at: <RFC-3339-timestamp>
+   next_action: <concrete-next-move>
+   ---
+   ```
 5. Populate body with stub sections for Intent, Success evidence, Constraints
    and non-goals, Evidence ledger, Open questions, Next move, History.
 6. Append the creation History entry.
@@ -375,8 +393,8 @@ tools/install.sh --platform github-copilot --project .
 A **project-pinned** adapter always takes precedence over the global
 bootstrap install. The global install supplies conductor and bootstrap
 behavior everywhere, then defers to the version a project has pinned.
-Precedence is recorded in `.work-studio/adapter.lock` and honored by
-GitHub Copilot's project-over-user skill resolution.
+Precedence is recorded in `.work-studio/adapter.lock` and enforced by
+the generated adapter's runtime pin-resolution contract.
 
 ### Discovery
 

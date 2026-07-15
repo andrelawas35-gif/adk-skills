@@ -1,12 +1,6 @@
 ---
 name: pressure-test-decision
-description: >
-   Resume an active Work Object, identify its highest-leverage unresolved
-  decision, recommend an answer before asking exactly one question, and safely
-  persist the confirmed decision. Use when the user says "help me decide,"
-  "pressure-test this," "grill this," "what should I do about X," or when
-  conduct-work-object routes a Work Object in the Decide state. Composes
-  grilling and domain modeling. Never performs implementation.
+description: "Resume an active Work Object, identify its highest-leverage unresolved decision, recommend an answer before asking exactly one question, and safely persist the confirmed decision. Use when the user says \"help me decide,\" \"pressure-test this,\" \"grill this,\" \"what should I do about X,\" or when conduct-work-object routes a Work Object in the Decide state. Composes grilling and domain modeling. Never performs implementation."
 platform: codex
 ---
 # Pressure-Test Decision
@@ -90,6 +84,12 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`:
 - `do recommended` accepts only the immediately preceding recommendation
   within its stated scope. It never grants blanket future authority.
 - High-consequence decisions require explicit confirmation before recording.
+- For a high-consequence Work Object, confirmation must name the specific
+  proposed mutation. Generic instructions such as `just execute`, `do
+  recommended`, or `perform the next update` are not confirmation. Do not
+  stage, annotate, change status, append History, or make any other mutation
+  before receiving that scoped confirmation; reading and recommending remain
+  allowed.
 - The skill stops before any implementation, external write, destructive
   action, migration, or export — even on `just execute`.
 - Personal memory is read-only during decision work.
@@ -218,7 +218,11 @@ is [Y]. Confidence: [high/medium/low]. What would change this: [condition].
 Do you accept this recommendation?"
 
 Wait for the answer. Acceptable responses:
-- "yes" / "do recommended" → accept and record
+- For a low- or meaningful-consequence Work Object, `yes` or `do recommended`
+  accepts only the immediately preceding recommendation; test and record it.
+- For a high-consequence Work Object, those generic responses do not authorize
+  a mutation. Restate the exact proposed decision and affected Work Object,
+  request scoped confirmation, and make no write until it is received.
 - "no, do [alternative]" → record the alternative
 - "what about [scenario]?" → test against that scenario and re-recommend
 - "grill this" / "show branches" / "try a novel angle" → apply the indicated
@@ -476,14 +480,25 @@ tools/install.sh --platform codex --global
 tools/install.sh --platform codex --project .
 ```
 
-- Global install dir: `~/.codex/skills/`
-- Project pin dir: `.codex/skills/`
+- Global install dir: `~/.agents/skills/`
+- Project pin dir: `.agents/skills/`
 
 A **project-pinned** adapter always takes precedence over the global
 bootstrap install. The global install supplies conductor and bootstrap
 behavior everywhere, then defers to the version a project has pinned.
-Precedence is recorded in `.work-studio/adapter.lock` and honored by
-Codex (VS Code)'s project-over-user skill resolution.
+Precedence is recorded in `.work-studio/adapter.lock` and enforced by
+the generated adapter's runtime pin-resolution contract.
+
+### Runtime pin resolution
+
+Codex can discover both user and repository skills with the same name.
+Before applying this skill, search upward from the current directory for
+`.work-studio/adapter.lock`, stopping at the repository or filesystem
+boundary. If the lock declares `platform=codex`, read its `dest` value and
+resolve `<dest>/<this-skill-name>/SKILL.md`. When that path differs from
+the currently loaded copy, **load and follow the pinned copy** before
+continuing. If the pinned file is unavailable, report the broken pin and
+stop instead of silently falling back to the global copy.
 
 ### Discovery
 
