@@ -27,6 +27,7 @@ repository or filesystem boundary.
 
 - `conduct-work-object` (core + codex, claude-code, github-copilot adapters)
 - `pressure-test-decision` (core + codex, claude-code, github-copilot adapters)
+- `turn-signal-into-work` (core + codex, claude-code, github-copilot adapters)
 - `google-adk-agent-builder`
 
 ## Tools

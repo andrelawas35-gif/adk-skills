@@ -27,7 +27,8 @@ fi
 echo "test: global install"
 CLAUDE_HOME="$WORK/home/.claude" "$INSTALL" --platform "$PLATFORM" --global >/dev/null
 n=$(find "$WORK/home" -name SKILL.md | wc -l | tr -d ' ')
-check "$n" "2" "global install places both skills"
+expected=$(find "$REPO_ROOT/skills/core" -mindepth 2 -maxdepth 2 -name SKILL.md | wc -l | tr -d ' ')
+check "$n" "$expected" "global install places every generated skill"
 
 echo "test: project pin writes lock and skills"
 mkdir -p "$WORK/proj/.git"

@@ -428,6 +428,7 @@ stop instead of silently falling back to the global copy.
 | `structured_output` | `—` | native |
 | `subagent_spawn` | `runSubagent` | native |
 | `terminal_run` | `run_in_terminal` | native |
+| `user_confirmation` | `conversation turn` | native |
 | `web_fetch` | `open_browser_page / mcp tools` | native |
 | `web_search` | `—` | manual-fallback |
 

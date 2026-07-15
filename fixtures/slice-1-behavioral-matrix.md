@@ -1,6 +1,6 @@
-# Slice 1 Behavioral Matrix
+# Work Studio Behavioral Matrix
 
-This matrix maps every Slice 1 behavioral requirement to its expected outcome
+This matrix maps every implemented Work Studio behavioral requirement to its expected outcome
 per platform. It is the canonical reference for the conformance gate — CI
 verifies that every scenario is documented, every platform is accounted for,
 and no adapter claims behavior it cannot deliver.
@@ -139,6 +139,20 @@ Source: `fixtures/slice-1-capability-degradation.md` All scenarios
 
 ---
 
+## Signal Capture and Activation
+
+| ID | Scenario | Codex | Claude Code | GitHub Copilot |
+|----|----------|-------|-------------|----------------|
+| T1 | Preserve a live signal in the user's language | ✅ | ✅ | ✅ |
+| T2 | Classify without creating a Work Object | ✅ | ✅ | ✅ |
+| T3 | Route explicit activation through the conductor | ✅ | ✅ | ✅ |
+| T4 | Require an approved Evidence Bridge for personal context | ✅ | ✅ | ✅ |
+| T5 | Disclose manual-fallback or unsupported capability paths | ✅ | ✅ | ✅ |
+
+Source: `fixtures/slice-2-turn-signal-into-work.md` All scenarios
+
+---
+
 ## Generated-Artifact Integrity
 
 | ID | Scenario | Codex | Claude Code | GitHub Copilot |
@@ -158,16 +172,17 @@ Source: `tests/test_generate_adapters.py`
 
 | Platform | Total scenarios | ✅ Pass | ⚠️ Manual-fallback | ❌ Unsupported |
 |----------|----------------|---------|---------------------|---------------|
-| Codex | 51 | 51 | 0 | 0 |
-| Claude Code | 51 | 51 | 0 | 0 |
-| GitHub Copilot | 51 | 51 | 0 | 0 |
+| Codex | 56 | 56 | 0 | 0 |
+| Claude Code | 56 | 56 | 0 | 0 |
+| GitHub Copilot | 56 | 56 | 0 | 0 |
 
 > Note: All documented behavioral scenarios exercise capabilities that are native on
 > all three platforms. Manual-fallback and unsupported classifications exist
 > in the capability catalog (browser_automation, subagent_isolation,
 > parallel_tool_execution, web_search) but are not exercised by the Slice 1
 > behavioral scenarios — those capabilities are required by later slices
-> (verify-release-evidence, code-review, etc.).
+> (verify-release-evidence, code-review, etc.). Signal capture exercises the
+> required degradation behavior in its fixture without claiming a native result.
 >
 > When a scenario requiring a non-native capability is added in a later slice,
 > the matrix will be updated and the capability degradation fixture

@@ -512,6 +512,7 @@ the generated adapter's runtime pin-resolution contract.
 | `subagent_isolation` | `—` | manual-fallback |
 | `subagent_spawn` | `Task` | native |
 | `terminal_run` | `Bash` | native |
+| `user_confirmation` | `conversation turn` | native |
 | `web_fetch` | `WebFetch / WebSearch` | native |
 
 ### Capability Degradation

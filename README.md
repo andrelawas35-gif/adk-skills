@@ -72,6 +72,7 @@ sh tests/run.sh                                     # full generator + installer
 | [google-adk-agent-builder](skills/google-adk-agent-builder/SKILL.md) | Build and iterate on local Google ADK agents in Python — scaffolding, tools, multi-agent flows, session/memory wiring, and local dev loop |
 | [conduct-work-object](skills/core/conduct-work-object/SKILL.md) | Detect, create, activate, resume, update, and close Work Objects — the canonical continuity surface of Andrelawas Work Studio |
 | [pressure-test-decision](skills/core/pressure-test-decision/SKILL.md) | Resume a Work Object, identify the highest-leverage unresolved decision, recommend before asking one question, and safely persist the confirmed choice |
+| [turn-signal-into-work](skills/core/turn-signal-into-work/SKILL.md) | Capture a live signal, classify its smallest durable handling, and activate a Work Object only with explicit user authority |
 
 ## Platform Adapters
 
@@ -84,9 +85,9 @@ python3 tools/generate-adapters.py --check   # verify no drift
 
 | Platform | Adapters | Manifest |
 |----------|----------|----------|
-| Codex | [conduct-work-object](adapters/codex/skills/conduct-work-object/SKILL.md), [pressure-test-decision](adapters/codex/skills/pressure-test-decision/SKILL.md) | [manifest.json](adapters/codex/manifest.json) |
-| Claude Code | [conduct-work-object](adapters/claude-code/skills/conduct-work-object/SKILL.md), [pressure-test-decision](adapters/claude-code/skills/pressure-test-decision/SKILL.md) | [manifest.json](adapters/claude-code/manifest.json) |
-| GitHub Copilot | [conduct-work-object](adapters/github-copilot/skills/conduct-work-object/SKILL.md), [pressure-test-decision](adapters/github-copilot/skills/pressure-test-decision/SKILL.md) | [manifest.json](adapters/github-copilot/manifest.json) |
+| Codex | [conduct-work-object](adapters/codex/skills/conduct-work-object/SKILL.md), [pressure-test-decision](adapters/codex/skills/pressure-test-decision/SKILL.md), [turn-signal-into-work](adapters/codex/skills/turn-signal-into-work/SKILL.md) | [manifest.json](adapters/codex/manifest.json) |
+| Claude Code | [conduct-work-object](adapters/claude-code/skills/conduct-work-object/SKILL.md), [pressure-test-decision](adapters/claude-code/skills/pressure-test-decision/SKILL.md), [turn-signal-into-work](adapters/claude-code/skills/turn-signal-into-work/SKILL.md) | [manifest.json](adapters/claude-code/manifest.json) |
+| GitHub Copilot | [conduct-work-object](adapters/github-copilot/skills/conduct-work-object/SKILL.md), [pressure-test-decision](adapters/github-copilot/skills/pressure-test-decision/SKILL.md), [turn-signal-into-work](adapters/github-copilot/skills/turn-signal-into-work/SKILL.md) | [manifest.json](adapters/github-copilot/manifest.json) |
 
 ## Conformance Gate
 
@@ -116,7 +117,6 @@ python3 -m unittest discover -s tests -v
 
 ## Planned Work Studio Skills
 
-- `turn-signal-into-work`
 - `investigate-live-question`
 - `design-tracer-bullet`
 - `implement-bounded-change`

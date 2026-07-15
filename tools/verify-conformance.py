@@ -26,7 +26,7 @@ ROOT = Path(__file__).resolve().parent.parent
 CORE_DIR = ROOT / "skills" / "core"
 ADAPTERS_DIR = ROOT / "adapters"
 PLATFORMS = ["codex", "claude-code", "github-copilot"]
-SKILLS = ["conduct-work-object", "pressure-test-decision"]
+SKILLS = sorted(path.name for path in CORE_DIR.iterdir() if path.is_dir())
 
 
 # ── Required structural elements ─────────────────────────────────────────────
@@ -77,6 +77,7 @@ def verify_matrix(fixture_files):
         "fixtures/slice-1-pressure-test-and-record.md",
         "fixtures/slice-1-capability-degradation.md",
         "fixtures/slice-1-behavioral-matrix.md",
+        "fixtures/slice-2-turn-signal-into-work.md",
         "fixtures/personal-institution-work-studio-contract.md",
     }
 
@@ -138,6 +139,12 @@ def verify_matrix(fixture_files):
                     errors.append(
                         f"Behavioral matrix may be missing {platform} column "
                         f"(found {count} occurrences of '{label}')")
+        elif "turn-signal-into-work" in name:
+            _check_patterns(errors, name, content, [
+                "Scenario 1", "Scenario 2", "Scenario 3", "Scenario 4",
+                "user's language", "explicit activation", "Evidence Bridge",
+                "manual-fallback", "unsupported",
+            ])
 
     # Verify behavioral matrix exists
     matrix_path = ROOT / "fixtures" / "slice-1-behavioral-matrix.md"
@@ -316,7 +323,7 @@ def main():
         if not fixture_files:
             # Default to all known fixture files
             fixtures_dir = ROOT / "fixtures"
-            fixture_files = [str(p) for p in fixtures_dir.glob("slice-1-*.md")]
+            fixture_files = [str(p) for p in fixtures_dir.glob("slice-*.md")]
             fixture_files.append(
                 str(fixtures_dir / "personal-institution-work-studio-contract.md"))
 

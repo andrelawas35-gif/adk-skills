@@ -9,6 +9,7 @@ Dependency-free — standard-library unittest only, matching the generator's
 
 import hashlib
 import json
+import re
 import subprocess
 import sys
 import unittest
@@ -161,6 +162,7 @@ class GeneratorContract(unittest.TestCase):
         references = [
             "CAPABILITY-DEGRADATION.md",
             "CONSEQUENCE-AUTHORITY.md",
+            "EVIDENCE-MODEL.md",
             "SHARED-PROTOCOL.md",
         ]
         for platform in PLATFORMS:
@@ -169,6 +171,23 @@ class GeneratorContract(unittest.TestCase):
                     path = (ADAPTERS_DIR / platform / "skills" / skill
                             / "references" / reference)
                     self.assertTrue(path.is_file(), f"missing installed reference: {path}")
+
+    def test_every_required_core_capability_is_mapped_and_classified(self):
+        """A core requirement cannot silently disappear at an adapter boundary."""
+        for skill in core_skill_names():
+            core_text = (CORE_DIR / skill / "SKILL.md").read_text()
+            capabilities_section = core_text.split("## Required capabilities", 1)[1]
+            capabilities_section = capabilities_section.split("\n## ", 1)[0]
+            required = re.findall(r"^- `([^`]+)`", capabilities_section, re.MULTILINE)
+
+            for platform in PLATFORMS:
+                adapter = (ADAPTERS_DIR / platform / "skills" / skill / "SKILL.md").read_text()
+                for capability in required:
+                    with self.subTest(skill=skill, platform=platform, capability=capability):
+                        self.assertRegex(
+                            adapter,
+                            rf"\| `{re.escape(capability)}` \| .+ \| (native|manual-fallback|unsupported) \|",
+                        )
 
     def test_manifest_checksums_match_files(self):
         for platform in PLATFORMS:

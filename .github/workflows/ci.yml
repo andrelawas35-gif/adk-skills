@@ -1,4 +1,4 @@
-name: CI — Slice 1 Conformance Gate
+name: CI — Work Studio Conformance Gate
 
 on:
   push:
@@ -54,37 +54,32 @@ print('Manifest OK')
           done
 
       # ── Gate 5: Clean checkout demonstration ──────────────────────────
-      - name: Verify Slice 1 is demonstrable from clean checkout
+      - name: Verify implemented skills are demonstrable from clean checkout
         run: |
-          echo "=== Slice 1 Clean Checkout Validation ==="
+          echo "=== Work Studio Clean Checkout Validation ==="
           errors=0
           for f in references/WORK-OBJECT.md references/AGREEMENT-LOOP.md \
                    references/EVIDENCE-MODEL.md references/CONSEQUENCE-AUTHORITY.md \
                    references/CAPABILITY-DEGRADATION.md; do
             [ -f "$f" ] && echo "  OK: $f" || { echo "  MISSING: $f"; errors=1; }
           done
-          for f in skills/core/conduct-work-object/SKILL.md \
-                   skills/core/pressure-test-decision/SKILL.md; do
+          for f in skills/core/*/SKILL.md; do
             [ -f "$f" ] && echo "  OK: $f" || { echo "  MISSING: $f"; errors=1; }
           done
           for platform in codex claude-code github-copilot; do
-            for skill in conduct-work-object pressure-test-decision; do
-              f="adapters/$platform/skills/$skill/SKILL.md"
+            for f in adapters/$platform/skills/*/SKILL.md; do
               [ -f "$f" ] && echo "  OK: $f" || { echo "  MISSING: $f"; errors=1; }
             done
             for f in "adapters/$platform/manifest.json" "adapters/$platform/SHA256SUMS"; do
               [ -f "$f" ] && echo "  OK: $f" || { echo "  MISSING: $f"; errors=1; }
             done
           done
-          for f in fixtures/slice-1-initialize-and-resume.md \
-                   fixtures/slice-1-pressure-test-and-record.md \
-                   fixtures/slice-1-capability-degradation.md \
-                   fixtures/slice-1-behavioral-matrix.md; do
+          for f in fixtures/slice-*.md; do
             [ -f "$f" ] && echo "  OK: $f" || { echo "  MISSING: $f"; errors=1; }
           done
           [ -f ".work-studio/config.md" ] && echo "  OK: .work-studio/config.md" || { echo "  MISSING: .work-studio/config.md"; errors=1; }
           if [ $errors -ne 0 ]; then
-            echo "::error::Slice 1 is not demonstrable from clean checkout"
+            echo "::error::Work Studio is not demonstrable from clean checkout"
             exit 1
           fi
-          echo "=== Slice 1 is demonstrable from clean checkout ==="
+          echo "=== Work Studio is demonstrable from clean checkout ==="

@@ -60,6 +60,7 @@ The canonical set of capabilities a skill may require:
 | `web_fetch` | Fetch content from URLs | All platforms |
 | `subagent_spawn` | Spawn sub-agents for parallel work | All platforms |
 | `structured_output` | Produce structured (JSON, YAML) output | All platforms |
+| `user_confirmation` | Receive an explicit, scoped user decision or authorization | All platforms |
 | `browser_automation` | Automate browser interactions | Codex |
 | `parallel_tool_execution` | Execute multiple tools simultaneously | Codex, Claude Code |
 | `subagent_isolation` | Strong isolation between sub-agents | Codex |

@@ -36,6 +36,7 @@ PLATFORMS = ["codex", "claude-code", "github-copilot"]
 SHARED_REFERENCES = [
     "CAPABILITY-DEGRADATION.md",
     "CONSEQUENCE-AUTHORITY.md",
+    "EVIDENCE-MODEL.md",
     "SHARED-PROTOCOL.md",
 ]
 SHARED_PROTOCOL_FILE = ROOT / "references" / "SHARED-PROTOCOL.md"
