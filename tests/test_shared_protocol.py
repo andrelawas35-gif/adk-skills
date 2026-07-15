@@ -1,72 +1,46 @@
 #!/usr/bin/env python3
-"""Contract tests for the published Personal Institution handoff protocol."""
+"""Installed-boundary regressions for the Shared Protocol."""
 
-import unittest
 import json
+import os
+import shutil
+import subprocess
+import tempfile
+import unittest
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent.parent
-PROTOCOL = ROOT / "references" / "SHARED-PROTOCOL.md"
-CORE_SKILLS = (
-    ROOT / "skills" / "core" / "conduct-work-object" / "SKILL.md",
-    ROOT / "skills" / "core" / "pressure-test-decision" / "SKILL.md",
-)
+INSTALL = ROOT / "tools" / "install.sh"
+FIXTURE = ROOT / "fixtures" / "personal-institution-work-studio-contract.md"
 
 
 class SharedProtocolContract(unittest.TestCase):
-    def setUp(self):
-        self.text = PROTOCOL.read_text()
+    def test_installed_adapter_exposes_a_checksummed_protocol(self):
+        with tempfile.TemporaryDirectory() as work:
+            home = Path(work) / "home" / ".claude"
+            env = {**os.environ, "CLAUDE_HOME": str(home)}
+            result = subprocess.run(
+                [str(INSTALL), "--platform", "claude-code", "--global"],
+                cwd=ROOT, env=env, capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            installed = home / "skills" / "conduct-work-object" / "references" / "SHARED-PROTOCOL.md"
+            self.assertTrue(installed.is_file())
 
-    def test_declares_a_released_version_and_safe_version_mismatch(self):
-        self.assertIn("Protocol version: `0.1`", self.text)
-        self.assertIn("manual, user-approved summary", self.text)
-        self.assertIn("must not directly access", self.text)
+        manifest = json.loads((ROOT / "adapters" / "claude-code" / "manifest.json").read_text())
+        self.assertEqual(manifest["protocol_version"], "0.1")
+        self.assertTrue(any(entry["path"].endswith("references/SHARED-PROTOCOL.md") for entry in manifest["files"]))
 
-    def test_evidence_bridge_requires_approval_and_minimum_provenance(self):
-        for required_clause in (
-            "User approval",
-            "Minimum-necessary",
-            "stable private reference",
-            "Provenance",
-            "Sensitivity",
-            "Receiving Work Object",
-        ):
-            with self.subTest(required_clause=required_clause):
-                self.assertIn(required_clause, self.text)
-
-    def test_personalization_entries_are_revisable_and_not_identity_claims(self):
-        for required_clause in (
-            "Working-method",
-            "Active-lens",
-            "Hard-boundary",
-            "Supporting evidence",
-            "Contrary evidence",
-            "Review trigger",
-            "must not\nestablish identity",
-        ):
-            with self.subTest(required_clause=required_clause):
-                self.assertIn(required_clause, self.text)
-
-    def test_expired_revisable_entries_become_inactive(self):
-        self.assertIn("become inactive", self.text)
-        self.assertIn("Hard-boundary entries remain active", self.text)
-
-    def test_work_studio_never_scans_or_mutates_personal_memory(self):
-        self.assertIn("must not scan, read, or mutate", self.text)
-
-    def test_adapter_manifest_declares_the_protocol_version(self):
-        manifest = json.loads(
-            (ROOT / "adapters" / "claude-code" / "manifest.json").read_text())
-        self.assertEqual(manifest.get("protocol_version"), "0.1")
-
-    def test_work_studio_core_skills_declare_the_handoff_boundary(self):
-        for skill in CORE_SKILLS:
-            text = skill.read_text()
-            with self.subTest(skill=skill.name):
-                self.assertIn("Shared Protocol v0.1", text)
-                self.assertIn("Evidence Bridge", text)
-                self.assertIn("must not scan, read, or mutate", text)
+    def test_conformance_rejects_a_missing_protocol_scenario(self):
+        with tempfile.TemporaryDirectory() as work:
+            malformed = Path(work) / FIXTURE.name
+            text = FIXTURE.read_text().replace("## Scenario 6 — Incompatible protocol versions degrade safely", "")
+            malformed.write_text(text)
+            result = subprocess.run(
+                ["python3", "tools/verify-conformance.py", "--matrix", str(malformed)],
+                cwd=ROOT, capture_output=True, text=True)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("Incompatible protocol versions", result.stdout)
 
 
 if __name__ == "__main__":
