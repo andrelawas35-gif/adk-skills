@@ -82,6 +82,7 @@ def verify_matrix(fixture_files):
         "fixtures/slice-2-implement-bounded-change.md",
         "fixtures/slice-2-verify-release-evidence.md",
         "fixtures/slice-3-investigate-live-question.md",
+        "fixtures/slice-3-deploy-with-recovery.md",
         "fixtures/personal-institution-work-studio-contract.md",
     }
 
@@ -174,6 +175,13 @@ def verify_matrix(fixture_files):
                 "Scenario 1", "Scenario 2", "Scenario 3", "Scenario 4", "Scenario 5",
                 "primary-source", "reality contact", "contradiction", "unresolved",
                 "Approved Evidence Bridge", "Personal Institution archive",
+            ])
+        elif "deploy-with-recovery" in name:
+            _check_patterns(errors, name, content, [
+                "Scenario 1", "Scenario 2", "Scenario 3", "Scenario 4",
+                "successful incremental deployment", "missing readiness",
+                "failed verification", "rollback", "sanitized evidence",
+                "manual-fallback", "unsupported", "observe", "does not claim closure",
             ])
 
     # Verify behavioral matrix exists

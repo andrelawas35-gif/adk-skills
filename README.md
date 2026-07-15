@@ -77,6 +77,7 @@ sh tests/run.sh                                     # full generator + installer
 | [implement-bounded-change](skills/core/implement-bounded-change/SKILL.md) | Implement only an accepted tracer bullet while preserving unrelated work, continuously verifying the bounded path, and stopping for new authority |
 | [verify-release-evidence](skills/core/verify-release-evidence/SKILL.md) | Report proportionate verification evidence for an implemented bounded change, including operational recovery, dependency, privacy, security, and evidence gaps without releasing |
 | [investigate-live-question](skills/core/investigate-live-question/SKILL.md) | Investigate an activated Inquiry with attributable primary-source research, proportionate reality contact, and explicit uncertainty routing |
+| [deploy-with-recovery](skills/core/deploy-with-recovery/SKILL.md) | Deploy a verified Work Object in authorized recoverable increments with readiness, rollback, sanitized evidence, and an Observe route |
 
 ## Platform Adapters
 
@@ -89,9 +90,9 @@ python3 tools/generate-adapters.py --check   # verify no drift
 
 | Platform | Adapters | Manifest |
 |----------|----------|----------|
-| Codex | [conduct-work-object](adapters/codex/skills/conduct-work-object/SKILL.md), [pressure-test-decision](adapters/codex/skills/pressure-test-decision/SKILL.md), [turn-signal-into-work](adapters/codex/skills/turn-signal-into-work/SKILL.md), [design-tracer-bullet](adapters/codex/skills/design-tracer-bullet/SKILL.md), [implement-bounded-change](adapters/codex/skills/implement-bounded-change/SKILL.md), [verify-release-evidence](adapters/codex/skills/verify-release-evidence/SKILL.md), [investigate-live-question](adapters/codex/skills/investigate-live-question/SKILL.md) | [manifest.json](adapters/codex/manifest.json) |
-| Claude Code | [conduct-work-object](adapters/claude-code/skills/conduct-work-object/SKILL.md), [pressure-test-decision](adapters/claude-code/skills/pressure-test-decision/SKILL.md), [turn-signal-into-work](adapters/claude-code/skills/turn-signal-into-work/SKILL.md), [design-tracer-bullet](adapters/claude-code/skills/design-tracer-bullet/SKILL.md), [implement-bounded-change](adapters/claude-code/skills/implement-bounded-change/SKILL.md), [verify-release-evidence](adapters/claude-code/skills/verify-release-evidence/SKILL.md), [investigate-live-question](adapters/claude-code/skills/investigate-live-question/SKILL.md) | [manifest.json](adapters/claude-code/manifest.json) |
-| GitHub Copilot | [conduct-work-object](adapters/github-copilot/skills/conduct-work-object/SKILL.md), [pressure-test-decision](adapters/github-copilot/skills/pressure-test-decision/SKILL.md), [turn-signal-into-work](adapters/github-copilot/skills/turn-signal-into-work/SKILL.md), [design-tracer-bullet](adapters/github-copilot/skills/design-tracer-bullet/SKILL.md), [implement-bounded-change](adapters/github-copilot/skills/implement-bounded-change/SKILL.md), [verify-release-evidence](adapters/github-copilot/skills/verify-release-evidence/SKILL.md), [investigate-live-question](adapters/github-copilot/skills/investigate-live-question/SKILL.md) | [manifest.json](adapters/github-copilot/manifest.json) |
+| Codex | [conduct-work-object](adapters/codex/skills/conduct-work-object/SKILL.md), [pressure-test-decision](adapters/codex/skills/pressure-test-decision/SKILL.md), [turn-signal-into-work](adapters/codex/skills/turn-signal-into-work/SKILL.md), [design-tracer-bullet](adapters/codex/skills/design-tracer-bullet/SKILL.md), [implement-bounded-change](adapters/codex/skills/implement-bounded-change/SKILL.md), [verify-release-evidence](adapters/codex/skills/verify-release-evidence/SKILL.md), [investigate-live-question](adapters/codex/skills/investigate-live-question/SKILL.md), [deploy-with-recovery](adapters/codex/skills/deploy-with-recovery/SKILL.md) | [manifest.json](adapters/codex/manifest.json) |
+| Claude Code | [conduct-work-object](adapters/claude-code/skills/conduct-work-object/SKILL.md), [pressure-test-decision](adapters/claude-code/skills/pressure-test-decision/SKILL.md), [turn-signal-into-work](adapters/claude-code/skills/turn-signal-into-work/SKILL.md), [design-tracer-bullet](adapters/claude-code/skills/design-tracer-bullet/SKILL.md), [implement-bounded-change](adapters/claude-code/skills/implement-bounded-change/SKILL.md), [verify-release-evidence](adapters/claude-code/skills/verify-release-evidence/SKILL.md), [investigate-live-question](adapters/claude-code/skills/investigate-live-question/SKILL.md), [deploy-with-recovery](adapters/claude-code/skills/deploy-with-recovery/SKILL.md) | [manifest.json](adapters/claude-code/manifest.json) |
+| GitHub Copilot | [conduct-work-object](adapters/github-copilot/skills/conduct-work-object/SKILL.md), [pressure-test-decision](adapters/github-copilot/skills/pressure-test-decision/SKILL.md), [turn-signal-into-work](adapters/github-copilot/skills/turn-signal-into-work/SKILL.md), [design-tracer-bullet](adapters/github-copilot/skills/design-tracer-bullet/SKILL.md), [implement-bounded-change](adapters/github-copilot/skills/implement-bounded-change/SKILL.md), [verify-release-evidence](adapters/github-copilot/skills/verify-release-evidence/SKILL.md), [investigate-live-question](adapters/github-copilot/skills/investigate-live-question/SKILL.md), [deploy-with-recovery](adapters/github-copilot/skills/deploy-with-recovery/SKILL.md) | [manifest.json](adapters/github-copilot/manifest.json) |
 
 ## Conformance Gate
 
@@ -123,7 +124,6 @@ python3 -m unittest discover -s tests -v
 
 - `investigate-live-question`
 - `implement-bounded-change`
-- `deploy-with-recovery`
 - `diagnose-production-incident`
 - `review-outcome-and-adapt`
 - `maintain-working-method`
@@ -151,6 +151,7 @@ reasoning.
 | [slice-2-implement-bounded-change.md](fixtures/slice-2-implement-bounded-change.md) | Accepted bounded implementation, working-tree preservation, continuous verification, deviation, and degradation behavior |
 | [slice-2-verify-release-evidence.md](fixtures/slice-2-verify-release-evidence.md) | Proportionate acceptance, recovery, dependency, privacy, security, and evidence-gap verification without release claims |
 | [slice-3-investigate-live-question.md](fixtures/slice-3-investigate-live-question.md) | Primary-source investigation, reality contact, contradiction handling, unresolved outcomes, and Evidence Bridge gating |
+| [slice-3-deploy-with-recovery.md](fixtures/slice-3-deploy-with-recovery.md) | Authorized incremental deployment, readiness gates, rollback, sanitized evidence, and Observe routing |
 
 ## Verification Evidence
 

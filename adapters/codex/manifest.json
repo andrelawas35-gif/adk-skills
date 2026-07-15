@@ -30,6 +30,31 @@
       "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
     },
     {
+      "name": "deploy-with-recovery",
+      "path": "adapters/codex/skills/deploy-with-recovery/SKILL.md",
+      "sha256": "d6899de1cc09e6036223e46afd7c8407db72e37a0a641cc35c95c265111afb6c"
+    },
+    {
+      "name": "deploy-with-recovery/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/codex/skills/deploy-with-recovery/references/CAPABILITY-DEGRADATION.md",
+      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+    },
+    {
+      "name": "deploy-with-recovery/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/codex/skills/deploy-with-recovery/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "ff61f7796626f48d2036633b4faf76dcfd7233a24ee8e2b53d4a7080df9020a0"
+    },
+    {
+      "name": "deploy-with-recovery/references/EVIDENCE-MODEL.md",
+      "path": "adapters/codex/skills/deploy-with-recovery/references/EVIDENCE-MODEL.md",
+      "sha256": "5e3ccd05bb7ff08015c9402cb5c708d83706b8c79dcb8546e1217a1528091141"
+    },
+    {
+      "name": "deploy-with-recovery/references/SHARED-PROTOCOL.md",
+      "path": "adapters/codex/skills/deploy-with-recovery/references/SHARED-PROTOCOL.md",
+      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
+    },
+    {
       "name": "design-tracer-bullet",
       "path": "adapters/codex/skills/design-tracer-bullet/SKILL.md",
       "sha256": "49b3dbe34caf481297d012670c046bfe4eb8cb9eaa358b5c15ca4c8dce9d2112"
