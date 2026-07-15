@@ -20,6 +20,7 @@ Restart VS Code or reload the Copilot extension after adding skills.
 
 | Skill | Description |
 |-------|-------------|
+| [capture-lived-evidence](skills/capture-lived-evidence/SKILL.md) | Convert notes, voice dumps, photos, and conversations into dated, source-preserving observations without premature interpretation |
 | [google-adk-agent-builder](skills/google-adk-agent-builder/SKILL.md) | Build and iterate on local Google ADK agents in Python — scaffolding, tools, multi-agent flows, session/memory wiring, and local dev loop |
 
 ## Skill Structure
