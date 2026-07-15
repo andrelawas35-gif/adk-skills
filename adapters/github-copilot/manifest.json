@@ -6,12 +6,12 @@
     {
       "name": "conduct-work-object",
       "path": "adapters/github-copilot/skills/conduct-work-object/SKILL.md",
-      "sha256": "d2fc32a37b7241315befaddaa0b6ac2f7b6f64669e605f7c2b63dffa2dbc002a"
+      "sha256": "2757c0975ff404ce4c876a95333719ef28afebf8c4ccdd6a593bcfad1c697d52"
     },
     {
       "name": "pressure-test-decision",
       "path": "adapters/github-copilot/skills/pressure-test-decision/SKILL.md",
-      "sha256": "9e65c7e3729cd636f6a079169e8de6d6d91090ad564f573375552a9d0dd8d46b"
+      "sha256": "976bddf2f8e08ec4387109fe2a61c53dba130d0bbd0dff5f6141688e250b58ab"
     }
   ]
 }

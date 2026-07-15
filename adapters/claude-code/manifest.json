@@ -6,12 +6,12 @@
     {
       "name": "conduct-work-object",
       "path": "adapters/claude-code/skills/conduct-work-object/SKILL.md",
-      "sha256": "dd9a8e9a60dc2a9c018bad2c04ea14cc06e7b46ddb291bb3093a51b1a1439ea3"
+      "sha256": "da7bb4e08d656eb2e9ab4cec27740ea79f349379b2bfabd6235b068036b7270c"
     },
     {
       "name": "pressure-test-decision",
       "path": "adapters/claude-code/skills/pressure-test-decision/SKILL.md",
-      "sha256": "6a58f3e13c3b4f0786845891e249976dca68b863cca28c8c00bac626cf6201f4"
+      "sha256": "d3fd394b24700119f7dfbb8d71f3af821223be8f644f2ef79c44bbc484c1dded"
     }
   ]
 }

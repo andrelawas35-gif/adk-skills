@@ -94,6 +94,19 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`:
   action, migration, or export — even on `just execute`.
 - Personal memory is read-only during decision work.
 
+## Personal Institution handoff
+
+When a decision needs personal context, apply Shared Protocol v0.1
+(`references/SHARED-PROTOCOL.md`). Work Studio must not scan, read, or mutate
+the Personal Institution archive. It may use an Evidence Bridge only after the
+user approves a minimum-necessary handoff for the receiving Work Object.
+
+Keep a bridge's provenance and sensitivity explicit; never relabel inference
+as source or system evidence. Do not persist personalization from chat, infer
+identity, or apply inactive or irrelevant contract entries. If the protocol is
+unavailable or incompatible, report the limitation and offer only a manual,
+user-approved summary.
+
 ## Agreement Loop behavior
 
 This skill IS the Agreement Loop for decisions. It activates the full loop
