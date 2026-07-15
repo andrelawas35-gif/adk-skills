@@ -21,6 +21,7 @@ Restart VS Code or reload the Copilot extension after adding skills.
 | Skill | Description |
 |-------|-------------|
 | [capture-lived-evidence](skills/capture-lived-evidence/SKILL.md) | Convert notes, voice dumps, photos, and conversations into dated, source-preserving observations without premature interpretation |
+| [anti-homogenization-editor](skills/anti-homogenization-editor/SKILL.md) | Ground drafts in lived detail and distinct voice without inventing specificity |
 | [google-adk-agent-builder](skills/google-adk-agent-builder/SKILL.md) | Build and iterate on local Google ADK agents in Python — scaffolding, tools, multi-agent flows, session/memory wiring, and local dev loop |
 | [maintain-personal-memory](skills/maintain-personal-memory/SKILL.md) | Organize and retrieve personal evidence before giving advice |
 | [project-studio](skills/project-studio/SKILL.md) | Turn a live question into a small, reality-based project |

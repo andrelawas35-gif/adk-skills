@@ -1,0 +1,4 @@
+interface:
+  display_name: "Anti-Homogenization Editor"
+  short_description: "Ground drafts in lived detail and distinct voice."
+  default_prompt: "Use $anti-homogenization-editor to review this draft and make it more like me without inventing detail:"
