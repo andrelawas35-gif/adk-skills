@@ -263,6 +263,7 @@ the generated adapter's runtime pin-resolution contract.
 | `terminal_run` | `Bash` | native |
 | `user_confirmation` | `conversation turn` | native |
 | `web_fetch` | `WebFetch / WebSearch` | native |
+| `web_search` | `WebSearch` | manual-fallback |
 
 ### Capability Degradation
 
@@ -301,6 +302,13 @@ that equivalent verification occurred.
 - **Record**: Append History entry noting the capability gap, the
   manual action taken, and what remains unverified.
 - **Note**: Claude Code sub-agents (Task tool) have different isolation guarantees than Codex subagents. For sensitive multi-agent workflows, verify isolation boundaries manually.
+
+#### `web_search` (manual-fallback)
+
+- **Best-effort tool**: `WebSearch`
+- **Behavior**: Pause and give one concrete manual instruction.
+- **Record**: Append History entry noting the capability gap, the
+  manual action taken, and what remains unverified.
 
 ### Declared Limitations
 

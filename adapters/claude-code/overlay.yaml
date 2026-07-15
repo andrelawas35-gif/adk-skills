@@ -28,6 +28,7 @@ capability_mappings:
   terminal_run: "Bash"
   git_operations: "Bash (git commands)"
   web_fetch: "WebFetch / WebSearch"
+  web_search: "WebSearch"
   subagent_spawn: "Task"
   user_confirmation: "conversation turn"
 
@@ -45,6 +46,7 @@ capabilities:
   structured_output: native
   user_confirmation: native
   browser_automation: manual-fallback
+  web_search: manual-fallback
   subagent_isolation: manual-fallback
   parallel_tool_execution: manual-fallback
 

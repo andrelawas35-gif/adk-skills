@@ -182,13 +182,27 @@ Source: `fixtures/slice-2-verify-release-evidence.md` All scenarios
 
 ---
 
+## Live-Question Investigation
+
+| ID | Scenario | Codex | Claude Code | GitHub Copilot |
+|----|----------|-------|-------------|----------------|
+| L1 | Frame the activated Inquiry and intended decision | ✅ | ✅ | ✅ |
+| L2 | Attribute primary-source evidence and separate inference | ✅ | ✅ | ✅ |
+| L3 | Require scoped authority for proportionate reality contact | ✅ | ✅ | ✅ |
+| L4 | Preserve contradictions and route unresolved evidence honestly | ✅ | ✅ | ✅ |
+| L5 | Block Personal Institution archive access without an Approved Evidence Bridge | ✅ | ✅ | ✅ |
+
+Source: `fixtures/slice-3-investigate-live-question.md` All scenarios
+
+---
+
 ## Summary
 
 | Platform | Total scenarios | ✅ Pass | ⚠️ Manual-fallback | ❌ Unsupported |
 |----------|----------------|---------|---------------------|---------------|
-| Codex | 56 | 56 | 0 | 0 |
-| Claude Code | 56 | 56 | 0 | 0 |
-| GitHub Copilot | 56 | 56 | 0 | 0 |
+| Codex | 61 | 61 | 0 | 0 |
+| Claude Code | 61 | 61 | 0 | 0 |
+| GitHub Copilot | 61 | 61 | 0 | 0 |
 
 > Note: All documented behavioral scenarios exercise capabilities that are native on
 > all three platforms. Manual-fallback and unsupported classifications exist
