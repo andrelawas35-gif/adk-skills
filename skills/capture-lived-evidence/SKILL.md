@@ -7,12 +7,18 @@ description: Convert notes, voice dumps, photos, and conversations into dated, s
 
 Capture what happened before explaining what it means. Produce an observation record that can support later reflection without smuggling in a conclusion.
 
+## Personal capture lens
+
+Preserve the material that can later connect a particular scene to the user's recurring concerns: how systems shape people; maps, routes, borders, and circulation; logistics and labor; law, economics, software, and storytelling; and the gap between an institution's categories and a person's lived reality.
+
+Do not force these themes onto every entry. Record them only when they are explicitly present in the source. Treat a social claim as the user's claim, not an established fact. Favor the user's direct, question-led language and useful fragments over polished, generic prose.
+
 ## Capture workflow
 
 1. Identify the source: `note`, `voice dump`, `photo`, `conversation`, or `mixed`.
 2. Date the record using the current local date when available. Preserve a user-provided event date separately when it differs from the capture date. Never guess a time, location, speaker, identity, intention, emotion, or cause.
 3. Preserve the user's original wording. For a voice dump or conversation, retain short salient excerpts verbatim; label paraphrases as paraphrases.
-4. Write only what was observed, said, done, felt, or explicitly thought. Use concrete, sensory, behavioral language.
+4. Write only what was observed, said, done, felt, or explicitly thought. Use concrete, sensory, behavioral language. Preserve named places, routes, roles, rules, tools, money, exchanges, boundaries, and constraints when they appear.
 5. Separate uncertainty from fact. Use `Unknown` or a question rather than filling gaps.
 6. Do not interpret, diagnose, advise, turn the record into a goal, infer identity, or connect it to prior patterns unless the user explicitly requests a second reflective step.
 
@@ -27,6 +33,7 @@ Return one Markdown record unless the user asks for another format:
 - **Event date:** YYYY-MM-DD | Unknown
 - **Source:** note | voice dump | photo | conversation | mixed
 - **Context:** [place, situation, or participants only when supplied]
+- **Elements named:** [people, places, objects, systems, rules, or institutions explicitly named in the source]
 
 ### Record
 
@@ -35,6 +42,10 @@ Return one Markdown record unless the user asks for another format:
 ### Exact language
 
 > [Short, material quote(s), or “None retained.”]
+
+### Tension or question stated
+
+[An explicit question, contradiction, discomfort, or unresolved claim from the source; otherwise “None stated.”]
 
 ### Unknown / to preserve
 
