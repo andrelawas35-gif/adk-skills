@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maintain Personal Memory"
+  short_description: "Retrieve evidence before giving personal advice."
+  default_prompt: "Use $maintain-personal-memory to retrieve what I have said about this before advising:"
