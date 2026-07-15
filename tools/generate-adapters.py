@@ -23,6 +23,7 @@ The generator:
 import hashlib
 import json
 import os
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -37,6 +38,7 @@ SHARED_REFERENCES = [
     "CONSEQUENCE-AUTHORITY.md",
     "SHARED-PROTOCOL.md",
 ]
+SHARED_PROTOCOL_FILE = ROOT / "references" / "SHARED-PROTOCOL.md"
 
 
 def read_version() -> str:
@@ -48,6 +50,14 @@ def read_version() -> str:
     if VERSION_FILE.exists():
         return VERSION_FILE.read_text().strip()
     return "0.0.0"
+
+
+def read_protocol_version() -> str:
+    """Read the released Shared Protocol version from its canonical reference."""
+    match = re.search(r"Protocol version: `([^`]+)`", SHARED_PROTOCOL_FILE.read_text())
+    if not match:
+        raise ValueError("Shared Protocol version declaration is missing")
+    return match.group(1)
 
 
 # ── Minimal YAML parser ──────────────────────────────────────────────────────
@@ -466,6 +476,7 @@ def build_manifest(platform_name, entries):
     return {
         "platform": platform_name,
         "version": read_version(),
+        "protocol_version": read_protocol_version(),
         "generated_by": "tools/generate-adapters.py",
         "files": entries,
     }

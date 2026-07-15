@@ -1,6 +1,7 @@
 {
   "platform": "claude-code",
   "version": "0.1.0",
+  "protocol_version": "0.1",
   "generated_by": "tools/generate-adapters.py",
   "files": [
     {

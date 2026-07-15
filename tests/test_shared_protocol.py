@@ -2,6 +2,7 @@
 """Contract tests for the published Personal Institution handoff protocol."""
 
 import unittest
+import json
 from pathlib import Path
 
 
@@ -53,6 +54,11 @@ class SharedProtocolContract(unittest.TestCase):
 
     def test_work_studio_never_scans_or_mutates_personal_memory(self):
         self.assertIn("must not scan, read, or mutate", self.text)
+
+    def test_adapter_manifest_declares_the_protocol_version(self):
+        manifest = json.loads(
+            (ROOT / "adapters" / "claude-code" / "manifest.json").read_text())
+        self.assertEqual(manifest.get("protocol_version"), "0.1")
 
     def test_work_studio_core_skills_declare_the_handoff_boundary(self):
         for skill in CORE_SKILLS:
