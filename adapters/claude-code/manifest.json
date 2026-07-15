@@ -1,0 +1,16 @@
+{
+  "platform": "claude-code",
+  "generated_by": "tools/generate-adapters.py",
+  "files": [
+    {
+      "name": "conduct-work-object",
+      "path": "adapters/claude-code/skills/conduct-work-object/SKILL.md",
+      "sha256": "cd53bf0579a3d812116bfa7307db12c9ab88735141bfb871f759f9d3bb12c937"
+    },
+    {
+      "name": "pressure-test-decision",
+      "path": "adapters/claude-code/skills/pressure-test-decision/SKILL.md",
+      "sha256": "d9a84b356f1c4ba83dbd149e737e9938eb720713e7584bdad50480077a6f3a47"
+    }
+  ]
+}

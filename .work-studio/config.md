@@ -25,5 +25,10 @@ repository or filesystem boundary.
 
 ## Active skills
 
-- `conduct-work-object`
+- `conduct-work-object` (core + codex, claude-code, github-copilot adapters)
+- `pressure-test-decision` (core + codex, claude-code, github-copilot adapters)
 - `google-adk-agent-builder`
+
+## Tools
+
+- `tools/generate-adapters.py` — Generate platform adapters from core + overlays

@@ -1,0 +1,54 @@
+# Codex (VS Code) Platform Overlay
+# This file defines only what differs from the canonical core.
+# Core decision logic, authority boundaries, and schema semantics MUST NOT be changed here.
+
+platform: codex
+platform_label: "Codex (VS Code)"
+skill_install_dir: "~/.codex/skills/"
+skill_file_extension: ".md"
+manifest_path: "adapters/codex/manifest.json"
+
+# Discovery — how the adapter finds the workspace
+discovery:
+  config_path: ".work-studio/config.md"
+  boundary_markers:
+    - ".git"
+  stop_conditions:
+    - "repository root (presence of .git)"
+    - "filesystem boundary"
+
+# Capability mappings — abstract capability → platform-native tool or instruction
+capability_mappings:
+  file_read: "read_file"
+  file_write: "create_file / replace_string_in_file"
+  directory_list: "list_dir"
+  glob_search: "file_search"
+  content_search: "grep_search"
+  terminal_run: "run_in_terminal"
+  git_operations: "run_in_terminal (git commands)"
+  web_fetch: "open_browser_page / mcp tools"
+  subagent_spawn: "runSubagent"
+
+# Capability classifications
+capabilities:
+  file_read: native
+  file_write: native
+  directory_list: native
+  glob_search: native
+  content_search: native
+  terminal_run: native
+  git_operations: native
+  web_fetch: native
+  subagent_spawn: native
+  structured_output: native
+
+# Declared limitations — these appear in the generated adapter
+declared_limitations:
+  - capability: browser_automation
+    classification: manual-fallback
+    description: "Browser automation requires user interaction for complex workflows. Use manual steps for multi-page flows."
+
+# Frontmatter overrides — merged into the core frontmatter
+frontmatter:
+  add:
+    platform: codex

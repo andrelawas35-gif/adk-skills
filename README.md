@@ -8,30 +8,57 @@ agent-builder skill as an implementation capability.
 The accepted system design is recorded in
 [docs/work-studio-planning-session-2026-07-15.md](docs/work-studio-planning-session-2026-07-15.md).
 
-## What Are Skills?
+## Architecture
 
-Skills are reusable operating instructions and workflows that Codex loads on
-demand. Each skill lives in its own folder with a `SKILL.md` file containing
-YAML frontmatter and Markdown instructions. The existing ADK skill may also be
-adapted for other skill-capable agents.
+Skills are authored once in a portable canonical core (`skills/core/`). Platform
+adapters are generated from the core plus a minimal overlay that changes only
+metadata, discovery wiring, and capability mappings — never core decision logic,
+authority rules, or schema semantics.
+
+```
+skills/core/                     ← Canonical source (edit here)
+adapters/codex/                  ← Generated: Codex (VS Code)
+adapters/claude-code/            ← Generated: Claude Code
+adapters/github-copilot/         ← Generated: GitHub Copilot
+tools/generate-adapters.py       ← Dependency-free generator
+```
 
 ## Installing Skills
 
-During development, keep skills in this source repository. Install a released
-skill folder into the appropriate personal skills directory:
+Copy the generated adapter for your platform into the appropriate skills
+directory:
 
-- **Codex**: `$CODEX_HOME/skills/` (commonly `~/.codex/skills/`)
-- **VS Code Copilot compatibility**: `~/.copilot/skills/`
+| Platform | Install path |
+|----------|-------------|
+| Codex (VS Code) | `~/.codex/skills/` |
+| Claude Code | `~/.claude/skills/` |
+| GitHub Copilot | `~/.copilot/skills/` |
 
-Restart or reload the relevant agent after adding skills.
+Each adapter's `manifest.json` contains SHA-256 checksums for verification.
+Project-pinned adapters take precedence over global installations.
 
 ## Existing Skills
 
 | Skill | Description |
 |-------|-------------|
 | [google-adk-agent-builder](skills/google-adk-agent-builder/SKILL.md) | Build and iterate on local Google ADK agents in Python — scaffolding, tools, multi-agent flows, session/memory wiring, and local dev loop |
-| [conduct-work-object](skills/conduct-work-object/SKILL.md) | Detect, create, activate, resume, update, and close Work Objects — the canonical continuity surface of Andrelawas Work Studio |
-| [pressure-test-decision](skills/pressure-test-decision/SKILL.md) | Resume a Work Object, identify the highest-leverage unresolved decision, recommend before asking one question, and safely persist the confirmed choice |
+| [conduct-work-object](skills/core/conduct-work-object/SKILL.md) | Detect, create, activate, resume, update, and close Work Objects — the canonical continuity surface of Andrelawas Work Studio |
+| [pressure-test-decision](skills/core/pressure-test-decision/SKILL.md) | Resume a Work Object, identify the highest-leverage unresolved decision, recommend before asking one question, and safely persist the confirmed choice |
+
+## Platform Adapters
+
+Generated adapters are committed artifacts. Regenerate after editing the core:
+
+```bash
+python3 tools/generate-adapters.py           # generate all adapters
+python3 tools/generate-adapters.py --check   # verify no drift
+```
+
+| Platform | Adapters | Manifest |
+|----------|----------|----------|
+| Codex | [conduct-work-object](adapters/codex/skills/conduct-work-object/SKILL.md), [pressure-test-decision](adapters/codex/skills/pressure-test-decision/SKILL.md) | [manifest.json](adapters/codex/manifest.json) |
+| Claude Code | [conduct-work-object](adapters/claude-code/skills/conduct-work-object/SKILL.md), [pressure-test-decision](adapters/claude-code/skills/pressure-test-decision/SKILL.md) | [manifest.json](adapters/claude-code/manifest.json) |
+| GitHub Copilot | [conduct-work-object](adapters/github-copilot/skills/conduct-work-object/SKILL.md), [pressure-test-decision](adapters/github-copilot/skills/pressure-test-decision/SKILL.md) | [manifest.json](adapters/github-copilot/manifest.json) |
 
 ## Planned Work Studio Skills
 

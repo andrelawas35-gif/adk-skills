@@ -1,0 +1,57 @@
+# Claude Code Platform Overlay
+# This file defines only what differs from the canonical core.
+# Core decision logic, authority boundaries, and schema semantics MUST NOT be changed here.
+
+platform: claude-code
+platform_label: "Claude Code"
+skill_install_dir: "~/.claude/skills/"
+skill_file_extension: ".md"
+manifest_path: "adapters/claude-code/manifest.json"
+
+# Discovery — how the adapter finds the workspace
+discovery:
+  config_path: ".work-studio/config.md"
+  boundary_markers:
+    - ".git"
+  stop_conditions:
+    - "repository root (presence of .git)"
+    - "filesystem boundary"
+
+# Capability mappings — abstract capability → platform-native tool or instruction
+capability_mappings:
+  file_read: "Read"
+  file_write: "Write / Edit"
+  directory_list: "Bash ls"
+  glob_search: "Glob"
+  content_search: "Grep"
+  terminal_run: "Bash"
+  git_operations: "Bash (git commands)"
+  web_fetch: "WebFetch / WebSearch"
+  subagent_spawn: "Task"
+
+# Capability classifications
+capabilities:
+  file_read: native
+  file_write: native
+  directory_list: native
+  glob_search: native
+  content_search: native
+  terminal_run: native
+  git_operations: native
+  web_fetch: native
+  subagent_spawn: native
+  structured_output: native
+
+# Declared limitations — these appear in the generated adapter
+declared_limitations:
+  - capability: subagent_isolation
+    classification: manual-fallback
+    description: "Claude Code sub-agents (Task tool) have different isolation guarantees than Codex subagents. For sensitive multi-agent workflows, verify isolation boundaries manually."
+  - capability: browser_automation
+    classification: manual-fallback
+    description: "Claude Code browser automation differs from Codex. Complex page interactions may require manual steps."
+
+# Frontmatter overrides — merged into the core frontmatter
+frontmatter:
+  add:
+    platform: claude-code
