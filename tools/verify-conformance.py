@@ -77,6 +77,7 @@ def verify_matrix(fixture_files):
         "fixtures/slice-1-pressure-test-and-record.md",
         "fixtures/slice-1-capability-degradation.md",
         "fixtures/slice-1-behavioral-matrix.md",
+        "fixtures/personal-institution-work-studio-contract.md",
     }
 
     for f in fixture_files:
@@ -104,6 +105,14 @@ def verify_matrix(fixture_files):
                 "Scenario 1", "Scenario 2", "Scenario 3",
                 "native", "manual-fallback", "unsupported",
                 "no false verification",
+            ])
+        elif name == "personal-institution-work-studio-contract.md":
+            _check_patterns(errors, name, content, [
+                "Scenario 1", "Scenario 2", "Scenario 3", "Scenario 4",
+                "Scenario 5", "Scenario 6", "Private record does not enter",
+                "Approved Evidence Bridge", "Chat does not silently",
+                "stale Active-lens", "missing evidence as a gap",
+                "Incompatible protocol versions", "manual, user-approved summary",
             ])
         elif "behavioral-matrix" in name:
             _check_patterns(errors, name, content, [
@@ -308,6 +317,8 @@ def main():
             # Default to all known fixture files
             fixtures_dir = ROOT / "fixtures"
             fixture_files = [str(p) for p in fixtures_dir.glob("slice-1-*.md")]
+            fixture_files.append(
+                str(fixtures_dir / "personal-institution-work-studio-contract.md"))
 
         print("=== Behavioral Matrix Verification ===")
         errors = verify_matrix(fixture_files)
