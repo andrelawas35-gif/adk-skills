@@ -78,6 +78,7 @@ def verify_matrix(fixture_files):
         "fixtures/slice-1-capability-degradation.md",
         "fixtures/slice-1-behavioral-matrix.md",
         "fixtures/slice-2-turn-signal-into-work.md",
+        "fixtures/slice-2-design-tracer-bullet.md",
         "fixtures/personal-institution-work-studio-contract.md",
     }
 
@@ -144,6 +145,13 @@ def verify_matrix(fixture_files):
                 "Scenario 1", "Scenario 2", "Scenario 3", "Scenario 4",
                 "user's language", "explicit activation", "Evidence Bridge",
                 "manual-fallback", "unsupported",
+            ])
+        elif "design-tracer-bullet" in name:
+            _check_patterns(errors, name, content, [
+                "Scenario 1", "Scenario 2", "Scenario 3", "Scenario 4",
+                "recommendation", "one question", "accepted design",
+                "riskiest assumption", "rollback", "observability",
+                "Adjacent Possibility Pass", "option space", "does not implement",
             ])
 
     # Verify behavioral matrix exists

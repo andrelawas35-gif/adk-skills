@@ -30,6 +30,31 @@
       "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
     },
     {
+      "name": "design-tracer-bullet",
+      "path": "adapters/github-copilot/skills/design-tracer-bullet/SKILL.md",
+      "sha256": "15f4b236d905ddacb1a82b00c01fc646da5405be323b62363fa70e3c82d94c0e"
+    },
+    {
+      "name": "design-tracer-bullet/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/github-copilot/skills/design-tracer-bullet/references/CAPABILITY-DEGRADATION.md",
+      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+    },
+    {
+      "name": "design-tracer-bullet/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/github-copilot/skills/design-tracer-bullet/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "ff61f7796626f48d2036633b4faf76dcfd7233a24ee8e2b53d4a7080df9020a0"
+    },
+    {
+      "name": "design-tracer-bullet/references/EVIDENCE-MODEL.md",
+      "path": "adapters/github-copilot/skills/design-tracer-bullet/references/EVIDENCE-MODEL.md",
+      "sha256": "5e3ccd05bb7ff08015c9402cb5c708d83706b8c79dcb8546e1217a1528091141"
+    },
+    {
+      "name": "design-tracer-bullet/references/SHARED-PROTOCOL.md",
+      "path": "adapters/github-copilot/skills/design-tracer-bullet/references/SHARED-PROTOCOL.md",
+      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
+    },
+    {
       "name": "pressure-test-decision",
       "path": "adapters/github-copilot/skills/pressure-test-decision/SKILL.md",
       "sha256": "025827f30cffa3ffa52bf05d04dd2cfcdc1396f705253f3a6b7f96abc789822f"
