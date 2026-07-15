@@ -1,16 +1,17 @@
 {
   "platform": "github-copilot",
+  "version": "0.1.0",
   "generated_by": "tools/generate-adapters.py",
   "files": [
     {
       "name": "conduct-work-object",
       "path": "adapters/github-copilot/skills/conduct-work-object/SKILL.md",
-      "sha256": "114d67652fb6419bcf750110915c02570c21d7af050b87c9eb0221aa6c0619dd"
+      "sha256": "d2fc32a37b7241315befaddaa0b6ac2f7b6f64669e605f7c2b63dffa2dbc002a"
     },
     {
       "name": "pressure-test-decision",
       "path": "adapters/github-copilot/skills/pressure-test-decision/SKILL.md",
-      "sha256": "bd76587921365d45ebf9252491346eaaa285d9029c9140962fedf73aad7549d2"
+      "sha256": "9e65c7e3729cd636f6a079169e8de6d6d91090ad564f573375552a9d0dd8d46b"
     }
   ]
 }

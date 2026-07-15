@@ -1,16 +1,17 @@
 {
   "platform": "codex",
+  "version": "0.1.0",
   "generated_by": "tools/generate-adapters.py",
   "files": [
     {
       "name": "conduct-work-object",
       "path": "adapters/codex/skills/conduct-work-object/SKILL.md",
-      "sha256": "e1f62bf28760e5eef85c007eacc0fc98e7dc2802419833f94593e9e281f1bcf2"
+      "sha256": "7353a483619f12f0a6e4b67dbdc286d0f0294186545ecd5e563cc811dc32546b"
     },
     {
       "name": "pressure-test-decision",
       "path": "adapters/codex/skills/pressure-test-decision/SKILL.md",
-      "sha256": "e1c3b64d98087444aa4347611034856e2013b6ff4235f7196689980ede9cc815"
+      "sha256": "a0e51523cb10acf3bb7efdd5f749ad0a3179dee9c176272f7b7953902a2dd2d5"
     }
   ]
 }

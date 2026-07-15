@@ -5,6 +5,7 @@
 platform: claude-code
 platform_label: "Claude Code"
 skill_install_dir: "~/.claude/skills/"
+project_install_dir: ".claude/skills/"
 skill_file_extension: ".md"
 manifest_path: "adapters/claude-code/manifest.json"
 
@@ -41,6 +42,9 @@ capabilities:
   web_fetch: native
   subagent_spawn: native
   structured_output: native
+  browser_automation: manual-fallback
+  subagent_isolation: manual-fallback
+  parallel_tool_execution: manual-fallback
 
 # Declared limitations — these appear in the generated adapter
 declared_limitations:

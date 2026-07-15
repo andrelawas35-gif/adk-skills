@@ -63,6 +63,21 @@ Work Objects.
 - The workspace root must be identifiable (search upward for `.git`,
   `.work-studio/`, or filesystem boundary)
 
+## Required capabilities
+
+This skill requires the following abstract capabilities. The platform adapter
+classifies each as native, manual-fallback, or unsupported and degrades
+explicitly when one is unavailable (see `references/CAPABILITY-DEGRADATION.md`).
+
+- `file_read` — Read Work Object files, config, active.md
+- `file_write` — Create and update Work Object files, append History
+- `directory_list` — List `.work-studio/objects/` directory
+- `glob_search` — Find Work Objects by ID pattern (`YYYY/MM/<id>-*.md`)
+- `content_search` — Search for Work Objects by title or content
+- `terminal_run` — Run git commands for workspace discovery
+- `git_operations` — Check repository boundaries, commit work
+- `structured_output` — Produce valid YAML frontmatter
+
 ## Consequence and authority rules
 
 Apply the rules in `references/CONSEQUENCE-AUTHORITY.md`:

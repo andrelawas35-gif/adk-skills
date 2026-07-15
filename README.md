@@ -80,6 +80,17 @@ python3 tools/generate-adapters.py --check   # verify no drift
 | [AGREEMENT-LOOP.md](references/AGREEMENT-LOOP.md) | Shared reasoning protocol for decision boundaries |
 | [EVIDENCE-MODEL.md](references/EVIDENCE-MODEL.md) | Provenance lanes and evidence recording rules |
 | [CONSEQUENCE-AUTHORITY.md](references/CONSEQUENCE-AUTHORITY.md) | Consequence levels, sensitivity classes, and authority gates |
+| [CAPABILITY-DEGRADATION.md](references/CAPABILITY-DEGRADATION.md) | Three-tier capability classification (native/manual-fallback/unsupported) and degradation rules |
+
+## Behavioral Fixtures
+
+Fixtures specify observable behavior for skills and handoffs. They are the
+regression suite for instruction changes; they do not prescribe hidden
+reasoning.
+
+| Fixture | Description |
+|---------|-------------|
+| [personal-institution-work-studio-contract.md](fixtures/personal-institution-work-studio-contract.md) | Privacy, provenance, personalization, and handoff behavior across the two packages |
 
 ## Skill Structure
 

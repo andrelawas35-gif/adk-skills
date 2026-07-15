@@ -67,6 +67,21 @@ rationale with revisit triggers.
 - The decision is genuinely unresolved — the answer is not obvious from
   existing evidence
 
+## Required capabilities
+
+This skill requires the following abstract capabilities. The platform adapter
+classifies each as native, manual-fallback, or unsupported and degrades
+explicitly when one is unavailable (see `references/CAPABILITY-DEGRADATION.md`).
+
+- `file_read` — Read Work Object files, evidence, prior decisions
+- `file_write` — Update Work Object with decisions, History entries
+- `content_search` — Look up discoverable facts in the workspace
+- `terminal_run` — Retrieve facts from git history, run checks
+- `git_operations` — Inspect repository state for evidence
+- `structured_output` — Produce decision records and YAML frontmatter
+- `web_fetch` — Retrieve external documentation or sources when relevant
+- `subagent_spawn` — Parallel Standards and Spec review (optional)
+
 ## Consequence and authority rules
 
 Apply `references/CONSEQUENCE-AUTHORITY.md`:
@@ -436,7 +451,26 @@ Core decision logic, authority boundaries, and schema semantics are
 preserved unchanged. This section documents only platform-specific
 wiring and declared limitations.
 
-**Installation**: Copy this skill to `~/.copilot/skills/`.
+### Installation and precedence
+
+Install with the maintainer tool (no Python required at runtime — it
+verifies checksums with the platform's `shasum`/`sha256sum`):
+
+```sh
+# Global bootstrap (conductor everywhere):
+tools/install.sh --platform github-copilot --global
+# Project pin (takes precedence inside this project):
+tools/install.sh --platform github-copilot --project .
+```
+
+- Global install dir: `~/.copilot/skills/`
+- Project pin dir: `.copilot/skills/`
+
+A **project-pinned** adapter always takes precedence over the global
+bootstrap install. The global install supplies conductor and bootstrap
+behavior everywhere, then defers to the version a project has pinned.
+Precedence is recorded in `.work-studio/adapter.lock` and honored by
+GitHub Copilot's project-over-user skill resolution.
 
 ### Discovery
 
@@ -449,16 +483,57 @@ wiring and declared limitations.
 
 | Abstract capability | Platform tool | Classification |
 |---------------------|---------------|----------------|
+| `browser_automation` | `—` | manual-fallback |
 | `content_search` | `grep_search` | native |
 | `directory_list` | `list_dir` | native |
 | `file_read` | `read_file` | native |
 | `file_write` | `create_file / replace_string_in_file / multi_replace_string_in_file` | native |
 | `git_operations` | `run_in_terminal (git commands)` | native |
 | `glob_search` | `file_search` | native |
+| `parallel_tool_execution` | `—` | manual-fallback |
 | `structured_output` | `—` | native |
 | `subagent_spawn` | `runSubagent` | native |
 | `terminal_run` | `run_in_terminal` | native |
 | `web_fetch` | `open_browser_page / mcp tools` | native |
+| `web_search` | `—` | manual-fallback |
+
+### Capability Degradation
+
+This adapter classifies every required capability. When a capability
+is unavailable, the workflow degrades explicitly — it never pretends
+that equivalent verification occurred.
+
+**Degradation rules**:
+
+- **`manual-fallback`**: Pause with ONE concrete manual instruction.
+  Record in the Work Object what was done and what remains unverified.
+  Never mark verification, export, or deployment as "successful" when
+  the required capability was unavailable.
+- **`unsupported`**: Stop the affected path immediately. Record the
+  platform limitation. Route to a supported platform or ask the user.
+- **Stricter safety wins**: When this platform imposes a stricter
+  constraint than the core, the platform rule takes precedence.
+  Divergences are disclosed below.
+
+#### `browser_automation` (manual-fallback)
+
+- **Behavior**: Pause and give one concrete manual instruction.
+- **Record**: Append History entry noting the capability gap, the
+  manual action taken, and what remains unverified.
+- **Note**: GitHub Copilot browser automation requires user interaction for complex workflows. Use manual steps for multi-page flows.
+
+#### `parallel_tool_execution` (manual-fallback)
+
+- **Behavior**: Pause and give one concrete manual instruction.
+- **Record**: Append History entry noting the capability gap, the
+  manual action taken, and what remains unverified.
+- **Note**: GitHub Copilot may serialize some parallel tool calls. For performance-critical multi-step workflows, verify execution order manually.
+
+#### `web_search` (manual-fallback)
+
+- **Behavior**: Pause and give one concrete manual instruction.
+- **Record**: Append History entry noting the capability gap, the
+  manual action taken, and what remains unverified.
 
 ### Declared Limitations
 

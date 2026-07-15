@@ -29,7 +29,19 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 CORE_DIR = ROOT / "skills" / "core"
 ADAPTERS_DIR = ROOT / "adapters"
+VERSION_FILE = ROOT / "VERSION"
 PLATFORMS = ["codex", "claude-code", "github-copilot"]
+
+
+def read_version() -> str:
+    """Read the release version, pinned in the VERSION file.
+
+    Read from a file (never derived from a clock or environment) so that
+    regeneration is byte-for-byte deterministic.
+    """
+    if VERSION_FILE.exists():
+        return VERSION_FILE.read_text().strip()
+    return "0.0.0"
 
 
 # ── Minimal YAML parser ──────────────────────────────────────────────────────
@@ -198,6 +210,7 @@ def generate_adapter_section(overlay):
     """Generate the Platform Adapter appendix."""
     platform_label = overlay.get("platform_label", overlay["platform"])
     install_dir = overlay.get("skill_install_dir", "N/A")
+    project_install_dir = overlay.get("project_install_dir", "N/A")
 
     lines = []
     lines.append("")
@@ -210,7 +223,28 @@ def generate_adapter_section(overlay):
     lines.append("preserved unchanged. This section documents only platform-specific")
     lines.append("wiring and declared limitations.")
     lines.append("")
-    lines.append(f"**Installation**: Copy this skill to `{install_dir}`.")
+
+    # Installation and precedence
+    lines.append("### Installation and precedence")
+    lines.append("")
+    lines.append("Install with the maintainer tool (no Python required at runtime — it")
+    lines.append("verifies checksums with the platform's `shasum`/`sha256sum`):")
+    lines.append("")
+    lines.append("```sh")
+    lines.append(f"# Global bootstrap (conductor everywhere):")
+    lines.append(f"tools/install.sh --platform {overlay['platform']} --global")
+    lines.append(f"# Project pin (takes precedence inside this project):")
+    lines.append(f"tools/install.sh --platform {overlay['platform']} --project .")
+    lines.append("```")
+    lines.append("")
+    lines.append(f"- Global install dir: `{install_dir}`")
+    lines.append(f"- Project pin dir: `{project_install_dir}`")
+    lines.append("")
+    lines.append("A **project-pinned** adapter always takes precedence over the global")
+    lines.append("bootstrap install. The global install supplies conductor and bootstrap")
+    lines.append("behavior everywhere, then defers to the version a project has pinned.")
+    lines.append("Precedence is recorded in `.work-studio/adapter.lock` and honored by")
+    lines.append(f"{platform_label}'s project-over-user skill resolution.")
     lines.append("")
 
     # Discovery
@@ -238,6 +272,52 @@ def generate_adapter_section(overlay):
             classification = caps.get(cap, "—")
             lines.append(f"| `{cap}` | `{tool}` | {classification} |")
         lines.append("")
+
+        # Capability Degradation section
+        non_native = {k: v for k, v in caps.items() if v != "native"}
+        if non_native:
+            lines.append("### Capability Degradation")
+            lines.append("")
+            lines.append("This adapter classifies every required capability. When a capability")
+            lines.append("is unavailable, the workflow degrades explicitly — it never pretends")
+            lines.append("that equivalent verification occurred.")
+            lines.append("")
+            lines.append("**Degradation rules**:")
+            lines.append("")
+            lines.append("- **`manual-fallback`**: Pause with ONE concrete manual instruction.")
+            lines.append("  Record in the Work Object what was done and what remains unverified.")
+            lines.append('  Never mark verification, export, or deployment as "successful" when')
+            lines.append("  the required capability was unavailable.")
+            lines.append("- **`unsupported`**: Stop the affected path immediately. Record the")
+            lines.append("  platform limitation. Route to a supported platform or ask the user.")
+            lines.append("- **Stricter safety wins**: When this platform imposes a stricter")
+            lines.append("  constraint than the core, the platform rule takes precedence.")
+            lines.append("  Divergences are disclosed below.")
+            lines.append("")
+
+            for cap in sorted(non_native.keys()):
+                classification = non_native[cap]
+                tool = mappings.get(cap, "—")
+                # Find matching declared limitation for the description
+                desc = ""
+                for lim in overlay.get("declared_limitations", []):
+                    if lim.get("capability") == cap:
+                        desc = lim.get("description", "")
+                        break
+                lines.append(f"#### `{cap}` ({classification})")
+                lines.append("")
+                if tool and tool != "—":
+                    lines.append(f"- **Best-effort tool**: `{tool}`")
+                if classification == "manual-fallback":
+                    lines.append("- **Behavior**: Pause and give one concrete manual instruction.")
+                    lines.append(f"- **Record**: Append History entry noting the capability gap, the")
+                    lines.append("  manual action taken, and what remains unverified.")
+                elif classification == "unsupported":
+                    lines.append("- **Behavior**: Stop the affected path. Do not attempt or substitute.")
+                    lines.append(f"- **Record**: Note the platform limitation in the Work Object body.")
+                if desc:
+                    lines.append(f"- **Note**: {desc}")
+                lines.append("")
 
     # Limitations
     limitations = overlay.get("declared_limitations", [])
@@ -282,6 +362,20 @@ def extract_body(filepath):
 
 # ── Generation ────────────────────────────────────────────────────────────────
 
+def build_skill_output(core_skill_dir, overlay):
+    """Build the exact adapter SKILL.md text for a core skill + overlay.
+
+    Single source of truth for both generation and drift checking, so the two
+    paths can never diverge.
+    """
+    body = extract_body(core_skill_dir / "SKILL.md")
+    frontmatter = generate_frontmatter(core_skill_dir.name, overlay)
+    adapter_section = generate_adapter_section(overlay)
+    output = frontmatter + body.rstrip("\n") + adapter_section
+    # Ensure exactly one trailing newline
+    return output.rstrip("\n") + "\n"
+
+
 def generate_skill(core_skill_dir, overlay, output_dir):
     """Generate one adapter skill from core + overlay."""
     core_file = core_skill_dir / "SKILL.md"
@@ -291,13 +385,7 @@ def generate_skill(core_skill_dir, overlay, output_dir):
         print(f"  SKIP {skill_name}: core file not found at {core_file}")
         return None
 
-    body = extract_body(core_file)
-    frontmatter = generate_frontmatter(skill_name, overlay)
-    adapter_section = generate_adapter_section(overlay)
-
-    output = frontmatter + body.rstrip("\n") + adapter_section
-    # Ensure exactly one trailing newline
-    output = output.rstrip("\n") + "\n"
+    output = build_skill_output(core_skill_dir, overlay)
 
     output_dir.mkdir(parents=True, exist_ok=True)
     output_file = output_dir / "SKILL.md"
@@ -339,19 +427,50 @@ def generate_platform(platform_name):
 
 # ── Manifest ──────────────────────────────────────────────────────────────────
 
+def build_manifest(platform_name, entries):
+    """Build the manifest dict for a platform. Deterministic (no timestamps)."""
+    return {
+        "platform": platform_name,
+        "version": read_version(),
+        "generated_by": "tools/generate-adapters.py",
+        "files": entries,
+    }
+
+
 def write_manifest(platform_name, entries):
     """Write per-platform manifest.json with checksums."""
     manifest_dir = ADAPTERS_DIR / platform_name
     manifest_dir.mkdir(parents=True, exist_ok=True)
 
-    manifest = {
-        "platform": platform_name,
-        "generated_by": "tools/generate-adapters.py",
-        "files": entries,
-    }
+    manifest = build_manifest(platform_name, entries)
     manifest_path = manifest_dir / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
     print(f"  Manifest: {manifest_path.relative_to(ROOT)}")
+
+
+def build_checksums(platform_name, entries):
+    """Build SHA256SUMS text: `<sha256>  <path-relative-to-adapter-dir>`.
+
+    Paths are relative to `adapters/<platform>/` so the installer can `cd`
+    into the adapter directory and run `shasum -a 256 -c SHA256SUMS` with no
+    other tooling. Sorted by path for deterministic output.
+    """
+    adapter_dir = ADAPTERS_DIR / platform_name
+    rows = []
+    for entry in entries:
+        rel = Path(entry["path"]).relative_to(Path("adapters") / platform_name)
+        rows.append((str(rel), entry["sha256"]))
+    rows.sort()
+    return "".join(f"{sha}  {rel}\n" for rel, sha in rows)
+
+
+def write_checksums(platform_name, entries):
+    """Write per-platform SHA256SUMS for dependency-free runtime verification."""
+    manifest_dir = ADAPTERS_DIR / platform_name
+    manifest_dir.mkdir(parents=True, exist_ok=True)
+    sums_path = manifest_dir / "SHA256SUMS"
+    sums_path.write_text(build_checksums(platform_name, entries))
+    print(f"  Checksums: {sums_path.relative_to(ROOT)}")
 
 
 # ── Check mode ────────────────────────────────────────────────────────────────
@@ -368,20 +487,15 @@ def check_platform(platform_name):
 
     output_base = ADAPTERS_DIR / platform_name / "skills"
     all_clean = True
+    expected_entries = []
 
     for skill_dir in sorted(CORE_DIR.iterdir()):
         if not skill_dir.is_dir():
             continue
         skill_name = skill_dir.name
-        output_dir = output_base / skill_name
-        output_file = output_dir / "SKILL.md"
+        output_file = output_base / skill_name / "SKILL.md"
 
-        # Generate expected content
-        body = extract_body(skill_dir / "SKILL.md")
-        frontmatter = generate_frontmatter(skill_name, overlay)
-        adapter_section = generate_adapter_section(overlay)
-        expected = frontmatter + body.rstrip("\n") + adapter_section
-        expected = expected.rstrip("\n") + "\n"
+        expected = build_skill_output(skill_dir, overlay)
 
         if not output_file.exists():
             print(f"  MISSING: {output_file.relative_to(ROOT)}")
@@ -395,25 +509,18 @@ def check_platform(platform_name):
         else:
             print(f"  OK: {output_file.relative_to(ROOT)}")
 
+        expected_entries.append({
+            "name": skill_name,
+            "path": str(output_file.relative_to(ROOT)),
+            "sha256": hashlib.sha256(expected.encode()).hexdigest(),
+        })
+
     # Check manifest
     manifest_path = ADAPTERS_DIR / platform_name / "manifest.json"
     if manifest_path.exists():
         try:
             manifest = json.loads(manifest_path.read_text())
-            expected_entries = []
-            for skill_dir in sorted(CORE_DIR.iterdir()):
-                if not skill_dir.is_dir():
-                    continue
-                skill_name = skill_dir.name
-                output_file = output_base / skill_name / "SKILL.md"
-                if output_file.exists():
-                    checksum = hashlib.sha256(output_file.read_bytes()).hexdigest()
-                    expected_entries.append({
-                        "name": skill_name,
-                        "path": str(output_file.relative_to(ROOT)),
-                        "sha256": checksum,
-                    })
-            if manifest.get("files") != expected_entries:
+            if manifest != build_manifest(platform_name, expected_entries):
                 print(f"  MANIFEST DRIFT: {manifest_path.relative_to(ROOT)}")
                 all_clean = False
             else:
@@ -421,6 +528,21 @@ def check_platform(platform_name):
         except (json.JSONDecodeError, KeyError) as e:
             print(f"  MANIFEST ERROR: {manifest_path.relative_to(ROOT)}: {e}")
             all_clean = False
+    else:
+        print(f"  MANIFEST MISSING: {manifest_path.relative_to(ROOT)}")
+        all_clean = False
+
+    # Check SHA256SUMS
+    sums_path = ADAPTERS_DIR / platform_name / "SHA256SUMS"
+    expected_sums = build_checksums(platform_name, expected_entries)
+    if not sums_path.exists():
+        print(f"  CHECKSUMS MISSING: {sums_path.relative_to(ROOT)}")
+        all_clean = False
+    elif sums_path.read_text() != expected_sums:
+        print(f"  CHECKSUMS DRIFT: {sums_path.relative_to(ROOT)}")
+        all_clean = False
+    else:
+        print(f"  CHECKSUMS OK: {sums_path.relative_to(ROOT)}")
 
     return all_clean
 
@@ -448,6 +570,7 @@ def main():
             entries = generate_platform(platform)
             if entries:
                 write_manifest(platform, entries)
+                write_checksums(platform, entries)
         print("\nDone. Run 'python3 tools/generate-adapters.py --check' to verify.")
 
 

@@ -67,6 +67,21 @@ rationale with revisit triggers.
 - The decision is genuinely unresolved — the answer is not obvious from
   existing evidence
 
+## Required capabilities
+
+This skill requires the following abstract capabilities. The platform adapter
+classifies each as native, manual-fallback, or unsupported and degrades
+explicitly when one is unavailable (see `references/CAPABILITY-DEGRADATION.md`).
+
+- `file_read` — Read Work Object files, evidence, prior decisions
+- `file_write` — Update Work Object with decisions, History entries
+- `content_search` — Look up discoverable facts in the workspace
+- `terminal_run` — Retrieve facts from git history, run checks
+- `git_operations` — Inspect repository state for evidence
+- `structured_output` — Produce decision records and YAML frontmatter
+- `web_fetch` — Retrieve external documentation or sources when relevant
+- `subagent_spawn` — Parallel Standards and Spec review (optional)
+
 ## Consequence and authority rules
 
 Apply `references/CONSEQUENCE-AUTHORITY.md`:

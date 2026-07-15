@@ -8,6 +8,10 @@ Andrelawas Work Studio is the execution and continuity system for bounded work. 
 The separate personal evidence and reflection system that preserves lived observations, recurring questions, and personal interpretation.
 _Avoid_: personal-memory store, Work Studio archive
 
+**Shared protocol**:
+A small, versioned specification of the terms and handoff rules shared by separately installable Personal Institution and Work Studio packages.
+_Avoid_: shared mega-skill, duplicated instructions
+
 **Work Studio**:
 The execution, decision, and delivery system whose canonical record is a Work Object.
 _Avoid_: personal archive, life operating system
@@ -31,6 +35,10 @@ _Avoid_: identity claim, default theme
 **Hard-boundary entry**:
 An explicit Personalization Contract entry governing privacy, consent, safety, or authority; it changes only through deliberate review.
 _Avoid_: preference, convenience rule
+
+**Inactive contract entry**:
+A Working-method or Active-lens entry whose review trigger passed without renewal; it remains as historical evidence but no longer guides skills.
+_Avoid_: deleted preference, active default
 
 **Work Object**:
 The durable record of one activated inquiry, project, change, or incident in Work Studio.
