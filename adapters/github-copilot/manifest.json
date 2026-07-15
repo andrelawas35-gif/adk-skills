@@ -107,7 +107,7 @@
     {
       "name": "turn-signal-into-work",
       "path": "adapters/github-copilot/skills/turn-signal-into-work/SKILL.md",
-      "sha256": "3878c9d40cdcc08a3c41c50cd855fbeed9cef07193782906dcf6994dacc5d6f8"
+      "sha256": "ef8d10165083fbcff36a4bf834878d2f380470ce02d49c3fdd828ebed12384bd"
     },
     {
       "name": "turn-signal-into-work/references/CAPABILITY-DEGRADATION.md",

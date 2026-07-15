@@ -107,7 +107,7 @@
     {
       "name": "turn-signal-into-work",
       "path": "adapters/claude-code/skills/turn-signal-into-work/SKILL.md",
-      "sha256": "cb59027cc3c4ebdb86c09f01c29425a8cf582d6ec4ede7e109a890763a992817"
+      "sha256": "643cfb50dab26b6e56aa3d6e4d169726fe14001fcca668f171024c2159443583"
     },
     {
       "name": "turn-signal-into-work/references/CAPABILITY-DEGRADATION.md",

@@ -15,6 +15,14 @@ A signal deserves faithful capture before it deserves a project. Preserve the
 user's words, distinguish evidence from interpretation, and protect attention
 by creating a Work Object only when the user explicitly activates work.
 
+## Memory Candidate gate
+
+A Memory Candidate that depends on Personal Institution context may enter Work
+Studio only as an approved, redacted Evidence Bridge. Direct personal-memory
+content must not enter a Work Object or inbox entry. Explicit activation does
+not bypass this gate: when no approved bridge exists, retain no personal
+content and request the minimum necessary user-approved summary instead.
+
 ## Personal working lens
 
 The useful question is not "how can this become a project?" but "what is the
@@ -43,9 +51,9 @@ This skill does not:
 **Required input:** a live signal in the user's language, such as an idea,
 observation, request, concern, or possible change.
 
-**Optional input:** an approved Evidence Bridge or a stable reference supplied
-by the user. Never request or retrieve the Personal Institution archive
-directly.
+**Optional input:** an approved, redacted Evidence Bridge or a stable reference
+supplied by the user. Never request or retrieve the Personal Institution
+archive directly.
 
 Discover the workspace by searching upward for `.work-studio/config.md`,
 stopping at the repository or filesystem boundary. Read the inbox and active
@@ -121,6 +129,12 @@ Institution records.
 
 Recommend one classification when unclear. State any inference and uncertainty.
 
+For a Memory Candidate, apply the Memory Candidate gate before activation. If
+the candidate needs personal context, accept only an approved, redacted
+Evidence Bridge with a stable source reference and sensitivity. Otherwise do
+not copy the candidate's personal-memory content into Work Studio; request the
+minimum necessary approved summary or stop with that evidence gap.
+
 ### 4. Persist the smallest appropriate artifact
 
 For remember or incubate, add a dated, user-language entry to
@@ -145,6 +159,9 @@ conductor to manufacture a Work Object.
   user report as `[lived]` unless a stronger source is supplied.
 - An Evidence Bridge must be user-approved, minimum-necessary, and record its
   provenance, sensitivity, source reference, and receiving Work Object.
+- Before recording a Memory Candidate, confirm that it is an approved, redacted
+  Evidence Bridge; direct personal-memory content must not enter a Work Object
+  or inbox entry.
 - Restricted material is never copied into inbox entries or Work Objects.
 
 ## Work Object updates

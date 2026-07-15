@@ -107,7 +107,7 @@
     {
       "name": "turn-signal-into-work",
       "path": "adapters/codex/skills/turn-signal-into-work/SKILL.md",
-      "sha256": "166069d9f1780d8085b66361a947bb60bfdc73ef11a492c7c9ae2a2cf533b37a"
+      "sha256": "d0e90329ee276e64755de30665b6e29d559bd307ccc2456557e59b811435a080"
     },
     {
       "name": "turn-signal-into-work/references/CAPABILITY-DEGRADATION.md",

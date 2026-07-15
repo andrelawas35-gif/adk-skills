@@ -100,6 +100,30 @@ Protocol versions.
 
 **Verification**: No cross-package private read or write occurs.
 
+## Scenario 7 — Memory Candidate gate admits only an approved bridge
+
+**Given**: A possible Work Object depends on a Memory Candidate held in the
+Personal Institution archive.
+**When**: The user explicitly activates the work without supplying an approved,
+redacted Evidence Bridge.
+**Then**:
+
+1. Work Studio does not treat explicit activation as approval to retrieve or
+copy the candidate.
+2. The candidate's personal-memory content must not enter a Work Object or
+inbox entry.
+3. It requests the minimum necessary user-approved summary or stable reference.
+4. Only an approved, redacted Evidence Bridge with provenance and sensitivity
+may be recorded for the receiving Work Object.
+
+**Recovery**: When the user supplies that approved, redacted bridge, Work
+Studio may route the activated signal to the conductor using the bridge's
+stable reference and sensitivity; it still does not copy the source record.
+
+**Verification**: The receiving Work Object contains the bridge metadata or an
+explicit evidence gap, never copied personal-memory content. Verify both the
+missing-bridge stop and approved-bridge route.
+
 ## Pass/Fail Criteria
 
 | Scenario | Pass condition |
@@ -110,6 +134,7 @@ Protocol versions.
 | Relevance | Active lenses do not distort unrelated work |
 | Editorial integrity | Missing evidence stays visible; no invented voice |
 | Version mismatch | Explicit, safe degradation without direct access |
+| Memory Candidate gate | Explicit activation never bypasses the approved-bridge boundary |
 
 All scenarios must pass before a protocol or cross-package behavior change is
 considered ready.
