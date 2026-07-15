@@ -31,12 +31,12 @@ Restart or reload the relevant agent after adding skills.
 |-------|-------------|
 | [google-adk-agent-builder](skills/google-adk-agent-builder/SKILL.md) | Build and iterate on local Google ADK agents in Python — scaffolding, tools, multi-agent flows, session/memory wiring, and local dev loop |
 | [conduct-work-object](skills/conduct-work-object/SKILL.md) | Detect, create, activate, resume, update, and close Work Objects — the canonical continuity surface of Andrelawas Work Studio |
+| [pressure-test-decision](skills/pressure-test-decision/SKILL.md) | Resume a Work Object, identify the highest-leverage unresolved decision, recommend before asking one question, and safely persist the confirmed choice |
 
 ## Planned Work Studio Skills
 
 - `turn-signal-into-work`
 - `investigate-live-question`
-- `pressure-test-decision`
 - `design-tracer-bullet`
 - `implement-bounded-change`
 - `verify-release-evidence`
