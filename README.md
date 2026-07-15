@@ -25,17 +25,40 @@ tools/generate-adapters.py       ← Dependency-free generator
 
 ## Installing Skills
 
-Copy the generated adapter for your platform into the appropriate skills
-directory:
+Install a platform's adapter with the dependency-free maintainer tool. It
+verifies checksums with the platform's `shasum`/`sha256sum` and requires **no
+Python at runtime**:
 
-| Platform | Install path |
-|----------|-------------|
-| Codex (VS Code) | `~/.codex/skills/` |
-| Claude Code | `~/.claude/skills/` |
-| GitHub Copilot | `~/.copilot/skills/` |
+```sh
+# Global bootstrap — the conductor, available everywhere:
+tools/install.sh --platform claude-code --global
 
-Each adapter's `manifest.json` contains SHA-256 checksums for verification.
-Project-pinned adapters take precedence over global installations.
+# Project pin — takes precedence inside this project:
+tools/install.sh --platform claude-code --project .
+```
+
+| Platform | Global path | Project pin path |
+|----------|-------------|------------------|
+| Codex (VS Code) | `~/.codex/skills/` | `.codex/skills/` |
+| Claude Code | `~/.claude/skills/` | `.claude/skills/` |
+| GitHub Copilot | `~/.copilot/skills/` | `.copilot/skills/` |
+
+Each adapter ships a `manifest.json` and a `SHA256SUMS` file with SHA-256
+checksums; the installer refuses to install artifacts that do not match. A
+**project-pinned** adapter always takes precedence over the global bootstrap
+install — the pin is recorded in `.work-studio/adapter.lock`. Inspect which
+install wins for a directory with:
+
+```sh
+tools/install.sh --platform claude-code --resolve .
+```
+
+### Verifying and testing
+
+```sh
+tools/install.sh --platform claude-code --verify   # verify committed artifacts
+sh tests/run.sh                                     # full generator + installer suite
+```
 
 ## Existing Skills
 
@@ -59,6 +82,32 @@ python3 tools/generate-adapters.py --check   # verify no drift
 | Codex | [conduct-work-object](adapters/codex/skills/conduct-work-object/SKILL.md), [pressure-test-decision](adapters/codex/skills/pressure-test-decision/SKILL.md) | [manifest.json](adapters/codex/manifest.json) |
 | Claude Code | [conduct-work-object](adapters/claude-code/skills/conduct-work-object/SKILL.md), [pressure-test-decision](adapters/claude-code/skills/pressure-test-decision/SKILL.md) | [manifest.json](adapters/claude-code/manifest.json) |
 | GitHub Copilot | [conduct-work-object](adapters/github-copilot/skills/conduct-work-object/SKILL.md), [pressure-test-decision](adapters/github-copilot/skills/pressure-test-decision/SKILL.md) | [manifest.json](adapters/github-copilot/manifest.json) |
+
+## Conformance Gate
+
+Slice 1 is gated by a CI workflow (`.github/workflows/ci.yml`)
+that enforces cross-platform behavioral equivalence:
+
+- **Drift detection**: `python3 tools/generate-adapters.py --check` fails when
+  committed artifacts diverge from source
+- **Behavioral matrix**: `tools/verify-conformance.py --all` checks that all 51
+  behavioral scenarios are documented and every platform has expected outcomes
+- **Structural verification**: All adapters contain required sections,
+  degradation rules, and platform declarations
+- **Manifest integrity**: `manifest.json` and `SHA256SUMS` checksums are
+  validated against generated files
+- **Generator contract**: Unit tests verify byte-for-byte idempotence, core
+  body preservation, and drift detection
+
+The [behavioral matrix](fixtures/slice-1-behavioral-matrix.md) covers:
+discovery, Work Object creation/resumption, pressure-testing, decision
+persistence, concurrency/authority, and capability degradation.
+
+Run locally:
+```bash
+python3 tools/verify-conformance.py --all
+python3 -m unittest discover -s tests -v
+```
 
 ## Planned Work Studio Skills
 

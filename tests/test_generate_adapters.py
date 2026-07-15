@@ -127,6 +127,33 @@ class GeneratorContract(unittest.TestCase):
                     sha, actual,
                     f"{platform}: SHA256SUMS mismatch for {rel}")
 
+    def test_all_platforms_share_identical_behavior(self):
+        """Every platform's adapter embeds the exact same core body, so the
+        shared behavioral scenario runs identically across platforms — the
+        only differences are metadata and the platform wiring appendix."""
+        for skill in core_skill_names():
+            bodies = {}
+            for platform in PLATFORMS:
+                adapter = (ADAPTERS_DIR / platform / "skills" / skill
+                           / "SKILL.md").read_text()
+                after_fm = adapter.split("---", 2)[2].lstrip("\n")
+                bodies[platform] = after_fm.split(
+                    "\n---\n\n## Platform Adapter", 1)[0]
+            distinct = set(bodies.values())
+            self.assertEqual(
+                len(distinct), 1,
+                f"{skill}: core behavior diverges across platforms")
+
+    def test_platform_constraints_are_disclosed(self):
+        """A manual-fallback capability must be surfaced in the adapter, not
+        silently changed — the adapter discloses the constraint."""
+        adapter = (ADAPTERS_DIR / "claude-code" / "skills"
+                   / "conduct-work-object" / "SKILL.md").read_text()
+        self.assertIn("manual-fallback", adapter)
+        self.assertIn("Declared Limitations", adapter)
+        self.assertIn("### Installation and precedence", adapter)
+        self.assertIn("takes precedence", adapter)
+
     def test_drift_is_detected(self):
         """--check must fail (and then recover) when an artifact is edited."""
         target = (ADAPTERS_DIR / "claude-code" / "skills"

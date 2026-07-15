@@ -1,0 +1,90 @@
+name: CI — Slice 1 Conformance Gate
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+
+jobs:
+  conformance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # ── Gate 1: Generated-artifact drift ──────────────────────────────
+      - name: Fail on committed-adapter drift
+        run: |
+          python3 tools/generate-adapters.py
+          if ! git diff --quiet -- adapters; then
+            echo "::error::Generated adapters are out of date. Run 'python3 tools/generate-adapters.py' and commit."
+            git --no-pager diff --stat -- adapters
+            exit 1
+          fi
+          echo "Committed adapters match the canonical core."
+
+      # ── Gate 2: Generator + installer test suite ───────────────────────
+      - name: Generator + installer test suite
+        run: sh tests/run.sh
+
+      # ── Gate 3: Behavioral matrix and structural verification ──────────
+      - name: Verify behavioral matrix and adapter structure
+        run: python3 tools/verify-conformance.py --all
+
+      # ── Gate 4: Manifest and checksum integrity ────────────────────────
+      - name: Verify manifests and SHA256SUMS
+        run: |
+          for platform in codex claude-code github-copilot; do
+            echo "=== $platform ==="
+            python3 -c "
+import json, hashlib
+from pathlib import Path
+manifest = json.loads(Path('adapters/$platform/manifest.json').read_text())
+for entry in manifest['files']:
+    actual = hashlib.sha256(Path(entry['path']).read_bytes()).hexdigest()
+    assert actual == entry['sha256'], f'{entry[\"path\"]}: checksum mismatch'
+print('Manifest OK')
+            "
+            sha256sum -c "adapters/$platform/SHA256SUMS" 2>/dev/null || \
+              shasum -a 256 -c "adapters/$platform/SHA256SUMS" 2>/dev/null
+          done
+
+      # ── Gate 5: Clean checkout demonstration ──────────────────────────
+      - name: Verify Slice 1 is demonstrable from clean checkout
+        run: |
+          echo "=== Slice 1 Clean Checkout Validation ==="
+          errors=0
+          for f in references/WORK-OBJECT.md references/AGREEMENT-LOOP.md \
+                   references/EVIDENCE-MODEL.md references/CONSEQUENCE-AUTHORITY.md \
+                   references/CAPABILITY-DEGRADATION.md; do
+            [ -f "$f" ] && echo "  OK: $f" || { echo "  MISSING: $f"; errors=1; }
+          done
+          for f in skills/core/conduct-work-object/SKILL.md \
+                   skills/core/pressure-test-decision/SKILL.md; do
+            [ -f "$f" ] && echo "  OK: $f" || { echo "  MISSING: $f"; errors=1; }
+          done
+          for platform in codex claude-code github-copilot; do
+            for skill in conduct-work-object pressure-test-decision; do
+              f="adapters/$platform/skills/$skill/SKILL.md"
+              [ -f "$f" ] && echo "  OK: $f" || { echo "  MISSING: $f"; errors=1; }
+            done
+            for f in "adapters/$platform/manifest.json" "adapters/$platform/SHA256SUMS"; do
+              [ -f "$f" ] && echo "  OK: $f" || { echo "  MISSING: $f"; errors=1; }
+            done
+          done
+          for f in fixtures/slice-1-initialize-and-resume.md \
+                   fixtures/slice-1-pressure-test-and-record.md \
+                   fixtures/slice-1-capability-degradation.md \
+                   fixtures/slice-1-behavioral-matrix.md; do
+            [ -f "$f" ] && echo "  OK: $f" || { echo "  MISSING: $f"; errors=1; }
+          done
+          [ -f ".work-studio/config.md" ] && echo "  OK: .work-studio/config.md" || { echo "  MISSING: .work-studio/config.md"; errors=1; }
+          if [ $errors -ne 0 ]; then
+            echo "::error::Slice 1 is not demonstrable from clean checkout"
+            exit 1
+          fi
+          echo "=== Slice 1 is demonstrable from clean checkout ==="
