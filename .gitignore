@@ -8,3 +8,9 @@ Thumbs.db
 *.swp
 *.swo
 *~
+
+# Work Studio — private operational records
+.work-studio/active.md
+.work-studio/inbox.md
+.work-studio/objects/
+# .work-studio/config.md is tracked (workspace identity)
