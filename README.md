@@ -74,6 +74,7 @@ sh tests/run.sh                                     # full generator + installer
 | [pressure-test-decision](skills/core/pressure-test-decision/SKILL.md) | Resume a Work Object, identify the highest-leverage unresolved decision, recommend before asking one question, and safely persist the confirmed choice |
 | [turn-signal-into-work](skills/core/turn-signal-into-work/SKILL.md) | Capture a live signal, classify its smallest durable handling, and activate a Work Object only with explicit user authority |
 | [design-tracer-bullet](skills/core/design-tracer-bullet/SKILL.md) | Design and record the smallest demoable end-to-end slice that tests a Design-state Work Object's riskiest assumption, then route it without implementing |
+| [implement-bounded-change](skills/core/implement-bounded-change/SKILL.md) | Implement only an accepted tracer bullet while preserving unrelated work, continuously verifying the bounded path, and stopping for new authority |
 
 ## Platform Adapters
 
@@ -146,6 +147,7 @@ reasoning.
 |---------|-------------|
 | [personal-institution-work-studio-contract.md](fixtures/personal-institution-work-studio-contract.md) | Privacy, provenance, personalization, and handoff behavior across the two packages |
 | [slice-2-design-tracer-bullet.md](fixtures/slice-2-design-tracer-bullet.md) | Bounded tracer-bullet recommendation, acceptance, risk treatment, rollback, and routing behavior |
+| [slice-2-implement-bounded-change.md](fixtures/slice-2-implement-bounded-change.md) | Accepted bounded implementation, working-tree preservation, continuous verification, deviation, and degradation behavior |
 
 ## Verification Evidence
 

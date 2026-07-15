@@ -79,6 +79,7 @@ def verify_matrix(fixture_files):
         "fixtures/slice-1-behavioral-matrix.md",
         "fixtures/slice-2-turn-signal-into-work.md",
         "fixtures/slice-2-design-tracer-bullet.md",
+        "fixtures/slice-2-implement-bounded-change.md",
         "fixtures/personal-institution-work-studio-contract.md",
     }
 
@@ -152,6 +153,13 @@ def verify_matrix(fixture_files):
                 "recommendation", "one question", "accepted design",
                 "riskiest assumption", "rollback", "observability",
                 "Adjacent Possibility Pass", "option space", "does not implement",
+            ])
+        elif "implement-bounded-change" in name:
+            _check_patterns(errors, name, content, [
+                "Scenario 1", "Scenario 2", "Scenario 3", "Scenario 4",
+                "repository inspection", "unrelated working-tree changes",
+                "continuous verification", "deviation", "manual-fallback",
+                "unsupported", "does not deploy",
             ])
 
     # Verify behavioral matrix exists
