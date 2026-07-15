@@ -1,0 +1,4 @@
+interface:
+  display_name: "Socratic Inquiry"
+  short_description: "Clarify thinking before giving an answer."
+  default_prompt: "Use $socratic-inquiry to help me think through this without rushing to an answer:"

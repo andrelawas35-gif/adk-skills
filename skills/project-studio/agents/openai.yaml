@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project Studio"
+  short_description: "Turn a live question into a real project."
+  default_prompt: "Use $project-studio to turn this interest into a small reality-based project:"

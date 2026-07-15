@@ -1,0 +1,4 @@
+interface:
+  display_name: "Capture Lived Evidence"
+  short_description: "Capture raw experiences as dated observations."
+  default_prompt: "Use $capture-lived-evidence to log this as a dated observation without interpretation:"
