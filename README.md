@@ -75,6 +75,7 @@ sh tests/run.sh                                     # full generator + installer
 | [turn-signal-into-work](skills/core/turn-signal-into-work/SKILL.md) | Capture a live signal, classify its smallest durable handling, and activate a Work Object only with explicit user authority |
 | [design-tracer-bullet](skills/core/design-tracer-bullet/SKILL.md) | Design and record the smallest demoable end-to-end slice that tests a Design-state Work Object's riskiest assumption, then route it without implementing |
 | [implement-bounded-change](skills/core/implement-bounded-change/SKILL.md) | Implement only an accepted tracer bullet while preserving unrelated work, continuously verifying the bounded path, and stopping for new authority |
+| [verify-release-evidence](skills/core/verify-release-evidence/SKILL.md) | Report proportionate verification evidence for an implemented bounded change, including operational recovery, dependency, privacy, security, and evidence gaps without releasing |
 
 ## Platform Adapters
 
@@ -87,9 +88,9 @@ python3 tools/generate-adapters.py --check   # verify no drift
 
 | Platform | Adapters | Manifest |
 |----------|----------|----------|
-| Codex | [conduct-work-object](adapters/codex/skills/conduct-work-object/SKILL.md), [pressure-test-decision](adapters/codex/skills/pressure-test-decision/SKILL.md), [turn-signal-into-work](adapters/codex/skills/turn-signal-into-work/SKILL.md), [design-tracer-bullet](adapters/codex/skills/design-tracer-bullet/SKILL.md) | [manifest.json](adapters/codex/manifest.json) |
-| Claude Code | [conduct-work-object](adapters/claude-code/skills/conduct-work-object/SKILL.md), [pressure-test-decision](adapters/claude-code/skills/pressure-test-decision/SKILL.md), [turn-signal-into-work](adapters/claude-code/skills/turn-signal-into-work/SKILL.md), [design-tracer-bullet](adapters/claude-code/skills/design-tracer-bullet/SKILL.md) | [manifest.json](adapters/claude-code/manifest.json) |
-| GitHub Copilot | [conduct-work-object](adapters/github-copilot/skills/conduct-work-object/SKILL.md), [pressure-test-decision](adapters/github-copilot/skills/pressure-test-decision/SKILL.md), [turn-signal-into-work](adapters/github-copilot/skills/turn-signal-into-work/SKILL.md), [design-tracer-bullet](adapters/github-copilot/skills/design-tracer-bullet/SKILL.md) | [manifest.json](adapters/github-copilot/manifest.json) |
+| Codex | [conduct-work-object](adapters/codex/skills/conduct-work-object/SKILL.md), [pressure-test-decision](adapters/codex/skills/pressure-test-decision/SKILL.md), [turn-signal-into-work](adapters/codex/skills/turn-signal-into-work/SKILL.md), [design-tracer-bullet](adapters/codex/skills/design-tracer-bullet/SKILL.md), [implement-bounded-change](adapters/codex/skills/implement-bounded-change/SKILL.md), [verify-release-evidence](adapters/codex/skills/verify-release-evidence/SKILL.md) | [manifest.json](adapters/codex/manifest.json) |
+| Claude Code | [conduct-work-object](adapters/claude-code/skills/conduct-work-object/SKILL.md), [pressure-test-decision](adapters/claude-code/skills/pressure-test-decision/SKILL.md), [turn-signal-into-work](adapters/claude-code/skills/turn-signal-into-work/SKILL.md), [design-tracer-bullet](adapters/claude-code/skills/design-tracer-bullet/SKILL.md), [implement-bounded-change](adapters/claude-code/skills/implement-bounded-change/SKILL.md), [verify-release-evidence](adapters/claude-code/skills/verify-release-evidence/SKILL.md) | [manifest.json](adapters/claude-code/manifest.json) |
+| GitHub Copilot | [conduct-work-object](adapters/github-copilot/skills/conduct-work-object/SKILL.md), [pressure-test-decision](adapters/github-copilot/skills/pressure-test-decision/SKILL.md), [turn-signal-into-work](adapters/github-copilot/skills/turn-signal-into-work/SKILL.md), [design-tracer-bullet](adapters/github-copilot/skills/design-tracer-bullet/SKILL.md), [implement-bounded-change](adapters/github-copilot/skills/implement-bounded-change/SKILL.md), [verify-release-evidence](adapters/github-copilot/skills/verify-release-evidence/SKILL.md) | [manifest.json](adapters/github-copilot/manifest.json) |
 
 ## Conformance Gate
 
@@ -121,7 +122,6 @@ python3 -m unittest discover -s tests -v
 
 - `investigate-live-question`
 - `implement-bounded-change`
-- `verify-release-evidence`
 - `deploy-with-recovery`
 - `diagnose-production-incident`
 - `review-outcome-and-adapt`
@@ -148,6 +148,7 @@ reasoning.
 | [personal-institution-work-studio-contract.md](fixtures/personal-institution-work-studio-contract.md) | Privacy, provenance, personalization, and handoff behavior across the two packages |
 | [slice-2-design-tracer-bullet.md](fixtures/slice-2-design-tracer-bullet.md) | Bounded tracer-bullet recommendation, acceptance, risk treatment, rollback, and routing behavior |
 | [slice-2-implement-bounded-change.md](fixtures/slice-2-implement-bounded-change.md) | Accepted bounded implementation, working-tree preservation, continuous verification, deviation, and degradation behavior |
+| [slice-2-verify-release-evidence.md](fixtures/slice-2-verify-release-evidence.md) | Proportionate acceptance, recovery, dependency, privacy, security, and evidence-gap verification without release claims |
 
 ## Verification Evidence
 

@@ -168,6 +168,20 @@ Source: `tests/test_generate_adapters.py`
 
 ---
 
+## Release-Evidence Verification
+
+| ID | Scenario | Codex | Claude Code | GitHub Copilot |
+|----|----------|-------|-------------|----------------|
+| V1 | Verify accepted user path with proportionate executed evidence | ✅ | ✅ | ✅ |
+| V2 | Report missing acceptance, privacy, or security evidence as a gap | ✅ | ✅ | ✅ |
+| V3 | Exercise relevant failure, recovery, and degraded dependency behavior | ✅ | ✅ | ✅ |
+| V4 | Check retries or duplicates when repeated delivery is relevant | ✅ | ✅ | ✅ |
+| V5 | Do not deploy, release, or claim release readiness | ✅ | ✅ | ✅ |
+
+Source: `fixtures/slice-2-verify-release-evidence.md` All scenarios
+
+---
+
 ## Summary
 
 | Platform | Total scenarios | ✅ Pass | ⚠️ Manual-fallback | ❌ Unsupported |
@@ -179,10 +193,10 @@ Source: `tests/test_generate_adapters.py`
 > Note: All documented behavioral scenarios exercise capabilities that are native on
 > all three platforms. Manual-fallback and unsupported classifications exist
 > in the capability catalog (browser_automation, subagent_isolation,
-> parallel_tool_execution, web_search) but are not exercised by the Slice 1
-> behavioral scenarios — those capabilities are required by later slices
-> (verify-release-evidence, code-review, etc.). Signal capture exercises the
-> required degradation behavior in its fixture without claiming a native result.
+> parallel_tool_execution, web_search) but are not exercised by the documented
+> behavioral scenarios. Signal capture and release-evidence verification exercise
+> the required degradation behavior in their fixtures without claiming a native
+> result.
 >
 > When a scenario requiring a non-native capability is added in a later slice,
 > the matrix will be updated and the capability degradation fixture

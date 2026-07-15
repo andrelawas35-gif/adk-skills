@@ -80,6 +80,7 @@ def verify_matrix(fixture_files):
         "fixtures/slice-2-turn-signal-into-work.md",
         "fixtures/slice-2-design-tracer-bullet.md",
         "fixtures/slice-2-implement-bounded-change.md",
+        "fixtures/slice-2-verify-release-evidence.md",
         "fixtures/personal-institution-work-studio-contract.md",
     }
 
@@ -160,6 +161,12 @@ def verify_matrix(fixture_files):
                 "repository inspection", "unrelated working-tree changes",
                 "continuous verification", "deviation", "manual-fallback",
                 "unsupported", "does not deploy",
+            ])
+        elif "verify-release-evidence" in name:
+            _check_patterns(errors, name, content, [
+                "Scenario 1", "Scenario 2", "Scenario 3", "Scenario 4",
+                "successful verification", "missing evidence", "degraded dependency",
+                "retry", "duplicate", "privacy", "security", "does not deploy or release",
             ])
 
     # Verify behavioral matrix exists
