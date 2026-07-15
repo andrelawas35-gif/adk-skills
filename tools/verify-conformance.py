@@ -83,6 +83,7 @@ def verify_matrix(fixture_files):
         "fixtures/slice-2-verify-release-evidence.md",
         "fixtures/slice-3-investigate-live-question.md",
         "fixtures/slice-3-deploy-with-recovery.md",
+        "fixtures/slice-3-diagnose-production-incident.md",
         "fixtures/personal-institution-work-studio-contract.md",
     }
 
@@ -182,6 +183,13 @@ def verify_matrix(fixture_files):
                 "successful incremental deployment", "missing readiness",
                 "failed verification", "rollback", "sanitized evidence",
                 "manual-fallback", "unsupported", "observe", "does not claim closure",
+            ])
+        elif "diagnose-production-incident" in name:
+            _check_patterns(errors, name, content, [
+                "Scenario 1", "Scenario 2", "Scenario 3", "Scenario 4", "Scenario 5",
+                "sanitized evidence", "containment", "restoration", "ranked hypothesis",
+                "one at a time", "affected path", "external dependency", "waiting",
+                "Change Work Object", "linked follow-up",
             ])
 
     # Verify behavioral matrix exists

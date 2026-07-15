@@ -196,13 +196,27 @@ Source: `fixtures/slice-3-investigate-live-question.md` All scenarios
 
 ---
 
+## Production-Incident Diagnosis
+
+| ID | Scenario | Codex | Claude Code | GitHub Copilot |
+|----|----------|-------|-------------|----------------|
+| D1 | Sanitize intake and establish an authorized containment boundary | ✅ | ✅ | ✅ |
+| D2 | Restore and verify the actual affected path | ✅ | ✅ | ✅ |
+| D3 | Rank hypotheses and test one at a time | ✅ | ✅ | ✅ |
+| D4 | Preserve a blocked external dependency and `waiting` revisit trigger | ✅ | ✅ | ✅ |
+| D5 | Create only a bounded linked Change Work Object for prevention | ✅ | ✅ | ✅ |
+
+Source: `fixtures/slice-3-diagnose-production-incident.md` All scenarios
+
+---
+
 ## Summary
 
 | Platform | Total scenarios | ✅ Pass | ⚠️ Manual-fallback | ❌ Unsupported |
 |----------|----------------|---------|---------------------|---------------|
-| Codex | 61 | 61 | 0 | 0 |
-| Claude Code | 61 | 61 | 0 | 0 |
-| GitHub Copilot | 61 | 61 | 0 | 0 |
+| Codex | 66 | 66 | 0 | 0 |
+| Claude Code | 66 | 66 | 0 | 0 |
+| GitHub Copilot | 66 | 66 | 0 | 0 |
 
 > Note: All documented behavioral scenarios exercise capabilities that are native on
 > all three platforms. Manual-fallback and unsupported classifications exist
