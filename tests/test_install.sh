@@ -33,7 +33,7 @@ check "$n" "$expected" "global install places every generated skill"
 echo "test: project pin writes lock and skills"
 mkdir -p "$WORK/proj/.git"
 "$INSTALL" --platform "$PLATFORM" --project "$WORK/proj" >/dev/null
-[ -f "$WORK/proj/.claude/skills/conduct-work-object/SKILL.md" ] \
+[ -f "$WORK/proj/.claude/skills/alawas-conduct-work-object/SKILL.md" ] \
   && ok "project skill installed" || bad "project skill installed"
 [ -f "$WORK/proj/.work-studio/adapter.lock" ] \
   && ok "project lock written" || bad "project lock written"
@@ -61,7 +61,7 @@ case "$res" in
 esac
 
 echo "test: tamper detection on installed copy"
-tampered="$WORK/proj/.claude/skills/conduct-work-object/SKILL.md"
+tampered="$WORK/proj/.claude/skills/alawas-conduct-work-object/SKILL.md"
 echo "corruption" >> "$tampered"
 adapter_dir="$REPO_ROOT/adapters/$PLATFORM"
 if command -v sha256sum >/dev/null 2>&1; then SUM="sha256sum -c"; else SUM="shasum -a 256 -c"; fi

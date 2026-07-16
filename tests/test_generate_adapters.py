@@ -20,6 +20,7 @@ GENERATOR = ROOT / "tools" / "generate-adapters.py"
 CORE_DIR = ROOT / "skills" / "core"
 ADAPTERS_DIR = ROOT / "adapters"
 PLATFORMS = ["codex", "claude-code", "github-copilot"]
+SKILL_NAMESPACE = "alawas"
 
 
 def run_generator(*args):
@@ -32,11 +33,22 @@ def run_generator(*args):
 def core_body(skill_name):
     """The Markdown body of a core skill (everything after the frontmatter)."""
     text = (CORE_DIR / skill_name / "SKILL.md").read_text()
-    return text.split("---", 2)[2].lstrip("\n").rstrip("\n")
+    body = text.split("---", 2)[2].lstrip("\n").rstrip("\n")
+    for name in sorted(core_skill_names(), key=len, reverse=True):
+        body = body.replace(f"`{name}`", f"`{adapter_skill_name(name)}`")
+    return body
 
 
 def core_skill_names():
     return sorted(p.name for p in CORE_DIR.iterdir() if p.is_dir())
+
+
+def adapter_skill_name(skill):
+    return f"{SKILL_NAMESPACE}-{skill}"
+
+
+def adapter_file(platform, skill):
+    return ADAPTERS_DIR / platform / "skills" / adapter_skill_name(skill) / "SKILL.md"
 
 
 class GeneratorContract(unittest.TestCase):
@@ -69,8 +81,7 @@ class GeneratorContract(unittest.TestCase):
         authority rules, or schema semantics."""
         for platform in PLATFORMS:
             for skill in core_skill_names():
-                adapter = (ADAPTERS_DIR / platform / "skills" / skill
-                           / "SKILL.md").read_text()
+                adapter = adapter_file(platform, skill).read_text()
                 body_before_adapter = adapter.split(
                     "\n---\n\n## Platform Adapter", 1)[0]
                 # Strip the generated frontmatter to isolate the body.
@@ -84,8 +95,7 @@ class GeneratorContract(unittest.TestCase):
         appended section — it never inserts into or rewrites the body."""
         for platform in PLATFORMS:
             for skill in core_skill_names():
-                adapter = (ADAPTERS_DIR / platform / "skills" / skill
-                           / "SKILL.md").read_text()
+                adapter = adapter_file(platform, skill).read_text()
                 after_fm = adapter.split("---", 2)[2].lstrip("\n")
                 self.assertTrue(
                     after_fm.startswith(core_body(skill)),
@@ -96,18 +106,16 @@ class GeneratorContract(unittest.TestCase):
     def test_frontmatter_declares_platform(self):
         for platform in PLATFORMS:
             for skill in core_skill_names():
-                adapter = (ADAPTERS_DIR / platform / "skills" / skill
-                           / "SKILL.md").read_text()
+                adapter = adapter_file(platform, skill).read_text()
                 frontmatter = adapter.split("---", 2)[1]
                 self.assertIn(f"platform: {platform}", frontmatter)
-                self.assertIn(f"name: {skill}", frontmatter)
+                self.assertIn(f"name: {adapter_skill_name(skill)}", frontmatter)
 
     def test_generated_description_is_a_single_line_quoted_scalar(self):
         """Keep the generated description in a directly parseable YAML scalar."""
         for platform in PLATFORMS:
             for skill in core_skill_names():
-                adapter = (ADAPTERS_DIR / platform / "skills" / skill
-                           / "SKILL.md").read_text()
+                adapter = adapter_file(platform, skill).read_text()
                 frontmatter = adapter.split("---", 2)[1].splitlines()
                 description_line = next(
                     line for line in frontmatter if line.startswith("description: "))
@@ -132,8 +140,7 @@ class GeneratorContract(unittest.TestCase):
             "next_action: <concrete-next-move>",
         ]
         for platform in PLATFORMS:
-            adapter = (ADAPTERS_DIR / platform / "skills"
-                       / "conduct-work-object" / "SKILL.md").read_text()
+            adapter = adapter_file(platform, "conduct-work-object").read_text()
             for field in required_fields:
                 self.assertIn(field, adapter, f"{platform}: missing {field}")
 
@@ -144,8 +151,7 @@ class GeneratorContract(unittest.TestCase):
         )
         for platform in PLATFORMS:
             for skill in core_skill_names():
-                adapter = (ADAPTERS_DIR / platform / "skills" / skill
-                           / "SKILL.md").read_text()
+                adapter = adapter_file(platform, skill).read_text()
                 self.assertIn(
                     required, " ".join(adapter.split()),
                     f"{platform}/{skill}: weak authority gate")
@@ -154,8 +160,7 @@ class GeneratorContract(unittest.TestCase):
             "`do recommended` accepts"
         )
         for platform in PLATFORMS:
-            adapter = (ADAPTERS_DIR / platform / "skills"
-                       / "pressure-test-decision" / "SKILL.md").read_text()
+            adapter = adapter_file(platform, "pressure-test-decision").read_text()
             self.assertIn(local_flow, " ".join(adapter.split()))
 
     def test_installed_skills_include_their_declared_references(self):
@@ -170,7 +175,7 @@ class GeneratorContract(unittest.TestCase):
         for platform in PLATFORMS:
             for skill in core_skill_names():
                 for reference in references:
-                    path = (ADAPTERS_DIR / platform / "skills" / skill
+                    path = (ADAPTERS_DIR / platform / "skills" / adapter_skill_name(skill)
                             / "references" / reference)
                     self.assertTrue(path.is_file(), f"missing installed reference: {path}")
 
@@ -183,7 +188,7 @@ class GeneratorContract(unittest.TestCase):
             required = re.findall(r"^- `([^`]+)`", capabilities_section, re.MULTILINE)
 
             for platform in PLATFORMS:
-                adapter = (ADAPTERS_DIR / platform / "skills" / skill / "SKILL.md").read_text()
+                adapter = adapter_file(platform, skill).read_text()
                 for capability in required:
                     with self.subTest(skill=skill, platform=platform, capability=capability):
                         self.assertRegex(
@@ -224,8 +229,7 @@ class GeneratorContract(unittest.TestCase):
         for skill in core_skill_names():
             bodies = {}
             for platform in PLATFORMS:
-                adapter = (ADAPTERS_DIR / platform / "skills" / skill
-                           / "SKILL.md").read_text()
+                adapter = adapter_file(platform, skill).read_text()
                 after_fm = adapter.split("---", 2)[2].lstrip("\n")
                 bodies[platform] = after_fm.split(
                     "\n---\n\n## Platform Adapter", 1)[0]
@@ -237,8 +241,7 @@ class GeneratorContract(unittest.TestCase):
     def test_platform_constraints_are_disclosed(self):
         """A manual-fallback capability must be surfaced in the adapter, not
         silently changed — the adapter discloses the constraint."""
-        adapter = (ADAPTERS_DIR / "claude-code" / "skills"
-                   / "conduct-work-object" / "SKILL.md").read_text()
+        adapter = adapter_file("claude-code", "conduct-work-object").read_text()
         self.assertIn("manual-fallback", adapter)
         self.assertIn("Declared Limitations", adapter)
         self.assertIn("### Installation and precedence", adapter)
@@ -248,16 +251,14 @@ class GeneratorContract(unittest.TestCase):
         """Codex may discover duplicate same-name skills, so either copy must
         explicitly defer to the project-pinned artifact recorded by installer."""
         for skill in core_skill_names():
-            adapter = (ADAPTERS_DIR / "codex" / "skills" / skill
-                       / "SKILL.md").read_text()
+            adapter = adapter_file("codex", skill).read_text()
             self.assertIn("### Runtime pin resolution", adapter)
             self.assertIn(".work-studio/adapter.lock", adapter)
             self.assertIn("load and follow the pinned copy", adapter)
 
     def test_drift_is_detected(self):
         """--check must fail (and then recover) when an artifact is edited."""
-        target = (ADAPTERS_DIR / "claude-code" / "skills"
-                  / "conduct-work-object" / "SKILL.md")
+        target = adapter_file("claude-code", "conduct-work-object")
         original = target.read_bytes()
         try:
             target.write_text(target.read_text() + "\ndrifted\n")

@@ -5,6 +5,8 @@ import sys
 import unittest
 from pathlib import Path
 
+from adapter_helpers import namespaced_core_body
+
 
 ROOT = Path(__file__).resolve().parent.parent
 GENERATOR = ROOT / "tools" / "generate-adapters.py"
@@ -73,10 +75,10 @@ class PKMProjectAdapterQualificationContract(unittest.TestCase):
         for platform in PLATFORMS:
             for skill in SKILLS:
                 with self.subTest(platform=platform, skill=skill):
-                    adapter_dir = ROOT / "adapters" / platform / "skills" / skill
+                    adapter_dir = ROOT / "adapters" / platform / "skills" / f"alawas-{skill}"
                     adapter_text = (adapter_dir / "SKILL.md").read_text()
                     core_text = (ROOT / "skills" / "core" / skill / "SKILL.md").read_text()
-                    core_body = core_text.split("---", 2)[2].lstrip("\n").rstrip("\n")
+                    core_body = namespaced_core_body(ROOT / "skills" / "core" / skill / "SKILL.md")
                     self.assertIn(core_body, adapter_text)
                     self.assertEqual(
                         protocol_text,

@@ -5,6 +5,8 @@ import sys
 import unittest
 from pathlib import Path
 
+from adapter_helpers import namespaced_core_body
+
 
 ROOT = Path(__file__).resolve().parent.parent
 GENERATOR = ROOT / "tools" / "generate-adapters.py"
@@ -54,10 +56,10 @@ class ImplementBoundedChangeContract(unittest.TestCase):
         )
         self.assertEqual(result.returncode, 0, result.stderr)
 
-        core_body = CORE.read_text().split("---", 2)[2].lstrip("\n").rstrip("\n")
+        core_body = namespaced_core_body(CORE)
         for platform in PLATFORMS:
             with self.subTest(platform=platform):
-                adapter_dir = ROOT / "adapters" / platform / "skills" / "implement-bounded-change"
+                adapter_dir = ROOT / "adapters" / platform / "skills" / "alawas-implement-bounded-change"
                 self.assertIn(core_body, (adapter_dir / "SKILL.md").read_text())
                 self.assertTrue((adapter_dir / "references" / "SHARED-PROTOCOL.md").is_file())
                 self.assertTrue((adapter_dir / "references" / "CAPABILITY-DEGRADATION.md").is_file())

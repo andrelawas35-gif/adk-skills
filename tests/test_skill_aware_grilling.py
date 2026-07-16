@@ -2,6 +2,7 @@
 
 import unittest
 from pathlib import Path
+import re
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -29,6 +30,23 @@ class SkillAwareGrillingContract(unittest.TestCase):
             "Receiving first question",
         ):
             self.assertIn(field, text)
+
+    def test_each_lens_uses_the_two_tier_template(self):
+        text = REFERENCE.read_text()
+        sections = re.split(r"^### `[^`]+`$", text, flags=re.MULTILINE)[1:]
+        self.assertEqual(len(sections), len(list(CORE.glob("*/SKILL.md"))))
+        for section in sections:
+            self.assertIn("**Gates**", section)
+            self.assertIn("**Escalation**", section)
+            self.assertIn("**Pressure scenario**", section)
+
+    def test_reference_defines_harm_based_gates_and_branch_coverage(self):
+        text = REFERENCE.read_text()
+        self.assertIn("authority or consent", text)
+        self.assertIn("irreversibility or external consequence", text)
+        self.assertIn("privacy or data boundary", text)
+        self.assertIn("gates accounted for + branches visited", text)
+        self.assertNotIn("every listed component as required", text)
 
     def test_conductor_owns_lazy_grilling_persistence(self):
         text = (CORE / "conduct-work-object" / "SKILL.md").read_text()

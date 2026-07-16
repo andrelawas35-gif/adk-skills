@@ -24,7 +24,7 @@ class SharedProtocolContract(unittest.TestCase):
                 [str(INSTALL), "--platform", "claude-code", "--global"],
                 cwd=ROOT, env=env, capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, result.stderr)
-            installed = home / "skills" / "conduct-work-object" / "references" / "SHARED-PROTOCOL.md"
+            installed = home / "skills" / "alawas-conduct-work-object" / "references" / "SHARED-PROTOCOL.md"
             self.assertTrue(installed.is_file())
 
         manifest = json.loads((ROOT / "adapters" / "claude-code" / "manifest.json").read_text())

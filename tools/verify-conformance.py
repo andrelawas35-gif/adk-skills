@@ -27,6 +27,18 @@ CORE_DIR = ROOT / "skills" / "core"
 ADAPTERS_DIR = ROOT / "adapters"
 PLATFORMS = ["codex", "claude-code", "github-copilot"]
 SKILLS = sorted(path.name for path in CORE_DIR.iterdir() if path.is_dir())
+SKILL_NAMESPACE = "alawas"
+
+
+def adapter_skill_name(skill):
+    return f"{SKILL_NAMESPACE}-{skill}"
+
+
+def namespaced_core_body(skill):
+    body = (CORE_DIR / skill / "SKILL.md").read_text().split("---", 2)[2].lstrip("\n").rstrip("\n")
+    for name in sorted(SKILLS, key=len, reverse=True):
+        body = body.replace(f"`{name}`", f"`{adapter_skill_name(name)}`")
+    return body
 
 
 # ── Required structural elements ─────────────────────────────────────────────
@@ -214,7 +226,7 @@ def verify_structure():
 
     for platform in PLATFORMS:
         for skill in SKILLS:
-            adapter_path = ADAPTERS_DIR / platform / "skills" / skill / "SKILL.md"
+            adapter_path = ADAPTERS_DIR / platform / "skills" / adapter_skill_name(skill) / "SKILL.md"
             if not adapter_path.exists():
                 errors.append(f"MISSING: {adapter_path.relative_to(ROOT)}")
                 continue
@@ -256,9 +268,7 @@ def verify_structure():
                         f"{platform}/{skill}: missing degradation pattern '{pattern}'")
 
             # Check core body is preserved
-            core_path = CORE_DIR / skill / "SKILL.md"
-            core_content = core_path.read_text()
-            core_body = core_content.split("---", 2)[2].lstrip("\n").rstrip("\n")
+            core_body = namespaced_core_body(skill)
             if core_body not in content:
                 errors.append(
                     f"{platform}/{skill}: core body not preserved verbatim")

@@ -16,21 +16,21 @@ fail() {
 mkdir -p "$WORK/project/.git"
 
 HOME="$WORK/home" "$INSTALL" --platform codex --global >/dev/null
-[ -f "$WORK/home/.agents/skills/conduct-work-object/SKILL.md" ] \
+[ -f "$WORK/home/.agents/skills/alawas-conduct-work-object/SKILL.md" ] \
   || fail "global install did not use the Codex user skill directory"
-[ -f "$WORK/home/.agents/skills/pressure-test-decision/SKILL.md" ] \
+[ -f "$WORK/home/.agents/skills/alawas-pressure-test-decision/SKILL.md" ] \
   || fail "global install did not install both Codex skills"
 
 HOME="$WORK/home" "$INSTALL" --platform codex --project "$WORK/project" >/dev/null
-[ -f "$WORK/project/.agents/skills/conduct-work-object/SKILL.md" ] \
+[ -f "$WORK/project/.agents/skills/alawas-conduct-work-object/SKILL.md" ] \
   || fail "project install did not use the Codex repository skill directory"
-[ -f "$WORK/project/.agents/skills/pressure-test-decision/SKILL.md" ] \
+[ -f "$WORK/project/.agents/skills/alawas-pressure-test-decision/SKILL.md" ] \
   || fail "project install did not install both Codex skills"
-[ -f "$WORK/project/.agents/skills/conduct-work-object/references/CONSEQUENCE-AUTHORITY.md" ] \
+[ -f "$WORK/project/.agents/skills/alawas-conduct-work-object/references/CONSEQUENCE-AUTHORITY.md" ] \
   || fail "project install omitted declared shared references"
 
-CONDUCTOR="$WORK/project/.agents/skills/conduct-work-object/SKILL.md"
-DECIDER="$WORK/project/.agents/skills/pressure-test-decision/SKILL.md"
+CONDUCTOR="$WORK/project/.agents/skills/alawas-conduct-work-object/SKILL.md"
+DECIDER="$WORK/project/.agents/skills/alawas-pressure-test-decision/SKILL.md"
 grep -Fq 'If `updated_at` changed since step 1, report the conflict' "$CONDUCTOR" \
   || fail "installed conductor lost concurrent-write protection"
 grep -Fq 'Creating or updating a Work Object of **high** consequence: ask first.' "$CONDUCTOR" \
@@ -56,7 +56,7 @@ cp "$INSTALL" "$COPY/tools/install.sh"
 cp "$REPO_ROOT/VERSION" "$COPY/VERSION"
 cp -R "$REPO_ROOT/adapters/codex" "$COPY/adapters/codex"
 printf '\ncorruption\n' >> \
-  "$COPY/adapters/codex/skills/conduct-work-object/SKILL.md"
+  "$COPY/adapters/codex/skills/alawas-conduct-work-object/SKILL.md"
 if HOME="$WORK/tampered-home" "$COPY/tools/install.sh" \
   --platform codex --global >/dev/null 2>&1; then
   fail "tampered Codex source artifacts were installed"

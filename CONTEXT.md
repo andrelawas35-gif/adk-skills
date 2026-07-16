@@ -81,16 +81,18 @@ assumptions, and the receiving specialist's recommended first question.
 _Avoid_: chat transcript, generic status update, hidden reasoning
 
 **Coverage lens**:
-The bounded set of decision-bearing components a particular specialist must
-explore when it receives a Work Object. A lens supplements the shared grilling
-handoff; it does not replace another specialist's expertise.
-_Avoid_: universal checklist, repeated discovery, specialist scope expansion
+The two-tier coverage guide used by a receiving specialist: harm-based gates
+are accounted for, while non-gate branches are explored by information value.
+A lens supplements the shared grilling handoff; it does not replace another
+specialist's expertise.
+_Avoid_: universal checklist, exhaustive component accounting, specialist scope expansion
 
 **Grilling section**:
-The compact Work Object section that holds the active coverage map and latest
-Grilling handoff. It is continuity metadata, not a transcript, evidence
-ledger, or duplicate decision record.
-_Avoid_: chat log, second evidence ledger, decision archive
+The compact Work Object section that holds the active coverage result — gates
+accounted for plus branches visited — and the latest Grilling handoff. It is
+continuity metadata, not a transcript, evidence ledger, or duplicate decision
+record.
+_Avoid_: chat log, exhaustive checklist, second evidence ledger, decision archive
 
 **Personal-memory record**:
 A private record maintained by Personal Institution; it remains outside a Work Object unless the user explicitly approves an Evidence Bridge.

@@ -33,6 +33,7 @@ CORE_DIR = ROOT / "skills" / "core"
 ADAPTERS_DIR = ROOT / "adapters"
 VERSION_FILE = ROOT / "VERSION"
 PLATFORMS = ["codex", "claude-code", "github-copilot"]
+SKILL_NAMESPACE = "alawas"
 SHARED_REFERENCES = [
     "AGREEMENT-LOOP.md",
     "SKILL-AWARE-GRILLING.md",
@@ -387,14 +388,28 @@ def extract_body(filepath):
 
 # ── Generation ────────────────────────────────────────────────────────────────
 
+def adapter_skill_name(core_skill_name):
+    """Return the public, collision-safe adapter name for a core skill."""
+    return f"{SKILL_NAMESPACE}-{core_skill_name}"
+
+
+def namespace_skill_references(body):
+    """Rewrite only backticked Work Studio skill references for adapters."""
+    for skill_dir in sorted(CORE_DIR.iterdir(), key=lambda item: len(item.name), reverse=True):
+        if skill_dir.is_dir():
+            body = body.replace(
+                f"`{skill_dir.name}`", f"`{adapter_skill_name(skill_dir.name)}`")
+    return body
+
+
 def build_skill_output(core_skill_dir, overlay):
     """Build the exact adapter SKILL.md text for a core skill + overlay.
 
     Single source of truth for both generation and drift checking, so the two
     paths can never diverge.
     """
-    body = extract_body(core_skill_dir / "SKILL.md")
-    frontmatter = generate_frontmatter(core_skill_dir.name, overlay)
+    body = namespace_skill_references(extract_body(core_skill_dir / "SKILL.md"))
+    frontmatter = generate_frontmatter(adapter_skill_name(core_skill_dir.name), overlay)
     adapter_section = generate_adapter_section(overlay)
     output = frontmatter + body.rstrip("\n") + adapter_section
     # Ensure exactly one trailing newline
@@ -405,6 +420,7 @@ def generate_skill(core_skill_dir, overlay, output_dir):
     """Generate one adapter skill from core + overlay."""
     core_file = core_skill_dir / "SKILL.md"
     skill_name = core_skill_dir.name
+    output_skill_name = adapter_skill_name(skill_name)
 
     if not core_file.exists():
         print(f"  SKIP {skill_name}: core file not found at {core_file}")
@@ -418,7 +434,7 @@ def generate_skill(core_skill_dir, overlay, output_dir):
 
     checksum = hashlib.sha256(output.encode()).hexdigest()
     return {
-        "name": skill_name,
+        "name": output_skill_name,
         "path": str(output_file.relative_to(ROOT)),
         "sha256": checksum,
     }
@@ -456,18 +472,25 @@ def generate_platform(platform_name):
     overlay = parse_yaml(overlay_text)
 
     output_base = ADAPTERS_DIR / platform_name / "skills"
+    expected_dirs = {adapter_skill_name(path.name) for path in CORE_DIR.iterdir()
+                     if path.is_dir()}
+    if output_base.exists():
+        for child in output_base.iterdir():
+            if child.is_dir() and child.name not in expected_dirs:
+                shutil.rmtree(child)
     manifest_entries = []
 
     for skill_dir in sorted(CORE_DIR.iterdir()):
         if not skill_dir.is_dir():
             continue
-        output_dir = output_base / skill_dir.name
+        output_skill_name = adapter_skill_name(skill_dir.name)
+        output_dir = output_base / output_skill_name
         entry = generate_skill(skill_dir, overlay, output_dir)
         if entry:
             manifest_entries.append(entry)
             print(f"  Generated: {entry['path']} ({entry['sha256'][:12]}...)")
             manifest_entries.extend(
-                build_reference_entries(skill_dir.name, output_dir, write=True))
+                build_reference_entries(output_skill_name, output_dir, write=True))
 
     return manifest_entries
 
@@ -541,7 +564,8 @@ def check_platform(platform_name):
         if not skill_dir.is_dir():
             continue
         skill_name = skill_dir.name
-        output_file = output_base / skill_name / "SKILL.md"
+        output_skill_name = adapter_skill_name(skill_name)
+        output_file = output_base / output_skill_name / "SKILL.md"
 
         expected = build_skill_output(skill_dir, overlay)
 
@@ -558,12 +582,12 @@ def check_platform(platform_name):
             print(f"  OK: {output_file.relative_to(ROOT)}")
 
         expected_entries.append({
-            "name": skill_name,
+            "name": output_skill_name,
             "path": str(output_file.relative_to(ROOT)),
             "sha256": hashlib.sha256(expected.encode()).hexdigest(),
         })
 
-        for entry in build_reference_entries(skill_name, output_file.parent):
+        for entry in build_reference_entries(output_skill_name, output_file.parent):
             reference_file = ROOT / entry["path"]
             if not reference_file.exists():
                 print(f"  MISSING: {reference_file.relative_to(ROOT)}")
