@@ -115,6 +115,11 @@ user-approved summary.
 
 ## Agreement Loop behavior
 
+Apply the shared conversational inquiry contract in
+`references/AGREEMENT-LOOP.md`: give a recommendation before one question,
+maintain coverage of material branches, and continue without an arbitrary
+question cap until the user and evidence establish the next safe move.
+
 This skill IS the Agreement Loop for decisions. It activates the full loop
 because every invocation is a decision boundary:
 
@@ -156,6 +161,13 @@ because every invocation is a decision boundary:
 8. **Converge or route** — If the decision is sufficient to proceed, record it
    and route back to `conduct-work-object`. If new decisions emerged, loop
    back. If the decision space is exhausted, route with documented uncertainty.
+
+## Skill-aware grilling lens
+
+Apply the `pressure-test-decision` lens in
+`references/SKILL-AWARE-GRILLING.md`. On direct entry, route through
+`conduct-work-object` first. Return the standard five-field Grilling handoff
+for conductor persistence; do not store a transcript or mutate the Work Object.
 
 ## Stage workflow
 

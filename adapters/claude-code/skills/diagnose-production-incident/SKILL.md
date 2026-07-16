@@ -56,7 +56,19 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
 
 ## Agreement Loop behavior
 
+Apply the shared conversational inquiry contract in
+`references/AGREEMENT-LOOP.md`: give a recommendation before one question,
+maintain coverage of material branches, and continue without an arbitrary
+question cap until the user and evidence establish the next safe move.
+
 Use one small loop whenever the incident needs a decision not already recorded: state the observed symptom and evidence gap, consequence and safe boundary; recommend the smallest reversible containment, recovery, or diagnostic move; then ask one decision-bearing question for the missing authority. Do not ask for blanket permission to make later fixes or to declare recovery complete.
+
+## Skill-aware grilling lens
+
+Apply the `diagnose-production-incident` lens in
+`references/SKILL-AWARE-GRILLING.md`. On direct entry, route through
+`conduct-work-object` first. Return the standard five-field Grilling handoff
+for conductor persistence; do not store a transcript or mutate the Work Object.
 
 ## Stage workflow
 

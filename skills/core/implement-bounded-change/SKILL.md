@@ -80,6 +80,11 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
 
 ## Agreement Loop behavior
 
+Apply the shared conversational inquiry contract in
+`references/AGREEMENT-LOOP.md`: give a recommendation before one question,
+maintain coverage of material branches, and continue without an arbitrary
+question cap until the user and evidence establish the next safe move.
+
 Do not reopen an accepted implementation boundary merely because a different
 solution looks attractive. Activate the Agreement Loop only when a material new
 decision or authority boundary would change the accepted tracer bullet. First
@@ -95,6 +100,13 @@ retrieve discoverable repository facts, then:
 
 Do not use this loop to obtain blanket permission for nearby cleanup, future
 implementation, deployment, or other unaccepted work.
+
+## Skill-aware grilling lens
+
+Apply the `implement-bounded-change` lens in
+`references/SKILL-AWARE-GRILLING.md`. On direct entry, route through
+`conduct-work-object` first. Return the standard five-field Grilling handoff
+for conductor persistence; do not store a transcript or mutate the Work Object.
 
 ## Stage workflow
 

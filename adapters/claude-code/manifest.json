@@ -7,7 +7,17 @@
     {
       "name": "conduct-work-object",
       "path": "adapters/claude-code/skills/conduct-work-object/SKILL.md",
-      "sha256": "b91f1d8635bbbc32a4e4684c72655534a3380c1e8fec2645652e578f66bf946f"
+      "sha256": "b52beb1b15e0f0f7c24256889608968753d3ae40705d27b053cd267b562e89c6"
+    },
+    {
+      "name": "conduct-work-object/references/AGREEMENT-LOOP.md",
+      "path": "adapters/claude-code/skills/conduct-work-object/references/AGREEMENT-LOOP.md",
+      "sha256": "ac363e19c970bf165e40d69c84618c819b724caf8ef9cdecd3235cb4747393d9"
+    },
+    {
+      "name": "conduct-work-object/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/claude-code/skills/conduct-work-object/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "abb3daed8bfe2ac02dca7b6997c079f70bbc726285f26131747dfa03fcfbf1cf"
     },
     {
       "name": "conduct-work-object/references/CAPABILITY-DEGRADATION.md",
@@ -32,7 +42,17 @@
     {
       "name": "deploy-with-recovery",
       "path": "adapters/claude-code/skills/deploy-with-recovery/SKILL.md",
-      "sha256": "8af67950e3efdd1b80be5652b15216bd7627733f388145e35477264e1b0288a9"
+      "sha256": "bcdd2604ef700a79aa25252ea5f090a2d73973093ba08c659b879d15fb7e992d"
+    },
+    {
+      "name": "deploy-with-recovery/references/AGREEMENT-LOOP.md",
+      "path": "adapters/claude-code/skills/deploy-with-recovery/references/AGREEMENT-LOOP.md",
+      "sha256": "ac363e19c970bf165e40d69c84618c819b724caf8ef9cdecd3235cb4747393d9"
+    },
+    {
+      "name": "deploy-with-recovery/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/claude-code/skills/deploy-with-recovery/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "abb3daed8bfe2ac02dca7b6997c079f70bbc726285f26131747dfa03fcfbf1cf"
     },
     {
       "name": "deploy-with-recovery/references/CAPABILITY-DEGRADATION.md",
@@ -57,7 +77,17 @@
     {
       "name": "design-tracer-bullet",
       "path": "adapters/claude-code/skills/design-tracer-bullet/SKILL.md",
-      "sha256": "8d46126e891b823f3a1e604cdc996a9babc2bef3aff76afbf8b5f4fc8a9ceb41"
+      "sha256": "d57c6de443e638fd51d25102396e5a337fb67652a9e8e273fa6a382e3acc1754"
+    },
+    {
+      "name": "design-tracer-bullet/references/AGREEMENT-LOOP.md",
+      "path": "adapters/claude-code/skills/design-tracer-bullet/references/AGREEMENT-LOOP.md",
+      "sha256": "ac363e19c970bf165e40d69c84618c819b724caf8ef9cdecd3235cb4747393d9"
+    },
+    {
+      "name": "design-tracer-bullet/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/claude-code/skills/design-tracer-bullet/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "abb3daed8bfe2ac02dca7b6997c079f70bbc726285f26131747dfa03fcfbf1cf"
     },
     {
       "name": "design-tracer-bullet/references/CAPABILITY-DEGRADATION.md",
@@ -82,7 +112,17 @@
     {
       "name": "diagnose-production-incident",
       "path": "adapters/claude-code/skills/diagnose-production-incident/SKILL.md",
-      "sha256": "bb4986d1b8da6dbc24cb93468d4c407fc16efadd2ab726f81e8cdc423d4f9a35"
+      "sha256": "df7c0e66536a47cf0de52537a8de8dfc260ad9b70e644029f669d47cc0ab1ea4"
+    },
+    {
+      "name": "diagnose-production-incident/references/AGREEMENT-LOOP.md",
+      "path": "adapters/claude-code/skills/diagnose-production-incident/references/AGREEMENT-LOOP.md",
+      "sha256": "ac363e19c970bf165e40d69c84618c819b724caf8ef9cdecd3235cb4747393d9"
+    },
+    {
+      "name": "diagnose-production-incident/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/claude-code/skills/diagnose-production-incident/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "abb3daed8bfe2ac02dca7b6997c079f70bbc726285f26131747dfa03fcfbf1cf"
     },
     {
       "name": "diagnose-production-incident/references/CAPABILITY-DEGRADATION.md",
@@ -105,9 +145,54 @@
       "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
     },
     {
+      "name": "govern-scorecards",
+      "path": "adapters/claude-code/skills/govern-scorecards/SKILL.md",
+      "sha256": "6427eddc16a873d128e4c42d27b1cdb4d098767efcbec25a6c4296bbefe796f2"
+    },
+    {
+      "name": "govern-scorecards/references/AGREEMENT-LOOP.md",
+      "path": "adapters/claude-code/skills/govern-scorecards/references/AGREEMENT-LOOP.md",
+      "sha256": "ac363e19c970bf165e40d69c84618c819b724caf8ef9cdecd3235cb4747393d9"
+    },
+    {
+      "name": "govern-scorecards/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/claude-code/skills/govern-scorecards/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "abb3daed8bfe2ac02dca7b6997c079f70bbc726285f26131747dfa03fcfbf1cf"
+    },
+    {
+      "name": "govern-scorecards/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/claude-code/skills/govern-scorecards/references/CAPABILITY-DEGRADATION.md",
+      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+    },
+    {
+      "name": "govern-scorecards/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/claude-code/skills/govern-scorecards/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "ff61f7796626f48d2036633b4faf76dcfd7233a24ee8e2b53d4a7080df9020a0"
+    },
+    {
+      "name": "govern-scorecards/references/EVIDENCE-MODEL.md",
+      "path": "adapters/claude-code/skills/govern-scorecards/references/EVIDENCE-MODEL.md",
+      "sha256": "5e3ccd05bb7ff08015c9402cb5c708d83706b8c79dcb8546e1217a1528091141"
+    },
+    {
+      "name": "govern-scorecards/references/SHARED-PROTOCOL.md",
+      "path": "adapters/claude-code/skills/govern-scorecards/references/SHARED-PROTOCOL.md",
+      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
+    },
+    {
       "name": "implement-bounded-change",
       "path": "adapters/claude-code/skills/implement-bounded-change/SKILL.md",
-      "sha256": "910fceafbd164e57480a23c2e1e3b29435e33eab1ea74dfb34719604a1467ab8"
+      "sha256": "e3d7d2078124693fd2381970b16b3bbcd719d66882bfd46418a7cfecd7f57c3f"
+    },
+    {
+      "name": "implement-bounded-change/references/AGREEMENT-LOOP.md",
+      "path": "adapters/claude-code/skills/implement-bounded-change/references/AGREEMENT-LOOP.md",
+      "sha256": "ac363e19c970bf165e40d69c84618c819b724caf8ef9cdecd3235cb4747393d9"
+    },
+    {
+      "name": "implement-bounded-change/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/claude-code/skills/implement-bounded-change/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "abb3daed8bfe2ac02dca7b6997c079f70bbc726285f26131747dfa03fcfbf1cf"
     },
     {
       "name": "implement-bounded-change/references/CAPABILITY-DEGRADATION.md",
@@ -132,7 +217,17 @@
     {
       "name": "investigate-live-question",
       "path": "adapters/claude-code/skills/investigate-live-question/SKILL.md",
-      "sha256": "7804d6bae6f9adcf015d1edf65182af7aa2c5ff5c6cb4f774d4754fad90f56b3"
+      "sha256": "8c37a5d33b8837cc12d604d3703990742925847074b8b4f7f5b9dd3726503c17"
+    },
+    {
+      "name": "investigate-live-question/references/AGREEMENT-LOOP.md",
+      "path": "adapters/claude-code/skills/investigate-live-question/references/AGREEMENT-LOOP.md",
+      "sha256": "ac363e19c970bf165e40d69c84618c819b724caf8ef9cdecd3235cb4747393d9"
+    },
+    {
+      "name": "investigate-live-question/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/claude-code/skills/investigate-live-question/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "abb3daed8bfe2ac02dca7b6997c079f70bbc726285f26131747dfa03fcfbf1cf"
     },
     {
       "name": "investigate-live-question/references/CAPABILITY-DEGRADATION.md",
@@ -155,9 +250,54 @@
       "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
     },
     {
+      "name": "maintain-working-method",
+      "path": "adapters/claude-code/skills/maintain-working-method/SKILL.md",
+      "sha256": "3a29245bb29e2947cb9e8fd6d1786a6af3d4e14781c91673518c1a5d28375d7d"
+    },
+    {
+      "name": "maintain-working-method/references/AGREEMENT-LOOP.md",
+      "path": "adapters/claude-code/skills/maintain-working-method/references/AGREEMENT-LOOP.md",
+      "sha256": "ac363e19c970bf165e40d69c84618c819b724caf8ef9cdecd3235cb4747393d9"
+    },
+    {
+      "name": "maintain-working-method/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/claude-code/skills/maintain-working-method/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "abb3daed8bfe2ac02dca7b6997c079f70bbc726285f26131747dfa03fcfbf1cf"
+    },
+    {
+      "name": "maintain-working-method/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/claude-code/skills/maintain-working-method/references/CAPABILITY-DEGRADATION.md",
+      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+    },
+    {
+      "name": "maintain-working-method/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/claude-code/skills/maintain-working-method/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "ff61f7796626f48d2036633b4faf76dcfd7233a24ee8e2b53d4a7080df9020a0"
+    },
+    {
+      "name": "maintain-working-method/references/EVIDENCE-MODEL.md",
+      "path": "adapters/claude-code/skills/maintain-working-method/references/EVIDENCE-MODEL.md",
+      "sha256": "5e3ccd05bb7ff08015c9402cb5c708d83706b8c79dcb8546e1217a1528091141"
+    },
+    {
+      "name": "maintain-working-method/references/SHARED-PROTOCOL.md",
+      "path": "adapters/claude-code/skills/maintain-working-method/references/SHARED-PROTOCOL.md",
+      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
+    },
+    {
       "name": "pressure-test-decision",
       "path": "adapters/claude-code/skills/pressure-test-decision/SKILL.md",
-      "sha256": "abcae169fe4277286b7b9ab1b76a22bd1b90fe1aef074627ce79551ee6aa7ecc"
+      "sha256": "54e1a8272fbfe84a70d033db7156b3ef4db72a5999c3db09893d0d03d9763741"
+    },
+    {
+      "name": "pressure-test-decision/references/AGREEMENT-LOOP.md",
+      "path": "adapters/claude-code/skills/pressure-test-decision/references/AGREEMENT-LOOP.md",
+      "sha256": "ac363e19c970bf165e40d69c84618c819b724caf8ef9cdecd3235cb4747393d9"
+    },
+    {
+      "name": "pressure-test-decision/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/claude-code/skills/pressure-test-decision/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "abb3daed8bfe2ac02dca7b6997c079f70bbc726285f26131747dfa03fcfbf1cf"
     },
     {
       "name": "pressure-test-decision/references/CAPABILITY-DEGRADATION.md",
@@ -180,9 +320,54 @@
       "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
     },
     {
+      "name": "review-outcome-and-adapt",
+      "path": "adapters/claude-code/skills/review-outcome-and-adapt/SKILL.md",
+      "sha256": "42ca129d3607497c064ce285e2320c177c0f1f3fe70ebfd405bad51d2a112e19"
+    },
+    {
+      "name": "review-outcome-and-adapt/references/AGREEMENT-LOOP.md",
+      "path": "adapters/claude-code/skills/review-outcome-and-adapt/references/AGREEMENT-LOOP.md",
+      "sha256": "ac363e19c970bf165e40d69c84618c819b724caf8ef9cdecd3235cb4747393d9"
+    },
+    {
+      "name": "review-outcome-and-adapt/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/claude-code/skills/review-outcome-and-adapt/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "abb3daed8bfe2ac02dca7b6997c079f70bbc726285f26131747dfa03fcfbf1cf"
+    },
+    {
+      "name": "review-outcome-and-adapt/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/claude-code/skills/review-outcome-and-adapt/references/CAPABILITY-DEGRADATION.md",
+      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+    },
+    {
+      "name": "review-outcome-and-adapt/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/claude-code/skills/review-outcome-and-adapt/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "ff61f7796626f48d2036633b4faf76dcfd7233a24ee8e2b53d4a7080df9020a0"
+    },
+    {
+      "name": "review-outcome-and-adapt/references/EVIDENCE-MODEL.md",
+      "path": "adapters/claude-code/skills/review-outcome-and-adapt/references/EVIDENCE-MODEL.md",
+      "sha256": "5e3ccd05bb7ff08015c9402cb5c708d83706b8c79dcb8546e1217a1528091141"
+    },
+    {
+      "name": "review-outcome-and-adapt/references/SHARED-PROTOCOL.md",
+      "path": "adapters/claude-code/skills/review-outcome-and-adapt/references/SHARED-PROTOCOL.md",
+      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
+    },
+    {
       "name": "turn-signal-into-work",
       "path": "adapters/claude-code/skills/turn-signal-into-work/SKILL.md",
-      "sha256": "bf631161e1788b6a0a64c63f313f360fa766234c077f36aeebee4d70cc255d55"
+      "sha256": "8ea2c09772c4a010a593acad0a11bbb12cf6b9a548939c814dba6283cc4fb10e"
+    },
+    {
+      "name": "turn-signal-into-work/references/AGREEMENT-LOOP.md",
+      "path": "adapters/claude-code/skills/turn-signal-into-work/references/AGREEMENT-LOOP.md",
+      "sha256": "ac363e19c970bf165e40d69c84618c819b724caf8ef9cdecd3235cb4747393d9"
+    },
+    {
+      "name": "turn-signal-into-work/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/claude-code/skills/turn-signal-into-work/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "abb3daed8bfe2ac02dca7b6997c079f70bbc726285f26131747dfa03fcfbf1cf"
     },
     {
       "name": "turn-signal-into-work/references/CAPABILITY-DEGRADATION.md",
@@ -207,7 +392,17 @@
     {
       "name": "verify-release-evidence",
       "path": "adapters/claude-code/skills/verify-release-evidence/SKILL.md",
-      "sha256": "8d089a1ea6ac4075e52d1fc590debb02b1c55d1387d8b0a0f3ecd4ab75a03a89"
+      "sha256": "67f24a19fe1a39eb9c67f82f5c27d6a9165f52c0fa413bcbfd07682bcc8b742a"
+    },
+    {
+      "name": "verify-release-evidence/references/AGREEMENT-LOOP.md",
+      "path": "adapters/claude-code/skills/verify-release-evidence/references/AGREEMENT-LOOP.md",
+      "sha256": "ac363e19c970bf165e40d69c84618c819b724caf8ef9cdecd3235cb4747393d9"
+    },
+    {
+      "name": "verify-release-evidence/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/claude-code/skills/verify-release-evidence/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "abb3daed8bfe2ac02dca7b6997c079f70bbc726285f26131747dfa03fcfbf1cf"
     },
     {
       "name": "verify-release-evidence/references/CAPABILITY-DEGRADATION.md",

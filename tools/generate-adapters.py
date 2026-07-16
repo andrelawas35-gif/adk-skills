@@ -34,6 +34,8 @@ ADAPTERS_DIR = ROOT / "adapters"
 VERSION_FILE = ROOT / "VERSION"
 PLATFORMS = ["codex", "claude-code", "github-copilot"]
 SHARED_REFERENCES = [
+    "AGREEMENT-LOOP.md",
+    "SKILL-AWARE-GRILLING.md",
     "CAPABILITY-DEGRADATION.md",
     "CONSEQUENCE-AUTHORITY.md",
     "EVIDENCE-MODEL.md",

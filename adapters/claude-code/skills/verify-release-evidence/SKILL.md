@@ -77,6 +77,11 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
 
 ## Agreement Loop behavior
 
+Apply the shared conversational inquiry contract in
+`references/AGREEMENT-LOOP.md`: give a recommendation before one question,
+maintain coverage of material branches, and continue without an arbitrary
+question cap until the user and evidence establish the next safe move.
+
 Use the Agreement Loop only when the recorded evidence plan is insufficient and
 the smallest useful check would cross a material authority or boundary change.
 
@@ -87,6 +92,13 @@ the smallest useful check would cross a material authority or boundary change.
 4. Continue only after explicit scoped confirmation; otherwise report the gap.
 
 Do not reopen a bounded implementation merely to improve it while verifying.
+
+## Skill-aware grilling lens
+
+Apply the `verify-release-evidence` lens in
+`references/SKILL-AWARE-GRILLING.md`. On direct entry, route through
+`conduct-work-object` first. Return the standard five-field Grilling handoff
+for conductor persistence; do not store a transcript or mutate the Work Object.
 
 ## Stage workflow
 

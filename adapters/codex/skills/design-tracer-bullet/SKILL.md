@@ -69,6 +69,11 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
 
 ## Agreement Loop behavior
 
+Apply the shared conversational inquiry contract in
+`references/AGREEMENT-LOOP.md`: give a recommendation before one question,
+maintain coverage of material branches, and continue without an arbitrary
+question cap until the user and evidence establish the next safe move.
+
 Activate the Agreement Loop only if an unresolved boundary would materially
 change the tracer bullet. Retrieve discoverable facts first. Then:
 
@@ -83,6 +88,13 @@ Run the Adjacent Possibility Pass only when it changes the option space: name
 the dominant assumption, offer at most three materially distinct alternatives,
 state their changed assumptions and costs, and recommend one. Do not generate
 novelty merely to make the design feel more complete.
+
+## Skill-aware grilling lens
+
+Apply the `design-tracer-bullet` lens in
+`references/SKILL-AWARE-GRILLING.md`. On direct entry, route through
+`conduct-work-object` first. Return the standard five-field Grilling handoff
+for conductor persistence; do not store a transcript or mutate the Work Object.
 
 ## Stage workflow
 

@@ -88,12 +88,24 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
 
 ## Agreement Loop behavior
 
+Apply the shared conversational inquiry contract in
+`references/AGREEMENT-LOOP.md`: give a recommendation before one question,
+maintain coverage of material branches, and continue without an arbitrary
+question cap until the user and evidence establish the next safe move.
+
 Activate the Agreement Loop only for a material deployment decision that is not
 already recorded. First state the gate, observed evidence, consequence, and
 safe route. Recommend one smallest recoverable increment or a stop, then ask
 one decision-bearing question naming the exact missing or changed authority.
 Do not use this loop to obtain blanket permission for later increments,
 unrelated migration, or closure.
+
+## Skill-aware grilling lens
+
+Apply the `deploy-with-recovery` lens in
+`references/SKILL-AWARE-GRILLING.md`. On direct entry, route through
+`conduct-work-object` first. Return the standard five-field Grilling handoff
+for conductor persistence; do not store a transcript or mutate the Work Object.
 
 ## Stage workflow
 

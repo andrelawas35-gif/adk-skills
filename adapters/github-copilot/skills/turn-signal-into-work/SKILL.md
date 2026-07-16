@@ -86,6 +86,11 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
 
 ## Agreement Loop behavior
 
+Apply the shared conversational inquiry contract in
+`references/AGREEMENT-LOOP.md`: give a recommendation before one question,
+maintain coverage of material branches, and continue without an arbitrary
+question cap until the user and evidence establish the next safe move.
+
 Classification is not a decision loop when the signal and next handling are
 clear. Activate the Agreement Loop only when an unresolved boundary would
 materially change the handling:
@@ -97,6 +102,13 @@ materially change the handling:
 
 Do not offer a menu of equal options, and do not use a classification question
 to obtain blanket authority for future work.
+
+## Skill-aware grilling lens
+
+Apply the `turn-signal-into-work` lens in `references/SKILL-AWARE-GRILLING.md`.
+On direct entry, route through `conduct-work-object` first. Return the standard
+five-field Grilling handoff for conductor persistence; do not store a
+transcript or mutate the Work Object.
 
 ## Stage workflow
 

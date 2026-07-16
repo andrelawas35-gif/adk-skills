@@ -8,6 +8,30 @@ Andrelawas Work Studio is the execution and continuity system for bounded work. 
 The separate personal evidence and reflection system that preserves lived observations, recurring questions, and personal interpretation.
 _Avoid_: personal-memory store, Work Studio archive
 
+**Local-first**:
+An ownership model in which Personal Institution records are stored on the user's own machine by default; sync and sharing require explicit later choices.
+_Avoid_: cloud-first, automatic sync
+
+**Observation**:
+A short, firsthand record of something the user noticed, experienced, or thought, preserved in the user's own words before later interpretation.
+_Avoid_: fact, conclusion, AI summary
+
+**Observation revision**:
+A user-authored correction or update to an Observation that preserves the original text and records the change as later history.
+_Avoid_: overwrite, silent edit
+
+**Question**:
+An open inquiry the user wants to explore. A Question may exist without a Project and may inform one or more Projects.
+_Avoid_: task, commitment
+
+**Project**:
+A bounded effort to create, change, or test something. A Project may contain multiple Questions.
+_Avoid_: curiosity, ongoing theme
+
+**Source**:
+The provenance of an Observation. An Observation defaults to the self source; an external source may be attached when it prompted or supports the record.
+_Avoid_: truth rating, fact checker
+
 **Shared protocol**:
 A small, versioned specification of the terms and handoff rules shared by separately installable Personal Institution and Work Studio packages.
 _Avoid_: shared mega-skill, duplicated instructions
@@ -43,6 +67,30 @@ _Avoid_: deleted preference, active default
 **Work Object**:
 The durable record of one activated inquiry, project, change, or incident in Work Studio.
 _Avoid_: chat, personal note, task
+
+**Skill-aware grilling**:
+A continuous, recommendation-led conversation recorded in a Work Object. Each
+specialist activates only its relevant coverage lens when the conductor routes
+work to it, then hands unresolved material forward.
+_Avoid_: one universal checklist, isolated skill interview, command sequence
+
+**Grilling handoff**:
+The compact continuity record passed between specialists: current
+recommendation, confirmed decisions, unresolved branches, evidence and
+assumptions, and the receiving specialist's recommended first question.
+_Avoid_: chat transcript, generic status update, hidden reasoning
+
+**Coverage lens**:
+The bounded set of decision-bearing components a particular specialist must
+explore when it receives a Work Object. A lens supplements the shared grilling
+handoff; it does not replace another specialist's expertise.
+_Avoid_: universal checklist, repeated discovery, specialist scope expansion
+
+**Grilling section**:
+The compact Work Object section that holds the active coverage map and latest
+Grilling handoff. It is continuity metadata, not a transcript, evidence
+ledger, or duplicate decision record.
+_Avoid_: chat log, second evidence ledger, decision archive
 
 **Personal-memory record**:
 A private record maintained by Personal Institution; it remains outside a Work Object unless the user explicitly approves an Evidence Bridge.

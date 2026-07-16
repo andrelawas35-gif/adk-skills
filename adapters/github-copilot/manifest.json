@@ -7,7 +7,17 @@
     {
       "name": "conduct-work-object",
       "path": "adapters/github-copilot/skills/conduct-work-object/SKILL.md",
-      "sha256": "8677c05b57a4864c2983614c0a3a28725271261209d6bac034b26cca340cc483"
+      "sha256": "0eec959be49b266e479f323c91168df1a4740bca05721a2672a1797e7ebab38d"
+    },
+    {
+      "name": "conduct-work-object/references/AGREEMENT-LOOP.md",
+      "path": "adapters/github-copilot/skills/conduct-work-object/references/AGREEMENT-LOOP.md",
+      "sha256": "ac363e19c970bf165e40d69c84618c819b724caf8ef9cdecd3235cb4747393d9"
+    },
+    {
+      "name": "conduct-work-object/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/github-copilot/skills/conduct-work-object/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "abb3daed8bfe2ac02dca7b6997c079f70bbc726285f26131747dfa03fcfbf1cf"
     },
     {
       "name": "conduct-work-object/references/CAPABILITY-DEGRADATION.md",
@@ -32,7 +42,17 @@
     {
       "name": "deploy-with-recovery",
       "path": "adapters/github-copilot/skills/deploy-with-recovery/SKILL.md",
-      "sha256": "90e1b12d468a346441412cad2311a822543ce9a43b2c4eb673ce4239cd34086a"
+      "sha256": "321cb7e3a45ee8f21db3a5cb24c2457c0ab26961777bd272233cb73df5ccf2fb"
+    },
+    {
+      "name": "deploy-with-recovery/references/AGREEMENT-LOOP.md",
+      "path": "adapters/github-copilot/skills/deploy-with-recovery/references/AGREEMENT-LOOP.md",
+      "sha256": "ac363e19c970bf165e40d69c84618c819b724caf8ef9cdecd3235cb4747393d9"
+    },
+    {
+      "name": "deploy-with-recovery/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/github-copilot/skills/deploy-with-recovery/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "abb3daed8bfe2ac02dca7b6997c079f70bbc726285f26131747dfa03fcfbf1cf"
     },
     {
       "name": "deploy-with-recovery/references/CAPABILITY-DEGRADATION.md",
@@ -57,7 +77,17 @@
     {
       "name": "design-tracer-bullet",
       "path": "adapters/github-copilot/skills/design-tracer-bullet/SKILL.md",
-      "sha256": "15f4b236d905ddacb1a82b00c01fc646da5405be323b62363fa70e3c82d94c0e"
+      "sha256": "e5cf2b0a5b6f73fe4a0bbc6f252e93c4be0df12120e3f4453c89caa5f81cb542"
+    },
+    {
+      "name": "design-tracer-bullet/references/AGREEMENT-LOOP.md",
+      "path": "adapters/github-copilot/skills/design-tracer-bullet/references/AGREEMENT-LOOP.md",
+      "sha256": "ac363e19c970bf165e40d69c84618c819b724caf8ef9cdecd3235cb4747393d9"
+    },
+    {
+      "name": "design-tracer-bullet/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/github-copilot/skills/design-tracer-bullet/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "abb3daed8bfe2ac02dca7b6997c079f70bbc726285f26131747dfa03fcfbf1cf"
     },
     {
       "name": "design-tracer-bullet/references/CAPABILITY-DEGRADATION.md",
@@ -82,7 +112,17 @@
     {
       "name": "diagnose-production-incident",
       "path": "adapters/github-copilot/skills/diagnose-production-incident/SKILL.md",
-      "sha256": "6ce040adce39a32ddb9b92cdcaa8a84d8a4dd75f2b02ddb3290913df0a974d30"
+      "sha256": "8408e4c40b77c9f62935c74cd21d8003ec1ec4a814f61207d7b65a0215790b1a"
+    },
+    {
+      "name": "diagnose-production-incident/references/AGREEMENT-LOOP.md",
+      "path": "adapters/github-copilot/skills/diagnose-production-incident/references/AGREEMENT-LOOP.md",
+      "sha256": "ac363e19c970bf165e40d69c84618c819b724caf8ef9cdecd3235cb4747393d9"
+    },
+    {
+      "name": "diagnose-production-incident/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/github-copilot/skills/diagnose-production-incident/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "abb3daed8bfe2ac02dca7b6997c079f70bbc726285f26131747dfa03fcfbf1cf"
     },
     {
       "name": "diagnose-production-incident/references/CAPABILITY-DEGRADATION.md",
@@ -105,9 +145,54 @@
       "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
     },
     {
+      "name": "govern-scorecards",
+      "path": "adapters/github-copilot/skills/govern-scorecards/SKILL.md",
+      "sha256": "0494012ef9d399c51ea1636120249bc1d9a84cd1846517a2fb31a65d24a8c991"
+    },
+    {
+      "name": "govern-scorecards/references/AGREEMENT-LOOP.md",
+      "path": "adapters/github-copilot/skills/govern-scorecards/references/AGREEMENT-LOOP.md",
+      "sha256": "ac363e19c970bf165e40d69c84618c819b724caf8ef9cdecd3235cb4747393d9"
+    },
+    {
+      "name": "govern-scorecards/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/github-copilot/skills/govern-scorecards/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "abb3daed8bfe2ac02dca7b6997c079f70bbc726285f26131747dfa03fcfbf1cf"
+    },
+    {
+      "name": "govern-scorecards/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/github-copilot/skills/govern-scorecards/references/CAPABILITY-DEGRADATION.md",
+      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+    },
+    {
+      "name": "govern-scorecards/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/github-copilot/skills/govern-scorecards/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "ff61f7796626f48d2036633b4faf76dcfd7233a24ee8e2b53d4a7080df9020a0"
+    },
+    {
+      "name": "govern-scorecards/references/EVIDENCE-MODEL.md",
+      "path": "adapters/github-copilot/skills/govern-scorecards/references/EVIDENCE-MODEL.md",
+      "sha256": "5e3ccd05bb7ff08015c9402cb5c708d83706b8c79dcb8546e1217a1528091141"
+    },
+    {
+      "name": "govern-scorecards/references/SHARED-PROTOCOL.md",
+      "path": "adapters/github-copilot/skills/govern-scorecards/references/SHARED-PROTOCOL.md",
+      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
+    },
+    {
       "name": "implement-bounded-change",
       "path": "adapters/github-copilot/skills/implement-bounded-change/SKILL.md",
-      "sha256": "c3a5f79b11356703c48bc82be79273f3fcaa2a42926165d58719b5379dc2ebef"
+      "sha256": "cde36e5c0efd2261739d2d19846a6d2ba77745d3785fa3151f7d96e283a60351"
+    },
+    {
+      "name": "implement-bounded-change/references/AGREEMENT-LOOP.md",
+      "path": "adapters/github-copilot/skills/implement-bounded-change/references/AGREEMENT-LOOP.md",
+      "sha256": "ac363e19c970bf165e40d69c84618c819b724caf8ef9cdecd3235cb4747393d9"
+    },
+    {
+      "name": "implement-bounded-change/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/github-copilot/skills/implement-bounded-change/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "abb3daed8bfe2ac02dca7b6997c079f70bbc726285f26131747dfa03fcfbf1cf"
     },
     {
       "name": "implement-bounded-change/references/CAPABILITY-DEGRADATION.md",
@@ -132,7 +217,17 @@
     {
       "name": "investigate-live-question",
       "path": "adapters/github-copilot/skills/investigate-live-question/SKILL.md",
-      "sha256": "f4016504d315a3d39c2c43509d0d454c875b224c62932d8250ec840b78881dd1"
+      "sha256": "e16b010a8dee7191411e2868cc5e591d3d5414ea681f87b4002a6c4bc123fdc8"
+    },
+    {
+      "name": "investigate-live-question/references/AGREEMENT-LOOP.md",
+      "path": "adapters/github-copilot/skills/investigate-live-question/references/AGREEMENT-LOOP.md",
+      "sha256": "ac363e19c970bf165e40d69c84618c819b724caf8ef9cdecd3235cb4747393d9"
+    },
+    {
+      "name": "investigate-live-question/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/github-copilot/skills/investigate-live-question/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "abb3daed8bfe2ac02dca7b6997c079f70bbc726285f26131747dfa03fcfbf1cf"
     },
     {
       "name": "investigate-live-question/references/CAPABILITY-DEGRADATION.md",
@@ -155,9 +250,54 @@
       "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
     },
     {
+      "name": "maintain-working-method",
+      "path": "adapters/github-copilot/skills/maintain-working-method/SKILL.md",
+      "sha256": "493a77ffed27a4da433201ef0707640b9e3cb90337745721a5ab00e7ea9015c5"
+    },
+    {
+      "name": "maintain-working-method/references/AGREEMENT-LOOP.md",
+      "path": "adapters/github-copilot/skills/maintain-working-method/references/AGREEMENT-LOOP.md",
+      "sha256": "ac363e19c970bf165e40d69c84618c819b724caf8ef9cdecd3235cb4747393d9"
+    },
+    {
+      "name": "maintain-working-method/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/github-copilot/skills/maintain-working-method/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "abb3daed8bfe2ac02dca7b6997c079f70bbc726285f26131747dfa03fcfbf1cf"
+    },
+    {
+      "name": "maintain-working-method/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/github-copilot/skills/maintain-working-method/references/CAPABILITY-DEGRADATION.md",
+      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+    },
+    {
+      "name": "maintain-working-method/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/github-copilot/skills/maintain-working-method/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "ff61f7796626f48d2036633b4faf76dcfd7233a24ee8e2b53d4a7080df9020a0"
+    },
+    {
+      "name": "maintain-working-method/references/EVIDENCE-MODEL.md",
+      "path": "adapters/github-copilot/skills/maintain-working-method/references/EVIDENCE-MODEL.md",
+      "sha256": "5e3ccd05bb7ff08015c9402cb5c708d83706b8c79dcb8546e1217a1528091141"
+    },
+    {
+      "name": "maintain-working-method/references/SHARED-PROTOCOL.md",
+      "path": "adapters/github-copilot/skills/maintain-working-method/references/SHARED-PROTOCOL.md",
+      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
+    },
+    {
       "name": "pressure-test-decision",
       "path": "adapters/github-copilot/skills/pressure-test-decision/SKILL.md",
-      "sha256": "025827f30cffa3ffa52bf05d04dd2cfcdc1396f705253f3a6b7f96abc789822f"
+      "sha256": "dfdbc1b24a86465ea7377e3a19ff254653eaf4d35de7b6ce4e458454198e80cc"
+    },
+    {
+      "name": "pressure-test-decision/references/AGREEMENT-LOOP.md",
+      "path": "adapters/github-copilot/skills/pressure-test-decision/references/AGREEMENT-LOOP.md",
+      "sha256": "ac363e19c970bf165e40d69c84618c819b724caf8ef9cdecd3235cb4747393d9"
+    },
+    {
+      "name": "pressure-test-decision/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/github-copilot/skills/pressure-test-decision/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "abb3daed8bfe2ac02dca7b6997c079f70bbc726285f26131747dfa03fcfbf1cf"
     },
     {
       "name": "pressure-test-decision/references/CAPABILITY-DEGRADATION.md",
@@ -180,9 +320,54 @@
       "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
     },
     {
+      "name": "review-outcome-and-adapt",
+      "path": "adapters/github-copilot/skills/review-outcome-and-adapt/SKILL.md",
+      "sha256": "32b339db2e8cb9f198a7d6391de820f584ec6ab657d8a17d3535f83b44f325a2"
+    },
+    {
+      "name": "review-outcome-and-adapt/references/AGREEMENT-LOOP.md",
+      "path": "adapters/github-copilot/skills/review-outcome-and-adapt/references/AGREEMENT-LOOP.md",
+      "sha256": "ac363e19c970bf165e40d69c84618c819b724caf8ef9cdecd3235cb4747393d9"
+    },
+    {
+      "name": "review-outcome-and-adapt/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/github-copilot/skills/review-outcome-and-adapt/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "abb3daed8bfe2ac02dca7b6997c079f70bbc726285f26131747dfa03fcfbf1cf"
+    },
+    {
+      "name": "review-outcome-and-adapt/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/github-copilot/skills/review-outcome-and-adapt/references/CAPABILITY-DEGRADATION.md",
+      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+    },
+    {
+      "name": "review-outcome-and-adapt/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/github-copilot/skills/review-outcome-and-adapt/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "ff61f7796626f48d2036633b4faf76dcfd7233a24ee8e2b53d4a7080df9020a0"
+    },
+    {
+      "name": "review-outcome-and-adapt/references/EVIDENCE-MODEL.md",
+      "path": "adapters/github-copilot/skills/review-outcome-and-adapt/references/EVIDENCE-MODEL.md",
+      "sha256": "5e3ccd05bb7ff08015c9402cb5c708d83706b8c79dcb8546e1217a1528091141"
+    },
+    {
+      "name": "review-outcome-and-adapt/references/SHARED-PROTOCOL.md",
+      "path": "adapters/github-copilot/skills/review-outcome-and-adapt/references/SHARED-PROTOCOL.md",
+      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
+    },
+    {
       "name": "turn-signal-into-work",
       "path": "adapters/github-copilot/skills/turn-signal-into-work/SKILL.md",
-      "sha256": "ef8d10165083fbcff36a4bf834878d2f380470ce02d49c3fdd828ebed12384bd"
+      "sha256": "34d5938964b6e347d9944c56ba5a6ef2afd196a95241b67333240a3a7051ba37"
+    },
+    {
+      "name": "turn-signal-into-work/references/AGREEMENT-LOOP.md",
+      "path": "adapters/github-copilot/skills/turn-signal-into-work/references/AGREEMENT-LOOP.md",
+      "sha256": "ac363e19c970bf165e40d69c84618c819b724caf8ef9cdecd3235cb4747393d9"
+    },
+    {
+      "name": "turn-signal-into-work/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/github-copilot/skills/turn-signal-into-work/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "abb3daed8bfe2ac02dca7b6997c079f70bbc726285f26131747dfa03fcfbf1cf"
     },
     {
       "name": "turn-signal-into-work/references/CAPABILITY-DEGRADATION.md",
@@ -207,7 +392,17 @@
     {
       "name": "verify-release-evidence",
       "path": "adapters/github-copilot/skills/verify-release-evidence/SKILL.md",
-      "sha256": "f38c6c945d0bb6677a99aed913950deefb168703db35aea18cb496eb6d3cad66"
+      "sha256": "32894d4197c3cb107c2d971e9614643ca2d5a4bcad3711690bad9286151f00d9"
+    },
+    {
+      "name": "verify-release-evidence/references/AGREEMENT-LOOP.md",
+      "path": "adapters/github-copilot/skills/verify-release-evidence/references/AGREEMENT-LOOP.md",
+      "sha256": "ac363e19c970bf165e40d69c84618c819b724caf8ef9cdecd3235cb4747393d9"
+    },
+    {
+      "name": "verify-release-evidence/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/github-copilot/skills/verify-release-evidence/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "abb3daed8bfe2ac02dca7b6997c079f70bbc726285f26131747dfa03fcfbf1cf"
     },
     {
       "name": "verify-release-evidence/references/CAPABILITY-DEGRADATION.md",

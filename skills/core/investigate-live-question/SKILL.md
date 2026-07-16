@@ -84,6 +84,11 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
 
 ## Agreement Loop behavior
 
+Apply the shared conversational inquiry contract in
+`references/AGREEMENT-LOOP.md`: give a recommendation before one question,
+maintain coverage of material branches, and continue without an arbitrary
+question cap until the user and evidence establish the next safe move.
+
 Use the minimum loop needed to unblock evidence collection:
 
 1. **Orient:** Label what is known as `[lived]`, `[source]`, `[system]`,
@@ -99,6 +104,13 @@ Use the minimum loop needed to unblock evidence collection:
 5. **Integrate:** Record observed evidence and contradictions without erasing
    the prior hypothesis. Reframe only when the new evidence makes the original
    question unhelpful.
+
+## Skill-aware grilling lens
+
+Apply the `investigate-live-question` lens in
+`references/SKILL-AWARE-GRILLING.md`. On direct entry, route through
+`conduct-work-object` first. Return the standard five-field Grilling handoff
+for conductor persistence; do not store a transcript or mutate the Work Object.
 
 ## Stage workflow
 

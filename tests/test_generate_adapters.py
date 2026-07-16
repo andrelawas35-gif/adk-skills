@@ -160,6 +160,8 @@ class GeneratorContract(unittest.TestCase):
 
     def test_installed_skills_include_their_declared_references(self):
         references = [
+            "AGREEMENT-LOOP.md",
+            "SKILL-AWARE-GRILLING.md",
             "CAPABILITY-DEGRADATION.md",
             "CONSEQUENCE-AUTHORITY.md",
             "EVIDENCE-MODEL.md",

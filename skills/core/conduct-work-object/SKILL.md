@@ -111,6 +111,11 @@ Apply the rules in `references/CONSEQUENCE-AUTHORITY.md`:
 
 ## Agreement Loop behavior
 
+Apply the shared conversational inquiry contract in
+`references/AGREEMENT-LOOP.md`: give a recommendation before one question,
+maintain coverage of material branches, and continue without an arbitrary
+question cap until the user and evidence establish the next safe move.
+
 This skill identifies decision boundaries but does not run the full Agreement
 Loop itself. When it encounters:
 
@@ -121,6 +126,15 @@ Loop itself. When it encounters:
 For routine decisions within this skill's authority (e.g., "should I resume the
 last active Work Object?"), apply the loop minimally: recommend, ask one
 question, integrate.
+
+## Skill-aware grilling lens
+
+Apply the `conduct-work-object` lens in `references/SKILL-AWARE-GRILLING.md`.
+For a direct specialist request, discover or establish the Work Object before
+routing it to that specialist. Create the `## Grilling` section lazily when a
+session activates; validate and persist its coverage update and five-field
+handoff as the sole writer. Preserve confirmed decisions and evidence in their
+canonical sections rather than duplicating them in Grilling.
 
 ## Stage workflow
 
@@ -199,7 +213,8 @@ objects.
    ---
    ```
 5. Populate body with stub sections for Intent, Success evidence, Constraints
-   and non-goals, Evidence ledger, Open questions, Next move, History.
+   and non-goals, Evidence ledger, Open questions, Next move, History. Add the
+   `Grilling` section only when skill-aware grilling activates.
 6. Append the creation History entry.
 7. Update `active.md` if this is the first active object or the user confirms
    it as Primary.
@@ -283,6 +298,7 @@ This skill composes with:
 - `diagnose-production-incident` — for incidents
 - `review-outcome-and-adapt` — for closing and review
 - `maintain-working-method` — for workflow candidate governance
+- `govern-scorecards` — for outcome scorecard review and candidate proposals
 
 Missing dependencies must be reported as reduced capability rather than
 silently imitated.
