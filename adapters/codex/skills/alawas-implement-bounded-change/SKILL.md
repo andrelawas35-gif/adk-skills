@@ -83,9 +83,10 @@ maintain coverage of material branches, and continue without an arbitrary
 question cap until the user and evidence establish the next safe move.
 
 Do not reopen an accepted implementation boundary merely because a different
-solution looks attractive. Activate the Agreement Loop only when a material new
-decision or authority boundary would change the accepted tracer bullet. First
-retrieve discoverable repository facts, then:
+solution looks attractive. An explicit grilling request runs the full
+implementation profile against the accepted boundary. Otherwise, activate only
+when a material new decision or authority boundary would change the tracer
+bullet. First retrieve discoverable repository facts, then:
 
 1. State the accepted constraint, new evidence, inference, and consequence.
 2. Recommend one smallest safe route, including whether to stop, revert, or
@@ -98,12 +99,15 @@ retrieve discoverable repository facts, then:
 Do not use this loop to obtain blanket permission for nearby cleanup, future
 implementation, deployment, or other unaccepted work.
 
-## Skill-aware grilling lens
+## Skill Grilling Profile
 
-Apply the `alawas-implement-bounded-change` lens in
-`references/SKILL-AWARE-GRILLING.md`. On direct entry, route through
-`alawas-conduct-work-object` first. Return the standard five-field Grilling handoff
-for conductor persistence; do not store a transcript or mutate the Work Object.
+Apply the `alawas-implement-bounded-change` profile and continuous Grilling Session in
+`references/SKILL-AWARE-GRILLING.md`. Reconcile the accepted boundary with the
+current repository, establish discriminating checks, protect unrelated dirty
+work, and reopen the frontier for any unapproved interface, schema, dependency,
+data, deployment, or external-effect expansion. On direct entry, route through
+`alawas-conduct-work-object` first. Return the compact continuity record; do not reset
+context, store a transcript, or mutate the Work Object.
 
 ## Stage workflow
 

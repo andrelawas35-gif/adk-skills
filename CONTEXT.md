@@ -40,6 +40,31 @@ _Avoid_: shared mega-skill, duplicated instructions
 The execution, decision, and delivery system whose canonical record is a Work Object.
 _Avoid_: personal archive, life operating system
 
+**Workspace Documentation Contract**:
+The sole durable artifact created when an empty workspace is bootstrapped. It
+defines how project documents are discovered, named, owned, created, validated,
+and superseded before the workspace records project-specific claims, and
+contains the canonical artifact registry. An explicit bootstrap request grants
+authority to create this contract only. It is a human-readable Markdown file
+with a rigid, parseable registry section.
+_Avoid_: project brief, empty documentation tree, implied repository convention
+
+**Canonical Artifact Registry**:
+The complete taxonomy declared in the Workspace Documentation Contract. It
+names each supported artifact type and its lifecycle rules even when the
+artifact's file has not been created. It includes generated adapters with their
+canonical source and deterministic generation boundary. Every entry declares
+its canonical name and location, purpose, owner, stage trigger, required
+evidence, creation and update authority, provenance and freshness rule,
+supersession rule, generated/canonical status, and validation method.
+_Avoid_: generated document tree, evidence inventory, guessed path convention
+
+**Generated Adapter Artifact**:
+A deterministic, non-canonical copy derived from a registered source artifact
+for a target platform. It may be regenerated but is never directly edited as
+the authoritative source.
+_Avoid_: canonical skill, hand-maintained fork, source of record
+
 **Evidence Bridge**:
 A user-approved, redacted summary or stable reference that carries only the minimum personal context needed into a Work Object.
 _Avoid_: memory sync, archive export
@@ -68,31 +93,39 @@ _Avoid_: deleted preference, active default
 The durable record of one activated inquiry, project, change, or incident in Work Studio.
 _Avoid_: chat, personal note, task
 
-**Skill-aware grilling**:
-A continuous, recommendation-led conversation recorded in a Work Object. Each
-specialist activates only its relevant coverage lens when the conductor routes
-work to it, then hands unresolved material forward.
-_Avoid_: one universal checklist, isolated skill interview, command sequence
+**Grilling Session**:
+A continuous, recommendation-led, one-question-at-a-time conversation that may
+move across specialist skills without resetting its context or accepted
+decisions.
+_Avoid_: isolated skill interview, command sequence, output template
 
-**Grilling handoff**:
-The compact continuity record passed between specialists: current
-recommendation, confirmed decisions, unresolved branches, evidence and
-assumptions, and the receiving specialist's recommended first question.
-_Avoid_: chat transcript, generic status update, hidden reasoning
+**Context Card**:
+The visible, correctable opening or resume summary of goal, project stage,
+approved preferences, inspected evidence, open branches, and active specialist.
+_Avoid_: hidden personalization, full chat replay, unverified memory dump
 
-**Coverage lens**:
-The two-tier coverage guide used by a receiving specialist: harm-based gates
-are accounted for, while non-gate branches are explored by information value.
-A lens supplements the shared grilling handoff; it does not replace another
-specialist's expertise.
-_Avoid_: universal checklist, exhaustive component accounting, specialist scope expansion
+**Decision Frontier**:
+The single unresolved branch currently most likely to change the recommendation,
+ranked by probability, impact, uncertainty, irreversibility, and dependency
+reach.
+_Avoid_: next checklist item, arbitrary question, unranked menu
 
-**Grilling section**:
-The compact Work Object section that holds the active coverage result — gates
-accounted for plus branches visited — and the latest Grilling handoff. It is
-continuity metadata, not a transcript, evidence ledger, or duplicate decision
-record.
-_Avoid_: chat log, exhaustive checklist, second evidence ledger, decision archive
+**Evidence Ledger**:
+The canonical Work Object record of attributable system evidence, decisions,
+testimony, inference, conflicts, and gaps used by a Grilling Session.
+_Avoid_: hidden reasoning, uncited code claim, averaged contradiction
+
+**Skill Grilling Profile**:
+The stage-specific policy defining what a specialist inspects, which tension it
+pursues, how it challenges an answer, where it routes, and when its stage has
+enough understanding.
+_Avoid_: coverage checklist, duplicated conversational engine, generic interview
+
+**Coverage Proof**:
+The convergence record showing that material branches are resolved, routed,
+deferred with triggers, or ruled out by evidence, and that no remaining question
+is likely to change the recommendation.
+_Avoid_: question count, completion assertion, exhaustive transcript
 
 **Personal-memory record**:
 A private record maintained by Personal Institution; it remains outside a Work Object unless the user explicitly approves an Evidence Bridge.

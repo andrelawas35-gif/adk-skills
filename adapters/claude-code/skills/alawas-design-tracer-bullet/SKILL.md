@@ -74,8 +74,9 @@ Apply the shared conversational inquiry contract in
 maintain coverage of material branches, and continue without an arbitrary
 question cap until the user and evidence establish the next safe move.
 
-Activate the Agreement Loop only if an unresolved boundary would materially
-change the tracer bullet. Retrieve discoverable facts first. Then:
+An explicit grilling request runs the full tracer-bullet profile. Otherwise,
+activate only if an unresolved boundary would materially change the tracer
+bullet. Retrieve discoverable facts first. Then:
 
 1. State the known evidence, inference, riskiest assumption, and consequence.
 2. Recommend one smallest end-to-end tracer bullet, including its trade-off.
@@ -85,16 +86,20 @@ change the tracer bullet. Retrieve discoverable facts first. Then:
    revise only the boundary changed by the answer.
 
 Run the Adjacent Possibility Pass only when it changes the option space: name
-the dominant assumption, offer at most three materially distinct alternatives,
-state their changed assumptions and costs, and recommend one. Do not generate
-novelty merely to make the design feel more complete.
+the dominant assumption, generate materially distinct evidence-grounded
+alternatives, state their changed assumptions and costs, and recommend one.
+Explore every material branch over successive one-question turns; do not dump a
+menu or generate novelty merely to make the design feel more complete.
 
-## Skill-aware grilling lens
+## Skill Grilling Profile
 
-Apply the `alawas-design-tracer-bullet` lens in
-`references/SKILL-AWARE-GRILLING.md`. On direct entry, route through
-`alawas-conduct-work-object` first. Return the standard five-field Grilling handoff
-for conductor persistence; do not store a transcript or mutate the Work Object.
+Apply the `alawas-design-tracer-bullet` profile and continuous Grilling Session in
+`references/SKILL-AWARE-GRILLING.md`. Start from the riskiest falsifiable
+assumption, define observable exit evidence, and challenge substitutes,
+containment, recovery, and result interpretation against the real code path.
+On direct entry, route through `alawas-conduct-work-object` first. Return the compact
+continuity record; do not reset context, store a transcript, or mutate the Work
+Object.
 
 ## Stage workflow
 

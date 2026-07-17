@@ -156,12 +156,15 @@ because every invocation is a decision boundary:
    and route back to `alawas-conduct-work-object`. If new decisions emerged, loop
    back. If the decision space is exhausted, route with documented uncertainty.
 
-## Skill-aware grilling lens
+## Skill Grilling Profile
 
-Apply the `alawas-pressure-test-decision` lens in
-`references/SKILL-AWARE-GRILLING.md`. On direct entry, route through
-`alawas-conduct-work-object` first. Return the standard five-field Grilling handoff
-for conductor persistence; do not store a transcript or mutate the Work Object.
+Apply the `alawas-pressure-test-decision` profile and continuous Grilling Session in
+`references/SKILL-AWARE-GRILLING.md`. Pursue the assumption carrying the most
+decision risk, reject false binaries when evidence supports another branch,
+and test the leading option with codebase-grounded and high-impact
+counterexamples. On direct entry, route through `alawas-conduct-work-object` first.
+Return the compact continuity record; do not reset context, store a transcript,
+or mutate the Work Object.
 
 ## Stage workflow
 

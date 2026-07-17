@@ -179,6 +179,15 @@ class GeneratorContract(unittest.TestCase):
                             / "references" / reference)
                     self.assertTrue(path.is_file(), f"missing installed reference: {path}")
 
+    def test_generated_adapters_include_local_grilling_profile_summary(self):
+        for platform in PLATFORMS:
+            for skill in core_skill_names():
+                adapter = adapter_file(platform, skill).read_text()
+                normalized = " ".join(adapter.split())
+                self.assertIn("## Skill Grilling Profile", adapter)
+                self.assertIn(f"`{adapter_skill_name(skill)}` profile", normalized)
+                self.assertIn("continuous Grilling Session", normalized)
+
     def test_every_required_core_capability_is_mapped_and_classified(self):
         """A core requirement cannot silently disappear at an adapter boundary."""
         for skill in core_skill_names():

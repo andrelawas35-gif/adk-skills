@@ -84,12 +84,14 @@ conflict or filling the smallest relevant gap rather than forcing a score,
 identity claim, or proposal. Route a material workflow decision to
 `pressure-test-decision` before recording it.
 
-## Skill-aware grilling lens
+## Skill Grilling Profile
 
-Apply the `govern-scorecards` lens in
-`references/SKILL-AWARE-GRILLING.md`. On direct entry, route through
-`conduct-work-object` first. Return the standard five-field Grilling handoff
-for conductor persistence; do not store a transcript or mutate the Work Object.
+Apply the `govern-scorecards` profile and continuous Grilling Session in
+`references/SKILL-AWARE-GRILLING.md`. Tie every dimension to an attributable,
+decision-relevant evidence source; challenge activity proxies, hidden
+distributions, aggregation, identity claims, and automatic action. On direct
+entry, route through `conduct-work-object` first. Return the compact continuity
+record; do not reset context, store a transcript, or mutate the Work Object.
 
 ## Stage workflow
 

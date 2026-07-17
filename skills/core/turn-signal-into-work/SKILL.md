@@ -95,9 +95,9 @@ Apply the shared conversational inquiry contract in
 maintain coverage of material branches, and continue without an arbitrary
 question cap until the user and evidence establish the next safe move.
 
-Classification is not a decision loop when the signal and next handling are
-clear. Activate the Agreement Loop only when an unresolved boundary would
-materially change the handling:
+An explicit grilling request runs the full signal profile. Otherwise,
+classification is not a decision loop when the signal and next handling are
+clear; activate only when an unresolved boundary would materially change it:
 
 1. State the evidence, inference, and consequence level.
 2. Recommend one classification and explain the smallest trade-off.
@@ -107,12 +107,14 @@ materially change the handling:
 Do not offer a menu of equal options, and do not use a classification question
 to obtain blanket authority for future work.
 
-## Skill-aware grilling lens
+## Skill Grilling Profile
 
-Apply the `turn-signal-into-work` lens in `references/SKILL-AWARE-GRILLING.md`.
-On direct entry, route through `conduct-work-object` first. Return the standard
-five-field Grilling handoff for conductor persistence; do not store a
-transcript or mutate the Work Object.
+Apply the `turn-signal-into-work` profile and continuous Grilling Session in
+`references/SKILL-AWARE-GRILLING.md`. Reflect the signal in the user's language,
+then challenge provenance, sensitivity, overlap, and whether activation is
+warranted. On direct entry, route through `conduct-work-object` first. Return
+the compact continuity record for conductor persistence; do not reset context,
+store a transcript, or mutate the Work Object.
 
 ## Stage workflow
 

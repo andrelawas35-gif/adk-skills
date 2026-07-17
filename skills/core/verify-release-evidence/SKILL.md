@@ -86,8 +86,9 @@ Apply the shared conversational inquiry contract in
 maintain coverage of material branches, and continue without an arbitrary
 question cap until the user and evidence establish the next safe move.
 
-Use the Agreement Loop only when the recorded evidence plan is insufficient and
-the smallest useful check would cross a material authority or boundary change.
+An explicit grilling request runs the full verification profile. Otherwise,
+activate only when the recorded evidence plan is insufficient and the smallest
+useful check would cross a material authority or boundary change.
 
 1. State the accepted criterion, available evidence, missing evidence, and
    consequence.
@@ -97,12 +98,14 @@ the smallest useful check would cross a material authority or boundary change.
 
 Do not reopen a bounded implementation merely to improve it while verifying.
 
-## Skill-aware grilling lens
+## Skill Grilling Profile
 
-Apply the `verify-release-evidence` lens in
-`references/SKILL-AWARE-GRILLING.md`. On direct entry, route through
-`conduct-work-object` first. Return the standard five-field Grilling handoff
-for conductor persistence; do not store a transcript or mutate the Work Object.
+Apply the `verify-release-evidence` profile and continuous Grilling Session in
+`references/SKILL-AWARE-GRILLING.md`. Start with the consequential claim having
+the weakest direct evidence, validate checks and negative cases independently,
+and expose environment, recovery, privacy, and downstream gaps. On direct
+entry, route through `conduct-work-object` first. Return the compact continuity
+record; do not reset context, store a transcript, or mutate the Work Object.
 
 ## Stage workflow
 

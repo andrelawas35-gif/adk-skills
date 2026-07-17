@@ -1,81 +1,182 @@
 # Agreement Loop
 
-The shared reasoning protocol for all Work Studio skills. Activates only at
-unresolved decision boundaries — it is not a conversational loop for every
-exchange.
+The shared conversational engine for Work Studio. An activated Agreement Loop
+is a continuous **Grilling Session**, not an output template or a checklist.
+Skill routing changes the active Skill Grilling Profile without resetting the
+conversation.
 
-## Conversational inquiry contract
+## Activation detector
 
-Treat an activated loop as a real conversation, not a command sequence. Start
-from the user's language and the available evidence, explain the current
-recommendation and its trade-off, then ask **one** highest-information question
-and wait for the answer. Do not make the user choose from an unranked menu.
+Activate when either:
 
-Keep a lightweight coverage map as the conversation develops: the decision or
-claim, its dependencies, affected people or systems, constraints and authority,
-evidence gaps, failure and edge cases, alternatives, and revisit triggers. Read
-or test facts that can be discovered directly instead of asking the user for
-them. After each answer, update the map, state what changed, and recommend the
-next most useful question or action.
+- the user explicitly asks to be grilled; or
+- a material unresolved choice could change the outcome, authority, safety,
+  evidence standard, implementation boundary, or downstream route.
 
-There is **no arbitrary question limit**. Continue for as many exchanges as the
-problem genuinely requires — whether that is three, 200, or more — until every
-material novel branch is resolved, explicitly deferred with a revisit trigger,
-or shown not to change the recommendation. Never manufacture questions merely
-to keep the loop running, and never continue past a user request to pause,
-answer, or act.
+Without an explicit grilling request, briefly name the detected uncertainty and
+ask whether to explore it. Do not activate for routine work inside established
+authority, settled decisions, or facts that can be discovered from permitted
+evidence. Read those facts instead.
 
-Before taking an action that needs authority, give a concise synthesis of the
-resolved understanding, remaining uncertainty, and recommendation. Obtain any
-required scoped confirmation; a conversational answer is not blanket authority.
+An explicit `grill me` starts immediately and remains active across specialist
+routes until the user pauses or the session converges. `do recommended` accepts
+only the recommendation currently in focus; it never closes the session,
+waives open branches, or grants unrelated authority.
 
-## When to activate
+## Opening context card
 
-The Agreement Loop activates when:
-- A genuine decision with multiple viable branches exists
-- The user has not already given clear authority
-- The choice materially affects the Work Object outcome
-- Further questions would change the recommendation
+Before the first decision question, show a compact, correctable **Context
+Card**:
 
-It does NOT activate for:
-- Routine operational steps within established authority
-- Questions answerable by reading existing evidence
-- Already-decided matters (check Decisions section first)
-- When the user has said `do recommended` or `just execute`
+- current goal and project stage;
+- relevant user-confirmed preferences and their source;
+- Work Object decisions and unresolved branches;
+- code, tests, configuration, ADRs, and other evidence inspected;
+- the specific uncertainty, contradiction, or downstream risk that activated
+  grilling; and
+- the active Skill Grilling Profile.
 
-## Steps
+On resume or specialist handoff, state what was inherited before asking a new
+question. Never cold-start a routed skill.
 
-1. **Orient** — Ground in the Work Object, memory, evidence, consequence, and current state. What do we know? What is decided? What is unresolved?
+## Grounding and personalization
 
-2. **Map** — Identify unresolved branches, dependencies, contradictions, and missing evidence. Surface what's at stake.
+Maintain an **Evidence Ledger** that distinguishes:
 
-3. **Recommend** — Give ONE recommended answer with supporting evidence, trade-offs, and confidence level. Do not present a menu.
+- `[system]` current code, configuration, executable results, and records;
+- `[decision]` explicit user or accountable-owner decisions;
+- `[memory]` relevant, user-approved reusable preferences;
+- `[testimony]` attributable human observations with context and uncertainty;
+- `[inference]` agent reasoning and unverified hypotheses; and
+- `[gap]` facts that could not be accessed or established.
 
-4. **Ask** — Ask exactly ONE decision-bearing question. Make it specific and answerable.
+Inspect discoverable evidence before asking the user. A codebase challenge must
+cite the exact local file, test, configuration, or Work Object record. Never
+present inference, stale documentation, or remembered context as current system
+fact. When sources conflict, expose the conflict and compare freshness,
+directness, and authority instead of inventing a reconciliation.
 
-5. **Integrate** — Record the user's answer as a Decision with rationale and revisit trigger.
+Use current conversation and Work Object context first. Treat Codex memory as a
+discovery aid, not a silent source of truth. A newly inferred preference remains
+session-local until the user approves it as reusable. State when remembered
+context influences a recommendation and make correction easy. Remove sensitive
+or mistakenly stored context rather than retaining it as preference history.
 
-6. **Generate novelty** — Only when it changes the option space. Do not churn alternatives for their own sake.
+## Decision frontier
 
-7. **Test** — Test the emerging agreement with an edge case or failure scenario.
+Maintain a branch map and choose one **Decision Frontier** at a time. Rank
+branches by:
 
-8. **Converge or route** — If agreement is sufficient, proceed. If not, loop back or route to a more appropriate skill.
+1. probability of relevance;
+2. impact on the project or system;
+3. uncertainty and evidence weakness;
+4. irreversibility, external effect, or dependency reach; and
+5. likelihood that the answer changes the recommendation.
 
-## Termination conditions
+Always surface low-probability/high-impact privacy, security, authority,
+irreversible-data, external-harm, and unrecoverable-deployment branches. Map
+plausible adjacent and downstream consequences automatically. Explore them now
+when they can invalidate the current recommendation; otherwise defer them with
+an owner or receiving skill and a concrete revisit trigger.
 
-The loop stops when:
-- Agreement is sufficient and action can proceed
-- Action or external evidence is needed before further deliberation
-- Further questions will not change the recommendation
-- The user proceeds with documented uncertainty
-- Another skill is more appropriate for the situation
+Generate a novel recommendation only when evidence, a contradiction, a
+counterexample, or a dependency opens a real new option. Do not brainstorm for
+its own sake.
+
+## Conversational turn contract
+
+Each turn must feel like a response to the user, not a form being filled out:
+
+1. Reiterate the evolving model in the user's language. Distinguish what the
+   user confirmed, what the agent inferred, and what remains uncertain.
+2. State what changed because of the last answer or new evidence.
+3. Name the current tension, contradiction, or counterexample.
+4. Give one recommended answer or next move, its principal trade-off, and what
+   evidence would change it.
+5. Ask exactly one decision-bearing question and wait.
+
+Use natural prose. Labels are optional unless they clarify provenance,
+contradiction, or a coverage checkpoint. Never emit a completed plan, design,
+implementation, deployment action, or final artifact while a Grilling Session
+is active and material branches remain.
+
+Treat each answer as a working hypothesis. Challenge it with the strongest
+credible codebase-grounded counterexample, alternative, or failure scenario
+when doing so could change the result. Continue until the answer has supporting
+evidence, an accountable decision, or a documented uncertainty and revisit
+trigger.
+
+## Progress invariant and coverage checkpoints
+
+Every turn must do at least one of the following:
+
+- reduce material uncertainty;
+- expose or resolve a contradiction;
+- obtain necessary authority;
+- add discriminating evidence;
+- open a genuinely novel material branch; or
+- resolve, route, or explicitly defer a branch.
+
+If a proposed question does none of these, do not ask it. There is no numerical
+question cap: three, 200, or more turns are valid. Repetition without progress
+is a failure.
+
+At meaningful transitions, show a short checkpoint: what is resolved, what is
+active, what is deferred, and why the next question matters.
+
+## Cross-skill continuity
+
+Use the profiles in `references/SKILL-AWARE-GRILLING.md`. When another skill
+owns the Decision Frontier, route to it without resetting the session. The
+receiving skill inherits the Context Card, Evidence Ledger, confirmed
+decisions, open branches, current recommendation, and reason for routing, then
+continues with its own stage-specific question.
+
+Only `conduct-work-object` persists the compact session state. Specialists
+return continuity state; they do not write transcripts or mutate lifecycle
+state. Direct specialist invocation first discovers or establishes the Work
+Object through the conductor.
+
+## Controls, persistence, and recovery
+
+Accept natural controls at any time: pause, resume, defer this branch, go
+deeper, challenge that recommendation, show coverage, switch lens, or conclude
+with uncertainty. Pausing preserves the exact Decision Frontier.
+
+Checkpoint compact state after every accepted decision, material evidence
+change, or route. Persist decisions and evidence in their canonical Work Object
+sections, with only continuity metadata in the Grilling Session section. On a
+write conflict, pause consequential action and reconcile competing revisions;
+never silently overwrite or merge incompatible decisions.
+
+If persistence fails, disclose it immediately and preserve a recoverable
+session summary. On recovery, compare the last persisted checkpoint with the
+unpersisted summary before continuing.
+
+## Convergence and action authority
+
+Converge only with a **Coverage Proof** showing that:
+
+- material high-probability/high-impact branches are resolved;
+- safety-floor branches are resolved, routed, or explicitly accepted by an
+  accountable owner;
+- codebase and record contradictions are addressed;
+- remaining branches are deferred with revisit triggers; and
+- no remaining question is likely to change the recommendation.
+
+Then present the agreed outcome, evidence, accepted recommendations, residual
+risks, deferred branches, and exact next action. Obtain separately scoped
+authority naming affected files or systems, external effects, and verification
+boundary. Any newly discovered expansion reopens the relevant frontier.
 
 ## Anti-patterns
 
-- **Ceremony inflation**: Running the full loop for trivial choices
-- **Interrogation fatigue**: Asking multiple sequential questions without progress
-- **Menu dumping**: Presenting options without a recommendation
-- **Loop cycling**: Revisiting settled decisions without new evidence
-- **Novelty churn**: Generating alternatives that don't change the option space
-- **Command voice**: Issuing a directive without explaining the recommendation
-  or inviting the user's informed response
+- Producing a polished artifact instead of beginning the conversation.
+- Asking multiple questions in one turn or presenting an unranked menu.
+- Walking a fixed checklist regardless of evidence or project stage.
+- Claiming codebase facts without exact evidence.
+- Importing opaque memory or personal context without provenance and consent.
+- Treating `do recommended` as blanket authority or session closure.
+- Continuing for a target question count after the frontier is exhausted.
+- Restarting context when routing to another skill.
+- Averaging contradictions into a vague low-confidence conclusion.

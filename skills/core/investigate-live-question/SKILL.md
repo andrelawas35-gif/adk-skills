@@ -89,7 +89,8 @@ Apply the shared conversational inquiry contract in
 maintain coverage of material branches, and continue without an arbitrary
 question cap until the user and evidence establish the next safe move.
 
-Use the minimum loop needed to unblock evidence collection:
+Use as many progressive one-question turns as the evidence frontier requires,
+while keeping each evidence move minimal:
 
 1. **Orient:** Label what is known as `[lived]`, `[source]`, `[system]`,
    `[inference]`, `[decision]`, or `[unresolved]`; state the current
@@ -105,12 +106,14 @@ Use the minimum loop needed to unblock evidence collection:
    the prior hypothesis. Reframe only when the new evidence makes the original
    question unhelpful.
 
-## Skill-aware grilling lens
+## Skill Grilling Profile
 
-Apply the `investigate-live-question` lens in
-`references/SKILL-AWARE-GRILLING.md`. On direct entry, route through
-`conduct-work-object` first. Return the standard five-field Grilling handoff
-for conductor persistence; do not store a transcript or mutate the Work Object.
+Apply the `investigate-live-question` profile and continuous Grilling Session
+in `references/SKILL-AWARE-GRILLING.md`. Frame one falsifiable question, choose
+the smallest discriminating evidence move, preserve source conflicts, and test
+the strongest plausible alternative before concluding. On direct entry, route
+through `conduct-work-object` first. Return the compact continuity record; do
+not reset context, store a transcript, or mutate the Work Object.
 
 ## Stage workflow
 

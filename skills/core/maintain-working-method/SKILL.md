@@ -89,12 +89,15 @@ evidence, unresolved limits, consequence, and one recommended bounded move
 before asking one decision-bearing question. Do not ask for blanket authority
 to promote future candidates, collect evidence, or apply a Working Method.
 
-## Skill-aware grilling lens
+## Skill Grilling Profile
 
-Apply the `maintain-working-method` lens in
-`references/SKILL-AWARE-GRILLING.md`. On direct entry, route through
-`conduct-work-object` first. Return the standard five-field Grilling handoff
-for conductor persistence; do not store a transcript or mutate the Work Object.
+Apply the `maintain-working-method` profile and continuous Grilling Session in
+`references/SKILL-AWARE-GRILLING.md`. Start from observed behavior and outcome,
+seek contrary contexts, bound applicability and exceptions, and require a
+reviewable trial before promotion. Keep attributed personal-fit defaults
+separate from shared policy. On direct entry, route through
+`conduct-work-object` first. Return the compact continuity record; do not reset
+context, store a transcript, or mutate the Work Object.
 
 ## Candidate record contract
 

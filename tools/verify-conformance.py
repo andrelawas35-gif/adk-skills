@@ -50,6 +50,7 @@ REQUIRED_SECTIONS = [
     "## Required capabilities",
     "## Consequence and authority rules",
     "## Agreement Loop behavior",
+    "## Skill Grilling Profile",
     "## Stage workflow",
     "## Evidence rules",
     "## Work Object updates",

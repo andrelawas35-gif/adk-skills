@@ -80,7 +80,7 @@ After the YAML frontmatter, the Markdown body contains:
 | Evidence ledger | Dated entries with provenance lanes |
 | Current hypothesis | Revisable working theory |
 | Decisions and revisit triggers | Owned choices with rationale |
-| Agreement Loop state | Current loop position and pending question |
+| Grilling Session | Compact Context Card, Decision Frontier, coverage, recommendation, and next question; created only when grilling activates |
 | Relationships | Typed links to other Work Objects |
 | Artifacts | Produced or referenced artifacts |
 | Verification and release evidence | What was verified, how, and the result |
@@ -105,3 +105,16 @@ Every meaningful transition appends a History entry. Format:
 ```
 
 Do not store: hidden reasoning chains, full prompts, complete chat transcripts, or internal agent deliberation.
+
+## Grilling Session continuity
+
+Create `## Grilling Session` lazily when the Agreement Loop activates. Store
+only the compact state defined in `SKILL-AWARE-GRILLING.md`; keep decisions,
+evidence, verification, outcomes, and History in their canonical sections.
+
+On resume, reconstruct the Context Card from the current Work Object and
+permitted evidence. Mark missing legacy history as unknown rather than
+fabricating it. After every accepted decision, material evidence change, or
+specialist route, the conductor checkpoints the session using optimistic
+concurrency. A conflicting revision pauses consequential action until accepted
+decisions and Decision Frontiers are reconciled.

@@ -94,12 +94,15 @@ Recommend the smallest direction justified by those facts before asking one
 decision-bearing question. Do not ask for blanket authority to create future
 work, share a result, or improve adjacent systems.
 
-## Skill-aware grilling lens
+## Skill Grilling Profile
 
-Apply the `review-outcome-and-adapt` lens in
-`references/SKILL-AWARE-GRILLING.md`. On direct entry, route through
-`conduct-work-object` first. Return the standard five-field Grilling handoff
-for conductor persistence; do not store a transcript or mutate the Work Object.
+Apply the `review-outcome-and-adapt` profile and continuous Grilling Session in
+`references/SKILL-AWARE-GRILLING.md`. Compare technical behavior, intended
+outcome, and unintended effects independently; challenge attribution, aggregate
+success, subgroup harm, and the earliest invalid upstream assumption. On
+direct entry, route through `conduct-work-object` first. Return the compact
+continuity record; do not reset context, store a transcript, or mutate the Work
+Object.
 
 ## Stage workflow
 

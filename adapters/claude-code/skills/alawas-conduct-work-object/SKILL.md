@@ -111,8 +111,9 @@ Apply the shared conversational inquiry contract in
 maintain coverage of material branches, and continue without an arbitrary
 question cap until the user and evidence establish the next safe move.
 
-This skill identifies decision boundaries but does not run the full Agreement
-Loop itself. When it encounters:
+This skill owns Grilling Session continuity. On an explicit grilling request,
+run its full profile until another specialist owns the Decision Frontier, then
+route without resetting context. During ordinary operation, when it encounters:
 
 - An unresolved decision about work direction → route to `alawas-pressure-test-decision`
 - An unresolved design question → route to `alawas-design-tracer-bullet`
@@ -122,14 +123,18 @@ For routine decisions within this skill's authority (e.g., "should I resume the
 last active Work Object?"), apply the loop minimally: recommend, ask one
 question, integrate.
 
-## Skill-aware grilling lens
+## Skill Grilling Profile
 
-Apply the `alawas-conduct-work-object` lens in `references/SKILL-AWARE-GRILLING.md`.
+Apply the `alawas-conduct-work-object` profile and continuous Grilling Session in
+`references/SKILL-AWARE-GRILLING.md`. Reconstruct one testable outcome, detect
+overlapping work, ground positive and negative evidence, and make consequence,
+sensitivity, lifecycle, rationale, and authority explicit before persistence.
+
 For a direct specialist request, discover or establish the Work Object before
-routing it to that specialist. Create the `## Grilling` section lazily when a
-session activates; validate and persist its coverage update and five-field
-handoff as the sole writer. Preserve confirmed decisions and evidence in their
-canonical sections rather than duplicating them in Grilling.
+routing while preserving the same Context Card, Evidence Ledger, Decision
+Frontier, and accepted decisions. Create `## Grilling Session` lazily. Act as
+the sole writer of compact continuity state; keep full decisions and evidence
+in their canonical sections and never store a transcript.
 
 ## Stage workflow
 
@@ -209,7 +214,7 @@ objects.
    ```
 5. Populate body with stub sections for Intent, Success evidence, Constraints
    and non-goals, Evidence ledger, Open questions, Next move, History. Add the
-   `Grilling` section only when skill-aware grilling activates.
+   `Grilling Session` section only when the Agreement Loop activates.
 6. Append the creation History entry.
 7. Update `active.md` if this is the first active object or the user confirms
    it as Primary.

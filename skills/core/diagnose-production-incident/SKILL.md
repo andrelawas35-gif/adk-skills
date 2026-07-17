@@ -64,14 +64,21 @@ Apply the shared conversational inquiry contract in
 maintain coverage of material branches, and continue without an arbitrary
 question cap until the user and evidence establish the next safe move.
 
-Use one small loop whenever the incident needs a decision not already recorded: state the observed symptom and evidence gap, consequence and safe boundary; recommend the smallest reversible containment, recovery, or diagnostic move; then ask one decision-bearing question for the missing authority. Do not ask for blanket permission to make later fixes or to declare recovery complete.
+An explicit grilling request runs the full incident profile without delaying
+urgent containment. Otherwise, use the smallest loop needed for an unrecorded
+incident decision: state the observed symptom and evidence gap, consequence and
+safe boundary; recommend the smallest reversible containment, recovery, or
+diagnostic move; then ask one decision-bearing question for missing authority.
+Do not ask for blanket permission to make later fixes or declare recovery.
 
-## Skill-aware grilling lens
+## Skill Grilling Profile
 
-Apply the `diagnose-production-incident` lens in
-`references/SKILL-AWARE-GRILLING.md`. On direct entry, route through
-`conduct-work-object` first. Return the standard five-field Grilling handoff
-for conductor persistence; do not store a transcript or mutate the Work Object.
+Apply the `diagnose-production-incident` profile and continuous Grilling
+Session in `references/SKILL-AWARE-GRILLING.md`. Prioritize current harm and
+reversible containment, maintain separate impact, mechanism, and communication
+tracks, and ground causal claims in timeline plus mechanism evidence. On direct
+entry, route through `conduct-work-object` first. Return the compact continuity
+record; do not reset context, store a transcript, or mutate the Work Object.
 
 ## Stage workflow
 
