@@ -127,6 +127,21 @@ deferred with triggers, or ruled out by evidence, and that no remaining question
 is likely to change the recommendation.
 _Avoid_: question count, completion assertion, exhaustive transcript
 
+**Accepted answer**:
+A Grilling Session answer that the user has confirmed and the agent has
+checkpointed in the Work Object (Grilling section and Evidence Ledger). It does
+not create a registered artifact on its own; it materializes into one only when
+that artifact's declared stage trigger fires.
+_Avoid_: registered decision, provisional answer, unrecorded agreement
+
+**Registered decision**:
+A decision recorded in a Work Object's Decisions section with full structure
+(branch chosen, alternatives, rationale, trade-offs, confidence, revisit
+trigger, edge cases, actor). It may originate from an Accepted answer that meets
+the consequence threshold, or from any decision the user explicitly requests be
+formally registered.
+_Avoid_: accepted answer, ad-hoc choice, implicit default
+
 **Personal-memory record**:
 A private record maintained by Personal Institution; it remains outside a Work Object unless the user explicitly approves an Evidence Bridge.
 _Avoid_: Work Object evidence, synced note

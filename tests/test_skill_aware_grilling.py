@@ -63,11 +63,9 @@ class SkillAwareGrillingContract(unittest.TestCase):
         for path, section in zip(sorted(CORE.glob("*/SKILL.md")), sections):
             with self.subTest(skill=path.parent.name):
                 for field in (
-                    "**Inspect**",
-                    "**First frontier**",
-                    "**Challenge and novelty**",
-                    "**Route**",
-                    "**Complete when**",
+                    "**Gates**",
+                    "**Escalation**",
+                    "**Pressure scenario**",
                 ):
                     self.assertIn(field, section)
 

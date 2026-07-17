@@ -25,6 +25,18 @@ Direct specialist entry routes through `conduct-work-object` to discover or
 establish continuity. The conductor is the sole persistent writer. Routing
 changes the active profile but preserves the same Grilling Session.
 
+Each profile below states 2–3 obligatory **Gates**, a default **Escalation**
+path, and one poseable **Pressure scenario** — never a flat, exhaustively
+accounted component list. A component is a gate only when it concerns
+authority or consent, an irreversible or external consequence, or a privacy
+or data boundary; epistemic-quality components (evidentiary rigor, hypothesis
+strength, and the like) are never gates, though they remain available for
+escalation. Information value takes precedence over the default escalation
+path: an obligatory gate must always be addressed, but the escalation route
+itself may be overridden when better-targeted evidence exists. Coverage means
+gates accounted for and branches actually visited; an unvisited non-gate
+branch may go unrecorded.
+
 ## Compact Grilling Session state
 
 Create this Work Object section lazily, only when a session activates. Existing
@@ -66,285 +78,262 @@ Object mutation beyond the named decision.
 
 ### `turn-signal-into-work`
 
-**Inspect** — The signal in the user's language, its provenance and sensitivity,
-approved memory or Evidence Bridge, related Work Objects and decisions, and
-overlapping code or project evidence.
+**Gates** — (1) Provenance and sensitivity: confirm the signal's source and
+whether using it crosses a privacy or data boundary before acting on it. (2)
+Classification authority: confirm that classifying or activating the signal
+does not silently authorize Work Object creation without the authority that
+requires.
 
-**First frontier** — Confirm the interpretation before classifying activation,
-incubation, retention, or discard. Keep ambiguous overlap with existing work
-and record a split trigger.
+**Escalation** — Default: confirm the interpretation, check `active.md` and
+existing Work Objects for overlap, classify as activation, incubation,
+retention, or discard, and route classification to `conduct-work-object`.
+Information value overrides the default when evidence strongly indicates
+duplicate work or an unresolved evidence gap — escalate directly to
+`investigate-live-question` before classifying.
 
-**Challenge and novelty** — Challenge inferred meaning, duplicate outcomes,
-weak provenance, private context crossing boundaries, and activation without a
-meaningful outcome, evidence move, or available attention. Recommend a cheap
-investigation when it can decide whether activation is worthwhile.
-
-**Route** — Classification goes to `conduct-work-object`; uncertain evidence to
-`investigate-live-question`. Classification authority never silently authorizes
-Work Object creation.
-
-**Complete when** — Interpretation, provenance, sensitivity, existing-work
-relationship, classification, evidence gap, and next question are accepted.
+**Pressure scenario** — The signal is ambiguous between two established Work
+Objects: would classifying it as new silently fork tracked work, and which
+existing object's evidence would that duplicate?
 
 ### `conduct-work-object`
 
-**Inspect** — Inherited conversation, existing Work Objects and relationships,
-decisions, codebase seams, intended outcome, positive and negative evidence,
-consequence, sensitivity, authority, and current lifecycle state.
+**Gates** — (1) Consequence and authority: confirm whether the requested
+mutation is attention, ownership, external consequence, or lifecycle
+commitment, which requires explicit user approval, versus a routine update
+inside existing authority. (2) Concurrency integrity: confirm `updated_at`
+has not changed since read before writing, preventing a silent overwrite of
+another actor's concurrent edit.
 
-**First frontier** — Express one coherent, testable outcome in the user's
-language. Split independently completable outcomes; create linked children or
-successors when consequence, evidence, ownership, or lifecycle differs.
+**Escalation** — Default: read existing Work Objects and decisions, express
+one coherent testable outcome, recommend the next profile by consequence,
+uncertainty, and stage, and apply routine updates under existing authority.
+Information value overrides the default when evidence shows duplicate work by
+outcome (not title) or an unowned decision — escalate to reconciling the
+duplication or naming an owner before continuing.
 
-**Challenge and novelty** — Challenge duplicate work by outcome rather than
-title, activity-shaped success criteria, unexplained consequence labels,
-impossible state jumps, and unowned decisions. Preserve rationale and
-provenance for every consequential field.
-
-**Route** — Recommend the next profile from consequence, uncertainty, and
-project stage. The conductor alone validates schema, persists state, appends
-History, and resolves optimistic-concurrency conflicts.
-
-**Complete when** — The user accepts the compact object synthesis and the exact
-authorized mutation. Routine updates inside accepted state use existing
-authority; attention, ownership, external consequence, or lifecycle commitment
-requires explicit approval.
+**Pressure scenario** — Two Work Objects converge on the same outcome under
+different titles: does completing one silently obsolete evidence in the
+other, and who owns reconciling them?
 
 ### `pressure-test-decision`
 
-**Inspect** — Decision owner, deadline, consequence of no decision, viable
-alternatives, prior decisions, code constraints, dependencies, and acceptance
-criteria.
+**Gates** — (1) Decision authority: confirm who owns the decision and that
+recording it does not exceed the Work Object's consequence-based authority.
+(2) Irreversibility of the chosen branch: confirm the branch's reversibility
+before recording it, since an irreversible branch chosen on weak evidence is
+a harm-bearing outcome.
 
-**First frontier** — Find the assumption carrying the most decision risk and
-seek the strongest codebase-grounded disconfirming evidence before comparing
-minor trade-offs.
+**Escalation** — Default: find the assumption carrying the most decision
+risk, seek the strongest disconfirming evidence, recommend one branch, test
+it against a counterexample, and record it with rationale and a revisit
+trigger. Information value overrides the default when a cheap reversible
+experiment would discriminate better than continued discussion — escalate to
+`design-tracer-bullet` before recording a provisional decision.
 
-**Challenge and novelty** — Reject false binaries; introduce a third option,
-staged trial, reversible experiment, or evidence-triggered deferral only when
-grounded. Challenge unowned “must-have” criteria. Test the leading option
-against one codebase counterexample and one low-probability/high-impact case.
-
-**Route** — Prefer a cheap reversible experiment when it discriminates better
-than discussion. Route missing evidence to investigation or tracer-bullet
-design; keep the decision provisional until decisive evidence arrives.
-
-**Complete when** — The decision brief records the selected branch, rejected
-alternatives, supporting and contrary evidence, guardrails, residual risks,
-authority, and revisit triggers.
+**Pressure scenario** — The leading branch reverses easily today but becomes
+irreversible after the next deploy: does that change which branch should be
+recommended, and does the decision need to be made before or after that
+deploy?
 
 ### `design-tracer-bullet`
 
-**Inspect** — The provisional decision, riskiest falsifiable assumption,
-production code path, data and access boundaries, dependencies, observability,
-failure behavior, and execution environment.
+**Gates** — (1) External-effect and data boundary: confirm the design's
+containment and access boundary before treating any exit evidence as safe to
+observe. (2) Production execution authority: confirm that real-user or
+durable-production execution is separately authorized beyond design
+acceptance.
 
-**First frontier** — Define observable exit evidence and the result that would
-disprove the assumption before choosing the smallest end-to-end slice.
+**Escalation** — Default: define observable exit evidence and the falsifying
+result, choose the smallest end-to-end slice, and require containment, stop
+conditions, and cleanup. Information value overrides the default when a
+smaller discriminating experiment or investigation could resolve the
+assumption more cheaply — escalate there instead of building the full tracer
+bullet.
 
-**Challenge and novelty** — Reject technical-connectivity demos that cannot
-resolve the underlying assumption. Reject mocks replacing the dependency or
-failure behavior under test. Make success and informative failure observable
-without sensitive-data exposure; name realism lost by substitutes.
-
-**Route** — Inconclusive results route to a smaller discriminating experiment
-or investigation. Real-user or durable-production execution requires separate
-authority from design acceptance.
-
-**Complete when** — The design contains containment, external-effect limits,
-stop conditions, cleanup/recovery, and a result-to-action table that reopens
-the provisional decision on unexpected evidence.
+**Pressure scenario** — The smallest slice that produces informative failure
+also touches sensitive data: is there a substitute that preserves
+informativeness without the exposure, and what realism does it lose?
 
 ### `implement-bounded-change`
 
-**Inspect** — Accepted design, current repository and dirty state, intended
-seams, protected behavior, compatibility obligations, non-goals, dependencies,
-data boundaries, and focused verification path.
+**Gates** — (1) Scope boundary: confirm the smallest viable change does not
+cross an unapproved schema, public interface, dependency, deployment
+configuration, data boundary, or external effect. (2) Unrelated dirty-work
+preservation: confirm existing unrelated working-tree changes are protected
+and never staged, committed, or altered.
 
-**First frontier** — Reconcile the accepted boundary with current code and
-establish a failing or otherwise discriminating check whenever practical.
+**Escalation** — Default: reconcile the accepted boundary with current code,
+establish a discriminating check, implement the smallest reversible path, and
+run focused verification after each increment. Information value overrides
+the default when a material new decision or authority boundary appears
+mid-implementation — escalate by stopping and routing back to the conductor
+for scoped confirmation rather than proceeding.
 
-**Challenge and novelty** — Stop when the smallest viable change crosses an
-unapproved schema, public interface, dependency, deployment configuration, data
-boundary, or external effect. Keep adjacent cleanup outside scope unless its
-causal necessity, risk, and revised verification plan are explicitly accepted.
-Protect unrelated dirty changes.
-
-**Route** — Run focused checks after coherent increments. Revert only the
-skill's attributable latest increment when safe. Route scope changes back to
-the conductor and implementation claims to independent verification.
-
-**Complete when** — Every changed line maps to accepted behavior, necessary
-support, or an attributable generated consequence, and the handoff states exact
-changes, checks, gaps, compatibility risk, and recovery considerations. This
-profile never marks the object verified.
+**Pressure scenario** — The bounded change verifies locally, but the working
+tree also contains unrelated uncommitted work touching the same files: is the
+diff actually separable for its own commit, or does isolating it require
+hunk-level surgery?
 
 ### `verify-release-evidence`
 
-**Inspect** — Every acceptance and negative-evidence claim, implementation
-evidence versus independently reproduced evidence, integrated interfaces,
-environment dependencies, recovery claims, privacy/security boundaries, and
-downstream consumers.
+**Gates** — (1) Recovery credibility: confirm a credible, reproducible
+recovery path exists before treating a consequential change as ready; missing
+recovery blocks readiness unless an accountable owner explicitly accepts the
+irreversible risk. (2) Environment-specific behavior: confirm a local pass is
+never treated as evidence of environment-specific behavior without direct
+evidence from that environment.
 
-**First frontier** — Test the consequential claim with the weakest direct
-evidence. Require a reproducible check, observable artifact, or explicitly
-authorized human judgment.
+**Escalation** — Default: test the weakest direct evidence for the most
+consequential claim, require a reproducible check or explicitly authorized
+human judgment, and classify every issue as blocker, accepted risk, or linked
+follow-up. Information value overrides the default when the strongest
+credible negative case surfaces a new failure mode — escalate to re-testing
+that specific case before continuing the matrix.
 
-**Challenge and novelty** — Validate that consequential checks fail when their
-protected behavior is safely violated. Test the strongest credible negative
-case and inspect plausible unintended effects. A local pass cannot establish
-environment-specific behavior without direct evidence.
-
-**Route** — Classify every issue as release blocker, accepted residual risk, or
-linked follow-up with trigger. Missing credible recovery blocks consequential
-changes unless an accountable owner accepts the irreversible risk.
-
-**Complete when** — A claim-by-claim matrix yields `ready`, `ready with accepted
-risk`, or `not ready`, with provenance, negative evidence, environment limits,
-recovery, and gaps. `not ready` cannot be overridden without new evidence or a
-revised change.
+**Pressure scenario** — All consequential claims pass locally, but the target
+environment's data shape has never been exercised: does "ready" still hold,
+or does this drop to "ready with accepted risk" pending an owner's explicit
+sign-off?
 
 ### `deploy-with-recovery`
 
-**Inspect** — Verified artifact identity, target configuration, residual risks,
-current target health, concurrent changes, affected users/data, increment,
-signals, observation window, rollback mechanism, and available rollback owner.
+**Gates** — (1) Rollback viability: confirm a rehearsed or directly evidenced
+rollback mechanism and an available rollback owner exist before any increment
+ships. (2) Affected scope: confirm which users or data are exposed by the
+increment, sized to consequence and recoverability.
 
-**First frontier** — Prove equivalence between the verified and deployable
-artifact, then choose the smallest observable increment appropriate to
-consequence and recoverability.
+**Escalation** — Default: prove artifact equivalence, choose the smallest
+observable increment, require success and failure signals with stop
+conditions, and expand only after each window passes with positive evidence.
+Information value overrides the default when a signal is ambiguous or ongoing
+harm is possible — escalate immediately to holding, recovering, or routing to
+incident response rather than expanding.
 
-**Challenge and novelty** — Require success and failure signals, freshness
-windows, stop conditions, and rehearsed or directly evidenced recovery. Freeze
-expansion on uncertain signals. “No alert” is not success without relevant
-instrumentation.
-
-**Route** — Expand, hold, recover, or investigate after each observation
-window. Potential ongoing harm routes to incident response; stable ambiguity
-routes to investigation. Each increment requires positive outcome evidence and
-absence of decisive negative evidence.
-
-**Complete when** — The final increment passes its window, recovery remains
-viable, operational ownership transfers, and artifact, target, evidence,
-anomalies, risks, and the mandatory outcome-review trigger are recorded.
+**Pressure scenario** — The observation window shows no alert, but there is
+no instrumentation covering the affected path: is "no alert" actually
+evidence of success here, or a false-negative gap that should hold the
+rollout?
 
 ### `review-outcome-and-adapt`
 
-**Inspect** — Original hypothesis, acceptance and negative evidence, deployed
-boundary, residual risks, expected window, actual technical behavior,
-user/system outcome, unintended effects, affected groups, and concurrent
-factors.
+**Gates** — (1) Subgroup and unintended-effect harm: confirm aggregate
+success does not hide subgroup harm or an unintended effect on an affected
+group. (2) Closure consequence: confirm that consequential or uncertain
+closure has explicit owner acceptance before the object closes.
 
-**First frontier** — Compare expected and observed reality with an explicit
-counterfactual and attribution strength; do not equate healthy deployment with
-achieved outcome.
+**Escalation** — Default: compare expected versus observed reality with a
+counterfactual and attribution strength, search for contrary evidence, and
+route each mismatch to its earliest invalid assumption. Information value
+overrides the default when a subgroup shows harm the aggregate doesn't —
+escalate to naming that subgroup explicitly before closing as achieved.
 
-**Challenge and novelty** — Search for contrary evidence and subgroup harm
-hidden by aggregates. Compare every accepted risk and deferred branch with what
-occurred. Route each material mismatch to the earliest invalid assumption.
-
-**Route** — Close as achieved, close with uncertainty, continue, or create a
-linked successor when outcome, evidence, owner, consequence, or lifecycle is
-distinct. Produce working-method candidates without promoting them.
-
-**Complete when** — The learning record preserves expected versus observed
-results, attribution, unintended effects, mismatches, routed follow-ups, and
-next observation trigger. Consequential or uncertain closure requires owner
-acceptance.
+**Pressure scenario** — The aggregate outcome looks achieved, but one
+affected subgroup's data is thin: is "achieved" actually supported, or does
+the object need to close with documented uncertainty for that subgroup?
 
 ### `investigate-live-question`
 
-**Inspect** — One falsifiable question, existing code/tests/records/ADRs,
-operational evidence, prior conversation, source freshness, and permitted
-evidence boundaries.
+**Gates** — (1) Evidence-source authority: confirm narrow, scoped authority
+exists before collecting people, production, or sensitive-source evidence,
+rather than defaulting to it. (2) Testimony attribution: confirm human
+evidence is recorded as attributable testimony, never silently promoted to
+system fact.
 
-**First frontier** — Identify the smallest evidence gap most likely to change
-the recommendation, and predefine what results support, weaken, or leave the
-hypothesis unresolved.
+**Escalation** — Default: identify the smallest evidence gap most likely to
+change the recommendation, predefine what results support, weaken, or leave
+it unresolved, and prefer existing artifacts and local checks first.
+Information value overrides the default when only people, production, or
+sensitive sources can resolve the gap — escalate to obtaining narrow
+authority before collecting.
 
-**Challenge and novelty** — Maintain multiple viable hypotheses, expose source
-conflicts, and test the strongest plausible alternative unless the next move is
-safe and useful under either. Add a novel hypothesis only when evidence or a
-contradiction warrants it.
-
-**Route** — Prefer existing artifacts and local checks before people,
-production, sensitive data, or external sources. Obtain narrow authority for
-consequential collection. Treat human evidence as attributable testimony.
-
-**Complete when** — The hypothesis is supported, weakened, unresolved with a
-named next test, or escalated to incident response. Return evidence to the
-accountable skill; do not change consequential lifecycle state directly.
+**Pressure scenario** — The fastest way to resolve the question is a
+production query against data the requester isn't scoped to see: does the
+investigation stop here, or is there a narrower authorized query that still
+discriminates?
 
 ### `diagnose-production-incident`
 
-**Inspect** — Current harm, affected boundary, severity, onset, symptoms,
-recent changes, containment, target health, evidence freshness, access and
-communications authority, and recovery state.
+**Gates** — (1) Ongoing-harm containment: confirm the safest reversible
+containment is applied before anything else when harm is actively growing.
+(2) Emergency-access scope: confirm diagnostic access and communications
+authority are narrow, redacted, and expiring, never standing.
 
-**First frontier** — Reduce growing harm with the safest reversible containment
-that works across leading hypotheses; preserve minimum safe evidence when that
-does not prolong harm.
+**Escalation** — Default: reduce growing harm with safe reversible
+containment across leading hypotheses, maintain separate impact, mechanism,
+and communication tracks, and apply containment incrementally as the harm
+trajectory permits. Information value overrides the default when a recent
+change is only a hypothesis without timeline or mechanism evidence — escalate
+to confirming mechanism before treating it as the cause.
 
-**Challenge and novelty** — Maintain separate impact/containment,
-mechanism-diagnosis, and communication tracks with a live timeline and
-hypothesis set. Recent changes are hypotheses, not causes without timeline and
-mechanism evidence. Use narrow, redacted diagnostics and expiring emergency
-access.
-
-**Route** — Apply containment incrementally when the harm trajectory permits.
-Keep the incident open until user-facing recovery, data integrity, affected
-scope, dependencies, and containment side effects are bounded or owned.
-
-**Complete when** — Timeline, hypotheses, containment/recovery evidence,
-affected scope, communications, access review, uncertainty, and follow-ups are
-recorded. Always route to outcome review; high-consequence or recurring
-patterns also route to working-method maintenance.
+**Pressure scenario** — The fastest containment also cuts off legitimate
+traffic for unaffected users: does the harm trajectory justify that trade, or
+is there a narrower containment that protects the same boundary?
 
 ### `maintain-working-method`
 
-**Inspect** — Concrete observed behavior, linked Work Objects, reviews,
-incidents, repeated and contrary evidence, current rules, personal-fit context,
-and the outcome the candidate should improve.
+**Gates** — (1) Exception authority: confirm `use when`, `do not use when`,
+and exception authority are explicit before a rule can override normal
+judgment. (2) Guardrail expiry: confirm a temporary guardrail expires
+automatically rather than becoming permanent by default.
 
-**First frontier** — Require an observable behavior and reviewable outcome,
-then find contexts where the proposed rule creates friction, ceremony, lost
-autonomy, or worse results.
+**Escalation** — Default: require an observable behavior and reviewable
+outcome, find contexts where the proposed rule creates friction or worse
+results, and run a bounded trial with a rollback path. Information value
+overrides the default when exceptions to a rule become frequent — escalate to
+challenging the rule boundary itself before treating exceptions as
+noncompliance.
 
-**Challenge and novelty** — Define `use when`, `do not use when`, and exception
-authority. Test through a bounded trial with benefit, counter-signals, burden,
-and rollback. Temporary guardrails expire automatically. Frequent exceptions
-challenge the rule boundary before they imply noncompliance.
-
-**Route** — Separate attributed, overrideable personal-fit defaults from shared
-rules requiring evidence across affected participants and contexts.
-
-**Complete when** — Promotion preserves evidence history, trial and contrary
-results, applicability, exceptions, owner, and review trigger. Materially
-changed rules become linked successors rather than silent edits.
+**Pressure scenario** — A working-method rule has had three quiet exceptions
+this month: is the rule still correct as stated, or does the boundary itself
+need revising before a fourth exception happens?
 
 ### `govern-scorecards`
 
-**Inspect** — The decision the scorecard informs, dimensions, evidence sources,
-freshness, uncertainty, distributions, exceptions, subgroup effects, current
-rules, and personal/privacy boundaries.
+**Gates** — (1) Personal/privacy default: confirm personal evidence stays
+private by default and that aggregation, sharing, or system-wide rule
+creation requires explicit purpose, minimal disclosure, and authority. (2)
+Non-compensable failure visibility: confirm aggregation never averages away a
+subgroup harm or non-compensable failure.
 
-**First frontier** — Determine whether each dimension has attributable,
-decision-relevant evidence. Reject activity proxies used as outcome quality
-without demonstrated correlation.
+**Escalation** — Default: determine whether each dimension has attributable,
+decision-relevant evidence, separate observation from interpretation from
+action, and let thresholds trigger evidence inspection rather than automatic
+action. Information value overrides the default when a dimension repeatedly
+fails to inform decisions — escalate to retiring it rather than continuing to
+track it.
 
-**Challenge and novelty** — Separate observation, interpretation, and action.
-Do not aggregate away non-compensable failures or subgroup harm. Missing
-evidence is unknown, never zero. Retire dimensions that repeatedly fail to
-inform decisions; challenge identity claims and surveillance-like proxies.
+**Pressure scenario** — A scorecard dimension trends downward in aggregate
+but is flat for every subgroup except one: does the aggregate trend justify
+action, or does this need subgroup-level inspection before any rule changes?
 
-**Route** — Thresholds trigger evidence inspection, not automatic action.
-Personal evidence is private by default; aggregation, sharing, or system-wide
-rule creation requires explicit purpose, minimal disclosure, and authority.
+## Persistence routing
 
-**Complete when** — Rule versions preserve the basis of historical results,
-and every change states whether old and new results are comparable. Scorecard
-evidence may recommend investigation or review but cannot silently mutate work
-or policy.
+Every profile's accepted answers default to the Work Object checkpoint (the
+Grilling Session section and Evidence Ledger). A registered artifact beyond
+the Work Object is created only when its declared stage trigger fires, per the
+Canonical Artifact Registry in `WORKSPACE-DOCUMENTATION-CONTRACT.md`. This
+table maps each profile to the registered artifact(s) its accepted decisions
+can trigger.
+
+| Profile | Registered artifact it can trigger | Stage trigger |
+|---|---|---|
+| `turn-signal-into-work` | none directly; routes classification to `conduct-work-object` | — |
+| `conduct-work-object` | work-object, evidence-ledger, workspace-documentation-contract | accepted work intent; activated Grilling Session; explicit bootstrap authority |
+| `pressure-test-decision` | none directly; decision brief lives in the Work Object's Decisions section | — |
+| `design-tracer-bullet` | plan-or-design | accepted design boundary |
+| `implement-bounded-change` | none directly; returns implementation evidence to `conduct-work-object` | — |
+| `verify-release-evidence` | verification-record | verification claim or release decision |
+| `deploy-with-recovery` | runbook | accepted recurring or operational procedure |
+| `review-outcome-and-adapt` | outcome-review | outcome observation or review trigger |
+| `investigate-live-question` | none directly; returns evidence to the accountable skill | — |
+| `diagnose-production-incident` | none directly; timeline and evidence live in the Work Object | — |
+| `maintain-working-method` | none registered yet; Personalization Contract entries are not a Canonical Artifact Registry type | — |
+| `govern-scorecards` | none registered yet; scorecards are not a Canonical Artifact Registry type | — |
+
+"None directly" is not a gap: the profile's accepted answers remain fully
+durable at the Work Object checkpoint and may still feed an artifact owned by
+another profile — for example, `investigate-live-question` evidence can
+materialize into `conduct-work-object`'s evidence-ledger.
 
 ## Coverage Proof across profiles
 
