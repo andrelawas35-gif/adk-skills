@@ -20,5 +20,11 @@ __pycache__/
 .work-studio/adapter.lock
 # .work-studio/config.md is tracked (workspace identity)
 
-# Generated runtime installation; canonical Codex artifacts live in adapters/
+# Generated runtime installations; canonical artifacts live in adapters/
 .agents/skills/
+.claude/skills/
+.copilot/skills/
+.github/skills/
+
+# Platform adapter lock files (workspace-specific install state)
+.work-studio/adapter.*.lock
