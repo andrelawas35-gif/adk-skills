@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "scenarios": {
+    "capture": {
+      "entry": "capture",
+      "expected_nodes": ["kernel", "capture"],
+      "prohibited_nodes": ["conductor", "activate"],
+      "requires_authorization": false
+    },
+    "remember": {
+      "entry": "remember",
+      "expected_nodes": ["kernel", "remember"],
+      "prohibited_nodes": ["conductor", "activate"],
+      "requires_authorization": false
+    },
+    "incubate": {
+      "entry": "incubate",
+      "expected_nodes": ["kernel", "incubate"],
+      "prohibited_nodes": ["conductor", "activate"],
+      "requires_authorization": false
+    },
+    "activate": {
+      "entry": "activate",
+      "expected_nodes": [
+        "kernel",
+        "evidence-model",
+        "consequence-authority",
+        "conductor",
+        "activate"
+      ],
+      "prohibited_nodes": ["capture", "remember", "incubate"],
+      "requires_authorization": true
+    }
+  }
+}

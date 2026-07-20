@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "skill": "turn-signal-into-work",
+  "description": "Capture and route a signal with turn-signal-into-work while preserving authority, evidence, and privacy boundaries.",
+  "nodes": {
+    "kernel": {
+      "path": "skills/core/turn-signal-into-work/SKILL.md",
+      "package_path": "SKILL.md",
+      "requires": []
+    },
+    "evidence-model": {
+      "path": "references/EVIDENCE-MODEL.md",
+      "package_path": "references/EVIDENCE-MODEL.md",
+      "requires": ["kernel"]
+    },
+    "consequence-authority": {
+      "path": "references/CONSEQUENCE-AUTHORITY.md",
+      "package_path": "references/CONSEQUENCE-AUTHORITY.md",
+      "requires": ["kernel"]
+    },
+    "conductor": {
+      "path": "skills/core/conduct-work-object/SKILL.md",
+      "package_path": "modules/conduct-work-object/SKILL.md",
+      "requires": ["evidence-model", "consequence-authority"]
+    },
+    "capture": {
+      "path": "references/EVIDENCE-MODEL.md",
+      "package_path": "references/EVIDENCE-MODEL.md",
+      "requires": ["kernel"]
+    },
+    "remember": {
+      "path": "references/EVIDENCE-MODEL.md",
+      "package_path": "references/EVIDENCE-MODEL.md",
+      "requires": ["kernel"]
+    },
+    "incubate": {
+      "path": "references/EVIDENCE-MODEL.md",
+      "package_path": "references/EVIDENCE-MODEL.md",
+      "requires": ["kernel"]
+    },
+    "activate": {
+      "path": "tools/prompt-tracer-modules/activation-route.md",
+      "package_path": "modules/activation-route.md",
+      "requires": ["conductor"]
+    }
+  }
+}
