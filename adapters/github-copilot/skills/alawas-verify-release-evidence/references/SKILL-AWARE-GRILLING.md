@@ -6,74 +6,6 @@ inspect, which tension to pursue next, how to challenge the emerging answer,
 where to route it, and when its stage has enough understanding. It is not a
 checklist and never replaces the one-question conversational turn contract.
 
-## Shared behavior
-
-Use the active Work Object, project stage, codebase, tests, configuration,
-ADRs, workflow records, and permitted conversation context before questioning
-the user. Ask only about owner decisions or facts that cannot be discovered.
-
-The Decision Frontier is selected by probability, impact, uncertainty,
-irreversibility, and dependency reach. Authority or consent, privacy or data
-boundaries, irreversible or external consequences, and ongoing harm form the
-non-compensable safety floor. Surface those branches even when unlikely.
-
-An explicit grilling request starts immediately. Otherwise, activate only when
-a material unresolved choice can change the recommendation. If no such choice
-exists, proceed normally and state why grilling was unnecessary.
-
-Direct specialist entry routes through `conduct-work-object` to discover or
-establish continuity. The conductor is the sole persistent writer. Routing
-changes the active profile but preserves the same Grilling Session.
-
-Each profile below states 2–3 obligatory **Gates**, a default **Escalation**
-path, and one poseable **Pressure scenario** — never a flat, exhaustively
-accounted component list. A component is a gate only when it concerns
-authority or consent, an irreversible or external consequence, or a privacy
-or data boundary; epistemic-quality components (evidentiary rigor, hypothesis
-strength, and the like) are never gates, though they remain available for
-escalation. Information value takes precedence over the default escalation
-path: an obligatory gate must always be addressed, but the escalation route
-itself may be overridden when better-targeted evidence exists. Coverage means
-gates accounted for and branches actually visited; an unvisited non-gate
-branch may go unrecorded.
-
-## Compact Grilling Session state
-
-Create this Work Object section lazily, only when a session activates. Existing
-objects remain valid and adopt it when resumed; never fabricate past reasoning.
-
-```markdown
-## Grilling Session
-
-- **Revision:** <Work Object revision used for optimistic concurrency>
-- **Context Card:** <goal, stage, approved preferences, inspected evidence>
-- **Active profile and activation reason:** <skill + detected tension>
-- **Decision Frontier:** <one active unresolved branch and why it matters>
-- **Coverage:** <resolved | active | deferred with trigger | ruled out by evidence>
-- **Current recommendation:** <one answer, trade-off, and change condition>
-- **Confirmed decisions:** <links to canonical decisions>
-- **Evidence Ledger:** <links, conflicts, assumptions, and explicit gaps>
-- **Next question:** <one receiving-skill question, or none at convergence>
-```
-
-Store full decisions, evidence, verification, outcomes, and History in their
-canonical sections. Do not persist transcripts or hidden reasoning.
-
-## Continuity record
-
-Every specialist returns the conductor:
-
-1. current recommendation, trade-off, and what would change it;
-2. confirmed decisions and the rationale/provenance links;
-3. resolved, active, deferred, and ruled-out branches;
-4. evidence, source conflicts, inferences, and gaps;
-5. active or receiving profile, routing reason, and exactly one next question;
-6. Coverage Proof when the profile or whole session converges.
-
-The receiving skill first states what it inherited. `do recommended` accepts
-only the current recommendation; it does not close branches or authorize Work
-Object mutation beyond the named decision.
-
 ## Skill Grilling Profiles
 
 ### `turn-signal-into-work`
@@ -306,38 +238,20 @@ track it.
 but is flat for every subgroup except one: does the aggregate trend justify
 action, or does this need subgroup-level inspection before any rule changes?
 
-## Persistence routing
+### `track-components`
 
-Every profile's accepted answers default to the Work Object checkpoint (the
-Grilling Session section and Evidence Ledger). A registered artifact beyond
-the Work Object is created only when its declared stage trigger fires, per the
-Canonical Artifact Registry in `WORKSPACE-DOCUMENTATION-CONTRACT.md`. This
-table maps each profile to the registered artifact(s) its accepted decisions
-can trigger.
+**Gates** — (1) Registry and mutation authority: confirm that registration,
+retirement, cascade, or a schema change has the Work Object or owner authority
+the ledger contract requires. (2) Finding-to-commitment boundary: confirm a
+sweep queues signals only and never silently creates or changes Work Objects.
 
-| Profile | Registered artifact it can trigger | Stage trigger |
-|---|---|---|
-| `turn-signal-into-work` | none directly; routes classification to `conduct-work-object` | — |
-| `conduct-work-object` | work-object, evidence-ledger, workspace-documentation-contract | accepted work intent; activated Grilling Session; explicit bootstrap authority |
-| `pressure-test-decision` | none directly; decision brief lives in the Work Object's Decisions section | — |
-| `design-tracer-bullet` | plan-or-design | accepted design boundary |
-| `implement-bounded-change` | none directly; returns implementation evidence to `conduct-work-object` | — |
-| `verify-release-evidence` | verification-record | verification claim or release decision |
-| `deploy-with-recovery` | runbook | accepted recurring or operational procedure |
-| `review-outcome-and-adapt` | outcome-review | outcome observation or review trigger |
-| `investigate-live-question` | none directly; returns evidence to the accountable skill | — |
-| `diagnose-production-incident` | none directly; timeline and evidence live in the Work Object | — |
-| `maintain-working-method` | none registered yet; Personalization Contract entries are not a Canonical Artifact Registry type | — |
-| `govern-scorecards` | none registered yet; scorecards are not a Canonical Artifact Registry type | — |
+**Escalation** — Default: resolve locations and lineage, calculate grilling
+debt from declared consequence, staleness, blast radius, and git drift, then
+run the owning profile against applicable inline dimensions. Information value
+overrides the default when a missing dependency edge or contrary outcome
+evidence could invalidate a settled status — escalate to the smallest
+evidence-gathering or owner decision before re-stamping the entry.
 
-"None directly" is not a gap: the profile's accepted answers remain fully
-durable at the Work Object checkpoint and may still feed an artifact owned by
-another profile — for example, `investigate-live-question` evidence can
-materialize into `conduct-work-object`'s evidence-ledger.
-
-## Coverage Proof across profiles
-
-Before ending the Grilling Session, verify that relevant upstream, current, and
-downstream profiles were considered by probability and consequence. A profile
-need not be visited when evidence rules it out; record why. No numerical turn
-target substitutes for this proof.
+**Pressure scenario** — A high-blast-radius component is settled and inside its
+cooldown, but a dependent declares a contract change: does the cascade reopen
+it before any ordinary debt ranking, and is the declared edge sufficient?

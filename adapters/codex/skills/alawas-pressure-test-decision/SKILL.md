@@ -1,6 +1,6 @@
 ---
 name: alawas-pressure-test-decision
-description: "alawas-pressure-test-decision — Codex (VS Code) adapter"
+description: "Use when one material decision needs adversarial testing; recommends and records an evidence-backed choice through the conductor; never implements or treats generic approval as high-consequence authority."
 platform: codex
 ---
 # Pressure-Test Decision
@@ -107,54 +107,17 @@ identity, or apply inactive or irrelevant contract entries. If the protocol is
 unavailable or incompatible, report the limitation and offer only a manual,
 user-approved summary.
 
-## Agreement Loop behavior
+## Grilling entry and stage lens
 
-Apply the shared conversational inquiry contract in
-`references/AGREEMENT-LOOP.md`: give a recommendation before one question,
-maintain coverage of material branches, and continue without an arbitrary
-question cap until the user and evidence establish the next safe move.
+Follow `references/AGREEMENT-LOOP.md` in full; this skill contributes only its stage-specific lens below.
 
-This skill IS the Agreement Loop for decisions. It activates the full loop
-because every invocation is a decision boundary:
+Outside an explicit grilling request, nominate a Grilling Candidate only under the Agreement Loop's three-part threshold. Show its Candidate Card and wait for explicit entry; do not silently start a continuous session.
 
-1. **Orient** — Read the Work Object. Sort everything into provenance lanes:
-   evidence (lived/source/system), inference, prior decisions, and unresolved
-   material. Surface what's known vs. what's assumed.
-
-2. **Map** — Identify the decision tree. What branches exist? What depends on
-   what? Which decision has the highest leverage — the one that, once made,
-   collapses the most uncertainty? Walk dependencies before dependents.
-
-3. **Recommend** — Give ONE recommended answer. State:
-   - What evidence supports it
-   - What trade-offs it accepts
-   - What alternatives were considered and why they rank lower
-   - Confidence level (high/medium/low)
-   - What would change the recommendation
-
-4. **Ask** — Ask exactly ONE decision-bearing question. Make it specific,
-   answerable, and scoped to the current branch. Do not present a menu of
-   equal options.
-
-5. **Integrate** — Record the user's answer. If they accept the recommendation,
-   proceed to record. If they choose differently, record their choice with
-   their rationale. If they push back, re-orient with the new constraint.
-
-6. **Generate novelty** — Only when the current branches are exhausted or the
-   user says "try a novel angle." Apply the Adjacent Possibility Pass:
-   identify the dominant assumption, find a contradiction or neglected
-   dimension, generate at most three materially distinct alternatives, state
-   changed assumptions and costs, recommend one or retain the original.
-
-7. **Test** — Before recording, test the confirmed choice against:
-   - An edge case the choice doesn't handle well
-   - A failure mode that could invalidate the assumption
-   - A future scenario where the choice looks wrong
-   Surface these, don't hide them.
-
-8. **Converge or route** — If the decision is sufficient to proceed, record it
-   and route back to `alawas-conduct-work-object`. If new decisions emerged, loop
-   back. If the decision space is exhausted, route with documented uncertainty.
+This is the decision lens: pursue the assumption carrying the most decision
+risk, test the leading branch against a disconfirming counterexample, and
+route a cheaper discriminating experiment to `alawas-design-tracer-bullet` when it is
+more informative than continued discussion. The engine, not this skill,
+controls turn order, continuity, and convergence.
 
 ## Skill Grilling Profile
 
@@ -162,9 +125,7 @@ Apply the `alawas-pressure-test-decision` profile and continuous Grilling Sessio
 `references/SKILL-AWARE-GRILLING.md`. Pursue the assumption carrying the most
 decision risk, reject false binaries when evidence supports another branch,
 and test the leading option with codebase-grounded and high-impact
-counterexamples. On direct entry, route through `alawas-conduct-work-object` first.
-Return the compact continuity record; do not reset context, store a transcript,
-or mutate the Work Object.
+counterexamples.
 
 ## Stage workflow
 
@@ -478,112 +439,29 @@ Before reporting completion:
 
 ## Platform Adapter
 
-This skill is adapted for **Codex (VS Code)** from the canonical core.
-Core decision logic, authority boundaries, and schema semantics are
-preserved unchanged. This section documents only platform-specific
-wiring and declared limitations.
-
-### Installation and precedence
-
-Install with the maintainer tool (no Python required at runtime — it
-verifies checksums with the platform's `shasum`/`sha256sum`):
-
-```sh
-# Global bootstrap (conductor everywhere):
-tools/install.sh --platform codex --global
-# Project pin (takes precedence inside this project):
-tools/install.sh --platform codex --project .
-```
-
-- Global install dir: `~/.agents/skills/`
-- Project pin dir: `.agents/skills/`
-
-A **project-pinned** adapter always takes precedence over the global
-bootstrap install. The global install supplies conductor and bootstrap
-behavior everywhere, then defers to the version a project has pinned.
-Precedence is recorded in `.work-studio/adapter.lock` and enforced by
-the generated adapter's runtime pin-resolution contract.
+Invocation-relevant wiring only; installation and maintainer guidance live outside this file.
 
 ### Runtime pin resolution
 
 Codex can discover both user and repository skills with the same name.
 Before applying this skill, search upward from the current directory for
-`.work-studio/adapter.lock`, stopping at the repository or filesystem
-boundary. If the lock declares `platform=codex`, read its `dest` value and
+`.work-studio/adapter.codex.lock`, stopping at the repository or filesystem
+boundary. Read its `dest` value and
 resolve `<dest>/<this-skill-name>/SKILL.md`. When that path differs from
 the currently loaded copy, **load and follow the pinned copy** before
-continuing. If the pinned file is unavailable, report the broken pin and
+continuing. A matching legacy `adapter.lock` remains valid during migration.
+If the pinned file is unavailable, report the broken pin and
 stop instead of silently falling back to the global copy.
 
-### Discovery
-
-- Config path: `.work-studio/config.md`
-- Boundary marker: `.git`
-- Stop condition: repository root (presence of .git)
-- Stop condition: filesystem boundary
-
-### Capability Mappings
+### Required capability mappings
 
 | Abstract capability | Platform tool | Classification |
 |---------------------|---------------|----------------|
-| `browser_automation` | `—` | manual-fallback |
-| `content_search` | `grep_search` | native |
-| `directory_list` | `list_dir` | native |
 | `file_read` | `read_file` | native |
 | `file_write` | `create_file / replace_string_in_file` | native |
-| `git_operations` | `run_in_terminal (git commands)` | native |
-| `glob_search` | `file_search` | native |
-| `structured_output` | `—` | native |
-| `subagent_spawn` | `runSubagent` | native |
+| `content_search` | `grep_search` | native |
 | `terminal_run` | `run_in_terminal` | native |
-| `user_confirmation` | `conversation turn` | native |
+| `git_operations` | `run_in_terminal (git commands)` | native |
+| `structured_output` | `—` | native |
 | `web_fetch` | `open_browser_page / mcp tools` | native |
-| `web_search` | `—` | manual-fallback |
-
-### Capability Degradation
-
-This adapter classifies every required capability. When a capability
-is unavailable, the workflow degrades explicitly — it never pretends
-that equivalent verification occurred.
-
-**Degradation rules**:
-
-- **`manual-fallback`**: Pause with ONE concrete manual instruction.
-  Record in the Work Object what was done and what remains unverified.
-  Never mark verification, export, or deployment as "successful" when
-  the required capability was unavailable.
-- **`unsupported`**: Stop the affected path immediately. Record the
-  platform limitation. Route to a supported platform or ask the user.
-- **Stricter safety wins**: When this platform imposes a stricter
-  constraint than the core, the platform rule takes precedence.
-  Divergences are disclosed below.
-
-#### `browser_automation` (manual-fallback)
-
-- **Behavior**: Pause and give one concrete manual instruction.
-- **Record**: Append History entry noting the capability gap, the
-  manual action taken, and what remains unverified.
-- **Note**: Browser automation requires user interaction for complex workflows. Use manual steps for multi-page flows.
-
-#### `web_search` (manual-fallback)
-
-- **Behavior**: Pause and give one concrete manual instruction.
-- **Record**: Append History entry noting the capability gap, the
-  manual action taken, and what remains unverified.
-- **Note**: Live web search requires manual lookup. The agent can fetch known URLs but cannot perform open-ended web searches.
-
-### Declared Limitations
-
-- **browser_automation**
-  (manual-fallback):
-  Browser automation requires user interaction for complex workflows. Use manual steps for multi-page flows.
-- **web_search**
-  (manual-fallback):
-  Live web search requires manual lookup. The agent can fetch known URLs but cannot perform open-ended web searches.
-
-### Integrity
-
-This file is generated. Do not edit directly — edit the canonical core
-at `skills/core/<skill>/SKILL.md` or the overlay at
-`adapters/codex/overlay.yaml`. Regenerate with
-`python3 tools/generate-adapters.py`.
+| `subagent_spawn` | `runSubagent` | native |

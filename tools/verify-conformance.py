@@ -45,37 +45,36 @@ def namespaced_core_body(skill):
 
 REQUIRED_SECTIONS = [
     "## Governing principle",
-    "## Boundaries and non-goals",
-    "## Inputs and preconditions",
     "## Required capabilities",
-    "## Consequence and authority rules",
-    "## Agreement Loop behavior",
-    "## Skill Grilling Profile",
-    "## Stage workflow",
-    "## Evidence rules",
-    "## Work Object updates",
-    "## Routing and termination",
-    "## Anti-patterns",
-    "## Final self-check",
     "## Platform Adapter",
 ]
 
 REQUIRED_ADAPTER_SUBSECTIONS = [
-    "### Installation and precedence",
-    "### Discovery",
-    "### Capability Mappings",
-    "### Declared Limitations",
-    "### Integrity",
+    "### Required capability mappings",
 ]
 
 REQUIRED_CAPABILITY_CLASSIFICATIONS = {"native", "manual-fallback", "unsupported"}
 
-REQUIRED_DEGRADATION_PATTERNS = [
-    "Never mark verification, export, or deployment",
-    "manual-fallback",
-    "unsupported",
-    "Stricter safety wins",
+FORBIDDEN_COLD_PATH_SECTIONS = [
+    "### Installation and precedence",
+    "### Discovery",
+    "### Declared Limitations",
+    "### Integrity",
 ]
+
+
+def required_capabilities(skill):
+    content = (CORE_DIR / skill / "SKILL.md").read_text()
+    section = content.split("## Required capabilities", 1)[1].split("\n## ", 1)[0]
+    declared = []
+    for line in section.splitlines():
+        if not line.startswith("- "):
+            continue
+        declaration = line.split("—", 1)[0]
+        for capability in re.findall(r"`([^`]+)`", declaration):
+            if capability not in declared:
+                declared.append(capability)
+    return declared
 
 
 # ── Matrix verification ──────────────────────────────────────────────────────
@@ -246,38 +245,62 @@ def verify_structure():
                     errors.append(
                         f"{platform}/{skill}: missing adapter subsection '{subsection}'")
 
+            appendix = content.split("\n---\n\n## Platform Adapter", 1)[1]
+            for subsection in FORBIDDEN_COLD_PATH_SECTIONS:
+                if subsection in appendix:
+                    errors.append(
+                        f"{platform}/{skill}: cold-path subsection retained '{subsection}'")
+
+            if platform == "codex":
+                if "### Runtime pin resolution" not in appendix:
+                    errors.append(f"{platform}/{skill}: missing runtime pin resolution")
+            elif "### Runtime pin resolution" in appendix:
+                errors.append(f"{platform}/{skill}: irrelevant runtime pin resolution")
+
             # Check frontmatter has platform
             frontmatter = content.split("---", 2)[1]
             if f"platform: {platform}" not in frontmatter:
                 errors.append(
                     f"{platform}/{skill}: frontmatter missing platform declaration")
 
-            # Check capability mappings table
-            if "| Abstract capability |" not in content:
+            # Check exact required capability mappings and classifications.
+            if "| Abstract capability |" not in appendix:
                 errors.append(
                     f"{platform}/{skill}: missing capability mappings table")
-
-            # Check degradation section present
-            if "### Capability Degradation" not in content:
+            table = appendix.split("### Required capability mappings", 1)[1]
+            table = table.split("\n### ", 1)[0]
+            rows = re.findall(
+                r"^\| `([^`]+)` \| `([^`]*)` \| (native|manual-fallback|unsupported) \|$",
+                table,
+                re.MULTILINE,
+            )
+            row_caps = [capability for capability, _, _ in rows]
+            if row_caps != required_capabilities(skill):
                 errors.append(
-                    f"{platform}/{skill}: missing Capability Degradation section")
+                    f"{platform}/{skill}: capability rows do not match declarations")
+            classifications = {classification for _, _, classification in rows}
+            if not classifications.issubset(REQUIRED_CAPABILITY_CLASSIFICATIONS):
+                errors.append(f"{platform}/{skill}: invalid capability classification")
 
-            # Check degradation patterns
-            for pattern in REQUIRED_DEGRADATION_PATTERNS:
-                if pattern.lower() not in content.lower():
+            non_native = [
+                (capability, classification)
+                for capability, _, classification in rows
+                if classification != "native"
+            ]
+            if non_native and "### Capability Degradation" not in appendix:
+                errors.append(f"{platform}/{skill}: missing relevant degradation section")
+            if not non_native and "### Capability Degradation" in appendix:
+                errors.append(f"{platform}/{skill}: irrelevant degradation section")
+            for capability, classification in non_native:
+                if f"#### `{capability}` ({classification})" not in appendix:
                     errors.append(
-                        f"{platform}/{skill}: missing degradation pattern '{pattern}'")
+                        f"{platform}/{skill}: missing degradation for '{capability}'")
 
             # Check core body is preserved
             core_body = namespaced_core_body(skill)
             if core_body not in content:
                 errors.append(
                     f"{platform}/{skill}: core body not preserved verbatim")
-
-            # Check Generated-Artifact integrity markers
-            if "This file is generated" not in content:
-                errors.append(
-                    f"{platform}/{skill}: missing generation warning")
 
     # Verify core skills have Required capabilities
     for skill in SKILLS:

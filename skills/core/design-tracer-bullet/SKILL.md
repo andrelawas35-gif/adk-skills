@@ -71,23 +71,22 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
 - The recorded design authorizes only a route to the next specialist; it does
   not grant blanket authority to implement, deploy, export, or change scope.
 
-## Agreement Loop behavior
+## Grilling entry and stage lens
 
-Apply the shared conversational inquiry contract in
-`references/AGREEMENT-LOOP.md`: give a recommendation before one question,
-maintain coverage of material branches, and continue without an arbitrary
-question cap until the user and evidence establish the next safe move.
+Follow `references/AGREEMENT-LOOP.md` in full; this skill contributes only its stage-specific lens below.
+
+Outside an explicit grilling request, nominate a Grilling Candidate only under the Agreement Loop's three-part threshold. Show its Candidate Card and wait for explicit entry; do not silently start a continuous session.
 
 An explicit grilling request runs the full tracer-bullet profile. Otherwise,
-activate only if an unresolved boundary would materially change the tracer
-bullet. Retrieve discoverable facts first. Then:
+nominate a Candidate Card only if an unresolved boundary would materially
+change the tracer bullet. Retrieve discoverable facts first. Then:
 
 1. State the known evidence, inference, riskiest assumption, and consequence.
 2. Recommend one smallest end-to-end tracer bullet, including its trade-off.
 3. Ask one decision-bearing question that accepts, rejects, or changes that
    specific recommendation.
-4. On acceptance, record the agreed design and its revisit trigger. Otherwise,
-   revise only the boundary changed by the answer.
+4. Enter the continuous session only after explicit acceptance. Otherwise,
+   preserve the accepted boundary and its revisit trigger.
 
 Run the Adjacent Possibility Pass only when it changes the option space: name
 the dominant assumption, generate materially distinct evidence-grounded
@@ -101,9 +100,6 @@ Apply the `design-tracer-bullet` profile and continuous Grilling Session in
 `references/SKILL-AWARE-GRILLING.md`. Start from the riskiest falsifiable
 assumption, define observable exit evidence, and challenge substitutes,
 containment, recovery, and result interpretation against the real code path.
-On direct entry, route through `conduct-work-object` first. Return the compact
-continuity record; do not reset context, store a transcript, or mutate the Work
-Object.
 
 ## Stage workflow
 

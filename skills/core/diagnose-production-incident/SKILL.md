@@ -57,18 +57,19 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
 - For high-consequence Work Objects, explicit confirmation must name the exact proposed action and Work Object mutation. Do not stage, annotate, change status, append History, or make any other mutation before that confirmation.
 - An unavailable external dependency is not a diagnosis. Preserve the blocked condition, set the Incident to `waiting` only when that dependency or authority prevents the next safe action, and name its revisit trigger.
 
-## Agreement Loop behavior
+## Grilling entry and stage lens
 
-Apply the shared conversational inquiry contract in
-`references/AGREEMENT-LOOP.md`: give a recommendation before one question,
-maintain coverage of material branches, and continue without an arbitrary
-question cap until the user and evidence establish the next safe move.
+Follow `references/AGREEMENT-LOOP.md` in full; this skill contributes only its stage-specific lens below.
+
+Outside an explicit grilling request, nominate a Grilling Candidate only under the Agreement Loop's three-part threshold. Show its Candidate Card and wait for explicit entry; do not silently start a continuous session.
 
 An explicit grilling request runs the full incident profile without delaying
-urgent containment. Otherwise, use the smallest loop needed for an unrecorded
+urgent containment. Otherwise, nominate a Candidate Card for an unrecorded
 incident decision: state the observed symptom and evidence gap, consequence and
 safe boundary; recommend the smallest reversible containment, recovery, or
-diagnostic move; then ask one decision-bearing question for missing authority.
+diagnostic move; then wait for explicit entry before starting the continuous
+session. Urgent, already-authorized containment remains governed by its
+runbook, not by the Candidate Card.
 Do not ask for blanket permission to make later fixes or declare recovery.
 
 ## Skill Grilling Profile

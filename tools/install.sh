@@ -58,7 +58,7 @@ project_subdir() {
   case "$1" in
     claude-code)    echo ".claude/skills" ;;
     codex)          echo ".agents/skills" ;;
-    github-copilot) echo ".copilot/skills" ;;
+    github-copilot) echo ".github/skills" ;;
     *) die "unknown platform: $1" ;;
   esac
 }
@@ -102,9 +102,15 @@ resolve() {
   start=$(CDPATH= cd -- "$TARGET_DIR" && pwd)
   dir="$start"
   while :; do
-    lock="$dir/.work-studio/adapter.lock"
-    if [ -f "$lock" ] && grep -q "^platform=$PLATFORM$" "$lock" 2>/dev/null; then
+    lock="$dir/.work-studio/adapter.$PLATFORM.lock"
+    legacy_lock="$dir/.work-studio/adapter.lock"
+    if [ -f "$lock" ]; then
       pinned=$(sed -n 's/^dest=//p' "$lock")
+      echo "project:$pinned"
+      return 0
+    fi
+    if [ -f "$legacy_lock" ] && grep -q "^platform=$PLATFORM$" "$legacy_lock" 2>/dev/null; then
+      pinned=$(sed -n 's/^dest=//p' "$legacy_lock")
       echo "project:$pinned"
       return 0
     fi
@@ -131,7 +137,7 @@ do_install() {
   echo "installing $PLATFORM adapter v$VERSION → $DEST"
   if [ "$DRY_RUN" -eq 1 ]; then
     echo "(dry-run) would copy $SRC/skills/* to $DEST"
-    [ "$MODE" = "project" ] && echo "(dry-run) would write $TARGET_DIR/.work-studio/adapter.lock"
+    [ "$MODE" = "project" ] && echo "(dry-run) would write $TARGET_DIR/.work-studio/adapter.$PLATFORM.lock"
     return 0
   fi
 
@@ -162,8 +168,12 @@ do_install() {
       echo "platform=$PLATFORM"
       echo "version=$VERSION"
       echo "dest=$dest_abs"
-    } > "$lockdir/adapter.lock"
-    echo "pinned: $lockdir/adapter.lock (project overrides global for $PLATFORM)"
+    } > "$lockdir/adapter.$PLATFORM.lock"
+    legacy_lock="$lockdir/adapter.lock"
+    if [ -f "$legacy_lock" ] && grep -q "^platform=$PLATFORM$" "$legacy_lock" 2>/dev/null; then
+      rm -f "$legacy_lock"
+    fi
+    echo "pinned: $lockdir/adapter.$PLATFORM.lock (project overrides global for $PLATFORM)"
   fi
 
   echo "done."

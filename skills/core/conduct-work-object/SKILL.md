@@ -33,6 +33,8 @@ Work Objects.
 
 **This skill does:**
 - Discover the workspace and any existing Work Objects
+- Discover, bootstrap, persist, and reconcile the Workspace Documentation
+  Contract as its sole custodian
 - Create new Work Objects with valid schema and immutable ID
 - Resume Work Objects by ID, restoring state, status, next action, and evidence
 - Update frontmatter and body sections through routine transitions
@@ -109,24 +111,20 @@ Apply the rules in `references/CONSEQUENCE-AUTHORITY.md`:
 - `just execute` accepts the current recommendation but never bypasses safety,
   privacy, destructive-action, or external-commitment gates.
 
-## Agreement Loop behavior
+## Grilling entry and stage lens
 
-Apply the shared conversational inquiry contract in
-`references/AGREEMENT-LOOP.md`: give a recommendation before one question,
-maintain coverage of material branches, and continue without an arbitrary
-question cap until the user and evidence establish the next safe move.
+Follow `references/AGREEMENT-LOOP.md` in full; this skill contributes only its stage-specific lens below.
 
-This skill owns Grilling Session continuity. On an explicit grilling request,
-run its full profile until another specialist owns the Decision Frontier, then
-route without resetting context. During ordinary operation, when it encounters:
+Outside an explicit grilling request, nominate a Grilling Candidate only under the Agreement Loop's three-part threshold. Show its Candidate Card and wait for explicit entry; do not silently start a continuous session.
+
+The conductor owns durable checkpoint writes only. During ordinary operation,
+when evidence selects a different stage lens, it routes:
 
 - An unresolved decision about work direction → route to `pressure-test-decision`
 - An unresolved design question → route to `design-tracer-bullet`
 - An ambiguous signal without clear type → route to `turn-signal-into-work`
 
-For routine decisions within this skill's authority (e.g., "should I resume the
-last active Work Object?"), apply the loop minimally: recommend, ask one
-question, integrate.
+Routine lifecycle actions inside existing authority do not activate grilling.
 
 ## Skill Grilling Profile
 
@@ -144,6 +142,14 @@ in their canonical sections and never store a transcript.
 ## Stage workflow
 
 ### 1. Discover workspace
+
+First inspect root `WORKSPACE-DOCUMENTATION-CONTRACT.md` when it exists. Use
+its registry to locate artifacts; do not search for plausible alternatives. If
+it is absent, report a Missing Artifact Gap and recommend bootstrap. Create
+only the contract after explicit bootstrap authority, except that an accepted
+`component-ledger` registry entry also seeds its empty per-project ledger. For a legacy workspace,
+inspect existing files but do not move, rename, import, or canonicalize them
+without separately scoped migration authority.
 
 Search upward from the current working directory for `.work-studio/config.md`.
 Stop at:
@@ -304,6 +310,7 @@ This skill composes with:
 - `review-outcome-and-adapt` — for closing and review
 - `maintain-working-method` — for workflow candidate governance
 - `govern-scorecards` — for outcome scorecard review and candidate proposals
+- `track-components` — for registering, sweeping, and grilling durable components
 
 Missing dependencies must be reported as reduced capability rather than
 silently imitated.

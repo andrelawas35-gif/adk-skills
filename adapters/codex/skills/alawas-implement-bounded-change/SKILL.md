@@ -1,6 +1,6 @@
 ---
 name: alawas-implement-bounded-change
-description: "alawas-implement-bounded-change — Codex (VS Code) adapter"
+description: "Use when a Work Object contains an accepted tracer bullet; implements and checks only that reversible path while preserving dirty work; stops for any material scope or authority deviation."
 platform: codex
 ---
 # Implement Bounded Change
@@ -75,25 +75,24 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
   proposed deviation-record mutation. Do not stage, annotate, change status,
   append History, or make any other mutation before that confirmation.
 
-## Agreement Loop behavior
+## Grilling entry and stage lens
 
-Apply the shared conversational inquiry contract in
-`references/AGREEMENT-LOOP.md`: give a recommendation before one question,
-maintain coverage of material branches, and continue without an arbitrary
-question cap until the user and evidence establish the next safe move.
+Follow `references/AGREEMENT-LOOP.md` in full; this skill contributes only its stage-specific lens below.
+
+Outside an explicit grilling request, nominate a Grilling Candidate only under the Agreement Loop's three-part threshold. Show its Candidate Card and wait for explicit entry; do not silently start a continuous session.
 
 Do not reopen an accepted implementation boundary merely because a different
 solution looks attractive. An explicit grilling request runs the full
-implementation profile against the accepted boundary. Otherwise, activate only
-when a material new decision or authority boundary would change the tracer
-bullet. First retrieve discoverable repository facts, then:
+implementation profile against the accepted boundary. Otherwise, nominate a
+Candidate Card only when a material new decision or authority boundary would
+change the tracer bullet. First retrieve discoverable repository facts, then:
 
 1. State the accepted constraint, new evidence, inference, and consequence.
 2. Recommend one smallest safe route, including whether to stop, revert, or
    propose a scoped deviation.
 3. Ask one decision-bearing question that names the exact deviation and required
    authority.
-4. Continue only after the response explicitly accepts that deviation; otherwise
+4. Enter the continuous session only after explicit acceptance; otherwise
    preserve the current boundary and route the unresolved question.
 
 Do not use this loop to obtain blanket permission for nearby cleanup, future
@@ -105,9 +104,7 @@ Apply the `alawas-implement-bounded-change` profile and continuous Grilling Sess
 `references/SKILL-AWARE-GRILLING.md`. Reconcile the accepted boundary with the
 current repository, establish discriminating checks, protect unrelated dirty
 work, and reopen the frontier for any unapproved interface, schema, dependency,
-data, deployment, or external-effect expansion. On direct entry, route through
-`alawas-conduct-work-object` first. Return the compact continuity record; do not reset
-context, store a transcript, or mutate the Work Object.
+data, deployment, or external-effect expansion
 
 ## Stage workflow
 
@@ -241,112 +238,28 @@ and History. If it cannot record, report the exact record and manual step.
 
 ## Platform Adapter
 
-This skill is adapted for **Codex (VS Code)** from the canonical core.
-Core decision logic, authority boundaries, and schema semantics are
-preserved unchanged. This section documents only platform-specific
-wiring and declared limitations.
-
-### Installation and precedence
-
-Install with the maintainer tool (no Python required at runtime — it
-verifies checksums with the platform's `shasum`/`sha256sum`):
-
-```sh
-# Global bootstrap (conductor everywhere):
-tools/install.sh --platform codex --global
-# Project pin (takes precedence inside this project):
-tools/install.sh --platform codex --project .
-```
-
-- Global install dir: `~/.agents/skills/`
-- Project pin dir: `.agents/skills/`
-
-A **project-pinned** adapter always takes precedence over the global
-bootstrap install. The global install supplies conductor and bootstrap
-behavior everywhere, then defers to the version a project has pinned.
-Precedence is recorded in `.work-studio/adapter.lock` and enforced by
-the generated adapter's runtime pin-resolution contract.
+Invocation-relevant wiring only; installation and maintainer guidance live outside this file.
 
 ### Runtime pin resolution
 
 Codex can discover both user and repository skills with the same name.
 Before applying this skill, search upward from the current directory for
-`.work-studio/adapter.lock`, stopping at the repository or filesystem
-boundary. If the lock declares `platform=codex`, read its `dest` value and
+`.work-studio/adapter.codex.lock`, stopping at the repository or filesystem
+boundary. Read its `dest` value and
 resolve `<dest>/<this-skill-name>/SKILL.md`. When that path differs from
 the currently loaded copy, **load and follow the pinned copy** before
-continuing. If the pinned file is unavailable, report the broken pin and
+continuing. A matching legacy `adapter.lock` remains valid during migration.
+If the pinned file is unavailable, report the broken pin and
 stop instead of silently falling back to the global copy.
 
-### Discovery
-
-- Config path: `.work-studio/config.md`
-- Boundary marker: `.git`
-- Stop condition: repository root (presence of .git)
-- Stop condition: filesystem boundary
-
-### Capability Mappings
+### Required capability mappings
 
 | Abstract capability | Platform tool | Classification |
 |---------------------|---------------|----------------|
-| `browser_automation` | `—` | manual-fallback |
-| `content_search` | `grep_search` | native |
-| `directory_list` | `list_dir` | native |
 | `file_read` | `read_file` | native |
+| `directory_list` | `list_dir` | native |
+| `content_search` | `grep_search` | native |
 | `file_write` | `create_file / replace_string_in_file` | native |
-| `git_operations` | `run_in_terminal (git commands)` | native |
-| `glob_search` | `file_search` | native |
-| `structured_output` | `—` | native |
-| `subagent_spawn` | `runSubagent` | native |
 | `terminal_run` | `run_in_terminal` | native |
+| `structured_output` | `—` | native |
 | `user_confirmation` | `conversation turn` | native |
-| `web_fetch` | `open_browser_page / mcp tools` | native |
-| `web_search` | `—` | manual-fallback |
-
-### Capability Degradation
-
-This adapter classifies every required capability. When a capability
-is unavailable, the workflow degrades explicitly — it never pretends
-that equivalent verification occurred.
-
-**Degradation rules**:
-
-- **`manual-fallback`**: Pause with ONE concrete manual instruction.
-  Record in the Work Object what was done and what remains unverified.
-  Never mark verification, export, or deployment as "successful" when
-  the required capability was unavailable.
-- **`unsupported`**: Stop the affected path immediately. Record the
-  platform limitation. Route to a supported platform or ask the user.
-- **Stricter safety wins**: When this platform imposes a stricter
-  constraint than the core, the platform rule takes precedence.
-  Divergences are disclosed below.
-
-#### `browser_automation` (manual-fallback)
-
-- **Behavior**: Pause and give one concrete manual instruction.
-- **Record**: Append History entry noting the capability gap, the
-  manual action taken, and what remains unverified.
-- **Note**: Browser automation requires user interaction for complex workflows. Use manual steps for multi-page flows.
-
-#### `web_search` (manual-fallback)
-
-- **Behavior**: Pause and give one concrete manual instruction.
-- **Record**: Append History entry noting the capability gap, the
-  manual action taken, and what remains unverified.
-- **Note**: Live web search requires manual lookup. The agent can fetch known URLs but cannot perform open-ended web searches.
-
-### Declared Limitations
-
-- **browser_automation**
-  (manual-fallback):
-  Browser automation requires user interaction for complex workflows. Use manual steps for multi-page flows.
-- **web_search**
-  (manual-fallback):
-  Live web search requires manual lookup. The agent can fetch known URLs but cannot perform open-ended web searches.
-
-### Integrity
-
-This file is generated. Do not edit directly — edit the canonical core
-at `skills/core/<skill>/SKILL.md` or the overlay at
-`adapters/codex/overlay.yaml`. Regenerate with
-`python3 tools/generate-adapters.py`.

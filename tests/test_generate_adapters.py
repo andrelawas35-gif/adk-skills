@@ -51,6 +51,19 @@ def adapter_file(platform, skill):
     return ADAPTERS_DIR / platform / "skills" / adapter_skill_name(skill) / "SKILL.md"
 
 
+def required_capabilities(skill):
+    text = (CORE_DIR / skill / "SKILL.md").read_text()
+    section = text.split("## Required capabilities", 1)[1].split("\n## ", 1)[0]
+    declared = []
+    for line in section.splitlines():
+        if line.startswith("- "):
+            declaration = line.split("—", 1)[0]
+            for capability in re.findall(r"`([^`]+)`", declaration):
+                if capability not in declared:
+                    declared.append(capability)
+    return declared
+
+
 class GeneratorContract(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -125,6 +138,26 @@ class GeneratorContract(unittest.TestCase):
                 self.assertTrue(description.strip(), f"{platform}/{skill}: empty description")
                 self.assertNotIn("\n", description)
 
+    def test_generated_descriptions_are_compact_trigger_action_boundary_metadata(self):
+        boundary_terms = ("does not", "never", "stops for")
+        descriptions = set()
+        for platform in PLATFORMS:
+            for skill in core_skill_names():
+                frontmatter = adapter_file(platform, skill).read_text().split("---", 2)[1]
+                encoded = next(
+                    line[len("description: "):]
+                    for line in frontmatter.splitlines()
+                    if line.startswith("description: ")
+                )
+                description = json.loads(encoded)
+                self.assertTrue(description.startswith("Use when "), skill)
+                self.assertIn(";", description, skill)
+                self.assertTrue(
+                    any(term in description.lower() for term in boundary_terms), skill)
+                self.assertLessEqual(len(description.split()), 40, skill)
+                descriptions.add((skill, description))
+        self.assertEqual(len(descriptions), len(core_skill_names()))
+
     def test_installed_conductor_contains_the_minimum_work_object_schema(self):
         required_fields = [
             "schema_version: 1",
@@ -165,6 +198,7 @@ class GeneratorContract(unittest.TestCase):
 
     def test_installed_skills_include_their_declared_references(self):
         references = [
+            "WORKSPACE-DOCUMENTATION-CONTRACT.md",
             "AGREEMENT-LOOP.md",
             "SKILL-AWARE-GRILLING.md",
             "CAPABILITY-DEGRADATION.md",
@@ -184,9 +218,12 @@ class GeneratorContract(unittest.TestCase):
             for skill in core_skill_names():
                 adapter = adapter_file(platform, skill).read_text()
                 normalized = " ".join(adapter.split())
-                self.assertIn("## Skill Grilling Profile", adapter)
-                self.assertIn(f"`{adapter_skill_name(skill)}` profile", normalized)
-                self.assertIn("continuous Grilling Session", normalized)
+                if skill == "grilling-session":
+                    self.assertIn("## Entry and delegation", adapter)
+                    self.assertIn("Run ephemerally", normalized)
+                else:
+                    self.assertIn("## Skill Grilling Profile", adapter)
+                    self.assertIn(f"`{adapter_skill_name(skill)}` profile", normalized)
 
     def test_every_required_core_capability_is_mapped_and_classified(self):
         """A core requirement cannot silently disappear at an adapter boundary."""
@@ -204,6 +241,40 @@ class GeneratorContract(unittest.TestCase):
                             adapter,
                             rf"\| `{re.escape(capability)}` \| .+ \| (native|manual-fallback|unsupported) \|",
                         )
+
+    def test_platform_appendix_contains_only_required_capability_rows(self):
+        for platform in PLATFORMS:
+            for skill in core_skill_names():
+                adapter = adapter_file(platform, skill).read_text()
+                appendix = adapter.split("\n---\n\n## Platform Adapter", 1)[1]
+                table = appendix.split("### Required capability mappings", 1)[1]
+                table = table.split("\n### ", 1)[0]
+                rows = re.findall(r"^\| `([^`]+)` \|", table, re.MULTILINE)
+                self.assertEqual(rows, required_capabilities(skill),
+                                 f"{platform}/{skill}: irrelevant or missing mapping")
+
+    def test_platform_appendix_excludes_cold_path_maintainer_guidance(self):
+        forbidden = (
+            "### Installation and precedence",
+            "### Discovery",
+            "### Declared Limitations",
+            "### Integrity",
+            "tools/install.sh",
+            "python3 tools/generate-adapters.py",
+        )
+        for platform in PLATFORMS:
+            for skill in core_skill_names():
+                appendix = adapter_file(platform, skill).read_text().split(
+                    "\n---\n\n## Platform Adapter", 1)[1]
+                for text in forbidden:
+                    self.assertNotIn(text, appendix, f"{platform}/{skill}: {text}")
+
+    def test_degradation_details_are_emitted_only_when_required(self):
+        codex_inquiry = adapter_file("codex", "investigate-live-question").read_text()
+        codex_build = adapter_file("codex", "implement-bounded-change").read_text()
+        self.assertIn("#### `web_search` (manual-fallback)", codex_inquiry)
+        self.assertNotIn("`browser_automation`", codex_inquiry)
+        self.assertNotIn("### Capability Degradation", codex_build)
 
     def test_manifest_checksums_match_files(self):
         for platform in PLATFORMS:
@@ -248,13 +319,10 @@ class GeneratorContract(unittest.TestCase):
                 f"{skill}: core behavior diverges across platforms")
 
     def test_platform_constraints_are_disclosed(self):
-        """A manual-fallback capability must be surfaced in the adapter, not
-        silently changed — the adapter discloses the constraint."""
-        adapter = adapter_file("claude-code", "conduct-work-object").read_text()
+        """A required manual-fallback capability remains explicit."""
+        adapter = adapter_file("claude-code", "investigate-live-question").read_text()
         self.assertIn("manual-fallback", adapter)
-        self.assertIn("Declared Limitations", adapter)
-        self.assertIn("### Installation and precedence", adapter)
-        self.assertIn("takes precedence", adapter)
+        self.assertIn("#### `web_search` (manual-fallback)", adapter)
 
     def test_codex_runtime_defers_to_the_project_pin(self):
         """Codex may discover duplicate same-name skills, so either copy must
@@ -262,7 +330,7 @@ class GeneratorContract(unittest.TestCase):
         for skill in core_skill_names():
             adapter = adapter_file("codex", skill).read_text()
             self.assertIn("### Runtime pin resolution", adapter)
-            self.assertIn(".work-studio/adapter.lock", adapter)
+            self.assertIn(".work-studio/adapter.codex.lock", adapter)
             self.assertIn("load and follow the pinned copy", adapter)
 
     def test_drift_is_detected(self):

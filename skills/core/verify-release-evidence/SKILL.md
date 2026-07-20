@@ -79,22 +79,22 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
 - A failed, unavailable, skipped, or inconclusive check is an evidence gap,
   never a passing or release-ready result.
 
-## Agreement Loop behavior
+## Grilling entry and stage lens
 
-Apply the shared conversational inquiry contract in
-`references/AGREEMENT-LOOP.md`: give a recommendation before one question,
-maintain coverage of material branches, and continue without an arbitrary
-question cap until the user and evidence establish the next safe move.
+Follow `references/AGREEMENT-LOOP.md` in full; this skill contributes only its stage-specific lens below.
+
+Outside an explicit grilling request, nominate a Grilling Candidate only under the Agreement Loop's three-part threshold. Show its Candidate Card and wait for explicit entry; do not silently start a continuous session.
 
 An explicit grilling request runs the full verification profile. Otherwise,
-activate only when the recorded evidence plan is insufficient and the smallest
-useful check would cross a material authority or boundary change.
+nominate a Candidate Card when the recorded evidence plan is insufficient and
+the smallest useful check would cross a material authority or boundary change.
 
 1. State the accepted criterion, available evidence, missing evidence, and
    consequence.
 2. Recommend one smallest safe verification route or a stop.
 3. Ask one decision-bearing question naming the new authority or boundary.
-4. Continue only after explicit scoped confirmation; otherwise report the gap.
+4. Enter the continuous session only after explicit acceptance; otherwise
+   report the gap and preserve the current safe boundary.
 
 Do not reopen a bounded implementation merely to improve it while verifying.
 

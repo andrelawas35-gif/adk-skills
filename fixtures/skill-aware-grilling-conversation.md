@@ -84,6 +84,7 @@ Apply the same continuity contract to all profiles:
 - `diagnose-production-incident`
 - `maintain-working-method`
 - `govern-scorecards`
+- `track-components`
 
 ## Scenario 7 — Stage-specific challenge follows project reality
 
@@ -124,6 +125,26 @@ resolves a contradiction, obtains authority, adds discriminating evidence,
 opens a material novel branch, or resolves/routes/defers one. It does not stop
 because of a numerical limit and does not continue merely to reach a count.
 
+## Scenario 10a — Two answers do not end the session
+
+**Given** the agent has asked one question, received an answer, asked a second
+question, and received its answer; material decision branches remain open.
+
+**Then** it updates the same Grilling Session and asks exactly one third
+decision-bearing question. It does not summarize, offer a pair of questions,
+ask an "anything else" fallback, or declare the session complete merely
+because two questions were answered.
+
+## Scenario 10b — The frontier is discovered progressively
+
+**Given** an explicit grilling request about a codebase decision.
+
+**Then** the agent first inspects only the code and documents needed to pose
+the highest-value initial question. After each answer, it inspects evidence
+newly relevant to that answer, re-ranks the live Decision Frontier, discards
+invalidated branches, and asks exactly one next question. It does not infer an
+exhaustive list of grill questions at activation and drip-feed that fixed list.
+
 ## Scenario 11 — Convergence requires Coverage Proof and scoped authority
 
 **Given** no remaining question is likely to change the recommendation.
@@ -142,3 +163,35 @@ the Work Object without transcripts. On failure, it compares the last persisted
 checkpoint with the recoverable summary. On a concurrent revision, it pauses
 consequential action and presents conflicting decisions and Decision Frontiers
 for reconciliation; it never silently overwrites.
+
+## Scenario 13 — Coverage Proof requires confirmation of shared understanding
+
+**Given** a Grilling Session has a Coverage Proof.
+
+**Then** the agent asks exactly one question for confirmation of shared
+understanding. It does not conclude, implement, or treat `do recommended` as
+session closure until the user explicitly confirms the model is shared.
+
+## Scenario 14 — Canonical engine is the pinned-project entry point
+
+**Given** the user says “grill me” in a Work Studio-pinned project without an
+active Work Object.
+
+**Then** `grilling-session` starts an ephemeral, codebase-grounded session,
+infers and states a correctable initial lens, asks one question, and creates no
+Work Object. It offers conductor persistence only when the user explicitly
+asks to retain the session or an accepted decision needs durable continuity.
+
+## Scenario 15 — Skills nominate, but never silently enter, grilling
+
+**Given** a stage skill finds a material unresolved boundary that it cannot
+safely settle within its bounded rules, and a user answer or specific fact
+could change the recommendation.
+
+**Then** it shows a Candidate Card with exact triggering evidence, consequence,
+proposed profile, and ranked choices. It does not silently enter a Grilling
+Session. A declined or deferred card stays suppressed until its revisit trigger
+or material new evidence. A high-consequence card offers hold or entry rather
+than a continue path. Once active, changed rank or confidence is named in a
+Changed since last turn line; when all credible options are low confidence, the
+recommendation is the smallest discriminating evidence move.

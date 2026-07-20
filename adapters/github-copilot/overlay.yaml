@@ -5,7 +5,7 @@
 platform: github-copilot
 platform_label: "GitHub Copilot"
 skill_install_dir: "~/.copilot/skills/"
-project_install_dir: ".copilot/skills/"
+project_install_dir: ".github/skills/"
 skill_file_extension: ".md"
 manifest_path: "adapters/github-copilot/manifest.json"
 

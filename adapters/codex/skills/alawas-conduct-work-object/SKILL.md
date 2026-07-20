@@ -1,6 +1,6 @@
 ---
 name: alawas-conduct-work-object
-description: "alawas-conduct-work-object — Codex (VS Code) adapter"
+description: "Use when work must start, resume, transition, or close; maintains the canonical Work Object and routes its next stage; does not perform specialist domain work."
 platform: codex
 ---
 # Conduct Work Object
@@ -28,6 +28,8 @@ Work Objects.
 
 **This skill does:**
 - Discover the workspace and any existing Work Objects
+- Discover, bootstrap, persist, and reconcile the Workspace Documentation
+  Contract as its sole custodian
 - Create new Work Objects with valid schema and immutable ID
 - Resume Work Objects by ID, restoring state, status, next action, and evidence
 - Update frontmatter and body sections through routine transitions
@@ -104,24 +106,20 @@ Apply the rules in `references/CONSEQUENCE-AUTHORITY.md`:
 - `just execute` accepts the current recommendation but never bypasses safety,
   privacy, destructive-action, or external-commitment gates.
 
-## Agreement Loop behavior
+## Grilling entry and stage lens
 
-Apply the shared conversational inquiry contract in
-`references/AGREEMENT-LOOP.md`: give a recommendation before one question,
-maintain coverage of material branches, and continue without an arbitrary
-question cap until the user and evidence establish the next safe move.
+Follow `references/AGREEMENT-LOOP.md` in full; this skill contributes only its stage-specific lens below.
 
-This skill owns Grilling Session continuity. On an explicit grilling request,
-run its full profile until another specialist owns the Decision Frontier, then
-route without resetting context. During ordinary operation, when it encounters:
+Outside an explicit grilling request, nominate a Grilling Candidate only under the Agreement Loop's three-part threshold. Show its Candidate Card and wait for explicit entry; do not silently start a continuous session.
+
+The conductor owns durable checkpoint writes only. During ordinary operation,
+when evidence selects a different stage lens, it routes:
 
 - An unresolved decision about work direction → route to `alawas-pressure-test-decision`
 - An unresolved design question → route to `alawas-design-tracer-bullet`
 - An ambiguous signal without clear type → route to `alawas-turn-signal-into-work`
 
-For routine decisions within this skill's authority (e.g., "should I resume the
-last active Work Object?"), apply the loop minimally: recommend, ask one
-question, integrate.
+Routine lifecycle actions inside existing authority do not activate grilling.
 
 ## Skill Grilling Profile
 
@@ -139,6 +137,14 @@ in their canonical sections and never store a transcript.
 ## Stage workflow
 
 ### 1. Discover workspace
+
+First inspect root `WORKSPACE-DOCUMENTATION-CONTRACT.md` when it exists. Use
+its registry to locate artifacts; do not search for plausible alternatives. If
+it is absent, report a Missing Artifact Gap and recommend bootstrap. Create
+only the contract after explicit bootstrap authority, except that an accepted
+`component-ledger` registry entry also seeds its empty per-project ledger. For a legacy workspace,
+inspect existing files but do not move, rename, import, or canonicalize them
+without separately scoped migration authority.
 
 Search upward from the current working directory for `.work-studio/config.md`.
 Stop at:
@@ -299,6 +305,7 @@ This skill composes with:
 - `alawas-review-outcome-and-adapt` — for closing and review
 - `alawas-maintain-working-method` — for workflow candidate governance
 - `alawas-govern-scorecards` — for outcome scorecard review and candidate proposals
+- `alawas-track-components` — for registering, sweeping, and grilling durable components
 
 Missing dependencies must be reported as reduced capability rather than
 silently imitated.
@@ -391,112 +398,29 @@ Before reporting completion:
 
 ## Platform Adapter
 
-This skill is adapted for **Codex (VS Code)** from the canonical core.
-Core decision logic, authority boundaries, and schema semantics are
-preserved unchanged. This section documents only platform-specific
-wiring and declared limitations.
-
-### Installation and precedence
-
-Install with the maintainer tool (no Python required at runtime — it
-verifies checksums with the platform's `shasum`/`sha256sum`):
-
-```sh
-# Global bootstrap (conductor everywhere):
-tools/install.sh --platform codex --global
-# Project pin (takes precedence inside this project):
-tools/install.sh --platform codex --project .
-```
-
-- Global install dir: `~/.agents/skills/`
-- Project pin dir: `.agents/skills/`
-
-A **project-pinned** adapter always takes precedence over the global
-bootstrap install. The global install supplies conductor and bootstrap
-behavior everywhere, then defers to the version a project has pinned.
-Precedence is recorded in `.work-studio/adapter.lock` and enforced by
-the generated adapter's runtime pin-resolution contract.
+Invocation-relevant wiring only; installation and maintainer guidance live outside this file.
 
 ### Runtime pin resolution
 
 Codex can discover both user and repository skills with the same name.
 Before applying this skill, search upward from the current directory for
-`.work-studio/adapter.lock`, stopping at the repository or filesystem
-boundary. If the lock declares `platform=codex`, read its `dest` value and
+`.work-studio/adapter.codex.lock`, stopping at the repository or filesystem
+boundary. Read its `dest` value and
 resolve `<dest>/<this-skill-name>/SKILL.md`. When that path differs from
 the currently loaded copy, **load and follow the pinned copy** before
-continuing. If the pinned file is unavailable, report the broken pin and
+continuing. A matching legacy `adapter.lock` remains valid during migration.
+If the pinned file is unavailable, report the broken pin and
 stop instead of silently falling back to the global copy.
 
-### Discovery
-
-- Config path: `.work-studio/config.md`
-- Boundary marker: `.git`
-- Stop condition: repository root (presence of .git)
-- Stop condition: filesystem boundary
-
-### Capability Mappings
+### Required capability mappings
 
 | Abstract capability | Platform tool | Classification |
 |---------------------|---------------|----------------|
-| `browser_automation` | `—` | manual-fallback |
-| `content_search` | `grep_search` | native |
-| `directory_list` | `list_dir` | native |
 | `file_read` | `read_file` | native |
 | `file_write` | `create_file / replace_string_in_file` | native |
-| `git_operations` | `run_in_terminal (git commands)` | native |
+| `directory_list` | `list_dir` | native |
 | `glob_search` | `file_search` | native |
-| `structured_output` | `—` | native |
-| `subagent_spawn` | `runSubagent` | native |
+| `content_search` | `grep_search` | native |
 | `terminal_run` | `run_in_terminal` | native |
-| `user_confirmation` | `conversation turn` | native |
-| `web_fetch` | `open_browser_page / mcp tools` | native |
-| `web_search` | `—` | manual-fallback |
-
-### Capability Degradation
-
-This adapter classifies every required capability. When a capability
-is unavailable, the workflow degrades explicitly — it never pretends
-that equivalent verification occurred.
-
-**Degradation rules**:
-
-- **`manual-fallback`**: Pause with ONE concrete manual instruction.
-  Record in the Work Object what was done and what remains unverified.
-  Never mark verification, export, or deployment as "successful" when
-  the required capability was unavailable.
-- **`unsupported`**: Stop the affected path immediately. Record the
-  platform limitation. Route to a supported platform or ask the user.
-- **Stricter safety wins**: When this platform imposes a stricter
-  constraint than the core, the platform rule takes precedence.
-  Divergences are disclosed below.
-
-#### `browser_automation` (manual-fallback)
-
-- **Behavior**: Pause and give one concrete manual instruction.
-- **Record**: Append History entry noting the capability gap, the
-  manual action taken, and what remains unverified.
-- **Note**: Browser automation requires user interaction for complex workflows. Use manual steps for multi-page flows.
-
-#### `web_search` (manual-fallback)
-
-- **Behavior**: Pause and give one concrete manual instruction.
-- **Record**: Append History entry noting the capability gap, the
-  manual action taken, and what remains unverified.
-- **Note**: Live web search requires manual lookup. The agent can fetch known URLs but cannot perform open-ended web searches.
-
-### Declared Limitations
-
-- **browser_automation**
-  (manual-fallback):
-  Browser automation requires user interaction for complex workflows. Use manual steps for multi-page flows.
-- **web_search**
-  (manual-fallback):
-  Live web search requires manual lookup. The agent can fetch known URLs but cannot perform open-ended web searches.
-
-### Integrity
-
-This file is generated. Do not edit directly — edit the canonical core
-at `skills/core/<skill>/SKILL.md` or the overlay at
-`adapters/codex/overlay.yaml`. Regenerate with
-`python3 tools/generate-adapters.py`.
+| `git_operations` | `run_in_terminal (git commands)` | native |
+| `structured_output` | `—` | native |

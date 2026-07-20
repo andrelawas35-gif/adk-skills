@@ -1,6 +1,6 @@
 ---
 name: alawas-implement-bounded-change
-description: "alawas-implement-bounded-change — Claude Code adapter"
+description: "Use when a Work Object contains an accepted tracer bullet; implements and checks only that reversible path while preserving dirty work; stops for any material scope or authority deviation."
 platform: claude-code
 ---
 # Implement Bounded Change
@@ -75,25 +75,24 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
   proposed deviation-record mutation. Do not stage, annotate, change status,
   append History, or make any other mutation before that confirmation.
 
-## Agreement Loop behavior
+## Grilling entry and stage lens
 
-Apply the shared conversational inquiry contract in
-`references/AGREEMENT-LOOP.md`: give a recommendation before one question,
-maintain coverage of material branches, and continue without an arbitrary
-question cap until the user and evidence establish the next safe move.
+Follow `references/AGREEMENT-LOOP.md` in full; this skill contributes only its stage-specific lens below.
+
+Outside an explicit grilling request, nominate a Grilling Candidate only under the Agreement Loop's three-part threshold. Show its Candidate Card and wait for explicit entry; do not silently start a continuous session.
 
 Do not reopen an accepted implementation boundary merely because a different
 solution looks attractive. An explicit grilling request runs the full
-implementation profile against the accepted boundary. Otherwise, activate only
-when a material new decision or authority boundary would change the tracer
-bullet. First retrieve discoverable repository facts, then:
+implementation profile against the accepted boundary. Otherwise, nominate a
+Candidate Card only when a material new decision or authority boundary would
+change the tracer bullet. First retrieve discoverable repository facts, then:
 
 1. State the accepted constraint, new evidence, inference, and consequence.
 2. Recommend one smallest safe route, including whether to stop, revert, or
    propose a scoped deviation.
 3. Ask one decision-bearing question that names the exact deviation and required
    authority.
-4. Continue only after the response explicitly accepts that deviation; otherwise
+4. Enter the continuous session only after explicit acceptance; otherwise
    preserve the current boundary and route the unresolved question.
 
 Do not use this loop to obtain blanket permission for nearby cleanup, future
@@ -105,9 +104,7 @@ Apply the `alawas-implement-bounded-change` profile and continuous Grilling Sess
 `references/SKILL-AWARE-GRILLING.md`. Reconcile the accepted boundary with the
 current repository, establish discriminating checks, protect unrelated dirty
 work, and reopen the frontier for any unapproved interface, schema, dependency,
-data, deployment, or external-effect expansion. On direct entry, route through
-`alawas-conduct-work-object` first. Return the compact continuity record; do not reset
-context, store a transcript, or mutate the Work Object.
+data, deployment, or external-effect expansion
 
 ## Stage workflow
 
@@ -241,116 +238,16 @@ and History. If it cannot record, report the exact record and manual step.
 
 ## Platform Adapter
 
-This skill is adapted for **Claude Code** from the canonical core.
-Core decision logic, authority boundaries, and schema semantics are
-preserved unchanged. This section documents only platform-specific
-wiring and declared limitations.
+Invocation-relevant wiring only; installation and maintainer guidance live outside this file.
 
-### Installation and precedence
-
-Install with the maintainer tool (no Python required at runtime — it
-verifies checksums with the platform's `shasum`/`sha256sum`):
-
-```sh
-# Global bootstrap (conductor everywhere):
-tools/install.sh --platform claude-code --global
-# Project pin (takes precedence inside this project):
-tools/install.sh --platform claude-code --project .
-```
-
-- Global install dir: `~/.claude/skills/`
-- Project pin dir: `.claude/skills/`
-
-A **project-pinned** adapter always takes precedence over the global
-bootstrap install. The global install supplies conductor and bootstrap
-behavior everywhere, then defers to the version a project has pinned.
-Precedence is recorded in `.work-studio/adapter.lock` and enforced by
-the generated adapter's runtime pin-resolution contract.
-
-### Discovery
-
-- Config path: `.work-studio/config.md`
-- Boundary marker: `.git`
-- Stop condition: repository root (presence of .git)
-- Stop condition: filesystem boundary
-
-### Capability Mappings
+### Required capability mappings
 
 | Abstract capability | Platform tool | Classification |
 |---------------------|---------------|----------------|
-| `browser_automation` | `—` | manual-fallback |
-| `content_search` | `Grep` | native |
-| `directory_list` | `Bash ls` | native |
 | `file_read` | `Read` | native |
+| `directory_list` | `Bash ls` | native |
+| `content_search` | `Grep` | native |
 | `file_write` | `Write / Edit` | native |
-| `git_operations` | `Bash (git commands)` | native |
-| `glob_search` | `Glob` | native |
-| `parallel_tool_execution` | `—` | manual-fallback |
-| `structured_output` | `—` | native |
-| `subagent_isolation` | `—` | manual-fallback |
-| `subagent_spawn` | `Task` | native |
 | `terminal_run` | `Bash` | native |
+| `structured_output` | `—` | native |
 | `user_confirmation` | `conversation turn` | native |
-| `web_fetch` | `WebFetch / WebSearch` | native |
-| `web_search` | `WebSearch` | manual-fallback |
-
-### Capability Degradation
-
-This adapter classifies every required capability. When a capability
-is unavailable, the workflow degrades explicitly — it never pretends
-that equivalent verification occurred.
-
-**Degradation rules**:
-
-- **`manual-fallback`**: Pause with ONE concrete manual instruction.
-  Record in the Work Object what was done and what remains unverified.
-  Never mark verification, export, or deployment as "successful" when
-  the required capability was unavailable.
-- **`unsupported`**: Stop the affected path immediately. Record the
-  platform limitation. Route to a supported platform or ask the user.
-- **Stricter safety wins**: When this platform imposes a stricter
-  constraint than the core, the platform rule takes precedence.
-  Divergences are disclosed below.
-
-#### `browser_automation` (manual-fallback)
-
-- **Behavior**: Pause and give one concrete manual instruction.
-- **Record**: Append History entry noting the capability gap, the
-  manual action taken, and what remains unverified.
-- **Note**: Claude Code browser automation differs from Codex. Complex page interactions may require manual steps.
-
-#### `parallel_tool_execution` (manual-fallback)
-
-- **Behavior**: Pause and give one concrete manual instruction.
-- **Record**: Append History entry noting the capability gap, the
-  manual action taken, and what remains unverified.
-
-#### `subagent_isolation` (manual-fallback)
-
-- **Behavior**: Pause and give one concrete manual instruction.
-- **Record**: Append History entry noting the capability gap, the
-  manual action taken, and what remains unverified.
-- **Note**: Claude Code sub-agents (Task tool) have different isolation guarantees than Codex subagents. For sensitive multi-agent workflows, verify isolation boundaries manually.
-
-#### `web_search` (manual-fallback)
-
-- **Best-effort tool**: `WebSearch`
-- **Behavior**: Pause and give one concrete manual instruction.
-- **Record**: Append History entry noting the capability gap, the
-  manual action taken, and what remains unverified.
-
-### Declared Limitations
-
-- **subagent_isolation**
-  (manual-fallback):
-  Claude Code sub-agents (Task tool) have different isolation guarantees than Codex subagents. For sensitive multi-agent workflows, verify isolation boundaries manually.
-- **browser_automation**
-  (manual-fallback):
-  Claude Code browser automation differs from Codex. Complex page interactions may require manual steps.
-
-### Integrity
-
-This file is generated. Do not edit directly — edit the canonical core
-at `skills/core/<skill>/SKILL.md` or the overlay at
-`adapters/claude-code/overlay.yaml`. Regenerate with
-`python3 tools/generate-adapters.py`.

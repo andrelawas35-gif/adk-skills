@@ -86,18 +86,17 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
   that authority. A new rollback path, expanded blast radius, or destructive
   recovery requires fresh explicit confirmation.
 
-## Agreement Loop behavior
+## Grilling entry and stage lens
 
-Apply the shared conversational inquiry contract in
-`references/AGREEMENT-LOOP.md`: give a recommendation before one question,
-maintain coverage of material branches, and continue without an arbitrary
-question cap until the user and evidence establish the next safe move.
+Follow `references/AGREEMENT-LOOP.md` in full; this skill contributes only its stage-specific lens below.
+
+Outside an explicit grilling request, nominate a Grilling Candidate only under the Agreement Loop's three-part threshold. Show its Candidate Card and wait for explicit entry; do not silently start a continuous session.
 
 An explicit grilling request runs the full deployment profile. Otherwise,
-activate only for a material deployment decision that is not already recorded.
-First state the gate, observed evidence, consequence, and safe route. Recommend
-one smallest recoverable increment or a stop, then ask one decision-bearing
-question naming the exact missing or changed authority.
+nominate a Candidate Card only for a material deployment decision that is not
+already recorded. First state the gate, observed evidence, consequence, and
+safe route. Recommend one smallest recoverable increment or a hold, then ask
+one decision-bearing question naming the exact missing or changed authority.
 Do not use this loop to obtain blanket permission for later increments,
 unrelated migration, or closure.
 
@@ -106,9 +105,7 @@ unrelated migration, or closure.
 Apply the `deploy-with-recovery` profile and continuous Grilling Session in
 `references/SKILL-AWARE-GRILLING.md`. Prove artifact equivalence, challenge
 target health and recovery readiness, and make each increment's observation
-and stop conditions explicit before external action. On direct entry, route
-through `conduct-work-object` first. Return the compact continuity record; do
-not reset context, store a transcript, or mutate the Work Object.
+and stop conditions explicit before external action
 
 ## Stage workflow
 

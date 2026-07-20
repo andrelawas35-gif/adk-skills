@@ -1,6 +1,6 @@
 ---
 name: alawas-diagnose-production-incident
-description: "alawas-diagnose-production-incident — Codex (VS Code) adapter"
+description: "Use when production harm is active or suspected; contains harm, separates impact from mechanism, and verifies restoration; does not broaden emergency access or declare a cause without evidence."
 platform: codex
 ---
 # Diagnose Production Incident
@@ -54,18 +54,19 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
 - For high-consequence Work Objects, explicit confirmation must name the exact proposed action and Work Object mutation. Do not stage, annotate, change status, append History, or make any other mutation before that confirmation.
 - An unavailable external dependency is not a diagnosis. Preserve the blocked condition, set the Incident to `waiting` only when that dependency or authority prevents the next safe action, and name its revisit trigger.
 
-## Agreement Loop behavior
+## Grilling entry and stage lens
 
-Apply the shared conversational inquiry contract in
-`references/AGREEMENT-LOOP.md`: give a recommendation before one question,
-maintain coverage of material branches, and continue without an arbitrary
-question cap until the user and evidence establish the next safe move.
+Follow `references/AGREEMENT-LOOP.md` in full; this skill contributes only its stage-specific lens below.
+
+Outside an explicit grilling request, nominate a Grilling Candidate only under the Agreement Loop's three-part threshold. Show its Candidate Card and wait for explicit entry; do not silently start a continuous session.
 
 An explicit grilling request runs the full incident profile without delaying
-urgent containment. Otherwise, use the smallest loop needed for an unrecorded
+urgent containment. Otherwise, nominate a Candidate Card for an unrecorded
 incident decision: state the observed symptom and evidence gap, consequence and
 safe boundary; recommend the smallest reversible containment, recovery, or
-diagnostic move; then ask one decision-bearing question for missing authority.
+diagnostic move; then wait for explicit entry before starting the continuous
+session. Urgent, already-authorized containment remains governed by its
+runbook, not by the Candidate Card.
 Do not ask for blanket permission to make later fixes or declare recovery.
 
 ## Skill Grilling Profile
@@ -169,112 +170,28 @@ Each update appends attributable History with the evidence summary, selected rou
 
 ## Platform Adapter
 
-This skill is adapted for **Codex (VS Code)** from the canonical core.
-Core decision logic, authority boundaries, and schema semantics are
-preserved unchanged. This section documents only platform-specific
-wiring and declared limitations.
-
-### Installation and precedence
-
-Install with the maintainer tool (no Python required at runtime — it
-verifies checksums with the platform's `shasum`/`sha256sum`):
-
-```sh
-# Global bootstrap (conductor everywhere):
-tools/install.sh --platform codex --global
-# Project pin (takes precedence inside this project):
-tools/install.sh --platform codex --project .
-```
-
-- Global install dir: `~/.agents/skills/`
-- Project pin dir: `.agents/skills/`
-
-A **project-pinned** adapter always takes precedence over the global
-bootstrap install. The global install supplies conductor and bootstrap
-behavior everywhere, then defers to the version a project has pinned.
-Precedence is recorded in `.work-studio/adapter.lock` and enforced by
-the generated adapter's runtime pin-resolution contract.
+Invocation-relevant wiring only; installation and maintainer guidance live outside this file.
 
 ### Runtime pin resolution
 
 Codex can discover both user and repository skills with the same name.
 Before applying this skill, search upward from the current directory for
-`.work-studio/adapter.lock`, stopping at the repository or filesystem
-boundary. If the lock declares `platform=codex`, read its `dest` value and
+`.work-studio/adapter.codex.lock`, stopping at the repository or filesystem
+boundary. Read its `dest` value and
 resolve `<dest>/<this-skill-name>/SKILL.md`. When that path differs from
 the currently loaded copy, **load and follow the pinned copy** before
-continuing. If the pinned file is unavailable, report the broken pin and
+continuing. A matching legacy `adapter.lock` remains valid during migration.
+If the pinned file is unavailable, report the broken pin and
 stop instead of silently falling back to the global copy.
 
-### Discovery
-
-- Config path: `.work-studio/config.md`
-- Boundary marker: `.git`
-- Stop condition: repository root (presence of .git)
-- Stop condition: filesystem boundary
-
-### Capability Mappings
+### Required capability mappings
 
 | Abstract capability | Platform tool | Classification |
 |---------------------|---------------|----------------|
-| `browser_automation` | `—` | manual-fallback |
-| `content_search` | `grep_search` | native |
-| `directory_list` | `list_dir` | native |
 | `file_read` | `read_file` | native |
-| `file_write` | `create_file / replace_string_in_file` | native |
-| `git_operations` | `run_in_terminal (git commands)` | native |
-| `glob_search` | `file_search` | native |
-| `structured_output` | `—` | native |
-| `subagent_spawn` | `runSubagent` | native |
+| `directory_list` | `list_dir` | native |
+| `content_search` | `grep_search` | native |
 | `terminal_run` | `run_in_terminal` | native |
-| `user_confirmation` | `conversation turn` | native |
 | `web_fetch` | `open_browser_page / mcp tools` | native |
-| `web_search` | `—` | manual-fallback |
-
-### Capability Degradation
-
-This adapter classifies every required capability. When a capability
-is unavailable, the workflow degrades explicitly — it never pretends
-that equivalent verification occurred.
-
-**Degradation rules**:
-
-- **`manual-fallback`**: Pause with ONE concrete manual instruction.
-  Record in the Work Object what was done and what remains unverified.
-  Never mark verification, export, or deployment as "successful" when
-  the required capability was unavailable.
-- **`unsupported`**: Stop the affected path immediately. Record the
-  platform limitation. Route to a supported platform or ask the user.
-- **Stricter safety wins**: When this platform imposes a stricter
-  constraint than the core, the platform rule takes precedence.
-  Divergences are disclosed below.
-
-#### `browser_automation` (manual-fallback)
-
-- **Behavior**: Pause and give one concrete manual instruction.
-- **Record**: Append History entry noting the capability gap, the
-  manual action taken, and what remains unverified.
-- **Note**: Browser automation requires user interaction for complex workflows. Use manual steps for multi-page flows.
-
-#### `web_search` (manual-fallback)
-
-- **Behavior**: Pause and give one concrete manual instruction.
-- **Record**: Append History entry noting the capability gap, the
-  manual action taken, and what remains unverified.
-- **Note**: Live web search requires manual lookup. The agent can fetch known URLs but cannot perform open-ended web searches.
-
-### Declared Limitations
-
-- **browser_automation**
-  (manual-fallback):
-  Browser automation requires user interaction for complex workflows. Use manual steps for multi-page flows.
-- **web_search**
-  (manual-fallback):
-  Live web search requires manual lookup. The agent can fetch known URLs but cannot perform open-ended web searches.
-
-### Integrity
-
-This file is generated. Do not edit directly — edit the canonical core
-at `skills/core/<skill>/SKILL.md` or the overlay at
-`adapters/codex/overlay.yaml`. Regenerate with
-`python3 tools/generate-adapters.py`.
+| `user_confirmation` | `conversation turn` | native |
+| `structured_output` | `—` | native |

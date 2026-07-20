@@ -35,6 +35,7 @@ VERSION_FILE = ROOT / "VERSION"
 PLATFORMS = ["codex", "claude-code", "github-copilot"]
 SKILL_NAMESPACE = "alawas"
 SHARED_REFERENCES = [
+    "../WORKSPACE-DOCUMENTATION-CONTRACT.md",
     "AGREEMENT-LOOP.md",
     "SKILL-AWARE-GRILLING.md",
     "CAPABILITY-DEGRADATION.md",
@@ -176,36 +177,88 @@ def _parse_scalar(val: str):
 
 def generate_frontmatter(core_skill_name, overlay):
     """Generate platform-specific YAML frontmatter."""
-    platform_label = overlay.get("platform_label", overlay["platform"])
-    platform_name = overlay["platform"]
-
     descriptions = {
         "conduct-work-object": (
-            f"Detect, create, activate, resume, update, and close Work Objects — "
-            f"the canonical continuity surface of Andrelawas Work Studio. "
-            f"Use when the user asks to start or resume work, check what's active, "
-            f"move work forward, record a decision, or close something out. "
-            f"This skill owns the Work Object lifecycle and routes to specialists "
-            f"for domain-specific work."
+            "Use when work must start, resume, transition, or close; maintains the "
+            "canonical Work Object and routes its next stage; does not perform "
+            "specialist domain work."
         ),
         "pressure-test-decision": (
-            f"Resume an active Work Object, identify its highest-leverage unresolved "
-            f"decision, recommend an answer before asking exactly one question, and "
-            f"safely persist the confirmed decision. Use when the user says "
-            f'"help me decide," "pressure-test this," "grill this," '
-            f'"what should I do about X," or when conduct-work-object routes a '
-            f"Work Object in the Decide state. Composes grilling and domain modeling. "
-            f"Never performs implementation."
+            "Use when one material decision needs adversarial testing; recommends and "
+            "records an evidence-backed choice through the conductor; never implements "
+            "or treats generic approval as high-consequence authority."
+        ),
+        "turn-signal-into-work": (
+            "Use when an idea, request, or observation needs classification; preserves "
+            "provenance and routes it to capture, retention, activation, or discard; "
+            "does not create durable work without activation authority."
+        ),
+        "design-tracer-bullet": (
+            "Use when an accepted direction needs the smallest end-to-end experiment; "
+            "returns a bounded, observable, reversible tracer design; does not implement "
+            "it or authorize production effects."
+        ),
+        "implement-bounded-change": (
+            "Use when a Work Object contains an accepted tracer bullet; implements and "
+            "checks only that reversible path while preserving dirty work; stops for any "
+            "material scope or authority deviation."
+        ),
+        "verify-release-evidence": (
+            "Use when consequential implementation claims need direct verification; "
+            "classifies evidence, gaps, blockers, and recovery credibility; does not "
+            "deploy or promote local results as environment proof."
+        ),
+        "deploy-with-recovery": (
+            "Use when a verified change has explicit deployment authority; ships the "
+            "smallest observable increment with rollback and stop gates; never expands "
+            "without positive evidence."
+        ),
+        "diagnose-production-incident": (
+            "Use when production harm is active or suspected; contains harm, separates "
+            "impact from mechanism, and verifies restoration; does not broaden emergency "
+            "access or declare a cause without evidence."
+        ),
+        "investigate-live-question": (
+            "Use when one falsifiable question blocks a recommendation; gathers the "
+            "smallest discriminating evidence with provenance; does not contact people, "
+            "production, or sensitive sources without scoped authority."
+        ),
+        "review-outcome-and-adapt": (
+            "Use when observed outcomes must be compared with an accepted hypothesis; "
+            "returns attribution, subgroup effects, and a next route; does not close or "
+            "share consequential results without owner authority."
+        ),
+        "maintain-working-method": (
+            "Use when repeated workflow evidence may justify a reusable rule; trials, "
+            "revises, or retires a bounded working method; does not promote exceptions or "
+            "temporary guardrails into permanent policy silently."
+        ),
+        "govern-scorecards": (
+            "Use when outcome evidence must be judged across declared dimensions; exposes "
+            "gaps, subgroup harm, and non-compensable failures; does not let aggregates "
+            "trigger automatic rules or sharing."
+        ),
+        "track-components": (
+            "Use when durable components must be registered, swept, grilled, cascaded, or "
+            "retired; returns ledger and inbox mutation proposals; never turns findings "
+            "into Work Objects or commitments automatically."
+        ),
+        "grilling-session": (
+            "Use when the user explicitly requests continuous grilling or accepts a "
+            "candidate; maintains one decision frontier and one question at a time; does "
+            "not persist or execute without the owning skill's authority."
         ),
     }
 
-    description = descriptions.get(core_skill_name, f"{core_skill_name} — {platform_label} adapter")
+    if core_skill_name not in descriptions:
+        raise ValueError(f"Missing discovery description for core skill: {core_skill_name}")
+    description = descriptions[core_skill_name]
     short_desc = " ".join(description.split())
 
     fm_add = overlay.get("frontmatter", {}).get("add", {})
 
     lines = ["---"]
-    lines.append(f"name: {core_skill_name}")
+    lines.append(f"name: {adapter_skill_name(core_skill_name)}")
     # JSON strings are valid quoted YAML scalars. Keeping the generated value
     # on one line avoids indentation-sensitive folded-block failures in skill
     # loaders while preserving quotes and Unicode deterministically.
@@ -219,11 +272,31 @@ def generate_frontmatter(core_skill_name, overlay):
 
 # ── Platform adapter section ─────────────────────────────────────────────────
 
-def generate_adapter_section(overlay):
-    """Generate the Platform Adapter appendix."""
-    platform_label = overlay.get("platform_label", overlay["platform"])
-    install_dir = overlay.get("skill_install_dir", "N/A")
-    project_install_dir = overlay.get("project_install_dir", "N/A")
+def required_capabilities(core_skill_dir):
+    """Return capabilities declared by one core skill, preserving first use order."""
+    body = extract_body(core_skill_dir / "SKILL.md")
+    try:
+        section = body.split("## Required capabilities", 1)[1].split("\n## ", 1)[0]
+    except IndexError as exc:
+        raise ValueError(
+            f"Missing Required capabilities section: {core_skill_dir / 'SKILL.md'}"
+        ) from exc
+
+    declared = []
+    for line in section.splitlines():
+        if not line.startswith("- "):
+            continue
+        declaration = line.split("—", 1)[0]
+        for capability in re.findall(r"`([^`]+)`", declaration):
+            if capability not in declared:
+                declared.append(capability)
+    if not declared:
+        raise ValueError(f"No required capabilities declared: {core_skill_dir.name}")
+    return declared
+
+
+def generate_adapter_section(overlay, required):
+    """Generate only invocation-relevant platform wiring for one skill."""
 
     lines = []
     lines.append("")
@@ -231,33 +304,7 @@ def generate_adapter_section(overlay):
     lines.append("")
     lines.append("## Platform Adapter")
     lines.append("")
-    lines.append(f"This skill is adapted for **{platform_label}** from the canonical core.")
-    lines.append("Core decision logic, authority boundaries, and schema semantics are")
-    lines.append("preserved unchanged. This section documents only platform-specific")
-    lines.append("wiring and declared limitations.")
-    lines.append("")
-
-    # Installation and precedence
-    lines.append("### Installation and precedence")
-    lines.append("")
-    lines.append("Install with the maintainer tool (no Python required at runtime — it")
-    lines.append("verifies checksums with the platform's `shasum`/`sha256sum`):")
-    lines.append("")
-    lines.append("```sh")
-    lines.append(f"# Global bootstrap (conductor everywhere):")
-    lines.append(f"tools/install.sh --platform {overlay['platform']} --global")
-    lines.append(f"# Project pin (takes precedence inside this project):")
-    lines.append(f"tools/install.sh --platform {overlay['platform']} --project .")
-    lines.append("```")
-    lines.append("")
-    lines.append(f"- Global install dir: `{install_dir}`")
-    lines.append(f"- Project pin dir: `{project_install_dir}`")
-    lines.append("")
-    lines.append("A **project-pinned** adapter always takes precedence over the global")
-    lines.append("bootstrap install. The global install supplies conductor and bootstrap")
-    lines.append("behavior everywhere, then defers to the version a project has pinned.")
-    lines.append("Precedence is recorded in `.work-studio/adapter.lock` and enforced by")
-    lines.append("the generated adapter's runtime pin-resolution contract.")
+    lines.append("Invocation-relevant wiring only; installation and maintainer guidance live outside this file.")
     lines.append("")
 
     if overlay["platform"] == "codex":
@@ -265,104 +312,74 @@ def generate_adapter_section(overlay):
         lines.append("")
         lines.append("Codex can discover both user and repository skills with the same name.")
         lines.append("Before applying this skill, search upward from the current directory for")
-        lines.append("`.work-studio/adapter.lock`, stopping at the repository or filesystem")
-        lines.append("boundary. If the lock declares `platform=codex`, read its `dest` value and")
+        lines.append("`.work-studio/adapter.codex.lock`, stopping at the repository or filesystem")
+        lines.append("boundary. Read its `dest` value and")
         lines.append("resolve `<dest>/<this-skill-name>/SKILL.md`. When that path differs from")
         lines.append("the currently loaded copy, **load and follow the pinned copy** before")
-        lines.append("continuing. If the pinned file is unavailable, report the broken pin and")
+        lines.append("continuing. A matching legacy `adapter.lock` remains valid during migration.")
+        lines.append("If the pinned file is unavailable, report the broken pin and")
         lines.append("stop instead of silently falling back to the global copy.")
         lines.append("")
 
-    # Discovery
-    discovery = overlay.get("discovery", {})
-    lines.append("### Discovery")
-    lines.append("")
-    lines.append(f"- Config path: `{discovery.get('config_path', '.work-studio/config.md')}`")
-    for marker in discovery.get("boundary_markers", []):
-        lines.append(f"- Boundary marker: `{marker}`")
-    for condition in discovery.get("stop_conditions", []):
-        lines.append(f"- Stop condition: {condition}")
-    lines.append("")
-
-    # Capability mappings
+    # Required capability mappings only.
     mappings = overlay.get("capability_mappings", {})
     caps = overlay.get("capabilities", {})
-    if mappings or caps:
-        lines.append("### Capability Mappings")
+    lines.append("### Required capability mappings")
+    lines.append("")
+    lines.append("| Abstract capability | Platform tool | Classification |")
+    lines.append("|---------------------|---------------|----------------|")
+    for cap in required:
+        if cap not in caps:
+            raise ValueError(f"{overlay['platform']}: unclassified required capability: {cap}")
+        tool = mappings.get(cap, "—")
+        lines.append(f"| `{cap}` | `{tool}` | {caps[cap]} |")
+    lines.append("")
+
+    # Degradation behavior only for non-native capabilities this skill requires.
+    non_native = {cap: caps[cap] for cap in required if caps[cap] != "native"}
+    if non_native:
+        lines.append("### Capability Degradation")
         lines.append("")
-        lines.append("| Abstract capability | Platform tool | Classification |")
-        lines.append("|---------------------|---------------|----------------|")
-        all_keys = sorted(set(list(mappings.keys()) + list(caps.keys())))
-        for cap in all_keys:
+        lines.append("This adapter classifies every required capability. When a capability")
+        lines.append("is unavailable, the workflow degrades explicitly — it never pretends")
+        lines.append("that equivalent verification occurred.")
+        lines.append("")
+        lines.append("**Degradation rules**:")
+        lines.append("")
+        lines.append("- **`manual-fallback`**: Pause with ONE concrete manual instruction.")
+        lines.append("  Record in the Work Object what was done and what remains unverified.")
+        lines.append('  Never mark verification, export, or deployment as "successful" when')
+        lines.append("  the required capability was unavailable.")
+        lines.append("- **`unsupported`**: Stop the affected path immediately. Record the")
+        lines.append("  platform limitation. Route to a supported platform or ask the user.")
+        lines.append("- **Stricter safety wins**: When this platform imposes a stricter")
+        lines.append("  constraint than the core, the platform rule takes precedence.")
+        lines.append("  Divergences are disclosed below.")
+        lines.append("")
+
+        for cap in non_native:
+            classification = non_native[cap]
             tool = mappings.get(cap, "—")
-            classification = caps.get(cap, "—")
-            lines.append(f"| `{cap}` | `{tool}` | {classification} |")
-        lines.append("")
-
-        # Capability Degradation section
-        non_native = {k: v for k, v in caps.items() if v != "native"}
-        if non_native:
-            lines.append("### Capability Degradation")
+            # Find matching declared limitation for the description
+            desc = ""
+            for lim in overlay.get("declared_limitations", []):
+                if lim.get("capability") == cap:
+                    desc = lim.get("description", "")
+                    break
+            lines.append(f"#### `{cap}` ({classification})")
             lines.append("")
-            lines.append("This adapter classifies every required capability. When a capability")
-            lines.append("is unavailable, the workflow degrades explicitly — it never pretends")
-            lines.append("that equivalent verification occurred.")
+            if tool and tool != "—":
+                lines.append(f"- **Best-effort tool**: `{tool}`")
+            if classification == "manual-fallback":
+                lines.append("- **Behavior**: Pause and give one concrete manual instruction.")
+                lines.append("- **Record**: Append History entry noting the capability gap, the")
+                lines.append("  manual action taken, and what remains unverified.")
+            elif classification == "unsupported":
+                lines.append("- **Behavior**: Stop the affected path. Do not attempt or substitute.")
+                lines.append("- **Record**: Note the platform limitation in the Work Object body.")
+            if desc:
+                lines.append(f"- **Note**: {desc}")
             lines.append("")
-            lines.append("**Degradation rules**:")
-            lines.append("")
-            lines.append("- **`manual-fallback`**: Pause with ONE concrete manual instruction.")
-            lines.append("  Record in the Work Object what was done and what remains unverified.")
-            lines.append('  Never mark verification, export, or deployment as "successful" when')
-            lines.append("  the required capability was unavailable.")
-            lines.append("- **`unsupported`**: Stop the affected path immediately. Record the")
-            lines.append("  platform limitation. Route to a supported platform or ask the user.")
-            lines.append("- **Stricter safety wins**: When this platform imposes a stricter")
-            lines.append("  constraint than the core, the platform rule takes precedence.")
-            lines.append("  Divergences are disclosed below.")
-            lines.append("")
-
-            for cap in sorted(non_native.keys()):
-                classification = non_native[cap]
-                tool = mappings.get(cap, "—")
-                # Find matching declared limitation for the description
-                desc = ""
-                for lim in overlay.get("declared_limitations", []):
-                    if lim.get("capability") == cap:
-                        desc = lim.get("description", "")
-                        break
-                lines.append(f"#### `{cap}` ({classification})")
-                lines.append("")
-                if tool and tool != "—":
-                    lines.append(f"- **Best-effort tool**: `{tool}`")
-                if classification == "manual-fallback":
-                    lines.append("- **Behavior**: Pause and give one concrete manual instruction.")
-                    lines.append(f"- **Record**: Append History entry noting the capability gap, the")
-                    lines.append("  manual action taken, and what remains unverified.")
-                elif classification == "unsupported":
-                    lines.append("- **Behavior**: Stop the affected path. Do not attempt or substitute.")
-                    lines.append(f"- **Record**: Note the platform limitation in the Work Object body.")
-                if desc:
-                    lines.append(f"- **Note**: {desc}")
-                lines.append("")
-
-    # Limitations
-    limitations = overlay.get("declared_limitations", [])
-    if limitations:
-        lines.append("### Declared Limitations")
-        lines.append("")
-        for lim in limitations:
-            lines.append(f"- **{lim.get('capability', 'unknown')}**")
-            lines.append(f"  ({lim.get('classification', 'manual-fallback')}):")
-            lines.append(f"  {lim.get('description', 'No details provided.')}")
-        lines.append("")
-
-    lines.append("### Integrity")
-    lines.append("")
-    lines.append("This file is generated. Do not edit directly — edit the canonical core")
-    lines.append(f"at `skills/core/<skill>/SKILL.md` or the overlay at")
-    lines.append(f"`adapters/{overlay['platform']}/overlay.yaml`. Regenerate with")
-    lines.append("`python3 tools/generate-adapters.py`.")
-    lines.append("")
 
     return "\n".join(lines)
 
@@ -409,8 +426,9 @@ def build_skill_output(core_skill_dir, overlay):
     paths can never diverge.
     """
     body = namespace_skill_references(extract_body(core_skill_dir / "SKILL.md"))
-    frontmatter = generate_frontmatter(adapter_skill_name(core_skill_dir.name), overlay)
-    adapter_section = generate_adapter_section(overlay)
+    frontmatter = generate_frontmatter(core_skill_dir.name, overlay)
+    adapter_section = generate_adapter_section(
+        overlay, required_capabilities(core_skill_dir))
     output = frontmatter + body.rstrip("\n") + adapter_section
     # Ensure exactly one trailing newline
     return output.rstrip("\n") + "\n"
@@ -448,7 +466,7 @@ def build_reference_entries(skill_name, output_dir, write=False):
         reference_dir.mkdir(parents=True, exist_ok=True)
     for filename in SHARED_REFERENCES:
         source = ROOT / "references" / filename
-        destination = reference_dir / filename
+        destination = reference_dir / Path(filename).name
         content = source.read_bytes()
         if write:
             shutil.copyfile(source, destination)

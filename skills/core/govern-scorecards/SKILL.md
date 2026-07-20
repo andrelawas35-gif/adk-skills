@@ -71,13 +71,11 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
   mutation. Do not stage, annotate, change status, append History, or make any
   other mutation before that confirmation.
 
-## Agreement Loop behavior
+## Grilling entry and stage lens
 
-Apply the shared conversational inquiry contract in
-`references/AGREEMENT-LOOP.md`: recommend one smallest evidence-supported
-next move before one decision-bearing question. Do not use the review to seek
-blanket authority for future rule changes, Personal Institution access, or
-implementation.
+Follow `references/AGREEMENT-LOOP.md` in full; this skill contributes only its stage-specific lens below.
+
+Outside an explicit grilling request, nominate a Grilling Candidate only under the Agreement Loop's three-part threshold. Show its Candidate Card and wait for explicit entry; do not silently start a continuous session.
 
 When scorecard evidence conflicts or is insufficient, recommend preserving the
 conflict or filling the smallest relevant gap rather than forcing a score,

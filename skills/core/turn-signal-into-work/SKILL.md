@@ -88,21 +88,22 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
   mutation before receiving that scoped confirmation.
 - Never export, share, deploy, or copy private or restricted material.
 
-## Agreement Loop behavior
+## Grilling entry and stage lens
 
-Apply the shared conversational inquiry contract in
-`references/AGREEMENT-LOOP.md`: give a recommendation before one question,
-maintain coverage of material branches, and continue without an arbitrary
-question cap until the user and evidence establish the next safe move.
+Follow `references/AGREEMENT-LOOP.md` in full; this skill contributes only its stage-specific lens below.
+
+Outside an explicit grilling request, nominate a Grilling Candidate only under the Agreement Loop's three-part threshold. Show its Candidate Card and wait for explicit entry; do not silently start a continuous session.
 
 An explicit grilling request runs the full signal profile. Otherwise,
 classification is not a decision loop when the signal and next handling are
-clear; activate only when an unresolved boundary would materially change it:
+clear; nominate a Candidate Card only when an unresolved boundary would
+materially change it:
 
 1. State the evidence, inference, and consequence level.
 2. Recommend one classification and explain the smallest trade-off.
 3. Ask one decision-bearing question.
-4. Integrate the answer and record only the durable result.
+4. Enter the continuous session only after explicit acceptance; otherwise
+   retain the bounded classification result.
 
 Do not offer a menu of equal options, and do not use a classification question
 to obtain blanket authority for future work.
@@ -112,9 +113,7 @@ to obtain blanket authority for future work.
 Apply the `turn-signal-into-work` profile and continuous Grilling Session in
 `references/SKILL-AWARE-GRILLING.md`. Reflect the signal in the user's language,
 then challenge provenance, sensitivity, overlap, and whether activation is
-warranted. On direct entry, route through `conduct-work-object` first. Return
-the compact continuity record for conductor persistence; do not reset context,
-store a transcript, or mutate the Work Object.
+warranted.
 
 ## Stage workflow
 

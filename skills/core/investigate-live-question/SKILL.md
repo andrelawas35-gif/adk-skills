@@ -82,12 +82,11 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
 - A missing source, declined contact, unavailable participant, or inaccessible
   system is an evidence gap. It never becomes confirmation of the hypothesis.
 
-## Agreement Loop behavior
+## Grilling entry and stage lens
 
-Apply the shared conversational inquiry contract in
-`references/AGREEMENT-LOOP.md`: give a recommendation before one question,
-maintain coverage of material branches, and continue without an arbitrary
-question cap until the user and evidence establish the next safe move.
+Follow `references/AGREEMENT-LOOP.md` in full; this skill contributes only its stage-specific lens below.
+
+Outside an explicit grilling request, nominate a Grilling Candidate only under the Agreement Loop's three-part threshold. Show its Candidate Card and wait for explicit entry; do not silently start a continuous session.
 
 Use as many progressive one-question turns as the evidence frontier requires,
 while keeping each evidence move minimal:
@@ -111,9 +110,7 @@ while keeping each evidence move minimal:
 Apply the `investigate-live-question` profile and continuous Grilling Session
 in `references/SKILL-AWARE-GRILLING.md`. Frame one falsifiable question, choose
 the smallest discriminating evidence move, preserve source conflicts, and test
-the strongest plausible alternative before concluding. On direct entry, route
-through `conduct-work-object` first. Return the compact continuity record; do
-not reset context, store a transcript, or mutate the Work Object.
+the strongest plausible alternative before concluding
 
 ## Stage workflow
 

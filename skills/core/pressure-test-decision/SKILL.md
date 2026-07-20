@@ -113,54 +113,17 @@ identity, or apply inactive or irrelevant contract entries. If the protocol is
 unavailable or incompatible, report the limitation and offer only a manual,
 user-approved summary.
 
-## Agreement Loop behavior
+## Grilling entry and stage lens
 
-Apply the shared conversational inquiry contract in
-`references/AGREEMENT-LOOP.md`: give a recommendation before one question,
-maintain coverage of material branches, and continue without an arbitrary
-question cap until the user and evidence establish the next safe move.
+Follow `references/AGREEMENT-LOOP.md` in full; this skill contributes only its stage-specific lens below.
 
-This skill IS the Agreement Loop for decisions. It activates the full loop
-because every invocation is a decision boundary:
+Outside an explicit grilling request, nominate a Grilling Candidate only under the Agreement Loop's three-part threshold. Show its Candidate Card and wait for explicit entry; do not silently start a continuous session.
 
-1. **Orient** — Read the Work Object. Sort everything into provenance lanes:
-   evidence (lived/source/system), inference, prior decisions, and unresolved
-   material. Surface what's known vs. what's assumed.
-
-2. **Map** — Identify the decision tree. What branches exist? What depends on
-   what? Which decision has the highest leverage — the one that, once made,
-   collapses the most uncertainty? Walk dependencies before dependents.
-
-3. **Recommend** — Give ONE recommended answer. State:
-   - What evidence supports it
-   - What trade-offs it accepts
-   - What alternatives were considered and why they rank lower
-   - Confidence level (high/medium/low)
-   - What would change the recommendation
-
-4. **Ask** — Ask exactly ONE decision-bearing question. Make it specific,
-   answerable, and scoped to the current branch. Do not present a menu of
-   equal options.
-
-5. **Integrate** — Record the user's answer. If they accept the recommendation,
-   proceed to record. If they choose differently, record their choice with
-   their rationale. If they push back, re-orient with the new constraint.
-
-6. **Generate novelty** — Only when the current branches are exhausted or the
-   user says "try a novel angle." Apply the Adjacent Possibility Pass:
-   identify the dominant assumption, find a contradiction or neglected
-   dimension, generate at most three materially distinct alternatives, state
-   changed assumptions and costs, recommend one or retain the original.
-
-7. **Test** — Before recording, test the confirmed choice against:
-   - An edge case the choice doesn't handle well
-   - A failure mode that could invalidate the assumption
-   - A future scenario where the choice looks wrong
-   Surface these, don't hide them.
-
-8. **Converge or route** — If the decision is sufficient to proceed, record it
-   and route back to `conduct-work-object`. If new decisions emerged, loop
-   back. If the decision space is exhausted, route with documented uncertainty.
+This is the decision lens: pursue the assumption carrying the most decision
+risk, test the leading branch against a disconfirming counterexample, and
+route a cheaper discriminating experiment to `design-tracer-bullet` when it is
+more informative than continued discussion. The engine, not this skill,
+controls turn order, continuity, and convergence.
 
 ## Skill Grilling Profile
 
@@ -168,9 +131,7 @@ Apply the `pressure-test-decision` profile and continuous Grilling Session in
 `references/SKILL-AWARE-GRILLING.md`. Pursue the assumption carrying the most
 decision risk, reject false binaries when evidence supports another branch,
 and test the leading option with codebase-grounded and high-impact
-counterexamples. On direct entry, route through `conduct-work-object` first.
-Return the compact continuity record; do not reset context, store a transcript,
-or mutate the Work Object.
+counterexamples.
 
 ## Stage workflow
 

@@ -82,12 +82,15 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
   minimum necessary bridge for this receiving Work Object. Record its
   provenance and sensitivity; do not copy its source material.
 
-## Agreement Loop behavior
+## Grilling entry and stage lens
 
-Apply `references/AGREEMENT-LOOP.md`: state the candidate boundary, available
-evidence, unresolved limits, consequence, and one recommended bounded move
-before asking one decision-bearing question. Do not ask for blanket authority
-to promote future candidates, collect evidence, or apply a Working Method.
+Follow `references/AGREEMENT-LOOP.md` in full; this skill contributes only its
+stage-specific lens below. Do not ask for blanket authority to promote future
+candidates, collect evidence, or apply a Working Method.
+
+Outside an explicit grilling request, nominate a Grilling Candidate only under
+the Agreement Loop's three-part threshold. Show its Candidate Card and wait for
+explicit entry; do not silently start a continuous session.
 
 ## Skill Grilling Profile
 
@@ -95,9 +98,7 @@ Apply the `maintain-working-method` profile and continuous Grilling Session in
 `references/SKILL-AWARE-GRILLING.md`. Start from observed behavior and outcome,
 seek contrary contexts, bound applicability and exceptions, and require a
 reviewable trial before promotion. Keep attributed personal-fit defaults
-separate from shared policy. On direct entry, route through
-`conduct-work-object` first. Return the compact continuity record; do not reset
-context, store a transcript, or mutate the Work Object.
+separate from shared policy
 
 ## Candidate record contract
 

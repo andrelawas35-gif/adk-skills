@@ -35,10 +35,16 @@ mkdir -p "$WORK/proj/.git"
 "$INSTALL" --platform "$PLATFORM" --project "$WORK/proj" >/dev/null
 [ -f "$WORK/proj/.claude/skills/alawas-conduct-work-object/SKILL.md" ] \
   && ok "project skill installed" || bad "project skill installed"
-[ -f "$WORK/proj/.work-studio/adapter.lock" ] \
+[ -f "$WORK/proj/.work-studio/adapter.$PLATFORM.lock" ] \
   && ok "project lock written" || bad "project lock written"
-grep -q "^platform=$PLATFORM$" "$WORK/proj/.work-studio/adapter.lock" \
+grep -q "^platform=$PLATFORM$" "$WORK/proj/.work-studio/adapter.$PLATFORM.lock" \
   && ok "lock records platform" || bad "lock records platform"
+
+echo "test: project pins coexist across platforms"
+"$INSTALL" --platform codex --project "$WORK/proj" >/dev/null
+[ -f "$WORK/proj/.work-studio/adapter.$PLATFORM.lock" ] \
+  && [ -f "$WORK/proj/.work-studio/adapter.codex.lock" ] \
+  && ok "platform-specific locks coexist" || bad "platform-specific locks coexist"
 
 echo "test: precedence resolution"
 res=$("$INSTALL" --platform "$PLATFORM" --resolve "$WORK/proj")

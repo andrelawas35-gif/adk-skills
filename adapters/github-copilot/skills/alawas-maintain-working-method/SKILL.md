@@ -1,6 +1,6 @@
 ---
 name: alawas-maintain-working-method
-description: "alawas-maintain-working-method — GitHub Copilot adapter"
+description: "Use when repeated workflow evidence may justify a reusable rule; trials, revises, or retires a bounded working method; does not promote exceptions or temporary guardrails into permanent policy silently."
 platform: github-copilot
 ---
 # Maintain Working Method
@@ -80,12 +80,15 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
   minimum necessary bridge for this receiving Work Object. Record its
   provenance and sensitivity; do not copy its source material.
 
-## Agreement Loop behavior
+## Grilling entry and stage lens
 
-Apply `references/AGREEMENT-LOOP.md`: state the candidate boundary, available
-evidence, unresolved limits, consequence, and one recommended bounded move
-before asking one decision-bearing question. Do not ask for blanket authority
-to promote future candidates, collect evidence, or apply a Working Method.
+Follow `references/AGREEMENT-LOOP.md` in full; this skill contributes only its
+stage-specific lens below. Do not ask for blanket authority to promote future
+candidates, collect evidence, or apply a Working Method.
+
+Outside an explicit grilling request, nominate a Grilling Candidate only under
+the Agreement Loop's three-part threshold. Show its Candidate Card and wait for
+explicit entry; do not silently start a continuous session.
 
 ## Skill Grilling Profile
 
@@ -93,9 +96,7 @@ Apply the `alawas-maintain-working-method` profile and continuous Grilling Sessi
 `references/SKILL-AWARE-GRILLING.md`. Start from observed behavior and outcome,
 seek contrary contexts, bound applicability and exceptions, and require a
 reviewable trial before promotion. Keep attributed personal-fit defaults
-separate from shared policy. On direct entry, route through
-`alawas-conduct-work-object` first. Return the compact continuity record; do not reset
-context, store a transcript, or mutate the Work Object.
+separate from shared policy
 
 ## Candidate record contract
 
@@ -271,108 +272,14 @@ validation, durable record placement, History, and state/status transitions.
 
 ## Platform Adapter
 
-This skill is adapted for **GitHub Copilot** from the canonical core.
-Core decision logic, authority boundaries, and schema semantics are
-preserved unchanged. This section documents only platform-specific
-wiring and declared limitations.
+Invocation-relevant wiring only; installation and maintainer guidance live outside this file.
 
-### Installation and precedence
-
-Install with the maintainer tool (no Python required at runtime — it
-verifies checksums with the platform's `shasum`/`sha256sum`):
-
-```sh
-# Global bootstrap (conductor everywhere):
-tools/install.sh --platform github-copilot --global
-# Project pin (takes precedence inside this project):
-tools/install.sh --platform github-copilot --project .
-```
-
-- Global install dir: `~/.copilot/skills/`
-- Project pin dir: `.copilot/skills/`
-
-A **project-pinned** adapter always takes precedence over the global
-bootstrap install. The global install supplies conductor and bootstrap
-behavior everywhere, then defers to the version a project has pinned.
-Precedence is recorded in `.work-studio/adapter.lock` and enforced by
-the generated adapter's runtime pin-resolution contract.
-
-### Discovery
-
-- Config path: `.work-studio/config.md`
-- Boundary marker: `.git`
-- Stop condition: repository root (presence of .git)
-- Stop condition: filesystem boundary
-
-### Capability Mappings
+### Required capability mappings
 
 | Abstract capability | Platform tool | Classification |
 |---------------------|---------------|----------------|
-| `browser_automation` | `—` | manual-fallback |
-| `content_search` | `grep_search` | native |
-| `directory_list` | `list_dir` | native |
 | `file_read` | `read_file` | native |
+| `content_search` | `grep_search` | native |
 | `file_write` | `create_file / replace_string_in_file / multi_replace_string_in_file` | native |
-| `git_operations` | `run_in_terminal (git commands)` | native |
-| `glob_search` | `file_search` | native |
-| `parallel_tool_execution` | `—` | manual-fallback |
-| `structured_output` | `—` | native |
-| `subagent_spawn` | `runSubagent` | native |
-| `terminal_run` | `run_in_terminal` | native |
 | `user_confirmation` | `conversation turn` | native |
-| `web_fetch` | `open_browser_page / mcp tools` | native |
-| `web_search` | `—` | manual-fallback |
-
-### Capability Degradation
-
-This adapter classifies every required capability. When a capability
-is unavailable, the workflow degrades explicitly — it never pretends
-that equivalent verification occurred.
-
-**Degradation rules**:
-
-- **`manual-fallback`**: Pause with ONE concrete manual instruction.
-  Record in the Work Object what was done and what remains unverified.
-  Never mark verification, export, or deployment as "successful" when
-  the required capability was unavailable.
-- **`unsupported`**: Stop the affected path immediately. Record the
-  platform limitation. Route to a supported platform or ask the user.
-- **Stricter safety wins**: When this platform imposes a stricter
-  constraint than the core, the platform rule takes precedence.
-  Divergences are disclosed below.
-
-#### `browser_automation` (manual-fallback)
-
-- **Behavior**: Pause and give one concrete manual instruction.
-- **Record**: Append History entry noting the capability gap, the
-  manual action taken, and what remains unverified.
-- **Note**: GitHub Copilot browser automation requires user interaction for complex workflows. Use manual steps for multi-page flows.
-
-#### `parallel_tool_execution` (manual-fallback)
-
-- **Behavior**: Pause and give one concrete manual instruction.
-- **Record**: Append History entry noting the capability gap, the
-  manual action taken, and what remains unverified.
-- **Note**: GitHub Copilot may serialize some parallel tool calls. For performance-critical multi-step workflows, verify execution order manually.
-
-#### `web_search` (manual-fallback)
-
-- **Behavior**: Pause and give one concrete manual instruction.
-- **Record**: Append History entry noting the capability gap, the
-  manual action taken, and what remains unverified.
-
-### Declared Limitations
-
-- **browser_automation**
-  (manual-fallback):
-  GitHub Copilot browser automation requires user interaction for complex workflows. Use manual steps for multi-page flows.
-- **parallel_tool_execution**
-  (manual-fallback):
-  GitHub Copilot may serialize some parallel tool calls. For performance-critical multi-step workflows, verify execution order manually.
-
-### Integrity
-
-This file is generated. Do not edit directly — edit the canonical core
-at `skills/core/<skill>/SKILL.md` or the overlay at
-`adapters/github-copilot/overlay.yaml`. Regenerate with
-`python3 tools/generate-adapters.py`.
+| `structured_output` | `—` | native |

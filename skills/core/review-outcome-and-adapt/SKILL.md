@@ -81,12 +81,11 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
   successor`, names its type and bounded outcome, and supplies the authority
   required by its consequence.
 
-## Agreement Loop behavior
+## Grilling entry and stage lens
 
-Apply the shared conversational inquiry contract in
-`references/AGREEMENT-LOOP.md`: give a recommendation before one question,
-maintain coverage of material branches, and continue without an arbitrary
-question cap until the user and evidence establish the next safe move.
+Follow `references/AGREEMENT-LOOP.md` in full; this skill contributes only its stage-specific lens below.
+
+Outside an explicit grilling request, nominate a Grilling Candidate only under the Agreement Loop's three-part threshold. Show its Candidate Card and wait for explicit entry; do not silently start a continuous session.
 
 When a review outcome needs a direction, state the recorded hypothesis,
 available evidence, inference, unresolved uncertainty, and consequence.

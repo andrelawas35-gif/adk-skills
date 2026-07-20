@@ -109,7 +109,7 @@ Do not store: hidden reasoning chains, full prompts, complete chat transcripts, 
 ## Grilling Session continuity
 
 Create `## Grilling Session` lazily when the Agreement Loop activates. Store
-only the compact state defined in `SKILL-AWARE-GRILLING.md`; keep decisions,
+only the compact state defined in `AGREEMENT-LOOP.md`; keep decisions,
 evidence, verification, outcomes, and History in their canonical sections.
 
 On resume, reconstruct the Context Card from the current Work Object and

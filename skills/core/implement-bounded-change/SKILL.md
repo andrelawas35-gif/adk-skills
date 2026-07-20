@@ -78,25 +78,24 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
   proposed deviation-record mutation. Do not stage, annotate, change status,
   append History, or make any other mutation before that confirmation.
 
-## Agreement Loop behavior
+## Grilling entry and stage lens
 
-Apply the shared conversational inquiry contract in
-`references/AGREEMENT-LOOP.md`: give a recommendation before one question,
-maintain coverage of material branches, and continue without an arbitrary
-question cap until the user and evidence establish the next safe move.
+Follow `references/AGREEMENT-LOOP.md` in full; this skill contributes only its stage-specific lens below.
+
+Outside an explicit grilling request, nominate a Grilling Candidate only under the Agreement Loop's three-part threshold. Show its Candidate Card and wait for explicit entry; do not silently start a continuous session.
 
 Do not reopen an accepted implementation boundary merely because a different
 solution looks attractive. An explicit grilling request runs the full
-implementation profile against the accepted boundary. Otherwise, activate only
-when a material new decision or authority boundary would change the tracer
-bullet. First retrieve discoverable repository facts, then:
+implementation profile against the accepted boundary. Otherwise, nominate a
+Candidate Card only when a material new decision or authority boundary would
+change the tracer bullet. First retrieve discoverable repository facts, then:
 
 1. State the accepted constraint, new evidence, inference, and consequence.
 2. Recommend one smallest safe route, including whether to stop, revert, or
    propose a scoped deviation.
 3. Ask one decision-bearing question that names the exact deviation and required
    authority.
-4. Continue only after the response explicitly accepts that deviation; otherwise
+4. Enter the continuous session only after explicit acceptance; otherwise
    preserve the current boundary and route the unresolved question.
 
 Do not use this loop to obtain blanket permission for nearby cleanup, future
@@ -108,9 +107,7 @@ Apply the `implement-bounded-change` profile and continuous Grilling Session in
 `references/SKILL-AWARE-GRILLING.md`. Reconcile the accepted boundary with the
 current repository, establish discriminating checks, protect unrelated dirty
 work, and reopen the frontier for any unapproved interface, schema, dependency,
-data, deployment, or external-effect expansion. On direct entry, route through
-`conduct-work-object` first. Return the compact continuity record; do not reset
-context, store a transcript, or mutate the Work Object.
+data, deployment, or external-effect expansion
 
 ## Stage workflow
 
