@@ -26,5 +26,5 @@ __pycache__/
 .copilot/skills/
 .github/skills/
 
-# Platform adapter lock files (workspace-specific install state)
-.work-studio/adapter.*.lock
+# Legacy single-platform lock (superseded by per-platform locks)
+# Per-platform adapter locks use relative paths and are tracked

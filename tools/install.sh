@@ -106,12 +106,18 @@ resolve() {
     legacy_lock="$dir/.work-studio/adapter.lock"
     if [ -f "$lock" ]; then
       pinned=$(sed -n 's/^dest=//p' "$lock")
-      echo "project:$pinned"
+      case "$pinned" in
+        /*) echo "project:$pinned" ;;
+        *)  echo "project:$dir/$pinned" ;;
+      esac
       return 0
     fi
     if [ -f "$legacy_lock" ] && grep -q "^platform=$PLATFORM$" "$legacy_lock" 2>/dev/null; then
       pinned=$(sed -n 's/^dest=//p' "$legacy_lock")
-      echo "project:$pinned"
+      case "$pinned" in
+        /*) echo "project:$pinned" ;;
+        *)  echo "project:$dir/$pinned" ;;
+      esac
       return 0
     fi
     [ -d "$dir/.git" ] && break        # stop at repo boundary
@@ -162,12 +168,12 @@ do_install() {
   if [ "$MODE" = "project" ]; then
     lockdir="$TARGET_DIR/.work-studio"
     mkdir -p "$lockdir"
-    dest_abs=$(CDPATH= cd -- "$DEST" && pwd)
+    dest_rel=$(project_subdir "$PLATFORM")
     {
       echo "# Work Studio adapter pin — this project overrides the global install."
       echo "platform=$PLATFORM"
       echo "version=$VERSION"
-      echo "dest=$dest_abs"
+      echo "dest=$dest_rel"
     } > "$lockdir/adapter.$PLATFORM.lock"
     legacy_lock="$lockdir/adapter.lock"
     if [ -f "$legacy_lock" ] && grep -q "^platform=$PLATFORM$" "$legacy_lock" 2>/dev/null; then

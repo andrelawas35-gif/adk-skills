@@ -66,6 +66,23 @@ case "$res" in
   *) bad "nested dir inherits project pin (got '$res')" ;;
 esac
 
+echo "test: lock uses relative dest path"
+lock_dest=$(sed -n 's/^dest=//p' "$WORK/proj/.work-studio/adapter.$PLATFORM.lock")
+case "$lock_dest" in
+  /*) bad "lock dest is relative (got absolute: '$lock_dest')" ;;
+  .claude/skills|.agents/skills|.github/skills) ok "lock dest is relative" ;;
+  *) bad "lock dest is relative (got '$lock_dest')" ;;
+esac
+
+echo "test: relative lock resolves to correct absolute path"
+res=$("$INSTALL" --platform "$PLATFORM" --resolve "$WORK/proj")
+case "$res" in
+  project:*"$WORK/proj/.claude/skills"*) ok "relative lock resolves to absolute" ;;
+  project:*"$WORK/proj/.agents/skills"*) ok "relative lock resolves to absolute" ;;
+  project:*"$WORK/proj/.github/skills"*) ok "relative lock resolves to absolute" ;;
+  *) bad "relative lock resolves to absolute (got '$res')" ;;
+esac
+
 echo "test: tamper detection on installed copy"
 tampered="$WORK/proj/.claude/skills/alawas-conduct-work-object/SKILL.md"
 echo "corruption" >> "$tampered"
