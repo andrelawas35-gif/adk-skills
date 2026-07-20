@@ -41,12 +41,12 @@ tools/install.sh --platform codex --project .
 |----------|-------------|------------------|
 | Codex | `~/.agents/skills/` | `.agents/skills/` |
 | Claude Code | `~/.claude/skills/` | `.claude/skills/` |
-| GitHub Copilot | `~/.copilot/skills/` | `.copilot/skills/` |
+| GitHub Copilot | `~/.copilot/skills/` | `.github/skills/` |
 
 Each adapter ships a `manifest.json` and a `SHA256SUMS` file with SHA-256
 checksums; the installer refuses to install artifacts that do not match. A
 **project-pinned** adapter always takes precedence over the global bootstrap
-install — the pin is recorded in `.work-studio/adapter.lock`. Inspect which
+install — each platform pin is recorded in `.work-studio/adapter.<platform>.lock`. Inspect which
 install wins for a directory with:
 
 ```sh
@@ -70,6 +70,7 @@ sh tests/run.sh                                     # full generator + installer
 | Skill | Description |
 |-------|-------------|
 | [google-adk-agent-builder](skills/google-adk-agent-builder/SKILL.md) | Build and iterate on local Google ADK agents in Python — scaffolding, tools, multi-agent flows, session/memory wiring, and local dev loop |
+| [grilling-session](skills/core/grilling-session/SKILL.md) | Run an ephemeral or durable, codebase-grounded continuous grilling session; one adaptive question per turn |
 | [conduct-work-object](skills/core/conduct-work-object/SKILL.md) | Detect, create, activate, resume, update, and close Work Objects — the canonical continuity surface of Andrelawas Work Studio |
 | [pressure-test-decision](skills/core/pressure-test-decision/SKILL.md) | Resume a Work Object, identify the highest-leverage unresolved decision, recommend before asking one question, and safely persist the confirmed choice |
 | [turn-signal-into-work](skills/core/turn-signal-into-work/SKILL.md) | Capture a live signal, classify its smallest durable handling, and activate a Work Object only with explicit user authority |
@@ -91,9 +92,9 @@ python3 tools/generate-adapters.py --check   # verify no drift
 
 | Platform | Adapters | Manifest |
 |----------|----------|----------|
-| Codex | [conduct-work-object](adapters/codex/skills/conduct-work-object/SKILL.md), [pressure-test-decision](adapters/codex/skills/pressure-test-decision/SKILL.md), [turn-signal-into-work](adapters/codex/skills/turn-signal-into-work/SKILL.md), [design-tracer-bullet](adapters/codex/skills/design-tracer-bullet/SKILL.md), [implement-bounded-change](adapters/codex/skills/implement-bounded-change/SKILL.md), [verify-release-evidence](adapters/codex/skills/verify-release-evidence/SKILL.md), [investigate-live-question](adapters/codex/skills/investigate-live-question/SKILL.md), [deploy-with-recovery](adapters/codex/skills/deploy-with-recovery/SKILL.md), [diagnose-production-incident](adapters/codex/skills/diagnose-production-incident/SKILL.md) | [manifest.json](adapters/codex/manifest.json) |
-| Claude Code | [conduct-work-object](adapters/claude-code/skills/conduct-work-object/SKILL.md), [pressure-test-decision](adapters/claude-code/skills/pressure-test-decision/SKILL.md), [turn-signal-into-work](adapters/claude-code/skills/turn-signal-into-work/SKILL.md), [design-tracer-bullet](adapters/claude-code/skills/design-tracer-bullet/SKILL.md), [implement-bounded-change](adapters/claude-code/skills/implement-bounded-change/SKILL.md), [verify-release-evidence](adapters/claude-code/skills/verify-release-evidence/SKILL.md), [investigate-live-question](adapters/claude-code/skills/investigate-live-question/SKILL.md), [deploy-with-recovery](adapters/claude-code/skills/deploy-with-recovery/SKILL.md), [diagnose-production-incident](adapters/claude-code/skills/diagnose-production-incident/SKILL.md) | [manifest.json](adapters/claude-code/manifest.json) |
-| GitHub Copilot | [conduct-work-object](adapters/github-copilot/skills/conduct-work-object/SKILL.md), [pressure-test-decision](adapters/github-copilot/skills/pressure-test-decision/SKILL.md), [turn-signal-into-work](adapters/github-copilot/skills/turn-signal-into-work/SKILL.md), [design-tracer-bullet](adapters/github-copilot/skills/design-tracer-bullet/SKILL.md), [implement-bounded-change](adapters/github-copilot/skills/implement-bounded-change/SKILL.md), [verify-release-evidence](adapters/github-copilot/skills/verify-release-evidence/SKILL.md), [investigate-live-question](adapters/github-copilot/skills/investigate-live-question/SKILL.md), [deploy-with-recovery](adapters/github-copilot/skills/deploy-with-recovery/SKILL.md), [diagnose-production-incident](adapters/github-copilot/skills/diagnose-production-incident/SKILL.md) | [manifest.json](adapters/github-copilot/manifest.json) |
+| Codex | [grilling-session](adapters/codex/skills/alawas-grilling-session/SKILL.md), [conduct-work-object](adapters/codex/skills/alawas-conduct-work-object/SKILL.md), [pressure-test-decision](adapters/codex/skills/alawas-pressure-test-decision/SKILL.md), [turn-signal-into-work](adapters/codex/skills/alawas-turn-signal-into-work/SKILL.md), [design-tracer-bullet](adapters/codex/skills/alawas-design-tracer-bullet/SKILL.md), [implement-bounded-change](adapters/codex/skills/alawas-implement-bounded-change/SKILL.md), [verify-release-evidence](adapters/codex/skills/alawas-verify-release-evidence/SKILL.md), [investigate-live-question](adapters/codex/skills/alawas-investigate-live-question/SKILL.md), [deploy-with-recovery](adapters/codex/skills/alawas-deploy-with-recovery/SKILL.md), [diagnose-production-incident](adapters/codex/skills/alawas-diagnose-production-incident/SKILL.md) | [manifest.json](adapters/codex/manifest.json) |
+| Claude Code | [grilling-session](adapters/claude-code/skills/alawas-grilling-session/SKILL.md), [conduct-work-object](adapters/claude-code/skills/alawas-conduct-work-object/SKILL.md), [pressure-test-decision](adapters/claude-code/skills/alawas-pressure-test-decision/SKILL.md), [turn-signal-into-work](adapters/claude-code/skills/alawas-turn-signal-into-work/SKILL.md), [design-tracer-bullet](adapters/claude-code/skills/alawas-design-tracer-bullet/SKILL.md), [implement-bounded-change](adapters/claude-code/skills/alawas-implement-bounded-change/SKILL.md), [verify-release-evidence](adapters/claude-code/skills/alawas-verify-release-evidence/SKILL.md), [investigate-live-question](adapters/claude-code/skills/alawas-investigate-live-question/SKILL.md), [deploy-with-recovery](adapters/claude-code/skills/alawas-deploy-with-recovery/SKILL.md), [diagnose-production-incident](adapters/claude-code/skills/alawas-diagnose-production-incident/SKILL.md) | [manifest.json](adapters/claude-code/manifest.json) |
+| GitHub Copilot | [grilling-session](adapters/github-copilot/skills/alawas-grilling-session/SKILL.md), [conduct-work-object](adapters/github-copilot/skills/alawas-conduct-work-object/SKILL.md), [pressure-test-decision](adapters/github-copilot/skills/alawas-pressure-test-decision/SKILL.md), [turn-signal-into-work](adapters/github-copilot/skills/alawas-turn-signal-into-work/SKILL.md), [design-tracer-bullet](adapters/github-copilot/skills/alawas-design-tracer-bullet/SKILL.md), [implement-bounded-change](adapters/github-copilot/skills/alawas-implement-bounded-change/SKILL.md), [verify-release-evidence](adapters/github-copilot/skills/alawas-verify-release-evidence/SKILL.md), [investigate-live-question](adapters/github-copilot/skills/alawas-investigate-live-question/SKILL.md), [deploy-with-recovery](adapters/github-copilot/skills/alawas-deploy-with-recovery/SKILL.md), [diagnose-production-incident](adapters/github-copilot/skills/alawas-diagnose-production-incident/SKILL.md) | [manifest.json](adapters/github-copilot/manifest.json) |
 
 ## Conformance Gate
 
@@ -134,7 +135,8 @@ python3 -m unittest discover -s tests -v
 | Reference | Description |
 |-----------|-------------|
 | [WORK-OBJECT.md](references/WORK-OBJECT.md) | Work Object schema, identity rules, storage, history format |
-| [AGREEMENT-LOOP.md](references/AGREEMENT-LOOP.md) | Shared reasoning protocol for decision boundaries |
+| [AGREEMENT-LOOP.md](references/AGREEMENT-LOOP.md) | Canonical runtime engine for continuous grilling, session modes, lens selection, and durable continuity |
+| [SKILL-AWARE-GRILLING.md](references/SKILL-AWARE-GRILLING.md) | Stage-specific grilling lenses: gates, escalation paths, and pressure scenarios |
 | [EVIDENCE-MODEL.md](references/EVIDENCE-MODEL.md) | Provenance lanes and evidence recording rules |
 | [CONSEQUENCE-AUTHORITY.md](references/CONSEQUENCE-AUTHORITY.md) | Consequence levels, sensitivity classes, and authority gates |
 | [CAPABILITY-DEGRADATION.md](references/CAPABILITY-DEGRADATION.md) | Three-tier capability classification (native/manual-fallback/unsupported) and degradation rules |

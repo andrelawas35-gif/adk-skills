@@ -41,12 +41,13 @@ The execution, decision, and delivery system whose canonical record is a Work Ob
 _Avoid_: personal archive, life operating system
 
 **Workspace Documentation Contract**:
-The sole durable artifact created when an empty workspace is bootstrapped. It
-defines how project documents are discovered, named, owned, created, validated,
-and superseded before the workspace records project-specific claims, and
-contains the canonical artifact registry. An explicit bootstrap request grants
-authority to create this contract only. It is a human-readable Markdown file
-with a rigid, parseable registry section.
+The sole durable artifact created when an empty workspace is bootstrapped, at
+`WORKSPACE-DOCUMENTATION-CONTRACT.md`. It defines how project documents are
+discovered, named, owned, created, validated, and superseded before the
+workspace records project-specific claims, and contains the canonical artifact
+registry. An explicit bootstrap request grants authority to create this contract
+only. It is a human-readable Markdown file with a rigid, parseable registry
+section.
 _Avoid_: project brief, empty documentation tree, implied repository convention
 
 **Canonical Artifact Registry**:
@@ -57,12 +58,89 @@ canonical source and deterministic generation boundary. Every entry declares
 its canonical name and location, purpose, owner, stage trigger, required
 evidence, creation and update authority, provenance and freshness rule,
 supersession rule, generated/canonical status, and validation method.
+Each artifact type has exactly one canonical location; non-canonical copies
+must declare their relationship to it. Its initial classes are domain context,
+Work Objects, ADRs, plans/designs, Evidence Ledgers, runbooks, Verification
+Records, outcome reviews, and generated adapters. Its parseable YAML structure
+has a mandatory schema version and declares exact canonical locations for its
+own workspace.
 _Avoid_: generated document tree, evidence inventory, guessed path convention
+
+**Missing Artifact Gap**:
+The explicit state in which a registry-required artifact is absent from its
+canonical location. A skill must inspect, report the gap, recommend the minimum
+justified creation, and obtain scoped authority; it must not invent retrieval
+or contents.
+_Avoid_: implicit blank template, assumed project fact, silent file creation
+
+**Artifact Conflict**:
+A material disagreement between registered artifacts or revisions. A skill
+compares declared ownership, provenance, freshness, and canonical status, then
+surfaces the conflict for an accountable decision rather than silently
+reconciling it.
+_Avoid_: averaged conclusion, newest-file-wins, silent overwrite
+
+**Artifact Supersession**:
+The explicit relationship in which a current artifact identifies the exact
+predecessor it replaces and why. The predecessor remains readable but
+non-current.
+_Avoid_: destructive replacement, implicit deprecation, erased rationale
+
+**Documentation Contract Validation**:
+Behavioral verification of the registry against empty, docs-only, and
+code-without-docs workspaces, plus missing-reference, conflicting-record,
+stale-record, and partially-generated-adapter scenarios. Each scenario proves
+source discovery, no-hallucination behavior, and minimum-authority creation.
+_Avoid_: prose-only review, happy-path check, template existence test
+
+**Documentation Contract Custodian**:
+`conduct-work-object`, the sole skill authorized to discover, bootstrap,
+persist, or reconcile revisions to the Workspace Documentation Contract.
+Specialist skills may inspect it and recommend a mutation but may not perform
+one themselves. Direct specialist invocation routes to this custodian when the
+contract is absent or conflicted, then resumes with inherited evidence.
+_Avoid_: specialist-owned bootstrap, shared silent writer, direct contract edit
+
+**Artifact Stage Trigger**:
+The registered condition permitting an artifact to be created. It must be an
+explicit user intent, accepted decision, or registered evidence; agent-inferred
+project stage may recommend creation but cannot activate it.
+_Avoid_: guessed lifecycle state, convenient template creation, implied authority
+
+**Registry Architecture Change**:
+A change to the Canonical Artifact Registry's taxonomy or schema. It requires
+an ADR and explicit owner approval; ordinary evidence updates do not.
+_Avoid_: routine documentation edit, silent schema migration, adapter-only change
+
+**Artifact Freshness Rule**:
+The type-specific review trigger declared for a registered artifact. It reflects
+the artifact's own lifecycle rather than a universal documentation expiry
+period.
+_Avoid_: global TTL, newest-file assumption, permanent-current status
+
+**Claim Provenance**:
+The declared basis for a consequential artifact claim: observed system evidence,
+an accountable decision, attributable testimony, inference, or an explicit gap.
+A claim without provenance is not established project fact.
+_Avoid_: undocumented assertion, inferred certainty, anonymous source
+
+**Scoped Mutation Record**:
+The pre-execution record for a proposed artifact mutation. It names exact
+affected files, the authority source, any external effect, and the verification
+boundary.
+_Avoid_: blanket approval, unspecified write set, unverified documentation edit
+
+**Legacy Documentation Migration**:
+A separately authorized change that maps inspected pre-contract documents to
+registered canonical artifacts. Bootstrap never moves, renames, or imports
+legacy documents automatically.
+_Avoid_: silent reorganization, automatic import, implied canonicalization
 
 **Generated Adapter Artifact**:
 A deterministic, non-canonical copy derived from a registered source artifact
-for a target platform. It may be regenerated but is never directly edited as
-the authoritative source.
+for a target platform. It may be overwritten only by deterministic regeneration
+after source validation and drift checking, but is never directly edited as the
+authoritative source. Its cleanup requires separately scoped authority.
 _Avoid_: canonical skill, hand-maintained fork, source of record
 
 **Evidence Bridge**:
