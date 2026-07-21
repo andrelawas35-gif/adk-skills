@@ -19,10 +19,11 @@ Work Objects are not project management theater. They exist so that work
 can be paused, resumed, handed off, reviewed, and learned from without
 depending on any one person's memory or any one chat session's context.
 
-One Primary Work Object receives build or deployment effort at a time, with
-at most two Supporting Work Objects limited to inquiry, waiting, or
-maintenance. This is a provisional rule to be reviewed after five completed
-Work Objects.
+Exactly one Primary Work Object receives build or deployment effort at a
+time. The Primary slot is a genuine attention primitive — the conductor and
+all specialists need to know which object owns the current implementation
+pass. Supporting and other tracked-active objects have no numeric cap;
+the active.md register is advisory, not a concurrency constraint.
 
 ## Boundaries and non-goals
 
@@ -182,7 +183,7 @@ objects.
    - Title, type, status, state
    - `next_action`
    - Most recent History entries (last 3)
-   - Current hypothesis (if in Explore, Decide, or Design)
+   - Current hypothesis (if in Explore or Design)
    - Open questions
 4. Do NOT replay full history or evidence — the Work Object is the record.
 5. Route to the appropriate specialist based on state and next_action.
@@ -209,8 +210,8 @@ objects.
    id: <immutable-time-sortable-id>
    title: <human-readable-title>
    type: inquiry | project | change | incident
-   status: active | waiting | paused | blocked | closed
-   state: notice | frame | explore | decide | design | build | verify | release | observe | close
+  status: active | waiting | paused | closed
+  state: notice | explore | design | build | verify | release | observe | close
    consequence: low | meaningful | high
    sensitivity: ordinary | private | restricted
    created_at: <RFC-3339-timestamp>
@@ -244,9 +245,8 @@ Based on current state and next_action, route to the appropriate skill:
 
 | State | Typical route |
 |-------|---------------|
-| notice, frame | turn-signal-into-work |
+| notice | turn-signal-into-work |
 | explore | investigate-live-question |
-| decide | pressure-test-decision |
 | design | design-tracer-bullet |
 | build | implement-bounded-change |
 | verify | verify-release-evidence |
@@ -259,7 +259,17 @@ Object ID and the concrete question or task.
 
 ### 7. Manage attention
 
-`active.md` tracks the current Primary and Supporting objects:
+`active.md` is an advisory attention register, not a cardinality constraint.
+
+**Primary** names exactly one Work Object — the one receiving current build
+or deployment effort. This is a genuine attention primitive: every specialist
+needs to know which object owns the current implementation pass.
+
+**Supporting** lists all other active objects. There is no numeric cap.
+The register exists for discoverability and resumption, not concurrency
+enforcement.
+
+Template:
 
 ```markdown
 # Active Work Objects
@@ -273,8 +283,13 @@ Object ID and the concrete question or task.
 
 Update this file when:
 - A new Work Object becomes Primary (user confirms)
-- A Primary object is closed, paused, or blocked
-- Supporting objects are added or removed
+- A Primary object is closed, paused, or waiting
+- Any active object is added or removed from the register
+
+**Do not**:
+- Reject activation because a numeric cap is exceeded
+- Silently demote or omit active objects to fit a cap
+- Invent a priority-ordering scheme — ordering is the user's judgment
 
 Do not change Work Object identity to represent attention shifts.
 
@@ -288,7 +303,7 @@ Do not change Work Object identity to represent attention shifts.
 
 ## Adjacent Possibility behavior
 
-During Explore, Decide, or Design states, this skill may activate the
+During Explore or Design states, this skill may activate the
 Adjacent Possibility Pass as described in the planning document. This is
 delegated to the routed specialist, not performed by this skill directly.
 
@@ -328,7 +343,7 @@ After every interaction with a Work Object:
 **Terminate when:**
 - The Work Object is closed with a recorded outcome
 - The user explicitly ends the session
-- A blocking condition is recorded and the object is set to Blocked
+- A blocking condition is recorded and the object is set to Waiting
 
 ## Output template
 

@@ -4,6 +4,14 @@
 
 Accepted
 
+> **Partially superseded by ADR-0021** (2026-07-21): the consequence "adapter
+> generation copies the contract so installed skills use the same rules" is
+> narrowed. The behavioral rule (Missing Artifact Gap) now travels via a
+> standalone constitution file (`references/MISSING-ARTIFACT-GAP.md`) copied
+> into every adapter. The full contract document remains the authoritative
+> registry for artifact types, paths, and ownership — a lookup table for
+> `conduct-work-object` and `track-components`.
+
 ## Context
 
 Skills could discover similarly named documents inconsistently, invent project

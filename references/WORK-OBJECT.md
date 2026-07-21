@@ -11,8 +11,8 @@ schema_version: 1
 id: <immutable-time-sortable-id>
 title: Human-readable title
 type: inquiry | project | change | incident
-status: active | waiting | paused | blocked | closed
-state: notice | frame | explore | decide | design | build | verify | release | observe | close
+status: active | waiting | paused | closed
+state: notice | explore | design | build | verify | release | observe | close
 consequence: low | meaningful | high
 sensitivity: ordinary | private | restricted
 created_at: RFC-3339 timestamp
@@ -28,7 +28,7 @@ next_action: Concrete next move
 | `id` | Immutable. Time-sortable: `YYYY-MM-DD-NNN` where NNN is a zero-padded sequence number for the day. Example: `2026-07-15-001`. |
 | `title` | Human-readable. May change; references use `id`. |
 | `type` | Immutable after activation. One of: `inquiry`, `project`, `change`, `incident`. |
-| `status` | One of: `active`, `waiting`, `paused`, `blocked`, `closed`. |
+| `status` | One of: `active`, `waiting`, `paused`, `closed`. |
 | `state` | One lifecycle state. Flexible movement allowed. |
 | `consequence` | One of: `low`, `meaningful`, `high`. Governs required gates. |
 | `sensitivity` | One of: `ordinary`, `private`, `restricted`. Governs storage and export rules. |
@@ -41,7 +41,6 @@ next_action: Concrete next move
 | Field | Required when |
 |-------|---------------|
 | `revisit_trigger` | `status` is `waiting` or `paused` |
-| `closed_reason` | `status` is `closed` |
 
 ## File naming
 

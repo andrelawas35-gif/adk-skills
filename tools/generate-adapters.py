@@ -36,6 +36,7 @@ PLATFORMS = ["codex", "claude-code", "github-copilot"]
 SKILL_NAMESPACE = "alawas"
 SHARED_REFERENCES = [
     "../WORKSPACE-DOCUMENTATION-CONTRACT.md",
+    "MISSING-ARTIFACT-GAP.md",
     "AGREEMENT-LOOP.md",
     "SKILL-AWARE-GRILLING.md",
     "CAPABILITY-DEGRADATION.md",
