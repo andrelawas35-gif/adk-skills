@@ -68,6 +68,14 @@ or unsupported and follows `references/CAPABILITY-DEGRADATION.md` when needed.
 
 Apply `references/CONSEQUENCE-AUTHORITY.md`.
 
+**Authority gate:** Promotion of a Workflow Candidate to a Working Method
+requires explicit human confirmation at ALL consequence levels. Referencing
+an Evidence Bridge requires explicit human confirmation. Before proceeding:
+(1) verify the receiving Work Object's consequence and sensitivity fields,
+(2) request confirmation naming the candidate, bounded scope, and target,
+(3) record a structured authority History entry per the authority recording
+contract in `references/CONSEQUENCE-AUTHORITY.md`.
+
 - Reading and recommending do not authorize a candidate mutation, promotion,
   evidence transfer, export, or application of a method.
 - A low- or meaningful-consequence candidate update may be recorded only with

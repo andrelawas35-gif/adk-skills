@@ -1,36 +1,31 @@
 # Evidence Model
 
-Evidence is categorized into provenance lanes. Memory retrieves records into
-these lanes; memory is not itself evidence.
-
-## Provenance lanes
-
-| Lane | Definition | Examples |
-|------|------------|----------|
-| **Lived Evidence** | Dated observations, conversations, field encounters, direct experience | User reports, observed behavior, personal notes |
-| **Source Evidence** | Papers, documentation, laws, records, attributable external material | API docs, specifications, legal texts, research papers |
-| **System Evidence** | Code, tests, logs, metrics, browser checks, deployment results | Test output, type errors, build logs, runtime metrics |
-| **Inference** | Interpretation connecting available evidence | "Based on A and B, we infer C" |
-| **Decision** | A human-owned choice with alternatives, rationale, and revisit trigger | Architecture decisions, design choices, scope decisions |
-
-## Rules
-
-1. Every factual claim must carry a provenance marker: `[lived]`, `[source]`, `[system]`, `[inference]`, or `[decision]`.
-2. Inference must be clearly distinguished from direct evidence.
-3. Uncertainty must be stated explicitly: "The paper says X [source], but the sample size is small."
-4. Decisions record alternatives considered, rationale, and revisit triggers.
-5. Do not launder inference as source evidence.
+This document describes how evidence entries attach to a persisted Work
+Object's Evidence ledger section. For the canonical provenance tag taxonomy
+and rules governing tag usage, see `references/AGREEMENT-LOOP.md` (lines
+96-111), which is the single authoritative source for tag definitions and
+the laundering guard.
 
 ## In the Work Object
 
-The Evidence ledger section in a Work Object body records entries as:
+Evidence ledger entries use an inline-tag convention:
 
-```markdown
-### YYYY-MM-DD — <summary>
-
-- **Provenance**: lived | source | system | inference | decision
-- **Claim**: What is asserted
-- **Source**: Attribution (person, document, system, reasoning chain)
-- **Confidence**: high | medium | low
-- **Corroboration**: Supporting or contradicting evidence
 ```
+- <ISO8601 timestamp> — [tag] <free text>
+```
+
+Where `[tag]` is one of: `[system]`, `[decision]`, `[inference]`, `[gap]`,
+`[testimony]`, or `[memory]` — as defined in `AGREEMENT-LOOP.md`. No
+structured fields (`**Provenance**:`, `**Claim**:`, `**Source**:`,
+`**Confidence**:`, `**Corroboration**:`) are used in real Work Objects;
+the inline-tag convention is the canonical format.
+
+The Evidence ledger is append-only (ADR 0017, widened by ADR 0022).
+Correction happens by appending a new entry, never by editing an existing
+one. Timestamps must be unique at whole-second precision within a Work
+Object.
+
+Evidence entries carry provenance markers at capture time — what is known
+now, not what might be known later. The producer writes a tag and free text
+without needing confidence, corroboration, or structured field values that
+may not be available at the moment of observation.

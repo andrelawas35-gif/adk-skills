@@ -159,23 +159,36 @@ class GeneratorContract(unittest.TestCase):
         self.assertEqual(len(descriptions), len(core_skill_names()))
 
     def test_installed_conductor_contains_the_minimum_work_object_schema(self):
-        required_fields = [
-            "schema_version: 1",
-            "id: <immutable-time-sortable-id>",
-            "title: <human-readable-title>",
-            "type: inquiry | project | change | incident",
-            "status: active | waiting | paused | blocked | closed",
-            "state: notice | frame | explore | decide | design | build | verify | release | observe | close",
-            "consequence: low | meaningful | high",
-            "sensitivity: ordinary | private | restricted",
-            "created_at: <RFC-3339-timestamp>",
-            "updated_at: <RFC-3339-timestamp>",
-            "next_action: <concrete-next-move>",
-        ]
+        """Conductor delegates creation to ws CLI; schema lives in WORK-OBJECT.md and schema.py.
+
+        The conductor adapter must reference the CLI create command, and the
+        schema fields must be discoverable from WORK-OBJECT.md or the CLI.
+        """
+        # Verify the conductor references ws create (the new write path)
         for platform in PLATFORMS:
             adapter = adapter_file(platform, "conduct-work-object").read_text()
-            for field in required_fields:
-                self.assertIn(field, adapter, f"{platform}: missing {field}")
+            self.assertTrue(
+                "ws create" in adapter or "tools.ws" in adapter,
+                f"{platform}: conductor should reference ws CLI for creation"
+            )
+
+        # Verify WORK-OBJECT.md contains the minimum schema
+        wo_md = (ROOT / "references" / "WORK-OBJECT.md").read_text()
+        schema_fields = [
+            "schema_version",
+            "id:",
+            "title:",
+            "type:",
+            "status:",
+            "state:",
+            "consequence:",
+            "sensitivity:",
+            "created_at:",
+            "updated_at:",
+            "next_action:",
+        ]
+        for field in schema_fields:
+            self.assertIn(field, wo_md, f"WORK-OBJECT.md missing field: {field}")
 
     def test_high_consequence_objects_cannot_be_staged_without_confirmation(self):
         required = (
@@ -195,6 +208,60 @@ class GeneratorContract(unittest.TestCase):
         for platform in PLATFORMS:
             adapter = adapter_file(platform, "pressure-test-decision").read_text()
             self.assertIn(local_flow, " ".join(adapter.split()))
+
+    def test_gated_skills_have_inline_authority_blocks(self):
+        """Every skill that describes gated actions must have an inline
+        authority gate block referencing CONSEQUENCE-AUTHORITY.md (Decision 57).
+
+        The test checks both the core source and all generated adapters.
+        """
+        gated_skills = {
+            "conduct-work-object",
+            "deploy-with-recovery",
+            "implement-bounded-change",
+            "verify-release-evidence",
+            "review-outcome-and-adapt",
+            "diagnose-production-incident",
+            "maintain-working-method",
+            "govern-scorecards",
+        }
+        authority_marker = "**Authority gate:**"
+        reference_marker = "CONSEQUENCE-AUTHORITY.md"
+
+        # Core skills must have inline authority blocks
+        for skill in gated_skills:
+            core_text = (CORE_DIR / skill / "SKILL.md").read_text()
+            self.assertIn(
+                authority_marker, core_text,
+                f"core/{skill}: missing inline authority gate block"
+            )
+            self.assertIn(
+                reference_marker, core_text,
+                f"core/{skill}: authority gate does not reference CONSEQUENCE-AUTHORITY.md"
+            )
+
+        # Generated adapters must propagate authority blocks
+        for platform in PLATFORMS:
+            for skill in gated_skills:
+                adapter = adapter_file(platform, skill).read_text()
+                self.assertIn(
+                    authority_marker, adapter,
+                    f"{platform}/{skill}: authority gate missing in adapter"
+                )
+                self.assertIn(
+                    reference_marker, adapter,
+                    f"{platform}/{skill}: authority gate missing CONSEQUENCE-AUTHORITY.md ref"
+                )
+
+        # Non-gated skills should NOT have authority blocks (prevent scope creep)
+        all_skills = set(core_skill_names())
+        non_gated = all_skills - gated_skills
+        for skill in non_gated:
+            core_text = (CORE_DIR / skill / "SKILL.md").read_text()
+            self.assertNotIn(
+                authority_marker, core_text,
+                f"core/{skill}: has authority gate but is not in gated-skills list"
+            )
 
     def test_installed_skills_include_their_declared_references(self):
         references = [

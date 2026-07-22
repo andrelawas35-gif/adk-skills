@@ -404,6 +404,51 @@ def extract_body(filepath):
     return text
 
 
+# ── Authority block validation ────────────────────────────────────────────────
+
+# Skills that describe gated actions and MUST have inline authority blocks
+# referencing CONSEQUENCE-AUTHORITY.md at their action points.
+# Per Decision 57 (Grilling Session 8): authority checks must be inlined at
+# the exact point where an irreversible or gated action is described.
+AUTHORITY_GATED_SKILLS = {
+    "conduct-work-object",
+    "deploy-with-recovery",
+    "implement-bounded-change",
+    "verify-release-evidence",
+    "review-outcome-and-adapt",
+    "diagnose-production-incident",
+    "maintain-working-method",
+    "govern-scorecards",
+}
+
+
+def validate_authority_blocks():
+    """Check that every gated skill has an inline authority block.
+
+    Returns list of (skill_name, error_message) for each missing block.
+    An authority block is identified by the pattern:
+        **Authority gate:** ... references/CONSEQUENCE-AUTHORITY.md
+    """
+    errors = []
+    for skill_dir in sorted(CORE_DIR.iterdir()):
+        if not skill_dir.is_dir():
+            continue
+        skill_name = skill_dir.name
+        if skill_name not in AUTHORITY_GATED_SKILLS:
+            continue
+        skill_file = skill_dir / "SKILL.md"
+        if not skill_file.exists():
+            errors.append((skill_name, "SKILL.md not found"))
+            continue
+        body = skill_file.read_text()
+        if "**Authority gate:**" not in body:
+            errors.append((skill_name, "missing inline authority gate block"))
+        elif "CONSEQUENCE-AUTHORITY.md" not in body:
+            errors.append((skill_name,
+                          "authority gate present but does not reference CONSEQUENCE-AUTHORITY.md"))
+    return errors
+
+
 # ── Generation ────────────────────────────────────────────────────────────────
 
 def adapter_skill_name(core_skill_name):
@@ -658,6 +703,16 @@ def main():
             print(f"\n[{platform}]")
             if not check_platform(platform):
                 all_clean = False
+        # Validate authority blocks in core skills
+        auth_errors = validate_authority_blocks()
+        if auth_errors:
+            print("\n[authority-blocks]")
+            for skill, err in auth_errors:
+                print(f"  FAIL: {skill}: {err}")
+            all_clean = False
+        else:
+            print("\n[authority-blocks]")
+            print("  OK: all gated skills have inline authority blocks")
         if all_clean:
             print("\nAll generated files match. No drift detected.")
             sys.exit(0)
@@ -665,6 +720,14 @@ def main():
             print("\nDRIFT DETECTED. Run 'python3 tools/generate-adapters.py' to regenerate.")
             sys.exit(1)
     else:
+        # Validate authority blocks before generating
+        auth_errors = validate_authority_blocks()
+        if auth_errors:
+            print("Authority block validation failed:")
+            for skill, err in auth_errors:
+                print(f"  FAIL: {skill}: {err}")
+            print("Add inline authority gate blocks before regenerating.")
+            sys.exit(1)
         print("Generating adapters...")
         for platform in PLATFORMS:
             print(f"\n[{platform}]")

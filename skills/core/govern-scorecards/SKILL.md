@@ -58,6 +58,13 @@ unsupported and follows `references/CAPABILITY-DEGRADATION.md` when needed.
 
 Apply `references/CONSEQUENCE-AUTHORITY.md`.
 
+**Authority gate:** Proposing a Workflow Candidate that would change a
+workflow rule requires explicit human confirmation at ALL consequence levels.
+Before proceeding: (1) verify the receiving Work Object's consequence and
+sensitivity fields, (2) request confirmation naming the proposed rule and
+scope, (3) record a structured authority History entry per the authority
+recording contract in `references/CONSEQUENCE-AUTHORITY.md`.
+
 - A scorecard may recommend one bounded next move but never changes a workflow
   rule directly.
 - A proposed rule remains an unconfirmed Workflow Candidate until the existing

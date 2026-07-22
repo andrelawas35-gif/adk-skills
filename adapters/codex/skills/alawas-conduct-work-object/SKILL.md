@@ -96,6 +96,11 @@ Apply the rules in `references/CONSEQUENCE-AUTHORITY.md`:
 - Creating or updating a Work Object of **low** or **meaningful** consequence:
   proceed, append History.
 - Creating or updating a Work Object of **high** consequence: ask first.
+- Writing **restricted-sensitivity** content to a Work Object body: ask first,
+  regardless of consequence level. The restricted-content pointer-only rule
+  (link to protected sources, never store restricted material directly) is
+  the substantive prohibition — this gate ensures the agent encounters it
+  before writing.
 - For a high-consequence Work Object, confirmation must name the specific
   proposed mutation. Generic instructions such as `just execute`, `do
   recommended`, or `perform the next update` are not confirmation. Do not
@@ -190,54 +195,119 @@ objects.
 
 ### 4. Create Work Object
 
+**Authority gate:** Creating a Work Object at `high` consequence requires
+explicit human confirmation. Before proceeding: (1) verify the consequence
+and sensitivity fields, (2) request confirmation naming the action and scope,
+(3) record a structured authority History entry per the authority recording
+contract in `references/CONSEQUENCE-AUTHORITY.md`.
+
 1. Determine or ask for:
    - `type`: inquiry, project, change, or incident
    - `consequence`: low, meaningful, or high
    - `sensitivity`: ordinary, private, or restricted
-2. Generate the immutable ID: `YYYY-MM-DD-NNN` where NNN is the next
-   zero-padded sequence number for the day. Scan existing objects to avoid
-   collisions.
-3. Create the file at `.work-studio/objects/YYYY/MM/<id>-<slug>.md`.
-4. Populate frontmatter with all required fields. Set:
-   - `state`: `notice` (initial state)
-   - `status`: `active` (unless explicitly waiting)
-   - `created_at` and `updated_at`: now (RFC-3339)
-   Use this minimum schema so the installed skill remains self-contained:
 
-   ```yaml
-   ---
-   schema_version: 1
-   id: <immutable-time-sortable-id>
-   title: <human-readable-title>
-   type: inquiry | project | change | incident
-  status: active | waiting | paused | closed
-  state: notice | explore | design | build | verify | release | observe | close
-   consequence: low | meaningful | high
-   sensitivity: ordinary | private | restricted
-   created_at: <RFC-3339-timestamp>
-   updated_at: <RFC-3339-timestamp>
-   next_action: <concrete-next-move>
-   ---
+2. Run the deterministic CLI to create the Work Object:
+
+   ```sh
+   python3 -m tools.ws create \
+     --title "<human-readable-title>" \
+     --type <type> \
+     --consequence <consequence> \
+     --sensitivity <sensitivity>
    ```
-5. Populate body with stub sections for Intent, Success evidence, Constraints
-   and non-goals, Evidence ledger, Open questions, Next move, History. Add the
-   `Grilling Session` section only when the Agreement Loop activates.
-6. Append the creation History entry.
-7. Update `active.md` if this is the first active object or the user confirms
-   it as Primary.
+
+   The CLI handles: immutable ID allocation with collision detection, YAML
+   frontmatter generation with validated enums, body template with 7 required
+   sections plus structured Decisions template, file write to the correct
+   `objects/YYYY/MM/<id>-<slug>.md` path. It prints the created file path and
+   allocated ID.
+
+3. Append the creation History entry:
+
+   ```sh
+   python3 -m tools.ws append-history <id> \
+     --action "Created" \
+     --state notice \
+     --status active \
+     --actor "<platform>" \
+     --rationale "<creation rationale>" \
+     --expect-updated <updated_at>
+   ```
+
+4. Update `active.md` if this is the first active object or the user confirms
+   it as Primary:
+
+   ```sh
+   python3 -m tools.ws activate <id> \
+     --role primary \
+     --expect-updated <updated_at>
+   ```
 
 ### 5. Update Work Object
 
+**Authority gate:** Writing restricted-sensitivity content to a Work Object
+body requires explicit human confirmation at ALL consequence levels. Modifying
+frontmatter `status` or `state` at `high` consequence requires explicit human
+confirmation. Before proceeding: (1) verify the Work Object's consequence and
+sensitivity fields, (2) request confirmation naming the action and scope,
+(3) record a structured authority History entry per the authority recording
+contract in `references/CONSEQUENCE-AUTHORITY.md`.
+
+All `.work-studio/` file mutations go through the deterministic CLI
+(`python3 -m tools.ws`). The CLI enforces optimistic concurrency, lifecycle
+rules, and schema validation. Every write command except `ws create` and
+`ws init` requires `--expect-updated`.
+
 On any meaningful transition:
 
-1. Read the current file to get `updated_at`.
-2. Prepare changes.
-3. Re-read the file. If `updated_at` changed since step 1, report the conflict
-   and stop.
-4. Write the changes.
-5. Update `updated_at` to now.
-6. Append a History entry with timestamp, action, resulting state, actor type,
-   platform, and rationale.
+1. Read the current file to get `updated_at` from the YAML frontmatter.
+2. Choose the appropriate CLI command for the change:
+
+   **State/status transitions:**
+   ```sh
+   python3 -m tools.ws transition <id> \
+     --state <target-state> \
+     --status <target-status> \
+     --expect-updated <current-updated_at> \
+     --action "<description>" \
+     --actor "<platform>" \
+     --rationale "<reason>"
+   ```
+
+   **Closing a Work Object:**
+   ```sh
+   python3 -m tools.ws close <id> \
+     --expect-updated <current-updated_at> \
+     --rationale "<reason>"
+   ```
+
+   **Appending History (without state change):**
+   ```sh
+   python3 -m tools.ws append-history <id> \
+     --action "<description>" \
+     --state <current-state> \
+     --status <current-status> \
+     --actor "<platform>" \
+     --rationale "<reason>" \
+     --expect-updated <current-updated_at>
+   ```
+
+   **Appending Evidence:**
+   ```sh
+   python3 -m tools.ws append-evidence <id> \
+     --tag "[system]|[decision]|[inference]|[observed]|[lived]|[claimed]|[inferred]" \
+     --source "<source>" \
+     --text "<entry>" \
+     --expect-updated <current-updated_at>
+   ```
+
+3. For `next_action` updates and body section edits not covered by append
+   commands, edit the file directly — but always use `--expect-updated` from
+   the CLI for any subsequent mutation.
+
+4. The CLI handles `updated_at` updates, History appends, and concurrency
+   checks automatically. If the CLI rejects with a concurrency error, re-read
+   the file to get the new `updated_at` and retry.
 
 ### 6. Route to specialist
 
@@ -292,6 +362,17 @@ Update this file when:
 - Invent a priority-ordering scheme — ordering is the user's judgment
 
 Do not change Work Object identity to represent attention shifts.
+
+Use the CLI to manage attention:
+
+```sh
+python3 -m tools.ws activate <id> \
+  --role primary|supporting|paused \
+  --expect-updated <current-updated_at>
+```
+
+The CLI cross-checks that the object exists and is not closed before
+updating `active.md`.
 
 ## Evidence rules
 

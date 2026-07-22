@@ -106,12 +106,16 @@ Work Studio needs a short, always-loaded constitution.
    principle is relied on without a filename reference).
 3. Constitution membership requires direct textual grounding — an existing,
    locatable sentence in the corpus — not synthesis or invention. Of 8
-   illustrative candidates, only 4 clear this bar:
-   - "preserve provenance" (`EVIDENCE-MODEL.md:18`)
-   - "never launder inference" (`EVIDENCE-MODEL.md:22`, exact match)
+   illustrative candidates, only 3 clear this bar:
+   - "preserve provenance" (`EVIDENCE-MODEL.md:18`, referent now in AGREEMENT-LOOP.md after Grilling Session 7 rewrite)
    - "never claim unavailable capability" (`CAPABILITY-DEGRADATION.md:4-6`)
    - "missing artifact is a gap, not permission to invent"
      (`WORKSPACE-DOCUMENTATION-CONTRACT.md:4-6`, near-verbatim)
+   The "never launder inference as source evidence" candidate
+   (`EVIDENCE-MODEL.md:22`) was dropped by Grilling Session 7 (Decision 1)
+   when the source sentence was removed from `EVIDENCE-MODEL.md`. The
+   laundering guard now lives in `AGREEMENT-LOOP.md:108-110` and may be
+   re-nominated in a future session.
 4. Constitution entries are pinned by source-line checksum, not file-version
    comparison — 2 of the 4 source files have no version field, and ADR-0005
    confirms versioning was only ever meant for the cross-package boundary

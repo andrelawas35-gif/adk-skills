@@ -102,9 +102,9 @@ Rejected because: the user explicitly chooses sensitivity at creation time — t
 
 ## Enforcement
 
-Current enforcement: documented and wired in prose. The Authority gates table in `CONSEQUENCE-AUTHORITY.md` will include the sensitivity row. The conductor skill's authority-check behavior will reference it. No machine enforcement exists.
+Current enforcement: documented and wired in prose. The Authority gates table in `CONSEQUENCE-AUTHORITY.md` includes the sensitivity row. The conductor skill's authority-check behavior references it. Additionally, `ws validate sensitivity` scans Work Object bodies for restricted-content patterns and reports warnings.
 
-Planned enforcement: the future CLI's write path will check sensitivity before allowing body mutation. Until the CLI exists, enforcement depends on agent prose-compliance — same as every other authority rule in the system (Decision 45).
+CLI-level enforcement: `ws validate sensitivity` provides structural detection of restricted keywords in restricted-sensitivity objects. Full write-time gating (refusing the write) is deferred until the sensitivity check is promoted from validation to enforcement.
 
 ## Validation
 

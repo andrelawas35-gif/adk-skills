@@ -73,6 +73,13 @@ unsupported and follows `references/CAPABILITY-DEGRADATION.md` when needed.
 
 Apply `references/CONSEQUENCE-AUTHORITY.md`.
 
+**Authority gate:** Deployment, export, and external writes require explicit
+human confirmation at ALL consequence levels. Before proceeding: (1) verify
+the Work Object's consequence and sensitivity fields, (2) request confirmation
+naming the target, bounded increment, and permitted access, (3) record a
+structured authority History entry per the authority recording contract in
+`references/CONSEQUENCE-AUTHORITY.md`.
+
 - Deployment requires explicit deployment authority for every target and
   increment; prior verification does not authorize production access.
 - Read the authority and platform runbook together before acting. If their

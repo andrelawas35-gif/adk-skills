@@ -1,0 +1,27 @@
+# Constitutional Files List
+#
+# Files on this list require a linked authority record in the commit message
+# or a CONSTITUTIONAL-OVERRIDE: tag when modified.
+#
+# This file is itself constitutionally protected — modifications to the list
+# require the same authority as modifications to any file on it.
+#
+# Established: 2026-07-21 (Decision 62, Grilling Session 8)
+# Plan: docs/design/authority-sensitivity-component-plan.md
+#
+# Format: one relative path per line, from repository root.
+# Lines starting with # are comments.
+
+.work-studio/constitutional-files.list
+.work-studio/config.md
+references/CONSEQUENCE-AUTHORITY.md
+references/AGREEMENT-LOOP.md
+references/EVIDENCE-MODEL.md
+references/CAPABILITY-DEGRADATION.md
+WORKSPACE-DOCUMENTATION-CONTRACT.md
+VERSION
+tools/pre-commit
+tools/generate-adapters.py
+tools/verify-conformance.py
+tools/verify-append-only.py
+skills/core/conduct-work-object/SKILL.md

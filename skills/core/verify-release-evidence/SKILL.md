@@ -65,6 +65,13 @@ unsupported and follows `references/CAPABILITY-DEGRADATION.md` when needed.
 
 Apply `references/CONSEQUENCE-AUTHORITY.md`.
 
+**Authority gate:** Verification steps that access production, secrets, or
+external systems require explicit human confirmation at ALL consequence
+levels. Before proceeding: (1) verify the Work Object's consequence and
+sensitivity fields, (2) request confirmation naming the verification step
+and the boundary it crosses, (3) record a structured authority History entry
+per the authority recording contract in `references/CONSEQUENCE-AUTHORITY.md`.
+
 - Evidence must be proportionate: low-consequence changes need direct evidence
   for the accepted path and its material failure behavior; meaningful or high-
   consequence changes additionally require the relevant recovery, dependency,

@@ -63,6 +63,14 @@ unsupported and follows `references/CAPABILITY-DEGRADATION.md` when needed.
 
 Apply `references/CONSEQUENCE-AUTHORITY.md`.
 
+**Authority gate:** Writing files outside `.work-studio/` and the accepted
+bounded path requires explicit human confirmation. Destructive operations
+(delete, reset, force-push) require explicit human confirmation at ALL
+consequence levels. Before proceeding: (1) verify the Work Object's
+consequence and sensitivity fields, (2) request confirmation naming the
+action and scope, (3) record a structured authority History entry per the
+authority recording contract in `references/CONSEQUENCE-AUTHORITY.md`.
+
 - Recorded acceptance authorizes only the stated tracer-bullet implementation;
   it does not authorize a deviation, scope expansion, deployment, export, or
   unrelated cleanup.

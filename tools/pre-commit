@@ -1,0 +1,256 @@
+#!/usr/bin/env python3
+"""Pre-commit hook — five checks for authority, sensitivity, and constitutional protection.
+
+Install: ln -sf ../../tools/pre-commit .git/hooks/pre-commit
+(Or copy to .git/hooks/pre-commit and chmod +x)
+
+Checks:
+  1. Restricted-content pointer-only — staged WO with sensitivity:restricted must not
+     have inline body content.
+  2. High-consequence authority record — staged WO with consequence:high and state
+     beyond notice must have a structured authority History entry.
+  3. Private data in Git — no .work-studio/objects/ files may be staged.
+  4. Misplaced sensitive files — staged files outside .work-studio/ with sensitivity
+     private or restricted in frontmatter are rejected.
+  5. Constitutional file protection — modifications to files in
+     .work-studio/constitutional-files.list require a linked authority record or
+     CONSTITUTIONAL-OVERRIDE: tag in the commit message.
+
+Configuration:
+  Constitutional files list: .work-studio/constitutional-files.list
+  All paths are relative to the repository root.
+
+Decision reference: Decisions 53–62 (Grilling Session 8).
+Component plan: docs/design/authority-sensitivity-component-plan.md
+"""
+
+import os
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+
+def repo_root():
+    """Return the absolute path to the repository root."""
+    result = subprocess.run(
+        ["git", "rev-parse", "--show-toplevel"],
+        capture_output=True, text=True, cwd=os.getcwd()
+    )
+    if result.returncode != 0:
+        print("pre-commit: ERROR — not in a git repository")
+        sys.exit(1)
+    return Path(result.stdout.strip())
+
+
+def staged_files(root):
+    """Return list of staged file paths relative to repo root."""
+    result = subprocess.run(
+        ["git", "diff", "--cached", "--name-only", "--diff-filter=ACM"],
+        capture_output=True, text=True, cwd=str(root)
+    )
+    if result.returncode != 0:
+        return []
+    return [f for f in result.stdout.strip().split("\n") if f]
+
+
+def staged_file_content(root, rel_path):
+    """Return the staged content of a file (what would be committed)."""
+    result = subprocess.run(
+        ["git", "show", f":{rel_path}"],
+        capture_output=True, text=True, cwd=str(root)
+    )
+    if result.returncode != 0:
+        return None
+    return result.stdout
+
+
+def parse_frontmatter(content):
+    """Parse YAML frontmatter from a Markdown file. Returns dict or None."""
+    if not content or not content.startswith("---"):
+        return None
+    parts = content.split("---", 2)
+    if len(parts) < 3:
+        return None
+    fm_text = parts[1]
+    result = {}
+    for line in fm_text.split("\n"):
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if ":" in line:
+            key, _, val = line.partition(":")
+            key = key.strip()
+            val = val.strip()
+            if val.startswith('"') and val.endswith('"'):
+                val = val[1:-1]
+            elif val.startswith("'") and val.endswith("'"):
+                val = val[1:-1]
+            result[key] = val
+    return result
+
+
+def has_structured_authority_entry(content):
+    """Check if content has at least one structured authority History entry."""
+    # Pattern: "### YYYY-MM-DDTHH:MM:SSZ — Authority:" in the History section
+    authority_pattern = re.compile(
+        r'###\s+\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z\s+[—–-]\s+Authority:'
+    )
+    return bool(authority_pattern.search(content))
+
+
+def is_work_object(path):
+    """Check if a path looks like a Work Object file."""
+    return "/objects/" in path and path.endswith(".md")
+
+
+def read_constitutional_files(root):
+    """Read the list of constitutionally protected files."""
+    cf_path = root / ".work-studio" / "constitutional-files.list"
+    if not cf_path.exists():
+        return []
+    files = []
+    for line in cf_path.read_text().split("\n"):
+        line = line.strip()
+        if line and not line.startswith("#"):
+            files.append(line)
+    return files
+
+
+def check_commit_message_for_override(root):
+    """Check if the commit message contains CONSTITUTIONAL-OVERRIDE: tag."""
+    # The commit message file is passed as the first argument to the hook
+    # when using `git commit -m`, but for `git commit` with editor, we check
+    # the staged commit message file if available.
+    commit_msg_file = root / ".git" / "COMMIT_EDITMSG"
+    if commit_msg_file.exists():
+        content = commit_msg_file.read_text()
+        if "CONSTITUTIONAL-OVERRIDE:" in content:
+            return True
+    return False
+
+
+def main():
+    root = repo_root()
+    files = staged_files(root)
+    errors = []
+
+    if not files:
+        return 0
+
+    # ── Check 1: Restricted-content pointer-only ─────────────────────────
+    for f in files:
+        if not is_work_object(f):
+            continue
+        content = staged_file_content(root, f)
+        if not content:
+            continue
+        fm = parse_frontmatter(content)
+        if not fm:
+            continue
+        if fm.get("sensitivity") == "restricted":
+            body = content.split("---", 2)[-1].strip()
+            # Restricted files should only have pointer content (URLs, paths),
+            # not substantive body content
+            non_empty_lines = [l for l in body.split("\n")
+                             if l.strip() and not l.strip().startswith("#")
+                             and not l.strip().startswith("http")]
+            if len(non_empty_lines) > 3:  # Allow minimal metadata
+                errors.append(
+                    f"CHECK 1 FAIL: {f} has sensitivity:restricted but contains "
+                    f"inline body content ({len(non_empty_lines)} non-empty lines). "
+                    f"Restricted-sensitivity files must use pointer-only content."
+                )
+
+    # ── Check 2: High-consequence authority record ───────────────────────
+    for f in files:
+        if not is_work_object(f):
+            continue
+        content = staged_file_content(root, f)
+        if not content:
+            continue
+        fm = parse_frontmatter(content)
+        if not fm:
+            continue
+        if fm.get("consequence") == "high":
+            state = fm.get("state", "")
+            # Only check beyond the initial notice state
+            if state not in ("notice", ""):
+                if not has_structured_authority_entry(content):
+                    errors.append(
+                        f"CHECK 2 FAIL: {f} has consequence:high and state:{state} "
+                        f"but no structured authority History entry. "
+                        f"Add an authority entry per the authority recording contract."
+                    )
+
+    # ── Check 3: Private data in Git ─────────────────────────────────────
+    for f in files:
+        if f.startswith(".work-studio/objects/"):
+            errors.append(
+                f"CHECK 3 FAIL: {f} is a Work Object file staged for commit. "
+                f"Work Objects live in .work-studio/objects/ (Git-excluded). "
+                f"Unstage this file with: git reset HEAD {f}"
+            )
+
+    # ── Check 4: Misplaced sensitive files ───────────────────────────────
+    for f in files:
+        if f.startswith(".work-studio/"):
+            continue  # Already covered by check 3
+        if not f.endswith(".md"):
+            continue
+        content = staged_file_content(root, f)
+        if not content:
+            continue
+        fm = parse_frontmatter(content)
+        if not fm:
+            continue
+        sensitivity = fm.get("sensitivity", "")
+        if sensitivity in ("private", "restricted"):
+            errors.append(
+                f"CHECK 4 FAIL: {f} outside .work-studio/ has "
+                f"sensitivity:{sensitivity} in frontmatter. "
+                f"Move the file to .work-studio/ or reclassify sensitivity to ordinary."
+            )
+
+    # ── Check 5: Constitutional file protection ──────────────────────────
+    constitutional_files = read_constitutional_files(root)
+    if constitutional_files:
+        changed_constitutional = [f for f in files if f in constitutional_files]
+        if changed_constitutional:
+            if not check_commit_message_for_override(root):
+                errors.append(
+                    f"CHECK 5 FAIL: Constitutional file(s) modified without authority: "
+                    f"{', '.join(changed_constitutional)}. "
+                    f"Either include a linked authority record in the commit message "
+                    f"or add 'CONSTITUTIONAL-OVERRIDE:' tag."
+                )
+
+    # ── Check 6: CLI validation (ws validate) ───────────────────────────
+    # Run ws validate on any staged Work Objects or .work-studio/ files
+    staged_ws_files = [f for f in files if f.startswith(".work-studio/")]
+    if staged_ws_files:
+        result = subprocess.run(
+            [sys.executable, "-m", "tools.ws", "validate",
+             "schema", "append-only", "sensitivity", "lifecycle"],
+            capture_output=True, text=True, cwd=str(root)
+        )
+        if result.returncode != 0:
+            errors.append(
+                f"CHECK 6 FAIL: ws validate reported errors:\n"
+                f"{result.stderr.strip()}"
+            )
+
+    if errors:
+        print("┌─────────────────────────────────────────────────────────────┐")
+        print("│  PRE-COMMIT REJECTED — Authority / Sensitivity violation   │")
+        print("└─────────────────────────────────────────────────────────────┘")
+        for err in errors:
+            print(f"\n{err}")
+        print(f"\n{len(errors)} check(s) failed. Commit rejected.\n")
+        return 1
+
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

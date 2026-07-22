@@ -7,7 +7,7 @@
     {
       "name": "alawas-conduct-work-object",
       "path": "adapters/claude-code/skills/alawas-conduct-work-object/SKILL.md",
-      "sha256": "39058d4e0ef535b9133af2f89e1c5af09e21a2fbfcc3d463444379703e86ab35"
+      "sha256": "786365919d95ad1ffd056319fabfbfaf441ebaa1d3c4c816ffb6d3e3da3f5dc0"
     },
     {
       "name": "alawas-conduct-work-object/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
@@ -37,12 +37,12 @@
     {
       "name": "alawas-conduct-work-object/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/claude-code/skills/alawas-conduct-work-object/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "ff61f7796626f48d2036633b4faf76dcfd7233a24ee8e2b53d4a7080df9020a0"
+      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     },
     {
       "name": "alawas-conduct-work-object/references/EVIDENCE-MODEL.md",
       "path": "adapters/claude-code/skills/alawas-conduct-work-object/references/EVIDENCE-MODEL.md",
-      "sha256": "5e3ccd05bb7ff08015c9402cb5c708d83706b8c79dcb8546e1217a1528091141"
+      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
       "name": "alawas-conduct-work-object/references/SHARED-PROTOCOL.md",
@@ -52,7 +52,7 @@
     {
       "name": "alawas-deploy-with-recovery",
       "path": "adapters/claude-code/skills/alawas-deploy-with-recovery/SKILL.md",
-      "sha256": "9c2102d58c7f480c3bd4a035c2a1ce7aea8f87e4f18366b610c69c153872f847"
+      "sha256": "ebc5ba56cc24de9299db2296507f6078840d2e5bea282cc66a337903bc48154c"
     },
     {
       "name": "alawas-deploy-with-recovery/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
@@ -82,12 +82,12 @@
     {
       "name": "alawas-deploy-with-recovery/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/claude-code/skills/alawas-deploy-with-recovery/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "ff61f7796626f48d2036633b4faf76dcfd7233a24ee8e2b53d4a7080df9020a0"
+      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     },
     {
       "name": "alawas-deploy-with-recovery/references/EVIDENCE-MODEL.md",
       "path": "adapters/claude-code/skills/alawas-deploy-with-recovery/references/EVIDENCE-MODEL.md",
-      "sha256": "5e3ccd05bb7ff08015c9402cb5c708d83706b8c79dcb8546e1217a1528091141"
+      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
       "name": "alawas-deploy-with-recovery/references/SHARED-PROTOCOL.md",
@@ -127,12 +127,12 @@
     {
       "name": "alawas-design-tracer-bullet/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/claude-code/skills/alawas-design-tracer-bullet/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "ff61f7796626f48d2036633b4faf76dcfd7233a24ee8e2b53d4a7080df9020a0"
+      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     },
     {
       "name": "alawas-design-tracer-bullet/references/EVIDENCE-MODEL.md",
       "path": "adapters/claude-code/skills/alawas-design-tracer-bullet/references/EVIDENCE-MODEL.md",
-      "sha256": "5e3ccd05bb7ff08015c9402cb5c708d83706b8c79dcb8546e1217a1528091141"
+      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
       "name": "alawas-design-tracer-bullet/references/SHARED-PROTOCOL.md",
@@ -142,7 +142,7 @@
     {
       "name": "alawas-diagnose-production-incident",
       "path": "adapters/claude-code/skills/alawas-diagnose-production-incident/SKILL.md",
-      "sha256": "7eedd331b49c25f78a09dc189d05476822c128a2a15a04a5bf456be5d7468cfe"
+      "sha256": "3f40dd27cb3d0d7bcbc7a77261a4d3c43551925a8037b3d1e612c59656b811ed"
     },
     {
       "name": "alawas-diagnose-production-incident/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
@@ -172,12 +172,12 @@
     {
       "name": "alawas-diagnose-production-incident/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/claude-code/skills/alawas-diagnose-production-incident/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "ff61f7796626f48d2036633b4faf76dcfd7233a24ee8e2b53d4a7080df9020a0"
+      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     },
     {
       "name": "alawas-diagnose-production-incident/references/EVIDENCE-MODEL.md",
       "path": "adapters/claude-code/skills/alawas-diagnose-production-incident/references/EVIDENCE-MODEL.md",
-      "sha256": "5e3ccd05bb7ff08015c9402cb5c708d83706b8c79dcb8546e1217a1528091141"
+      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
       "name": "alawas-diagnose-production-incident/references/SHARED-PROTOCOL.md",
@@ -187,7 +187,7 @@
     {
       "name": "alawas-govern-scorecards",
       "path": "adapters/claude-code/skills/alawas-govern-scorecards/SKILL.md",
-      "sha256": "18112035ab1deeed318e13a04c63623432767ebdebe74ff3ac48bc34674ca2d9"
+      "sha256": "ab15764488b6c1d8b18462af1e37aaf36f07715e13fed3e68183660e9bbf8c48"
     },
     {
       "name": "alawas-govern-scorecards/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
@@ -217,12 +217,12 @@
     {
       "name": "alawas-govern-scorecards/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/claude-code/skills/alawas-govern-scorecards/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "ff61f7796626f48d2036633b4faf76dcfd7233a24ee8e2b53d4a7080df9020a0"
+      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     },
     {
       "name": "alawas-govern-scorecards/references/EVIDENCE-MODEL.md",
       "path": "adapters/claude-code/skills/alawas-govern-scorecards/references/EVIDENCE-MODEL.md",
-      "sha256": "5e3ccd05bb7ff08015c9402cb5c708d83706b8c79dcb8546e1217a1528091141"
+      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
       "name": "alawas-govern-scorecards/references/SHARED-PROTOCOL.md",
@@ -262,12 +262,12 @@
     {
       "name": "alawas-grilling-session/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/claude-code/skills/alawas-grilling-session/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "ff61f7796626f48d2036633b4faf76dcfd7233a24ee8e2b53d4a7080df9020a0"
+      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     },
     {
       "name": "alawas-grilling-session/references/EVIDENCE-MODEL.md",
       "path": "adapters/claude-code/skills/alawas-grilling-session/references/EVIDENCE-MODEL.md",
-      "sha256": "5e3ccd05bb7ff08015c9402cb5c708d83706b8c79dcb8546e1217a1528091141"
+      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
       "name": "alawas-grilling-session/references/SHARED-PROTOCOL.md",
@@ -277,7 +277,7 @@
     {
       "name": "alawas-implement-bounded-change",
       "path": "adapters/claude-code/skills/alawas-implement-bounded-change/SKILL.md",
-      "sha256": "26d0f5c17707f27a69c41c1ba53b214a4130e877e0459c01d1f1b485d18fc5b7"
+      "sha256": "248a6de9725b665c1bf654fb47de747a7a7bf127cf08accb95a86ed90290f313"
     },
     {
       "name": "alawas-implement-bounded-change/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
@@ -307,12 +307,12 @@
     {
       "name": "alawas-implement-bounded-change/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/claude-code/skills/alawas-implement-bounded-change/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "ff61f7796626f48d2036633b4faf76dcfd7233a24ee8e2b53d4a7080df9020a0"
+      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     },
     {
       "name": "alawas-implement-bounded-change/references/EVIDENCE-MODEL.md",
       "path": "adapters/claude-code/skills/alawas-implement-bounded-change/references/EVIDENCE-MODEL.md",
-      "sha256": "5e3ccd05bb7ff08015c9402cb5c708d83706b8c79dcb8546e1217a1528091141"
+      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
       "name": "alawas-implement-bounded-change/references/SHARED-PROTOCOL.md",
@@ -352,12 +352,12 @@
     {
       "name": "alawas-investigate-live-question/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/claude-code/skills/alawas-investigate-live-question/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "ff61f7796626f48d2036633b4faf76dcfd7233a24ee8e2b53d4a7080df9020a0"
+      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     },
     {
       "name": "alawas-investigate-live-question/references/EVIDENCE-MODEL.md",
       "path": "adapters/claude-code/skills/alawas-investigate-live-question/references/EVIDENCE-MODEL.md",
-      "sha256": "5e3ccd05bb7ff08015c9402cb5c708d83706b8c79dcb8546e1217a1528091141"
+      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
       "name": "alawas-investigate-live-question/references/SHARED-PROTOCOL.md",
@@ -367,7 +367,7 @@
     {
       "name": "alawas-maintain-working-method",
       "path": "adapters/claude-code/skills/alawas-maintain-working-method/SKILL.md",
-      "sha256": "c09aca8c3fb2cc5d45f47dcd140f69ed8db7602870e2698d48c8c57dced466f9"
+      "sha256": "27ed4655ffd04abb335573643fb2a8d6c1e9cd0db015cfcc14a6ff39971221eb"
     },
     {
       "name": "alawas-maintain-working-method/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
@@ -397,12 +397,12 @@
     {
       "name": "alawas-maintain-working-method/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/claude-code/skills/alawas-maintain-working-method/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "ff61f7796626f48d2036633b4faf76dcfd7233a24ee8e2b53d4a7080df9020a0"
+      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     },
     {
       "name": "alawas-maintain-working-method/references/EVIDENCE-MODEL.md",
       "path": "adapters/claude-code/skills/alawas-maintain-working-method/references/EVIDENCE-MODEL.md",
-      "sha256": "5e3ccd05bb7ff08015c9402cb5c708d83706b8c79dcb8546e1217a1528091141"
+      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
       "name": "alawas-maintain-working-method/references/SHARED-PROTOCOL.md",
@@ -442,12 +442,12 @@
     {
       "name": "alawas-pressure-test-decision/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/claude-code/skills/alawas-pressure-test-decision/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "ff61f7796626f48d2036633b4faf76dcfd7233a24ee8e2b53d4a7080df9020a0"
+      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     },
     {
       "name": "alawas-pressure-test-decision/references/EVIDENCE-MODEL.md",
       "path": "adapters/claude-code/skills/alawas-pressure-test-decision/references/EVIDENCE-MODEL.md",
-      "sha256": "5e3ccd05bb7ff08015c9402cb5c708d83706b8c79dcb8546e1217a1528091141"
+      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
       "name": "alawas-pressure-test-decision/references/SHARED-PROTOCOL.md",
@@ -457,7 +457,7 @@
     {
       "name": "alawas-review-outcome-and-adapt",
       "path": "adapters/claude-code/skills/alawas-review-outcome-and-adapt/SKILL.md",
-      "sha256": "7fee72850030cc7cd60667430ca9434d8024db482dc30d771561c0bc37018c53"
+      "sha256": "2a6d184a169e50840cffb033300dbac44aa075a0cbae3864912c834c78548556"
     },
     {
       "name": "alawas-review-outcome-and-adapt/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
@@ -487,12 +487,12 @@
     {
       "name": "alawas-review-outcome-and-adapt/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/claude-code/skills/alawas-review-outcome-and-adapt/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "ff61f7796626f48d2036633b4faf76dcfd7233a24ee8e2b53d4a7080df9020a0"
+      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     },
     {
       "name": "alawas-review-outcome-and-adapt/references/EVIDENCE-MODEL.md",
       "path": "adapters/claude-code/skills/alawas-review-outcome-and-adapt/references/EVIDENCE-MODEL.md",
-      "sha256": "5e3ccd05bb7ff08015c9402cb5c708d83706b8c79dcb8546e1217a1528091141"
+      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
       "name": "alawas-review-outcome-and-adapt/references/SHARED-PROTOCOL.md",
@@ -532,12 +532,12 @@
     {
       "name": "alawas-track-components/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/claude-code/skills/alawas-track-components/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "ff61f7796626f48d2036633b4faf76dcfd7233a24ee8e2b53d4a7080df9020a0"
+      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     },
     {
       "name": "alawas-track-components/references/EVIDENCE-MODEL.md",
       "path": "adapters/claude-code/skills/alawas-track-components/references/EVIDENCE-MODEL.md",
-      "sha256": "5e3ccd05bb7ff08015c9402cb5c708d83706b8c79dcb8546e1217a1528091141"
+      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
       "name": "alawas-track-components/references/SHARED-PROTOCOL.md",
@@ -577,12 +577,12 @@
     {
       "name": "alawas-turn-signal-into-work/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/claude-code/skills/alawas-turn-signal-into-work/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "ff61f7796626f48d2036633b4faf76dcfd7233a24ee8e2b53d4a7080df9020a0"
+      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     },
     {
       "name": "alawas-turn-signal-into-work/references/EVIDENCE-MODEL.md",
       "path": "adapters/claude-code/skills/alawas-turn-signal-into-work/references/EVIDENCE-MODEL.md",
-      "sha256": "5e3ccd05bb7ff08015c9402cb5c708d83706b8c79dcb8546e1217a1528091141"
+      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
       "name": "alawas-turn-signal-into-work/references/SHARED-PROTOCOL.md",
@@ -592,7 +592,7 @@
     {
       "name": "alawas-verify-release-evidence",
       "path": "adapters/claude-code/skills/alawas-verify-release-evidence/SKILL.md",
-      "sha256": "44c62a9fa32c72b753c397184adf44102163a96f4d5a66a9c90af5d984ef4441"
+      "sha256": "b3575d708b1cbea9b28c4d8edbb5cb6136cdd124a4e708b5b1f43d31139cdced"
     },
     {
       "name": "alawas-verify-release-evidence/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
@@ -622,12 +622,12 @@
     {
       "name": "alawas-verify-release-evidence/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/claude-code/skills/alawas-verify-release-evidence/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "ff61f7796626f48d2036633b4faf76dcfd7233a24ee8e2b53d4a7080df9020a0"
+      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     },
     {
       "name": "alawas-verify-release-evidence/references/EVIDENCE-MODEL.md",
       "path": "adapters/claude-code/skills/alawas-verify-release-evidence/references/EVIDENCE-MODEL.md",
-      "sha256": "5e3ccd05bb7ff08015c9402cb5c708d83706b8c79dcb8546e1217a1528091141"
+      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
       "name": "alawas-verify-release-evidence/references/SHARED-PROTOCOL.md",

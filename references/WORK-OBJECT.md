@@ -29,7 +29,7 @@ next_action: Concrete next move
 | `title` | Human-readable. May change; references use `id`. |
 | `type` | Immutable after activation. One of: `inquiry`, `project`, `change`, `incident`. |
 | `status` | One of: `active`, `waiting`, `paused`, `closed`. |
-| `state` | One lifecycle state. Flexible movement allowed. |
+| `state` | One lifecycle state. Governed by ADR 0015 (8-state model with 2 terminal prohibitions). Enforced by `ws transition`. |
 | `consequence` | One of: `low`, `meaningful`, `high`. Governs required gates. |
 | `sensitivity` | One of: `ordinary`, `private`, `restricted`. Governs storage and export rules. |
 | `created_at` | RFC-3339 timestamp. Immutable. |
@@ -63,9 +63,31 @@ next_action: Concrete next move
 
 By default: `.work-studio/objects/` within the workspace root. Discovery searches upward from the current working directory for `.work-studio/config.md` and stops at the repository or filesystem boundary. Never scan the home directory automatically.
 
+## Write path
+
+All `.work-studio/` file mutations go through the deterministic CLI
+(`python3 -m tools.ws`). Agents never write `.work-studio/` files directly.
+The CLI enforces:
+
+- Immutable ID allocation with collision detection (`ws create`)
+- Lifecycle transition rules per ADR 0015 (`ws transition`, `ws close`)
+- Optimistic concurrency via `--expect-updated` on every mutation
+- Frontmatter schema validation (`ws validate schema`)
+- Section structure validation (`ws validate sections`)
+- Append-only invariants (`ws validate append-only`)
+- Sensitivity rules (`ws validate sensitivity`)
+- Attention register consistency (`ws validate attention`)
+
+Every write command except `ws create` and `ws init` requires
+`--expect-updated`. Use `--force` only for recovery with a stderr warning.
+
 ## Concurrency
 
-Writers use optimistic concurrency: re-read the file immediately before writing and stop if `updated_at` changed since the initial read. Report the conflict; do not silently overwrite.
+**Work Studio assumes one active session per workspace.** The system does not protect against concurrent sessions.
+
+The `ws` CLI enforces optimistic concurrency on every mutation of existing files via `--expect-updated`: it reads the file's `updated_at`, compares it to the caller-supplied timestamp, and rejects the write with both timestamps if they differ. `--force` bypasses the check with a stderr warning. This protects against intra-session staleness (e.g., when a specialist and conductor both hold references to the same object).
+
+It is not a multi-session concurrency guarantee. If concurrent sessions ever become necessary, the concurrency model must be redesigned from scratch.
 
 ## Body sections
 

@@ -52,6 +52,14 @@ The platform adapter classifies capabilities as native, manual-fallback, or unsu
 
 Apply `references/CONSEQUENCE-AUTHORITY.md`.
 
+**Authority gate:** Production changes, destructive containment, customer
+contact, and external escalation require explicit human confirmation at ALL
+consequence levels. Before proceeding: (1) verify the Incident Work Object's
+consequence and sensitivity fields, (2) request confirmation naming the exact
+action, target, duration, and blast-radius limit, (3) record a structured
+authority History entry per the authority recording contract in
+`references/CONSEQUENCE-AUTHORITY.md`.
+
 - Read the Incident, current authority, and runbook together. When they conflict, stop at the safest reversible boundary and ask one scoped question.
 - An explicitly authorized emergency containment action may be performed only within its stated target, duration, and blast-radius limit. A new or expanded action requires fresh authority.
 - For high-consequence Work Objects, explicit confirmation must name the exact proposed action and Work Object mutation. Do not stage, annotate, change status, append History, or make any other mutation before that confirmation.
