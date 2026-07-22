@@ -11,9 +11,17 @@ from typing import Dict, List, Optional, Tuple
 
 # ── Valid evidence tags ───────────────────────────────────────────────────────
 
+# Canonical set from AGREEMENT-LOOP.md (lines 96-111):
+#   [system]    — code, configuration, executable results, records
+#   [decision]  — explicit user or accountable-owner decisions
+#   [inference] — agent reasoning and unverified hypotheses
+#   [gap]       — facts that could not be accessed or established
+#   [testimony] — attributable human observations with context/uncertainty
+#   [memory]    — relevant, user-approved reusable preferences
+
 VALID_EVIDENCE_TAGS = frozenset({
     "[system]", "[decision]", "[inference]",
-    "[observed]", "[lived]", "[claimed]", "[inferred]",
+    "[gap]", "[testimony]", "[memory]",
 })
 
 
@@ -212,20 +220,26 @@ def generate_history_entry(
     status: str,
     actor: str,
     rationale: str,
+    commit: Optional[str] = None,
 ) -> str:
     """Generate a timestamped History subsection entry.
 
     Format matches the History section template (### Heading with
     timestamp + structured fields).
+
+    Optional commit links the entry to a Git commit SHA per ADR 0023.
     """
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    return (
+    entry = (
         f"### {now} — {action}\n\n"
         f"- **State:** {state}\n"
         f"- **Status:** {status}\n"
         f"- **Actor:** {actor}\n"
         f"- **Rationale:** {rationale}"
     )
+    if commit:
+        entry += f"\n- **Commit:** {commit}"
+    return entry
 
 
 # ── Evidence entry generation ─────────────────────────────────────────────────
@@ -234,10 +248,12 @@ def generate_evidence_entry(
     tag: str,
     source: str,
     text: str,
+    sha: Optional[str] = None,
 ) -> str:
     """Generate an evidence ledger table row.
 
-    Validates the tag is an allowed value.
+    Validates the tag is an allowed value. Optional SHA is only
+    accepted on [system] entries per ADR 0023.
     """
     if tag not in VALID_EVIDENCE_TAGS:
         raise ValueError(
@@ -245,6 +261,13 @@ def generate_evidence_entry(
             f"Must be one of: {', '.join(sorted(VALID_EVIDENCE_TAGS))}"
         )
 
+    if sha and tag != "[system]":
+        raise ValueError(
+            f"SHA is only allowed on [system] evidence entries, not '{tag}'."
+        )
+
+    if sha:
+        return f"| {tag} | {source} | {text} | {sha} |"
     return f"| {tag} | {source} | {text} |"
 
 

@@ -1,10 +1,6 @@
 ---
 name: investigate-live-question
-description: >
-  Investigate an activated Inquiry through minimum-necessary context,
-  attributable primary-source research, and reality contact when real people
-  or use are involved; then route it as answered, reframed, prototype-ready,
-  or explicitly unresolved.
+description: "Use when one falsifiable question blocks a recommendation; gathers the smallest discriminating evidence with provenance; does not contact people, production, or sensitive sources without scoped authority."
 ---
 
 # Investigate Live Question
@@ -91,8 +87,8 @@ Outside an explicit grilling request, nominate a Grilling Candidate only under t
 Use as many progressive one-question turns as the evidence frontier requires,
 while keeping each evidence move minimal:
 
-1. **Orient:** Label what is known as `[lived]`, `[source]`, `[system]`,
-   `[inference]`, `[decision]`, or `[unresolved]`; state the current
+1. **Orient:** Label what is known as `[testimony]`, `[system]`,
+   `[inference]`, `[decision]`, or `[gap]`; state the current
    hypothesis and missing evidence.
 2. **Map:** Identify the smallest claim whose answer changes the Inquiry's
    route. Prefer primary-source evidence for that claim and name any required
@@ -166,10 +162,10 @@ contradictions, missing evidence, and confidence. Route only to:
 - Record source evidence with attributable author or institution, date,
   durable location, relevant claim, confidence, and corroboration or
   contradiction.
-- Record reality contact as `[lived]` or `[system]`, including consent or
+- Record reality contact as `[testimony]` or `[system]`, including consent or
   authorization boundary, method, observation, and limits. Never imply
   unobserved use.
-- Name missing evidence as `[unresolved]`, including the consequence of acting
+- Name missing evidence as `[gap]`, including the consequence of acting
   without it. Do not launder a gap into confidence.
 
 ## Personal Institution handoff

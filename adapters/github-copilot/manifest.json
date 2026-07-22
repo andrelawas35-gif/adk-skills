@@ -7,17 +7,12 @@
     {
       "name": "alawas-conduct-work-object",
       "path": "adapters/github-copilot/skills/alawas-conduct-work-object/SKILL.md",
-      "sha256": "5354299dc21a0032b122f57df18c7390f60270f1907659c27ace02b3042a1fc7"
+      "sha256": "de17cbdd26795a8bec3fd020cc5a2729c11b74ccf7b8f79532b7417f7f132947"
     },
     {
       "name": "alawas-conduct-work-object/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
       "path": "adapters/github-copilot/skills/alawas-conduct-work-object/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
       "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-conduct-work-object/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/github-copilot/skills/alawas-conduct-work-object/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
     },
     {
       "name": "alawas-conduct-work-object/references/AGREEMENT-LOOP.md",
@@ -32,17 +27,12 @@
     {
       "name": "alawas-conduct-work-object/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/github-copilot/skills/alawas-conduct-work-object/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
       "name": "alawas-conduct-work-object/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/github-copilot/skills/alawas-conduct-work-object/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
-    },
-    {
-      "name": "alawas-conduct-work-object/references/EVIDENCE-MODEL.md",
-      "path": "adapters/github-copilot/skills/alawas-conduct-work-object/references/EVIDENCE-MODEL.md",
-      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
       "name": "alawas-conduct-work-object/references/SHARED-PROTOCOL.md",
@@ -52,17 +42,7 @@
     {
       "name": "alawas-deploy-with-recovery",
       "path": "adapters/github-copilot/skills/alawas-deploy-with-recovery/SKILL.md",
-      "sha256": "f3b3bd131531079a6e70d98aee2830ea806e2e9d41834bb711009f228132e058"
-    },
-    {
-      "name": "alawas-deploy-with-recovery/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "path": "adapters/github-copilot/skills/alawas-deploy-with-recovery/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-deploy-with-recovery/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/github-copilot/skills/alawas-deploy-with-recovery/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
+      "sha256": "23d5bc6cc3cea3e52f0bbba7580f65420dde9c80489d0aecd9ffcdebd957b0f6"
     },
     {
       "name": "alawas-deploy-with-recovery/references/AGREEMENT-LOOP.md",
@@ -77,7 +57,7 @@
     {
       "name": "alawas-deploy-with-recovery/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/github-copilot/skills/alawas-deploy-with-recovery/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
       "name": "alawas-deploy-with-recovery/references/CONSEQUENCE-AUTHORITY.md",
@@ -85,29 +65,9 @@
       "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     },
     {
-      "name": "alawas-deploy-with-recovery/references/EVIDENCE-MODEL.md",
-      "path": "adapters/github-copilot/skills/alawas-deploy-with-recovery/references/EVIDENCE-MODEL.md",
-      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
-    },
-    {
-      "name": "alawas-deploy-with-recovery/references/SHARED-PROTOCOL.md",
-      "path": "adapters/github-copilot/skills/alawas-deploy-with-recovery/references/SHARED-PROTOCOL.md",
-      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
-    },
-    {
       "name": "alawas-design-tracer-bullet",
       "path": "adapters/github-copilot/skills/alawas-design-tracer-bullet/SKILL.md",
       "sha256": "2d1d6a1e0cf040ad64a80defb1af727cd0515362e5aa22839f54367fe7b0143b"
-    },
-    {
-      "name": "alawas-design-tracer-bullet/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "path": "adapters/github-copilot/skills/alawas-design-tracer-bullet/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-design-tracer-bullet/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/github-copilot/skills/alawas-design-tracer-bullet/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
     },
     {
       "name": "alawas-design-tracer-bullet/references/AGREEMENT-LOOP.md",
@@ -122,7 +82,7 @@
     {
       "name": "alawas-design-tracer-bullet/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/github-copilot/skills/alawas-design-tracer-bullet/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
       "name": "alawas-design-tracer-bullet/references/CONSEQUENCE-AUTHORITY.md",
@@ -135,24 +95,9 @@
       "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
-      "name": "alawas-design-tracer-bullet/references/SHARED-PROTOCOL.md",
-      "path": "adapters/github-copilot/skills/alawas-design-tracer-bullet/references/SHARED-PROTOCOL.md",
-      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
-    },
-    {
       "name": "alawas-diagnose-production-incident",
       "path": "adapters/github-copilot/skills/alawas-diagnose-production-incident/SKILL.md",
-      "sha256": "cad4e681df58707557541de29f50e48935e991541cc11a961c5cd89050b3f80c"
-    },
-    {
-      "name": "alawas-diagnose-production-incident/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "path": "adapters/github-copilot/skills/alawas-diagnose-production-incident/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-diagnose-production-incident/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/github-copilot/skills/alawas-diagnose-production-incident/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
+      "sha256": "df19508b77dc9c407306c9537dd7215170a61911438d41caf56be6c0e348a765"
     },
     {
       "name": "alawas-diagnose-production-incident/references/AGREEMENT-LOOP.md",
@@ -167,7 +112,7 @@
     {
       "name": "alawas-diagnose-production-incident/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/github-copilot/skills/alawas-diagnose-production-incident/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
       "name": "alawas-diagnose-production-incident/references/CONSEQUENCE-AUTHORITY.md",
@@ -180,24 +125,9 @@
       "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
-      "name": "alawas-diagnose-production-incident/references/SHARED-PROTOCOL.md",
-      "path": "adapters/github-copilot/skills/alawas-diagnose-production-incident/references/SHARED-PROTOCOL.md",
-      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
-    },
-    {
       "name": "alawas-govern-scorecards",
       "path": "adapters/github-copilot/skills/alawas-govern-scorecards/SKILL.md",
-      "sha256": "181712519fda879564136510b334da17036f32c2fbb18faca139af76ac1d2188"
-    },
-    {
-      "name": "alawas-govern-scorecards/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "path": "adapters/github-copilot/skills/alawas-govern-scorecards/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-govern-scorecards/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/github-copilot/skills/alawas-govern-scorecards/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
+      "sha256": "99f4f13b94e2e2fa1e5409a91a79e00021fab8ba70b527880e195eef4cb142e5"
     },
     {
       "name": "alawas-govern-scorecards/references/AGREEMENT-LOOP.md",
@@ -212,7 +142,7 @@
     {
       "name": "alawas-govern-scorecards/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/github-copilot/skills/alawas-govern-scorecards/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
       "name": "alawas-govern-scorecards/references/CONSEQUENCE-AUTHORITY.md",
@@ -225,24 +155,9 @@
       "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
-      "name": "alawas-govern-scorecards/references/SHARED-PROTOCOL.md",
-      "path": "adapters/github-copilot/skills/alawas-govern-scorecards/references/SHARED-PROTOCOL.md",
-      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
-    },
-    {
       "name": "alawas-grilling-session",
       "path": "adapters/github-copilot/skills/alawas-grilling-session/SKILL.md",
       "sha256": "b7a657485c24e31818140603b025b231dcc512d0c10c2ec3841a7266a76cf511"
-    },
-    {
-      "name": "alawas-grilling-session/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "path": "adapters/github-copilot/skills/alawas-grilling-session/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-grilling-session/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/github-copilot/skills/alawas-grilling-session/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
     },
     {
       "name": "alawas-grilling-session/references/AGREEMENT-LOOP.md",
@@ -255,39 +170,9 @@
       "sha256": "3e312ebacc7eb0b34e6552f2e7eb9fa4a9c2cad9a8c16d83bd7d077d961262fe"
     },
     {
-      "name": "alawas-grilling-session/references/CAPABILITY-DEGRADATION.md",
-      "path": "adapters/github-copilot/skills/alawas-grilling-session/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
-    },
-    {
-      "name": "alawas-grilling-session/references/CONSEQUENCE-AUTHORITY.md",
-      "path": "adapters/github-copilot/skills/alawas-grilling-session/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
-    },
-    {
-      "name": "alawas-grilling-session/references/EVIDENCE-MODEL.md",
-      "path": "adapters/github-copilot/skills/alawas-grilling-session/references/EVIDENCE-MODEL.md",
-      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
-    },
-    {
-      "name": "alawas-grilling-session/references/SHARED-PROTOCOL.md",
-      "path": "adapters/github-copilot/skills/alawas-grilling-session/references/SHARED-PROTOCOL.md",
-      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
-    },
-    {
       "name": "alawas-implement-bounded-change",
       "path": "adapters/github-copilot/skills/alawas-implement-bounded-change/SKILL.md",
-      "sha256": "1557fa218438b5bfe05453ee7a90768219926168c7bc5b6e7bdc81ea93dc0393"
-    },
-    {
-      "name": "alawas-implement-bounded-change/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "path": "adapters/github-copilot/skills/alawas-implement-bounded-change/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-implement-bounded-change/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/github-copilot/skills/alawas-implement-bounded-change/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
+      "sha256": "cecefb5968cf1012e1c3bc6ece0fd5c8b8329da8a59fe9a0a8659ad8c295e101"
     },
     {
       "name": "alawas-implement-bounded-change/references/AGREEMENT-LOOP.md",
@@ -302,7 +187,7 @@
     {
       "name": "alawas-implement-bounded-change/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/github-copilot/skills/alawas-implement-bounded-change/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
       "name": "alawas-implement-bounded-change/references/CONSEQUENCE-AUTHORITY.md",
@@ -315,24 +200,9 @@
       "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
-      "name": "alawas-implement-bounded-change/references/SHARED-PROTOCOL.md",
-      "path": "adapters/github-copilot/skills/alawas-implement-bounded-change/references/SHARED-PROTOCOL.md",
-      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
-    },
-    {
       "name": "alawas-investigate-live-question",
       "path": "adapters/github-copilot/skills/alawas-investigate-live-question/SKILL.md",
-      "sha256": "8bf5fe5043a51525e908ded4a9b81a29d6f024b821af4e7cdebc5b2258776604"
-    },
-    {
-      "name": "alawas-investigate-live-question/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "path": "adapters/github-copilot/skills/alawas-investigate-live-question/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-investigate-live-question/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/github-copilot/skills/alawas-investigate-live-question/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
+      "sha256": "ee0501f82d1b876207e334e0bea5cbaa415747abcb8bebcc990cacf9f0084024"
     },
     {
       "name": "alawas-investigate-live-question/references/AGREEMENT-LOOP.md",
@@ -347,7 +217,7 @@
     {
       "name": "alawas-investigate-live-question/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/github-copilot/skills/alawas-investigate-live-question/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
       "name": "alawas-investigate-live-question/references/CONSEQUENCE-AUTHORITY.md",
@@ -367,17 +237,7 @@
     {
       "name": "alawas-maintain-working-method",
       "path": "adapters/github-copilot/skills/alawas-maintain-working-method/SKILL.md",
-      "sha256": "6ad4ca7c986330246a1a209d436881bed76908cdbb948df221e8698377b57322"
-    },
-    {
-      "name": "alawas-maintain-working-method/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "path": "adapters/github-copilot/skills/alawas-maintain-working-method/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-maintain-working-method/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/github-copilot/skills/alawas-maintain-working-method/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
+      "sha256": "8d60d129b4835dd27bb844256a693eca7651adb13c81bd09335e252f7817c208"
     },
     {
       "name": "alawas-maintain-working-method/references/AGREEMENT-LOOP.md",
@@ -392,7 +252,7 @@
     {
       "name": "alawas-maintain-working-method/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/github-copilot/skills/alawas-maintain-working-method/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
       "name": "alawas-maintain-working-method/references/CONSEQUENCE-AUTHORITY.md",
@@ -405,24 +265,9 @@
       "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
-      "name": "alawas-maintain-working-method/references/SHARED-PROTOCOL.md",
-      "path": "adapters/github-copilot/skills/alawas-maintain-working-method/references/SHARED-PROTOCOL.md",
-      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
-    },
-    {
       "name": "alawas-pressure-test-decision",
       "path": "adapters/github-copilot/skills/alawas-pressure-test-decision/SKILL.md",
       "sha256": "921b44878b813e3b0ece44e084b3e6eb12eaae4a89307dbcf8ff64cf06c51ee8"
-    },
-    {
-      "name": "alawas-pressure-test-decision/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "path": "adapters/github-copilot/skills/alawas-pressure-test-decision/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-pressure-test-decision/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/github-copilot/skills/alawas-pressure-test-decision/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
     },
     {
       "name": "alawas-pressure-test-decision/references/AGREEMENT-LOOP.md",
@@ -437,17 +282,12 @@
     {
       "name": "alawas-pressure-test-decision/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/github-copilot/skills/alawas-pressure-test-decision/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
       "name": "alawas-pressure-test-decision/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/github-copilot/skills/alawas-pressure-test-decision/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
-    },
-    {
-      "name": "alawas-pressure-test-decision/references/EVIDENCE-MODEL.md",
-      "path": "adapters/github-copilot/skills/alawas-pressure-test-decision/references/EVIDENCE-MODEL.md",
-      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
       "name": "alawas-pressure-test-decision/references/SHARED-PROTOCOL.md",
@@ -457,17 +297,7 @@
     {
       "name": "alawas-review-outcome-and-adapt",
       "path": "adapters/github-copilot/skills/alawas-review-outcome-and-adapt/SKILL.md",
-      "sha256": "a4d158ea76628c483db1c4ab8415fb4fda2a55f65a07034472cddf4bb4443397"
-    },
-    {
-      "name": "alawas-review-outcome-and-adapt/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "path": "adapters/github-copilot/skills/alawas-review-outcome-and-adapt/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-review-outcome-and-adapt/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/github-copilot/skills/alawas-review-outcome-and-adapt/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
+      "sha256": "12508a3d946c4a4a8c386c10067641390b983c3d4e37f63b825882d4bb24dc50"
     },
     {
       "name": "alawas-review-outcome-and-adapt/references/AGREEMENT-LOOP.md",
@@ -482,7 +312,7 @@
     {
       "name": "alawas-review-outcome-and-adapt/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/github-copilot/skills/alawas-review-outcome-and-adapt/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
       "name": "alawas-review-outcome-and-adapt/references/CONSEQUENCE-AUTHORITY.md",
@@ -495,11 +325,6 @@
       "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
-      "name": "alawas-review-outcome-and-adapt/references/SHARED-PROTOCOL.md",
-      "path": "adapters/github-copilot/skills/alawas-review-outcome-and-adapt/references/SHARED-PROTOCOL.md",
-      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
-    },
-    {
       "name": "alawas-track-components",
       "path": "adapters/github-copilot/skills/alawas-track-components/SKILL.md",
       "sha256": "d740ce7bf0e122067a1bbf4d70f2653f46a53fc1eba64c5f3c4b7fd76663e939"
@@ -508,11 +333,6 @@
       "name": "alawas-track-components/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
       "path": "adapters/github-copilot/skills/alawas-track-components/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
       "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-track-components/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/github-copilot/skills/alawas-track-components/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
     },
     {
       "name": "alawas-track-components/references/AGREEMENT-LOOP.md",
@@ -525,39 +345,14 @@
       "sha256": "3e312ebacc7eb0b34e6552f2e7eb9fa4a9c2cad9a8c16d83bd7d077d961262fe"
     },
     {
-      "name": "alawas-track-components/references/CAPABILITY-DEGRADATION.md",
-      "path": "adapters/github-copilot/skills/alawas-track-components/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
-    },
-    {
       "name": "alawas-track-components/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/github-copilot/skills/alawas-track-components/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     },
     {
-      "name": "alawas-track-components/references/EVIDENCE-MODEL.md",
-      "path": "adapters/github-copilot/skills/alawas-track-components/references/EVIDENCE-MODEL.md",
-      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
-    },
-    {
-      "name": "alawas-track-components/references/SHARED-PROTOCOL.md",
-      "path": "adapters/github-copilot/skills/alawas-track-components/references/SHARED-PROTOCOL.md",
-      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
-    },
-    {
       "name": "alawas-turn-signal-into-work",
       "path": "adapters/github-copilot/skills/alawas-turn-signal-into-work/SKILL.md",
-      "sha256": "3cf9051ceaacb201e6e53237d89b8618a890d3e25ac732f59a35059ca798a107"
-    },
-    {
-      "name": "alawas-turn-signal-into-work/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "path": "adapters/github-copilot/skills/alawas-turn-signal-into-work/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-turn-signal-into-work/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/github-copilot/skills/alawas-turn-signal-into-work/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
+      "sha256": "87ec43272ebff6e6c9bf005ec1a7ba566eb8c2ac211bd1b198e670ae7d7a28ff"
     },
     {
       "name": "alawas-turn-signal-into-work/references/AGREEMENT-LOOP.md",
@@ -572,7 +367,7 @@
     {
       "name": "alawas-turn-signal-into-work/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/github-copilot/skills/alawas-turn-signal-into-work/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
       "name": "alawas-turn-signal-into-work/references/CONSEQUENCE-AUTHORITY.md",
@@ -585,24 +380,9 @@
       "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
-      "name": "alawas-turn-signal-into-work/references/SHARED-PROTOCOL.md",
-      "path": "adapters/github-copilot/skills/alawas-turn-signal-into-work/references/SHARED-PROTOCOL.md",
-      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
-    },
-    {
       "name": "alawas-verify-release-evidence",
       "path": "adapters/github-copilot/skills/alawas-verify-release-evidence/SKILL.md",
-      "sha256": "5b87fa02ebd0a5d4bcc6694eff3fbd25ba50506ba43ddffc386fdf35eda2463e"
-    },
-    {
-      "name": "alawas-verify-release-evidence/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "path": "adapters/github-copilot/skills/alawas-verify-release-evidence/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-verify-release-evidence/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/github-copilot/skills/alawas-verify-release-evidence/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
+      "sha256": "f2536d1a7cfda23ac26b30846ac38f10ed4b915a47991953ad1ec449b447e34b"
     },
     {
       "name": "alawas-verify-release-evidence/references/AGREEMENT-LOOP.md",
@@ -617,22 +397,12 @@
     {
       "name": "alawas-verify-release-evidence/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/github-copilot/skills/alawas-verify-release-evidence/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
       "name": "alawas-verify-release-evidence/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/github-copilot/skills/alawas-verify-release-evidence/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
-    },
-    {
-      "name": "alawas-verify-release-evidence/references/EVIDENCE-MODEL.md",
-      "path": "adapters/github-copilot/skills/alawas-verify-release-evidence/references/EVIDENCE-MODEL.md",
-      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
-    },
-    {
-      "name": "alawas-verify-release-evidence/references/SHARED-PROTOCOL.md",
-      "path": "adapters/github-copilot/skills/alawas-verify-release-evidence/references/SHARED-PROTOCOL.md",
-      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
     }
   ]
 }

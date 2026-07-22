@@ -53,6 +53,10 @@ unsupported and follows `references/CAPABILITY-DEGRADATION.md` when needed.
 - `file_read` — read the Work Object, implementation evidence, and check setup.
 - `directory_list` and `content_search` — locate the declared verification seam.
 - `terminal_run` — run focused checks and inspect their completed results.
+- `background_processes` — start and manage a local server or service for
+  verification; without it, ask the user to start the service.
+- `artifact_rendering` — render a visual artifact for human verification of the
+  user story; without it, ask the user to open the relevant page.
 - `structured_output` — report evidence, gaps, and the next route.
 - `user_confirmation` — obtain scoped authority before a check crosses a new
   privacy, security, production, or other material boundary.
@@ -244,5 +248,7 @@ Invocation-relevant wiring only; installation and maintainer guidance live outsi
 | `directory_list` | `Bash ls` | native |
 | `content_search` | `Grep` | native |
 | `terminal_run` | `Bash` | native |
+| `background_processes` | `Bash (background) / Monitor` | native |
+| `artifact_rendering` | `Artifact` | native |
 | `structured_output` | `—` | native |
 | `user_confirmation` | `conversation turn` | native |

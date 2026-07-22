@@ -1,0 +1,225 @@
+# Kernel Manifest — Portable Source-of-Truth Declaration
+#
+# This file declares the minimum set of files and directories that constitute
+# the portable Work Studio kernel. Generated adapters, installed skill copies,
+# and runtime state under .work-studio/ are outputs — not kernel.
+#
+# The kernel is the set of files that must be present for `ws init` to
+# bootstrap a functional Work Studio instance on any supported platform.
+#
+# Schema version governs migration. Path-boundary integrity is verified by
+# verify-kernel.py (path existence, boundary rules, schema version match).
+
+schema_version: 1
+
+# ── Kernel declaration ───────────────────────────────────────────────────────
+
+kernel:
+  description: >
+    Portable source-of-truth files. Every entry declares its purpose and
+    whether it is required for bootstrap. Generated files, installed skill
+    copies, and .work-studio/ runtime state are NOT kernel.
+
+  entries:
+    - path: VERSION
+      purpose: "Single source of truth for the Work Studio version number"
+      required_for_bootstrap: true
+
+    - path: WORKSPACE-DOCUMENTATION-CONTRACT.md
+      purpose: "Canonical artifact registry and documentation lifecycle rules"
+      required_for_bootstrap: true
+      owner: conduct-work-object
+
+    - path: CONTEXT.md
+      purpose: "Canonical domain language definitions"
+      required_for_bootstrap: false
+      owner: domain-modeling
+
+    - path: references/
+      purpose: "Shared protocol documents referenced by all skills"
+      required_for_bootstrap: true
+      files:
+        - AGREEMENT-LOOP.md
+        - CAPABILITY-DEGRADATION.md
+        - CONSEQUENCE-AUTHORITY.md
+        - EVIDENCE-MODEL.md
+        - MISSING-ARTIFACT-GAP.md
+        - SHARED-PROTOCOL.md
+        - SKILL-AWARE-GRILLING.md
+        - WORK-OBJECT.md
+
+    - path: skills/core/
+      purpose: "Canonical skill definitions — single source of truth for all adapters"
+      required_for_bootstrap: true
+      skills:
+        - conduct-work-object
+        - deploy-with-recovery
+        - design-tracer-bullet
+        - diagnose-production-incident
+        - govern-scorecards
+        - grilling-session
+        - implement-bounded-change
+        - investigate-live-question
+        - maintain-working-method
+        - pressure-test-decision
+        - review-outcome-and-adapt
+        - track-components
+        - turn-signal-into-work
+        - verify-release-evidence
+
+    - path: tools/
+      purpose: "CLI tools and generators — the ws CLI is the sole write path for .work-studio/"
+      required_for_bootstrap: true
+      files:
+        - generate-adapters.py
+        - pre-commit
+        - install.sh
+        - prompt_payload_tracer.py
+        - prompt-tracer-manifest.json
+        - repair-evidence-ledgers.py
+        - verify-conformance.py
+        - verify-append-only.py
+      directories:
+        - ws/
+        - prompt-tracer-modules/
+
+    - path: adapters/*/overlay.yaml
+      purpose: "Platform-specific capability mappings and limitations — kernel input to generate-adapters.py"
+      required_for_bootstrap: true
+      platforms:
+        - codex
+        - claude-code
+        - github-copilot
+
+    - path: adapters/*/manifest.json
+      purpose: "Platform adapter manifest — tracks installed skill versions and checksums"
+      required_for_bootstrap: false
+      platforms:
+        - codex
+        - claude-code
+        - github-copilot
+
+    - path: fixtures/
+      purpose: "Behavioral fixtures consumed by verify-conformance.py — kernel inputs for testing"
+      required_for_bootstrap: false
+
+    - path: tests/
+      purpose: "Test suite — broad tests are outside the minimum kernel but included for development"
+      required_for_bootstrap: false
+
+    - path: docs/
+      purpose: "Architecture Decision Records, designs, verification records, and outcome reviews"
+      required_for_bootstrap: false
+
+    - path: .work-studio/constitutional-files.list
+      purpose: "List of files requiring constitutional authority to modify"
+      required_for_bootstrap: true
+
+# ── Platform portability ─────────────────────────────────────────────────────
+
+platforms:
+  codex:
+    label: "Codex (VS Code)"
+    adapter_dir: adapters/codex/
+    overlay: adapters/codex/overlay.yaml
+    install_target: ".agents/skills/"
+    capability_mappings:
+      file_read: native
+      file_write: native
+      directory_list: native
+      glob_search: native
+      content_search: native
+      terminal_run: native
+      git_operations: native
+      web_fetch: native
+      subagent_spawn: native
+      structured_output: native
+      user_confirmation: native
+      browser_automation: manual-fallback
+      web_search: manual-fallback
+      deployment: manual-fallback
+      secret_access: manual-fallback
+
+  claude-code:
+    label: "Claude Code"
+    adapter_dir: adapters/claude-code/
+    overlay: adapters/claude-code/overlay.yaml
+    install_target: ".claude/agents/skills/"
+    capability_mappings:
+      file_read: native
+      file_write: native
+      directory_list: native
+      glob_search: native
+      content_search: native
+      terminal_run: native
+      git_operations: native
+      web_fetch: native
+      subagent_spawn: native
+      structured_output: native
+      user_confirmation: native
+      browser_automation: native
+      web_search: native
+      deployment: manual-fallback
+      secret_access: manual-fallback
+
+  github-copilot:
+    label: "GitHub Copilot"
+    adapter_dir: adapters/github-copilot/
+    overlay: adapters/github-copilot/overlay.yaml
+    install_target: ".github/copilot/agents/skills/"
+    capability_mappings:
+      file_read: native
+      file_write: native
+      directory_list: native
+      glob_search: native
+      content_search: native
+      terminal_run: native
+      git_operations: native
+      web_fetch: native
+      subagent_spawn: native
+      structured_output: native
+      user_confirmation: native
+      browser_automation: native
+      web_search: native
+      deployment: manual-fallback
+      secret_access: manual-fallback
+
+# ── Path-boundary integrity rules ────────────────────────────────────────────
+
+integrity:
+  discovery:
+    config_path: ".work-studio/config.md"
+    boundary_markers:
+      - ".git"
+    stop_conditions:
+      - "repository root (presence of .git)"
+      - "filesystem boundary"
+    forbidden_scan_targets:
+      - "home directory"
+      - "parent of repository root"
+
+  path_rules:
+    - rule: "kernel files must exist at declared paths"
+      check: existence
+    - rule: "no kernel file may reference a path outside the repository root"
+      check: boundary
+    - rule: "generated adapters must not be listed as kernel entries"
+      check: exclusion
+    - rule: "schema_version must be a positive integer"
+      check: version_consistency
+    - rule: "every required_for_bootstrap entry must resolve to an existing path"
+      check: bootstrap_completeness
+
+# ── Documented gaps ──────────────────────────────────────────────────────────
+
+gaps:
+  - id: sensitivity-enum-mismatch
+    description: >
+      references/WORK-OBJECT.md declares sensitivity as "ordinary | private |
+      restricted" but tools/ws/schema.py validates only "ordinary |
+      restricted". The "private" value is specified but not enforced.
+    affected_files:
+      - references/WORK-OBJECT.md
+      - tools/ws/schema.py
+    status: documented
+    resolution: "Resolve in a separate bounded change — not part of this kernel manifest scope"

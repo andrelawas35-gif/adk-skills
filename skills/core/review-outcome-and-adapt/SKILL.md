@@ -1,9 +1,6 @@
 ---
 name: review-outcome-and-adapt
-description: >
-  Compare a Work Object hypothesis with proportionate lived and system outcomes,
-  distinguish shipped output from observed value, and route a user-chosen next
-  direction without overstating evidence or mutating the original work.
+description: "Use when observed outcomes must be compared with an accepted hypothesis; returns attribution, subgroup effects, and a next route; does not close or share consequential results without owner authority."
 ---
 
 # Review Outcome and Adapt
@@ -121,7 +118,7 @@ value unless attributable outcome evidence supports that inference.
 
 ### 2. Compare hypothesis and outcomes
 
-Record minimum-necessary `[system]` and `[lived]` evidence separately from
+Record minimum-necessary `[system]` and `[testimony]` evidence separately from
 `[inference]`. State whether the available evidence confirms, contradicts, or
 is insufficient to assess the hypothesis. Preserve disconfirming evidence and
 the original hypothesis; never rewrite either to make a result fit.
@@ -153,8 +150,8 @@ authority is absent.
 
 ## Evidence rules
 
-- Label observations `[system]` or `[lived]`, review choices `[decision]`,
-  interpretations `[inference]`, and unavailable information `[unresolved]`
+- Label observations `[system]` or `[testimony]`, review choices `[decision]`,
+  interpretations `[inference]`, and unavailable information `[gap]`
   according to `references/EVIDENCE-MODEL.md`.
 - Retain the distinction between shipped output and observed value in the
   durable review record.

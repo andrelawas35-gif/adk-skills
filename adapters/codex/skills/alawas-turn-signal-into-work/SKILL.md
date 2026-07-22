@@ -165,7 +165,7 @@ conductor to manufacture a Work Object.
 - Keep the original signal concise and attributable; do not store full chat
   transcripts or hidden reasoning.
 - Label interpretation as `[inference]`, user choice as `[decision]`, and any
-  user report as `[lived]` unless a stronger source is supplied.
+  user report as `[testimony]` unless a stronger source is supplied.
 - An Evidence Bridge must be user-approved, minimum-necessary, and record its
   provenance, sensitivity, source reference, and receiving Work Object.
 - Before recording a Memory Candidate, confirm that it is an approved, redacted

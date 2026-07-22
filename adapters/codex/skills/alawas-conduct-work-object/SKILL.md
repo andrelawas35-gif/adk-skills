@@ -295,7 +295,7 @@ On any meaningful transition:
    **Appending Evidence:**
    ```sh
    python3 -m tools.ws append-evidence <id> \
-     --tag "[system]|[decision]|[inference]|[observed]|[lived]|[claimed]|[inferred]" \
+     --tag "[system]|[decision]|[inference]|[gap]|[testimony]|[memory]" \
      --source "<source>" \
      --text "<entry>" \
      --expect-updated <current-updated_at>

@@ -1,10 +1,6 @@
 ---
 name: verify-release-evidence
-description: >
-  Verify and report proportionate evidence for an implemented bounded change,
-  including acceptance, failure and recovery behavior, degraded dependencies,
-  privacy and security boundaries, and explicit evidence gaps. This skill
-  reports evidence; it does not deploy or release.
+description: "Use when consequential implementation claims need direct verification; classifies evidence, gaps, blockers, and recovery credibility; does not deploy or promote local results as environment proof."
 ---
 
 # Verify Release Evidence
@@ -57,6 +53,10 @@ unsupported and follows `references/CAPABILITY-DEGRADATION.md` when needed.
 - `file_read` — read the Work Object, implementation evidence, and check setup.
 - `directory_list` and `content_search` — locate the declared verification seam.
 - `terminal_run` — run focused checks and inspect their completed results.
+- `background_processes` — start and manage a local server or service for
+  verification; without it, ask the user to start the service.
+- `artifact_rendering` — render a visual artifact for human verification of the
+  user story; without it, ask the user to open the relevant page.
 - `structured_output` — report evidence, gaps, and the next route.
 - `user_confirmation` — obtain scoped authority before a check crosses a new
   privacy, security, production, or other material boundary.

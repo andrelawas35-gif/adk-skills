@@ -196,6 +196,71 @@ not silently changed.
 **Verification**: Same core requirement, platform-specific degradation.
 No adapter hides its limitation.
 
+### Scenario 12 — Lazy detection upgrades a manual-fallback capability
+
+**Given**: Claude Code adapter with `web_search: manual-fallback` and `WebSearch`
+available in the environment.  
+**When**: `investigate-live-question` needs `web_search`.  
+**Then**:
+1. Check whether `WebSearch` is present in the current environment
+2. Find it present
+3. Use it natively
+4. Record the upgrade as `[system]` evidence in the Work Object
+5. No manual-fallback pause occurs
+
+**Verification**: Capability used natively. Upgrade recorded. No false
+manual-fallback claim.
+
+### Scenario 13 — Lazy detection finds no tool, follows manual-fallback
+
+**Given**: Claude Code adapter with `deployment: manual-fallback` and no
+deployment tool in the environment.  
+**When**: `deploy-with-recovery` needs `deployment`.  
+**Then**:
+1. Check whether a deployment tool is present
+2. Find none
+3. Follow manual-fallback protocol unchanged
+4. Give one concrete manual instruction
+5. Record the gap in the Work Object
+
+**Verification**: Manual-fallback protocol followed. No false native claim.
+
+### Scenario 14 — Tentative upgrade fails, falls back
+
+**Given**: Claude Code adapter with `web_search: manual-fallback` and
+`WebSearch` present but returning errors.  
+**When**: `investigate-live-question` attempts native execution and it fails.  
+**Then**:
+1. Fall back to manual-fallback protocol
+2. Record both the attempted native execution and the fallback as `[system]` evidence
+3. Never claim the search succeeded
+
+**Verification**: Both attempt and fallback recorded. No false success claimed.
+
+### Scenario 15 — Authority gate and capability degradation fire independently
+
+**Given**: `deploy-with-recovery` with `deployment: manual-fallback`.  
+**When**: Deployment is needed.  
+**Then**:
+1. Authority gate fires first — records the deployment decision in History
+2. Capability degradation fires second — records the execution method and gap in History
+3. Two independent History entries with distinct provenance
+
+**Verification**: Two entries. Authority entry precedes capability entry.
+Neither claims the other's domain.
+
+### Scenario 16 — New capability `deployment` classified correctly
+
+**Given**: Any platform adapter.  
+**When**: Checking the capability mappings table for `deploy-with-recovery`.  
+**Then**:
+1. `deployment` row exists with classification and mapped tool
+2. `secret_access` row exists with classification and mapped tool
+3. `file_uploads` row exists with classification and mapped tool
+4. All three are `manual-fallback` on all platforms per Decision 77
+
+**Verification**: All three rows present. Classifications match overlay.
+
 ## Pass/Fail Criteria
 
 | # | Scenario | Pass condition |

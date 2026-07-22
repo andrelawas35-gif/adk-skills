@@ -13,6 +13,15 @@ capability was unavailable.
 | **manual-fallback** | The platform lacks direct support, but a human can perform the step. | Pause the workflow. Give ONE concrete instruction for the human to perform. Record in the Work Object what was done manually and what remains unverified. Do NOT claim automated verification succeeded. |
 | **unsupported** | The platform cannot perform this capability, and no safe manual fallback exists. | Stop the affected path immediately. Record the platform limitation in the Work Object with the capability name and the blocked action. Route to a platform that supports the capability, or ask the user how to proceed. Do NOT silently skip, fake, or substitute. |
 
+### Lazy detection for manual-fallback
+
+Before applying manual-fallback degradation, check whether the platform tool
+mapped to this capability is present in the current environment. If present,
+attempt native execution. If native execution succeeds, record the upgrade as
+`[system]` evidence. If native execution fails, apply the manual-fallback
+protocol below and record both the attempted native execution and the fallback.
+If the tool is absent, follow the manual-fallback protocol unchanged.
+
 ## Rules
 
 1. **No false verification**: An adapter must never mark a verification,
@@ -65,6 +74,12 @@ The canonical set of capabilities a skill may require:
 | `parallel_tool_execution` | Execute multiple tools simultaneously | Codex, Claude Code |
 | `subagent_isolation` | Strong isolation between sub-agents | Codex |
 | `web_search` | Search the live web | Varies |
+| `deployment` | Execute a deployment command that changes a live production environment | None currently |
+| `secret_access` | Read secrets, credentials, tokens, or API keys from a vault, env vars, or secure store | None currently |
+| `background_processes` | Start and manage a long-running process that outlives a single tool call | Claude Code, Codex |
+| `persistent_session_state` | Read and write state that persists across turns within a session | None currently |
+| `file_uploads` | Upload a file to an external service or platform | None currently |
+| `artifact_rendering` | Render a visual artifact (HTML, diagram, dashboard) for human inspection | Claude Code |
 
 ## In the Platform Adapter
 

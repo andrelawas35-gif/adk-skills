@@ -52,6 +52,8 @@ unsupported and follows `references/CAPABILITY-DEGRADATION.md` when needed.
   `alawas-conduct-work-object` for durable persistence.
 - `user_confirmation` — obtain the scoped authority needed for a proposed rule
   or any later candidate-maintenance decision.
+- `artifact_rendering` — render scorecard evidence as a visual artifact; without
+  it, present the data in structured text.
 - `structured_output` — return dimension-level evidence, conflicts, gaps,
   proposal status, and next route.
 
@@ -232,4 +234,5 @@ Invocation-relevant wiring only; installation and maintainer guidance live outsi
 | `content_search` | `Grep` | native |
 | `file_write` | `Write / Edit` | native |
 | `user_confirmation` | `conversation turn` | native |
+| `artifact_rendering` | `Artifact` | native |
 | `structured_output` | `—` | native |

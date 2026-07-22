@@ -53,6 +53,10 @@ unsupported and follows `references/CAPABILITY-DEGRADATION.md` when needed.
 - `file_read` — read the Work Object, implementation evidence, and check setup.
 - `directory_list` and `content_search` — locate the declared verification seam.
 - `terminal_run` — run focused checks and inspect their completed results.
+- `background_processes` — start and manage a local server or service for
+  verification; without it, ask the user to start the service.
+- `artifact_rendering` — render a visual artifact for human verification of the
+  user story; without it, ask the user to open the relevant page.
 - `structured_output` — report evidence, gaps, and the next route.
 - `user_confirmation` — obtain scoped authority before a check crosses a new
   privacy, security, production, or other material boundary.
@@ -244,5 +248,25 @@ Invocation-relevant wiring only; installation and maintainer guidance live outsi
 | `directory_list` | `list_dir` | native |
 | `content_search` | `grep_search` | native |
 | `terminal_run` | `run_in_terminal` | native |
+| `background_processes` | `—` | manual-fallback |
+| `artifact_rendering` | `—` | manual-fallback |
 | `structured_output` | `—` | native |
 | `user_confirmation` | `conversation turn` | native |
+
+### Capability Degradation
+
+Apply `references/CAPABILITY-DEGRADATION.md`. Per-capability
+classifications and notes below.
+
+#### `background_processes` (manual-fallback)
+
+- **Behavior**: Pause and give one concrete manual instruction.
+- **Record**: Append History entry noting the capability gap, the
+  manual action taken, and what remains unverified.
+- **Note**: GitHub Copilot does not support persistent background processes across tool calls. Start services manually or use a separate terminal.
+
+#### `artifact_rendering` (manual-fallback)
+
+- **Behavior**: Pause and give one concrete manual instruction.
+- **Record**: Append History entry noting the capability gap, the
+  manual action taken, and what remains unverified.

@@ -176,90 +176,66 @@ def _parse_scalar(val: str):
 
 # ── Frontmatter generation ───────────────────────────────────────────────────
 
-def generate_frontmatter(core_skill_name, overlay):
-    """Generate platform-specific YAML frontmatter."""
-    descriptions = {
-        "conduct-work-object": (
-            "Use when work must start, resume, transition, or close; maintains the "
-            "canonical Work Object and routes its next stage; does not perform "
-            "specialist domain work."
-        ),
-        "pressure-test-decision": (
-            "Use when one material decision needs adversarial testing; recommends and "
-            "records an evidence-backed choice through the conductor; never implements "
-            "or treats generic approval as high-consequence authority."
-        ),
-        "turn-signal-into-work": (
-            "Use when an idea, request, or observation needs classification; preserves "
-            "provenance and routes it to capture, retention, activation, or discard; "
-            "does not create durable work without activation authority."
-        ),
-        "design-tracer-bullet": (
-            "Use when an accepted direction needs the smallest end-to-end experiment; "
-            "returns a bounded, observable, reversible tracer design; does not implement "
-            "it or authorize production effects."
-        ),
-        "implement-bounded-change": (
-            "Use when a Work Object contains an accepted tracer bullet; implements and "
-            "checks only that reversible path while preserving dirty work; stops for any "
-            "material scope or authority deviation."
-        ),
-        "verify-release-evidence": (
-            "Use when consequential implementation claims need direct verification; "
-            "classifies evidence, gaps, blockers, and recovery credibility; does not "
-            "deploy or promote local results as environment proof."
-        ),
-        "deploy-with-recovery": (
-            "Use when a verified change has explicit deployment authority; ships the "
-            "smallest observable increment with rollback and stop gates; never expands "
-            "without positive evidence."
-        ),
-        "diagnose-production-incident": (
-            "Use when production harm is active or suspected; contains harm, separates "
-            "impact from mechanism, and verifies restoration; does not broaden emergency "
-            "access or declare a cause without evidence."
-        ),
-        "investigate-live-question": (
-            "Use when one falsifiable question blocks a recommendation; gathers the "
-            "smallest discriminating evidence with provenance; does not contact people, "
-            "production, or sensitive sources without scoped authority."
-        ),
-        "review-outcome-and-adapt": (
-            "Use when observed outcomes must be compared with an accepted hypothesis; "
-            "returns attribution, subgroup effects, and a next route; does not close or "
-            "share consequential results without owner authority."
-        ),
-        "maintain-working-method": (
-            "Use when repeated workflow evidence may justify a reusable rule; trials, "
-            "revises, or retires a bounded working method; does not promote exceptions or "
-            "temporary guardrails into permanent policy silently."
-        ),
-        "govern-scorecards": (
-            "Use when outcome evidence must be judged across declared dimensions; exposes "
-            "gaps, subgroup harm, and non-compensable failures; does not let aggregates "
-            "trigger automatic rules or sharing."
-        ),
-        "track-components": (
-            "Use when durable components must be registered, swept, grilled, cascaded, or "
-            "retired; returns ledger and inbox mutation proposals; never turns findings "
-            "into Work Objects or commitments automatically."
-        ),
-        "grilling-session": (
-            "Use when the user explicitly requests continuous grilling or accepts a "
-            "candidate; maintains one decision frontier and one question at a time; does "
-            "not persist or execute without the owning skill's authority."
-        ),
-    }
+def extract_canonical_description(core_skill_dir):
+    """Extract the description field from a canonical SKILL.md frontmatter.
 
-    if core_skill_name not in descriptions:
-        raise ValueError(f"Missing discovery description for core skill: {core_skill_name}")
-    description = descriptions[core_skill_name]
+    Handles double-quoted strings, folded block scalars (``description: >``),
+    and plain inline values.
+    """
+    text = (core_skill_dir / "SKILL.md").read_text()
+    parts = text.split("---", 2)
+    if len(parts) < 3:
+        raise ValueError(f"No frontmatter found in {core_skill_dir}/SKILL.md")
+    fm_text = parts[1]
+
+    lines = fm_text.split("\n")
+    for i, line in enumerate(lines):
+        stripped = line.strip()
+        if not stripped.startswith("description:"):
+            continue
+
+        rest = stripped[len("description:"):].strip()
+
+        # Double-quoted string
+        if rest.startswith('"') and rest.endswith('"'):
+            return rest[1:-1]
+
+        # Block scalar: description: > or description: |
+        if rest in (">", "|"):
+            desc_lines = []
+            key_indent = len(line) - len(line.lstrip())
+            for j in range(i + 1, len(lines)):
+                next_line = lines[j]
+                next_stripped = next_line.strip()
+                if not next_stripped or next_stripped.startswith("#"):
+                    continue
+                next_indent = len(next_line) - len(next_line.lstrip())
+                if next_indent <= key_indent and ":" in next_stripped:
+                    break
+                desc_lines.append(next_stripped)
+            return " ".join(desc_lines)
+
+        # Plain inline value
+        return rest
+
+    raise ValueError(
+        f"No description found in {core_skill_dir}/SKILL.md frontmatter")
+
+
+def generate_frontmatter(core_skill_dir, overlay):
+    """Generate platform-specific YAML frontmatter.
+
+    Extracts the description from the canonical SKILL.md frontmatter — the
+    single source of truth (Decision 87, Session 11).
+    """
+    description = extract_canonical_description(core_skill_dir)
     short_desc = " ".join(description.split())
 
     fm_add = overlay.get("frontmatter", {}).get("add", {})
+    skill_name = core_skill_dir.name
 
     lines = ["---"]
-    lines.append(f"name: {adapter_skill_name(core_skill_name)}")
+    lines.append(f"name: {adapter_skill_name(skill_name)}")
     # JSON strings are valid quoted YAML scalars. Keeping the generated value
     # on one line avoids indentation-sensitive folded-block failures in skill
     # loaders while preserving quotes and Unicode deterministically.
@@ -309,6 +285,11 @@ def generate_adapter_section(overlay, required):
     lines.append("")
 
     if overlay["platform"] == "codex":
+        # Pin-resolution paragraph emitted for Codex only. Assumption: Claude
+        # Code and GitHub Copilot skill loaders natively prefer project-pinned
+        # over global without explicit prose instruction. UNVERIFIED — see
+        # Decision 85 (Session 11). Verify per-platform before adding or
+        # permanently omitting.
         lines.append("### Runtime pin resolution")
         lines.append("")
         lines.append("Codex can discover both user and repository skills with the same name.")
@@ -341,21 +322,8 @@ def generate_adapter_section(overlay, required):
     if non_native:
         lines.append("### Capability Degradation")
         lines.append("")
-        lines.append("This adapter classifies every required capability. When a capability")
-        lines.append("is unavailable, the workflow degrades explicitly — it never pretends")
-        lines.append("that equivalent verification occurred.")
-        lines.append("")
-        lines.append("**Degradation rules**:")
-        lines.append("")
-        lines.append("- **`manual-fallback`**: Pause with ONE concrete manual instruction.")
-        lines.append("  Record in the Work Object what was done and what remains unverified.")
-        lines.append('  Never mark verification, export, or deployment as "successful" when')
-        lines.append("  the required capability was unavailable.")
-        lines.append("- **`unsupported`**: Stop the affected path immediately. Record the")
-        lines.append("  platform limitation. Route to a supported platform or ask the user.")
-        lines.append("- **Stricter safety wins**: When this platform imposes a stricter")
-        lines.append("  constraint than the core, the platform rule takes precedence.")
-        lines.append("  Divergences are disclosed below.")
+        lines.append("Apply `references/CAPABILITY-DEGRADATION.md`. Per-capability")
+        lines.append("classifications and notes below.")
         lines.append("")
 
         for cap in non_native:
@@ -449,6 +417,38 @@ def validate_authority_blocks():
     return errors
 
 
+def validate_capability_classifications():
+    """Check that every capability classified on any platform is classified on all platforms.
+
+    Per Decision 84 (Session 11): prevents latent cross-platform gaps where a
+    capability is declared in one overlay but silently missing from another.
+
+    Returns list of (capability, platform, error_message) for each gap.
+    """
+    errors = []
+    all_caps = {}  # {capability_name: {platform: classification}}
+
+    for platform in PLATFORMS:
+        overlay_file = ADAPTERS_DIR / platform / "overlay.yaml"
+        if not overlay_file.exists():
+            errors.append(("—", platform, "overlay.yaml not found"))
+            continue
+        overlay = parse_yaml(overlay_file.read_text())
+        caps = overlay.get("capabilities", {})
+        for cap in caps:
+            all_caps.setdefault(cap, {})[platform] = caps[cap]
+
+    for cap, platforms in sorted(all_caps.items()):
+        for platform in PLATFORMS:
+            if platform not in platforms:
+                errors.append(
+                    (cap, platform,
+                     f"classified on {sorted(platforms.keys())} but missing from {platform} overlay")
+                )
+
+    return errors
+
+
 # ── Generation ────────────────────────────────────────────────────────────────
 
 def adapter_skill_name(core_skill_name):
@@ -472,7 +472,7 @@ def build_skill_output(core_skill_dir, overlay):
     paths can never diverge.
     """
     body = namespace_skill_references(extract_body(core_skill_dir / "SKILL.md"))
-    frontmatter = generate_frontmatter(core_skill_dir.name, overlay)
+    frontmatter = generate_frontmatter(core_skill_dir, overlay)
     adapter_section = generate_adapter_section(
         overlay, required_capabilities(core_skill_dir))
     output = frontmatter + body.rstrip("\n") + adapter_section
@@ -504,13 +504,33 @@ def generate_skill(core_skill_dir, overlay, output_dir):
     }
 
 
-def build_reference_entries(skill_name, output_dir, write=False):
-    """Include every shared reference declared by the generated core skills."""
+def build_reference_entries(skill_name, output_dir, core_skill_dir=None, write=False):
+    """Include shared references that the skill body actually mentions.
+
+    Scans the canonical skill body for each shared reference filename and
+    only copies files the skill explicitly references (Decision 88, Session 11).
+    When core_skill_dir is None (legacy path), includes all references.
+    """
     entries = []
     reference_dir = output_dir / "references"
+
+    if core_skill_dir is not None:
+        body = extract_body(core_skill_dir / "SKILL.md")
+        active_refs = [f for f in SHARED_REFERENCES if Path(f).name in body]
+    else:
+        active_refs = SHARED_REFERENCES
+
     if write:
-        reference_dir.mkdir(parents=True, exist_ok=True)
-    for filename in SHARED_REFERENCES:
+        if active_refs:
+            reference_dir.mkdir(parents=True, exist_ok=True)
+            # Remove stale reference files no longer mentioned by this skill
+            active_names = {Path(f).name for f in active_refs}
+            for existing in reference_dir.iterdir():
+                if existing.is_file() and existing.name not in active_names:
+                    existing.unlink()
+        elif reference_dir.exists():
+            shutil.rmtree(reference_dir)
+    for filename in active_refs:
         source = ROOT / "references" / filename
         destination = reference_dir / Path(filename).name
         content = source.read_bytes()
@@ -554,7 +574,7 @@ def generate_platform(platform_name):
             manifest_entries.append(entry)
             print(f"  Generated: {entry['path']} ({entry['sha256'][:12]}...)")
             manifest_entries.extend(
-                build_reference_entries(output_skill_name, output_dir, write=True))
+                build_reference_entries(output_skill_name, output_dir, core_skill_dir=skill_dir, write=True))
 
     return manifest_entries
 
@@ -651,7 +671,7 @@ def check_platform(platform_name):
             "sha256": hashlib.sha256(expected.encode()).hexdigest(),
         })
 
-        for entry in build_reference_entries(output_skill_name, output_file.parent):
+        for entry in build_reference_entries(output_skill_name, output_file.parent, core_skill_dir=skill_dir):
             reference_file = ROOT / entry["path"]
             if not reference_file.exists():
                 print(f"  MISSING: {reference_file.relative_to(ROOT)}")
@@ -713,6 +733,16 @@ def main():
         else:
             print("\n[authority-blocks]")
             print("  OK: all gated skills have inline authority blocks")
+        # Validate symmetric capability classifications across overlays
+        cap_errors = validate_capability_classifications()
+        if cap_errors:
+            print("\n[capability-classifications]")
+            for cap, platform, err in cap_errors:
+                print(f"  FAIL: {cap}: {platform}: {err}")
+            all_clean = False
+        else:
+            print("\n[capability-classifications]")
+            print("  OK: all capabilities classified on all platforms")
         if all_clean:
             print("\nAll generated files match. No drift detected.")
             sys.exit(0)
@@ -727,6 +757,14 @@ def main():
             for skill, err in auth_errors:
                 print(f"  FAIL: {skill}: {err}")
             print("Add inline authority gate blocks before regenerating.")
+            sys.exit(1)
+        # Validate symmetric capability classifications before generating
+        cap_errors = validate_capability_classifications()
+        if cap_errors:
+            print("Capability classification validation failed (Decision 84):")
+            for cap, platform, err in cap_errors:
+                print(f"  FAIL: {cap}: {platform}: {err}")
+            print("Classify every capability on all three platforms before regenerating.")
             sys.exit(1)
         print("Generating adapters...")
         for platform in PLATFORMS:

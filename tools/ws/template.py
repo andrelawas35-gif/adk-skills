@@ -94,9 +94,9 @@ def _decisions_template(consequence: str) -> str:
 def _evidence_ledger() -> str:
     return (
         "## Evidence ledger\n\n"
-        "<!-- Tagged evidence entries. See references/EVIDENCE-MODEL.md for\n"
-        "     allowed tags: [system], [decision], [inference], [observed],\n"
-        "     [lived], [claimed], [inferred]. -->\n\n"
+        "<!-- Tagged evidence entries. See references/AGREEMENT-LOOP.md for\n"
+        "     canonical tags: [system], [decision], [inference],\n"
+        "     [gap], [testimony], [memory]. -->\n\n"
         "| Tag | Source | Entry |\n"
         "|-----|--------|-------|\n"
     )

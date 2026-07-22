@@ -1,6 +1,6 @@
 ---
 name: govern-scorecards
-description: "Review durable outcome evidence across Work Studio scorecard dimensions and propose bounded, versioned workflow-rule changes without activity optimization, identity inference, or automatic governance."
+description: "Use when outcome evidence must be judged across declared dimensions; exposes gaps, subgroup harm, and non-compensable failures; does not let aggregates trigger automatic rules or sharing."
 ---
 # Govern Scorecards
 
@@ -51,6 +51,8 @@ unsupported and follows `references/CAPABILITY-DEGRADATION.md` when needed.
   `conduct-work-object` for durable persistence.
 - `user_confirmation` — obtain the scoped authority needed for a proposed rule
   or any later candidate-maintenance decision.
+- `artifact_rendering` — render scorecard evidence as a visual artifact; without
+  it, present the data in structured text.
 - `structured_output` — return dimension-level evidence, conflicts, gaps,
   proposal status, and next route.
 

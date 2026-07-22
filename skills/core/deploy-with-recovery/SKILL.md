@@ -1,9 +1,6 @@
 ---
 name: deploy-with-recovery
-description: >
-  Release a verified Work Object incrementally only with explicit deployment
-  authority, a loaded platform runbook, readiness, migration, budget, rollback,
-  and post-deployment checks; record sanitized evidence and route to Observe.
+description: "Use when a verified change has explicit deployment authority; ships the smallest observable increment with rollback and stop gates; never expands without positive evidence."
 ---
 
 # Deploy With Recovery
@@ -62,6 +59,12 @@ unsupported and follows `references/CAPABILITY-DEGRADATION.md` when needed.
   platform runbook, verified evidence, and local deployment artifacts.
 - `terminal_run` — execute only the runbook-approved incremental deployment,
   verification, and rollback commands.
+- `deployment` — execute only the runbook-approved incremental deployment
+  command; without it, give the user the exact command to run.
+- `secret_access` — access deployment credentials from the authorized source;
+  without it, ask the user to provide or confirm credentials are available.
+- `file_uploads` — upload deployment artifacts to the target platform; without
+  it, give the user the exact upload instruction.
 - `web_fetch` — retrieve a referenced platform runbook or status page at a
   known location when the authorized route permits it.
 - `user_confirmation` — obtain explicit deployment authority or authority for

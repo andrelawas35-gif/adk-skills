@@ -1,9 +1,6 @@
 ---
 name: track-components
-description: >
-  Register, inspect, grill, cascade, and retire durable project components in
-  the per-project component ledger without duplicating component truth,
-  mass-spawning Work Objects, or treating a sweep as autonomous work.
+description: "Use when durable components must be registered, swept, grilled, cascaded, or retired; returns ledger and inbox mutation proposals; never turns findings into Work Objects or commitments automatically."
 ---
 
 # Track Components

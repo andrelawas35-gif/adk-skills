@@ -30,6 +30,12 @@ capability_mappings:
   web_fetch: "WebFetch / WebSearch"
   web_search: "WebSearch"
   subagent_spawn: "Task"
+  background_processes: "Bash (background) / Monitor"
+  deployment: "—"
+  secret_access: "—"
+  persistent_session_state: "—"
+  file_uploads: "—"
+  artifact_rendering: "Artifact"
   user_confirmation: "conversation turn"
 
 # Capability classifications
@@ -49,12 +55,24 @@ capabilities:
   web_search: manual-fallback
   subagent_isolation: manual-fallback
   parallel_tool_execution: manual-fallback
+  deployment: manual-fallback
+  secret_access: manual-fallback
+  background_processes: native
+  persistent_session_state: manual-fallback
+  file_uploads: manual-fallback
+  artifact_rendering: native
 
 # Declared limitations — these appear in the generated adapter
 declared_limitations:
   - capability: subagent_isolation
     classification: manual-fallback
     description: "Claude Code sub-agents (Task tool) have different isolation guarantees than Codex subagents. For sensitive multi-agent workflows, verify isolation boundaries manually."
+  - capability: deployment
+    classification: manual-fallback
+    description: "No platform has first-class deployment tooling. Deployment commands execute through the shell. The skill's authority gate provides the authorization ceremony; the capability layer provides the execution instruction."
+  - capability: secret_access
+    classification: manual-fallback
+    description: "No platform has first-class vault or secret-store access. Credentials are provided by the user or environment. The skill must not invent, infer, or cache credentials."
   - capability: browser_automation
     classification: manual-fallback
     description: "Claude Code browser automation differs from Codex. Complex page interactions may require manual steps."

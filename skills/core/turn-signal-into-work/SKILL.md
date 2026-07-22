@@ -1,10 +1,6 @@
 ---
 name: turn-signal-into-work
-description: >
-  Capture a live signal in the user's language, classify whether it should be
-  discarded, remembered, incubated, or activated, and create a Work Object
-  only after explicit activation. Use when a user brings an idea, observation,
-  request, or possible piece of work that has not yet become a Work Object.
+description: "Use when an idea, request, or observation needs classification; preserves provenance and routes it to capture, retention, activation, or discard; does not create durable work without activation authority."
 ---
 
 # Turn Signal into Work
@@ -169,7 +165,7 @@ conductor to manufacture a Work Object.
 - Keep the original signal concise and attributable; do not store full chat
   transcripts or hidden reasoning.
 - Label interpretation as `[inference]`, user choice as `[decision]`, and any
-  user report as `[lived]` unless a stronger source is supplied.
+  user report as `[testimony]` unless a stronger source is supplied.
 - An Evidence Bridge must be user-approved, minimum-necessary, and record its
   provenance, sensitivity, source reference, and receiving Work Object.
 - Before recording a Memory Candidate, confirm that it is an approved, redacted

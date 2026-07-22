@@ -1,12 +1,6 @@
 ---
 name: pressure-test-decision
-description: >
-  Resume an active Work Object, identify its highest-leverage unresolved
-  decision, recommend an answer before asking exactly one question, and
-  safely persist the confirmed decision. Use when the user says "help me
-  decide," "pressure-test this," "grill this," "what should I do about X,"
-  or when conduct-work-object routes a Work Object in the Decide state.
-  Composes grilling and domain modeling. Never performs implementation.
+description: "Use when one material decision needs adversarial testing; recommends and records an evidence-backed choice through the conductor; never implements or treats generic approval as high-consequence authority."
 ---
 
 # Pressure-Test Decision

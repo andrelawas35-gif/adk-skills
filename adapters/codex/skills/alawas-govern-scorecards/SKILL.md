@@ -52,6 +52,8 @@ unsupported and follows `references/CAPABILITY-DEGRADATION.md` when needed.
   `alawas-conduct-work-object` for durable persistence.
 - `user_confirmation` — obtain the scoped authority needed for a proposed rule
   or any later candidate-maintenance decision.
+- `artifact_rendering` — render scorecard evidence as a visual artifact; without
+  it, present the data in structured text.
 - `structured_output` — return dimension-level evidence, conflicts, gaps,
   proposal status, and next route.
 
@@ -244,4 +246,16 @@ stop instead of silently falling back to the global copy.
 | `content_search` | `grep_search` | native |
 | `file_write` | `create_file / replace_string_in_file` | native |
 | `user_confirmation` | `conversation turn` | native |
+| `artifact_rendering` | `—` | manual-fallback |
 | `structured_output` | `—` | native |
+
+### Capability Degradation
+
+Apply `references/CAPABILITY-DEGRADATION.md`. Per-capability
+classifications and notes below.
+
+#### `artifact_rendering` (manual-fallback)
+
+- **Behavior**: Pause and give one concrete manual instruction.
+- **Record**: Append History entry noting the capability gap, the
+  manual action taken, and what remains unverified.

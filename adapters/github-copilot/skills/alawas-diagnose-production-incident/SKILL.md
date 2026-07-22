@@ -41,6 +41,7 @@ The platform adapter classifies capabilities as native, manual-fallback, or unsu
 
 - `file_read`, `directory_list`, and `content_search` — read the Incident, runbook, prior evidence, and bounded local diagnostics.
 - `terminal_run` — execute only authorized containment, restoration, diagnostic, and affected-path verification commands from the runbook.
+- `secret_access` — access diagnostic credentials from the authorized source; without it, ask the user to provide the needed access.
 - `web_fetch` — retrieve a referenced status page, runbook, or dependency evidence at a known location when the authorized route permits it.
 - `user_confirmation` — obtain scoped authority for a material production action, expanded blast radius, destructive recovery, external commitment, or Change Work Object mutation at high consequence.
 - `structured_output` — return a sanitized incident record, ranked hypothesis ledger, recovery verification, dependency state, and recommended route.
@@ -90,7 +91,7 @@ record; do not reset context, store a transcript, or mutate the Work Object.
 
 ### 1. Establish the incident boundary and sanitize intake
 
-Read the Incident and runbook. Record the report as `[lived]`, `[system]`, or `[unresolved]`, including the affected path, time window, impact, consequence, known owners, and current dependency state. Replace secrets, tokens, customer identifiers, raw request bodies, and unrestricted logs with a minimum-necessary sanitized summary or stable reference.
+Read the Incident and runbook. Record the report as `[testimony]`, `[system]`, or `[gap]`, including the affected path, time window, impact, consequence, known owners, and current dependency state. Replace secrets, tokens, customer identifiers, raw request bodies, and unrestricted logs with a minimum-necessary sanitized summary or stable reference.
 
 ### 2. Contain the immediate risk
 
@@ -106,7 +107,7 @@ Create a ledger of plausible causes, each labelled `[inference]` with the suppor
 
 ### 5. Handle blocked dependencies honestly
 
-When a dependency, vendor, owner, credential, or required observation is unavailable, record it as `[unresolved]` with the affected decision, consequence, owner, and revisit trigger. Preserve any completed containment or recovery evidence. Set `status: waiting` only when the external dependency blocks the smallest safe next action; otherwise retain active investigation.
+When a dependency, vendor, owner, credential, or required observation is unavailable, record it as `[gap]` with the affected decision, consequence, owner, and revisit trigger. Preserve any completed containment or recovery evidence. Set `status: waiting` only when the external dependency blocks the smallest safe next action; otherwise retain active investigation.
 
 ### 6. Route prevention as a bounded successor
 
@@ -114,7 +115,7 @@ After recovery is verified or the incident is safely bounded, distinguish confir
 
 ## Evidence rules
 
-- Label observations as `[system]` or `[lived]`, recorded authority as `[decision]`, hypotheses as `[inference]`, and unavailable information as `[unresolved]` according to `references/EVIDENCE-MODEL.md`.
+- Label observations as `[system]` or `[testimony]`, recorded authority as `[decision]`, hypotheses as `[inference]`, and unavailable information as `[gap]` according to `references/EVIDENCE-MODEL.md`.
 - Sanitize evidence before persistence. Keep stable references, timestamps, path classes, metric deltas, command categories, and outcomes—not raw sensitive payloads or credentials.
 - Distinguish containment performed, restoration attempted, recovery verified on the affected path, and root cause confirmed; none implies the next.
 - Preserve disconfirming results and failed tests. A negative test narrows a hypothesis; it does not prove a different one.
@@ -188,6 +189,19 @@ Invocation-relevant wiring only; installation and maintainer guidance live outsi
 | `directory_list` | `list_dir` | native |
 | `content_search` | `grep_search` | native |
 | `terminal_run` | `run_in_terminal` | native |
+| `secret_access` | `—` | manual-fallback |
 | `web_fetch` | `open_browser_page / mcp tools` | native |
 | `user_confirmation` | `conversation turn` | native |
 | `structured_output` | `—` | native |
+
+### Capability Degradation
+
+Apply `references/CAPABILITY-DEGRADATION.md`. Per-capability
+classifications and notes below.
+
+#### `secret_access` (manual-fallback)
+
+- **Behavior**: Pause and give one concrete manual instruction.
+- **Record**: Append History entry noting the capability gap, the
+  manual action taken, and what remains unverified.
+- **Note**: No platform has first-class vault or secret-store access. Credentials are provided by the user or environment. The skill must not invent, infer, or cache credentials.

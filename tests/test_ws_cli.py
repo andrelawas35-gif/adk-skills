@@ -51,6 +51,18 @@ from ws.validate import (
     check_sensitivity,
     check_lifecycle,
     check_structure,
+    check_claims,
+    check_evidence_lanes,
+    check_authority,
+    check_attention_limits,
+    check_protected_fields,
+    check_sensitivity_policy,
+    check_history_integrity,
+    check_file_integrity,
+    check_incident_routing,
+    check_prerequisites,
+    check_unsupported_capabilities,
+    check_interrupted_mutations,
     CHECK_REGISTRY,
 )
 
@@ -393,6 +405,20 @@ class TestSectionsParsing(unittest.TestCase):
         with self.assertRaises(ValueError):
             generate_evidence_entry("[bad-tag]", "test", "text")
 
+    def test_generate_evidence_entry_rejects_non_canonical_tag(self):
+        """[observed], [lived], [claimed], [inferred] are not canonical."""
+        for tag in ("[observed]", "[lived]", "[claimed]", "[inferred]"):
+            with self.subTest(tag=tag):
+                with self.assertRaises(ValueError):
+                    generate_evidence_entry(tag, "test", "text")
+
+    def test_generate_evidence_entry_accepts_canonical_gap_testimony_memory(self):
+        """[gap], [testimony], [memory] are canonical and accepted."""
+        for tag in ("[gap]", "[testimony]", "[memory]"):
+            with self.subTest(tag=tag):
+                entry = generate_evidence_entry(tag, "source", "text")
+                self.assertTrue(entry.startswith(f"| {tag}"))
+
     def test_check_append_only_detects_duplicate(self):
         """Duplicate entries are detected."""
         entry = "| [system] | test | Initial evidence |"
@@ -400,7 +426,7 @@ class TestSectionsParsing(unittest.TestCase):
 
     def test_check_append_only_allows_new(self):
         """New entries pass append-only check."""
-        entry = "| [observed] | test | New observation |"
+        entry = "| [testimony] | test | New observation |"
         self.assertTrue(check_append_only(SAMPLE_BODY, "evidence ledger", entry))
 
 
@@ -661,13 +687,1662 @@ class TestValidateStructure(unittest.TestCase):
             self.assertEqual(len(errors), 0)
 
 
+# ── Forbidden claims tests ────────────────────────────────────────────────────
+
+
+class TestCheckClaims(unittest.TestCase):
+    """test_check_claims_rejects_verify_without_evidence."""
+
+    def test_notice_state_without_evidence_passes(self):
+        """Notice is the initial state — empty evidence is acceptable."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = SAMPLE_FRONTMATTER  # state: notice
+            # Remove evidence entry AND pass result — notice state shouldn't
+            # have a pass decision either.
+            body = SAMPLE_BODY.replace(
+                "| [system] | test | Initial evidence |", ""
+            ).replace(
+                "| **Result** | pass |", "| **Result** | pending |"
+            )
+            obj_file = make_object_file(tmpdir, "2026-07-21-010-test.md", fm + "\n" + body)
+            errors = check_claims(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_active_state_without_evidence_fails(self):
+        """Any state beyond notice requires at least one evidence entry."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = SAMPLE_FRONTMATTER.replace("state: notice", "state: build")
+            body = SAMPLE_BODY.replace(
+                "| [system] | test | Initial evidence |", ""
+            )
+            obj_file = make_object_file(tmpdir, "2026-07-21-010-test.md", fm + "\n" + body)
+            errors = check_claims(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("Evidence Ledger is empty" in e for e in errors))
+
+    def test_verify_state_without_evidence_fails(self):
+        """Verify state specifically requires evidence."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = SAMPLE_FRONTMATTER.replace("state: notice", "state: verify")
+            body = SAMPLE_BODY.replace(
+                "| [system] | test | Initial evidence |", ""
+            )
+            obj_file = make_object_file(tmpdir, "2026-07-21-010-test.md", fm + "\n" + body)
+            errors = check_claims(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("verification or release readiness" in e for e in errors))
+
+    def test_release_state_without_evidence_fails(self):
+        """Release state specifically requires evidence."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = SAMPLE_FRONTMATTER.replace("state: notice", "state: release")
+            body = SAMPLE_BODY.replace(
+                "| [system] | test | Initial evidence |", ""
+            )
+            obj_file = make_object_file(tmpdir, "2026-07-21-010-test.md", fm + "\n" + body)
+            errors = check_claims(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("verification or release readiness" in e for e in errors))
+
+    def test_verify_state_with_evidence_passes(self):
+        """Verify state with evidence entries passes."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = SAMPLE_FRONTMATTER.replace("state: notice", "state: verify")
+            obj_file = make_object_file(tmpdir, "2026-07-21-010-test.md", fm + "\n" + SAMPLE_BODY)
+            errors = check_claims(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_checked_success_items_without_evidence_fails(self):
+        """Checked success-evidence items require evidence entries."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            body_with_checks = SAMPLE_BODY.replace(
+                "- [ ] Done", "- [x] Verified behavior\n- [x] Passed review"
+            )
+            body_no_evidence = body_with_checks.replace(
+                "| [system] | test | Initial evidence |", ""
+            )
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                SAMPLE_FRONTMATTER + "\n" + body_no_evidence,
+            )
+            errors = check_claims(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("success-evidence" in e for e in errors))
+
+    def test_more_checked_items_than_evidence_fails(self):
+        """Checked items outnumbering evidence entries is suspicious."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            body_with_checks = SAMPLE_BODY.replace(
+                "- [ ] Done",
+                "- [x] Item one\n- [x] Item two\n- [x] Item three",
+            )
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                SAMPLE_FRONTMATTER + "\n" + body_with_checks,
+            )
+            errors = check_claims(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("should not outnumber" in e for e in errors))
+
+    def test_pass_result_without_evidence_fails(self):
+        """A pass/fail Decision result without evidence is a forbidden claim."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            body_no_evidence = SAMPLE_BODY.replace(
+                "| [system] | test | Initial evidence |", ""
+            )
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                SAMPLE_FRONTMATTER + "\n" + body_no_evidence,
+            )
+            errors = check_claims(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("pass/fail result" in e for e in errors))
+
+    def test_close_state_is_exempt(self):
+        """Terminal close state is exempt from claims checking."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = SAMPLE_FRONTMATTER.replace("state: notice", "state: close")
+            fm = fm.replace("status: active", "status: closed")
+            body = SAMPLE_BODY.replace(
+                "| [system] | test | Initial evidence |", ""
+            )
+            obj_file = make_object_file(tmpdir, "2026-07-21-010-test.md", fm + "\n" + body)
+            errors = check_claims(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_closed_status_is_exempt(self):
+        """Closed status is exempt from claims checking."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = SAMPLE_FRONTMATTER.replace("status: active", "status: closed")
+            body = SAMPLE_BODY.replace(
+                "| [system] | test | Initial evidence |", ""
+            )
+            obj_file = make_object_file(tmpdir, "2026-07-21-010-test.md", fm + "\n" + body)
+            errors = check_claims(obj_file)
+            self.assertEqual(len(errors), 0)
+
+
+# ── Evidence lane tests ───────────────────────────────────────────────────────
+
+
+class TestCheckEvidenceLanes(unittest.TestCase):
+    """test_check_evidence_lanes_rejects_invalid_tags."""
+
+    def test_canonical_tags_pass(self):
+        """All six canonical tags from AGREEMENT-LOOP.md pass validation."""
+        canonical = ["[system]", "[decision]", "[inference]",
+                      "[gap]", "[testimony]", "[memory]"]
+        for tag in canonical:
+            with self.subTest(tag=tag):
+                body = (
+                    "## Evidence ledger\n\n"
+                    f"| {tag} | test.py | Entry text |\n"
+                )
+                fm = SAMPLE_FRONTMATTER + "\n" + body
+                with tempfile.TemporaryDirectory() as tmp:
+                    tmpdir = Path(tmp)
+                    obj_file = make_object_file(
+                        tmpdir, "2026-07-21-010-test.md", fm)
+                    errors = check_evidence_lanes(obj_file)
+                    self.assertEqual(len(errors), 0,
+                                     f"Tag {tag} should be valid but got: {errors}")
+
+    def test_non_canonical_tag_rejected(self):
+        """Tags not in the canonical set are rejected."""
+        body = (
+            "## Evidence ledger\n\n"
+            "| [observed] | user | Personal observation |\n"
+        )
+        fm = SAMPLE_FRONTMATTER + "\n" + body
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            obj_file = make_object_file(tmpdir, "2026-07-21-010-test.md", fm)
+            errors = check_evidence_lanes(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("non-canonical tag" in e for e in errors))
+            self.assertTrue(any("[observed]" in e for e in errors))
+
+    def test_lived_tag_rejected(self):
+        """[lived] is not a canonical tag."""
+        body = (
+            "## Evidence ledger\n\n"
+            "| [lived] | diary | Personal experience |\n"
+        )
+        fm = SAMPLE_FRONTMATTER + "\n" + body
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            obj_file = make_object_file(tmpdir, "2026-07-21-010-test.md", fm)
+            errors = check_evidence_lanes(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("[lived]" in e for e in errors))
+
+    def test_claimed_tag_rejected(self):
+        """[claimed] is not a canonical tag."""
+        body = (
+            "## Evidence ledger\n\n"
+            "| [claimed] | email | Unverified assertion |\n"
+        )
+        fm = SAMPLE_FRONTMATTER + "\n" + body
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            obj_file = make_object_file(tmpdir, "2026-07-21-010-test.md", fm)
+            errors = check_evidence_lanes(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("[claimed]" in e for e in errors))
+
+    def test_inferred_tag_rejected(self):
+        """[inferred] is not a canonical tag — use [inference]."""
+        body = (
+            "## Evidence ledger\n\n"
+            "| [inferred] | reasoning | Deduced conclusion |\n"
+        )
+        fm = SAMPLE_FRONTMATTER + "\n" + body
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            obj_file = make_object_file(tmpdir, "2026-07-21-010-test.md", fm)
+            errors = check_evidence_lanes(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("[inferred]" in e for e in errors))
+
+    def test_missing_tag_rejected(self):
+        """Entry without brackets is malformed."""
+        body = (
+            "## Evidence ledger\n\n"
+            "| no brackets here | source | text |\n"
+        )
+        fm = SAMPLE_FRONTMATTER + "\n" + body
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            obj_file = make_object_file(tmpdir, "2026-07-21-010-test.md", fm)
+            errors = check_evidence_lanes(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("no recognizable evidence tag" in e for e in errors))
+
+    def test_empty_evidence_ledger_passes(self):
+        """Empty evidence section is not a lane violation."""
+        body = "## Evidence ledger\n\n"
+        fm = SAMPLE_FRONTMATTER + "\n" + body
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            obj_file = make_object_file(tmpdir, "2026-07-21-010-test.md", fm)
+            errors = check_evidence_lanes(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_no_evidence_section_passes(self):
+        """Missing evidence section is not a lane violation."""
+        body = "## Intent\n\nNo evidence section here.\n"
+        fm = SAMPLE_FRONTMATTER + "\n" + body
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            obj_file = make_object_file(tmpdir, "2026-07-21-010-test.md", fm)
+            errors = check_evidence_lanes(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_mixed_valid_and_invalid_tags(self):
+        """Both valid and invalid tags are reported."""
+        body = (
+            "## Evidence ledger\n\n"
+            "| [system] | test.py | Passed |\n"
+            "| [lived] | diary | Experience |\n"
+            "| [decision] | user | Confirmed |\n"
+            "| [claimed] | email | Assertion |\n"
+        )
+        fm = SAMPLE_FRONTMATTER + "\n" + body
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            obj_file = make_object_file(tmpdir, "2026-07-21-010-test.md", fm)
+            errors = check_evidence_lanes(obj_file)
+        self.assertEqual(len(errors), 2)
+        self.assertTrue(any("[lived]" in e for e in errors))
+        self.assertTrue(any("[claimed]" in e for e in errors))
+
+    def test_inline_format_with_valid_tag_passes(self):
+        """Inline evidence format (- timestamp — [tag] text) is supported."""
+        body = (
+            "## Evidence ledger\n\n"
+            "- 2026-07-21T00:00:00Z — [system] Automated test passed\n"
+        )
+        fm = SAMPLE_FRONTMATTER + "\n" + body
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            obj_file = make_object_file(tmpdir, "2026-07-21-010-test.md", fm)
+            errors = check_evidence_lanes(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_inline_format_with_invalid_tag_rejected(self):
+        """Inline format with non-canonical tag is rejected."""
+        body = (
+            "## Evidence ledger\n\n"
+            "- 2026-07-21T00:00:00Z — [observed] Saw this happen\n"
+        )
+        fm = SAMPLE_FRONTMATTER + "\n" + body
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            obj_file = make_object_file(tmpdir, "2026-07-21-010-test.md", fm)
+            errors = check_evidence_lanes(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("[observed]" in e for e in errors))
+
+
+# ── Authority check tests ─────────────────────────────────────────────────────
+
+# High-consequence sample with an Authority History entry
+AUTHORITY_HISTORY = """### 2026-07-21T00:00:01Z — Authority: transition to build
+
+- **Scope:** Test transition
+- **Evidence reviewed:** Decision record present
+- **Constraints:** None
+- **Authority mode:** accepted-recommendation
+- **Granted by:** user"""
+
+# Authority entry missing fields
+AUTHORITY_INCOMPLETE = """### 2026-07-21T00:00:01Z — Authority: transition
+
+- **Scope:** Test"""
+
+
+class TestCheckAuthority(unittest.TestCase):
+    """test_authority_requires_record_for_high_consequence_transitions."""
+
+    def _high_consequence_fm(self):
+        return SAMPLE_FRONTMATTER.replace(
+            "consequence: meaningful", "consequence: high"
+        )
+
+    def test_low_consequence_exempt(self):
+        """Low/meaningful consequence objects are exempt."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = SAMPLE_FRONTMATTER.replace("state: notice", "state: build")
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md", fm + "\n" + SAMPLE_BODY)
+            errors = check_authority(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_high_consequence_notice_without_authority_passes(self):
+        """High-consequence in notice state doesn't need authority yet."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = self._high_consequence_fm()  # state: notice
+            body = SAMPLE_BODY.replace(
+                "### 2026-07-21T00:00:00Z — Created",
+                "### 2026-07-21T00:00:00Z — Consequence assessment\n\n"
+                "- **Reversible?** yes\n"
+                "- **Affects beyond workspace?** no\n"
+                "- **Failure affects safety/privacy/money?** yes\n"
+                "- **Assigned consequence:** high\n\n"
+                "### 2026-07-21T00:00:00Z — Created"
+            )
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md", fm + "\n" + body)
+            errors = check_authority(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_high_consequence_build_without_authority_fails(self):
+        """High-consequence build state without Authority entry is rejected."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = self._high_consequence_fm().replace("state: notice", "state: build")
+            body = SAMPLE_BODY.replace(
+                "### 2026-07-21T00:00:00Z — Created",
+                "### 2026-07-21T00:00:00Z — Consequence assessment\n\n"
+                "- **Reversible?** yes\n"
+                "- **Affects beyond workspace?** no\n"
+                "- **Failure affects safety/privacy/money?** yes\n"
+                "- **Assigned consequence:** high\n\n"
+                "### 2026-07-21T00:00:00Z — Created"
+            )
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md", fm + "\n" + body)
+            errors = check_authority(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("no Authority History entry" in e for e in errors))
+
+    def test_high_consequence_build_with_authority_passes(self):
+        """High-consequence build state with Authority entry passes."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = self._high_consequence_fm().replace("state: notice", "state: build")
+            body = SAMPLE_BODY.replace(
+                "### 2026-07-21T00:00:00Z — Created",
+                "### 2026-07-21T00:00:00Z — Consequence assessment\n\n"
+                "- **Reversible?** yes\n"
+                "- **Affects beyond workspace?** no\n"
+                "- **Failure affects safety/privacy/money?** yes\n"
+                "- **Assigned consequence:** high\n\n"
+                "### 2026-07-21T00:00:00Z — Created"
+            )
+            body += "\n" + AUTHORITY_HISTORY + "\n"
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md", fm + "\n" + body)
+            errors = check_authority(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_high_consequence_close_is_exempt(self):
+        """Closed objects are exempt from authority checking."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = self._high_consequence_fm()
+            fm = fm.replace("state: notice", "state: close")
+            fm = fm.replace("status: active", "status: closed")
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md", fm + "\n" + SAMPLE_BODY)
+            errors = check_authority(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_authority_entry_missing_fields(self):
+        """Authority entry without required fields is flagged."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = self._high_consequence_fm().replace("state: notice", "state: build")
+            body = SAMPLE_BODY + "\n" + AUTHORITY_INCOMPLETE + "\n"
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md", fm + "\n" + body)
+            errors = check_authority(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("missing required fields" in e for e in errors))
+
+    def test_accepted_recommendation_without_preceding_entry(self):
+        """accepted-recommendation without preceding recommendation is flagged."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = self._high_consequence_fm().replace("state: notice", "state: build")
+            # Authority entry first — no preceding recommendation
+            body = SAMPLE_BODY.replace(
+                "### 2026-07-21T00:00:00Z — Created",
+                AUTHORITY_HISTORY + "\n\n### 2026-07-21T00:00:00Z — Created"
+            )
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md", fm + "\n" + body)
+            errors = check_authority(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(
+                any("not preceded by a recommendation" in e for e in errors))
+
+    def test_recommendation_before_authority_passes(self):
+        """Recommendation entry before accepted-recommendation authority passes."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = self._high_consequence_fm().replace("state: notice", "state: build")
+            recommendation = (
+                "### 2026-07-21T00:00:00Z — Recommended: transition to build\n\n"
+                "- **Rationale:** Ready for build phase"
+            )
+            body = SAMPLE_BODY.replace(
+                "### 2026-07-21T00:00:00Z — Created",
+                recommendation + "\n\n" + AUTHORITY_HISTORY + "\n\n"
+                "### 2026-07-21T00:00:00Z — Created"
+            )
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md", fm + "\n" + body)
+            errors = check_authority(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_non_authority_history_entries_ignored(self):
+        """Regular History entries without 'Authority:' are not checked."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = self._high_consequence_fm().replace("state: notice", "state: design")
+            body = SAMPLE_BODY.replace(
+                "### 2026-07-21T00:00:00Z — Created",
+                "### 2026-07-21T00:00:00Z — Consequence assessment\n\n"
+                "- **Reversible?** yes\n"
+                "- **Affects beyond workspace?** no\n"
+                "- **Failure affects safety/privacy/money?** yes\n"
+                "- **Assigned consequence:** high"
+            )
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md", fm + "\n" + body)
+            errors = check_authority(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("no Authority History entry" in e for e in errors))
+
+
+# ── Attention-register limits tests ────────────────────────────────────────────
+
+
+class TestCheckAttentionLimits(unittest.TestCase):
+    """test_attention_limits_enforces_quantitative_caps."""
+
+    def test_empty_register_passes(self):
+        """Register with no entries passes all limits."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            active_md = tmpdir / "active.md"
+            active_md.write_text("# Active\n\n## Primary\n\n## Supporting\n\n")
+            errors = check_attention_limits(active_md)
+            self.assertEqual(len(errors), 0)
+
+    def test_one_primary_one_supporting_passes(self):
+        """1 Primary + 1 Supporting is within limits."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            active_md = tmpdir / "active.md"
+            active_md.write_text(
+                "# Active\n\n"
+                "## Primary\n\n- `001` — Main\n\n"
+                "## Supporting\n\n- `002` — Helper\n\n"
+            )
+            errors = check_attention_limits(active_md)
+            self.assertEqual(len(errors), 0)
+
+    def test_one_primary_two_supporting_passes(self):
+        """1 Primary + 2 Supporting = 3 total, at the boundary."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            active_md = tmpdir / "active.md"
+            active_md.write_text(
+                "# Active\n\n"
+                "## Primary\n\n- `001` — Main\n\n"
+                "## Supporting\n\n- `002` — A\n- `003` — B\n\n"
+            )
+            errors = check_attention_limits(active_md)
+            self.assertEqual(len(errors), 0)
+
+    def test_two_primary_rejected(self):
+        """More than 1 Primary is rejected."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            active_md = tmpdir / "active.md"
+            active_md.write_text(
+                "# Active\n\n"
+                "## Primary\n\n- `001` — First\n- `002` — Second\n\n"
+                "## Supporting\n\n"
+            )
+            errors = check_attention_limits(active_md)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("Primary" in e for e in errors))
+
+    def test_three_supporting_rejected(self):
+        """More than 2 Supporting is rejected."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            active_md = tmpdir / "active.md"
+            active_md.write_text(
+                "# Active\n\n"
+                "## Primary\n\n- `001` — Main\n\n"
+                "## Supporting\n\n"
+                "- `002` — A\n- `003` — B\n- `004` — C\n\n"
+            )
+            errors = check_attention_limits(active_md)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("Supporting" in e for e in errors))
+
+    def test_four_total_rejected(self):
+        """Total > 3 (1 Primary + 3 Supporting) triggers total cap error."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            active_md = tmpdir / "active.md"
+            active_md.write_text(
+                "# Active\n\n"
+                "## Primary\n\n- `001` — Main\n\n"
+                "## Supporting\n\n"
+                "- `002` — A\n- `003` — B\n- `004` — C\n\n"
+            )
+            errors = check_attention_limits(active_md)
+        # Should get both "Supporting" error and "total" error
+        self.assertTrue(len(errors) >= 2)
+        self.assertTrue(any("Supporting" in e for e in errors))
+        self.assertTrue(any("total" in e.lower() and "active" in e.lower()
+                           for e in errors))
+
+    def test_missing_file_returns_empty(self):
+        """Nonexistent active.md returns no errors (no register to enforce)."""
+        with tempfile.TemporaryDirectory() as tmp:
+            errors = check_attention_limits(Path(tmp) / "nonexistent.md")
+            self.assertEqual(len(errors), 0)
+
+    def test_none_path_returns_empty(self):
+        """None path returns no errors."""
+        errors = check_attention_limits(None)
+        self.assertEqual(len(errors), 0)
+
+    def test_paused_entries_not_counted(self):
+        """Entries under ## Paused are not counted as active."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            active_md = tmpdir / "active.md"
+            active_md.write_text(
+                "# Active\n\n"
+                "## Primary\n\n- `001` — Main\n\n"
+                "## Supporting\n\n- `002` — Helper\n\n"
+                "## Paused\n\n- `003` — Paused item\n\n"
+            )
+            errors = check_attention_limits(active_md)
+            self.assertEqual(len(errors), 0)
+
+
+# ── Protected-fields tests ─────────────────────────────────────────────────────
+
+
+class TestCheckProtectedFields(unittest.TestCase):
+    """test_protected_fields_enforces_immutable_field_rules."""
+
+    def test_valid_object_passes(self):
+        """Well-formed object with valid id and timestamps passes."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                SAMPLE_FRONTMATTER + "\n" + SAMPLE_BODY,
+            )
+            errors = check_protected_fields(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_invalid_id_format_rejected(self):
+        """id not matching YYYY-MM-DD-NNN is rejected."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            bad_fm = SAMPLE_FRONTMATTER.replace(
+                "id: 2026-07-21-010", "id: bad-format-id"
+            )
+            obj_file = make_object_file(
+                tmpdir, "bad-format-id-test.md",
+                bad_fm + "\n" + SAMPLE_BODY,
+            )
+            errors = check_protected_fields(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("YYYY-MM-DD-NNN" in e for e in errors))
+
+    def test_id_mismatch_with_filename_rejected(self):
+        """id not matching filename prefix is rejected."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-999-test.md",
+                SAMPLE_FRONTMATTER + "\n" + SAMPLE_BODY,
+            )
+            errors = check_protected_fields(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("does not match filename" in e for e in errors))
+
+    def test_missing_id_rejected(self):
+        """Missing id field is rejected."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            bad_fm = SAMPLE_FRONTMATTER.replace("id: 2026-07-21-010\n", "")
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                bad_fm + "\n" + SAMPLE_BODY,
+            )
+            errors = check_protected_fields(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("Missing required field: id" in e for e in errors))
+
+    def test_invalid_created_at_format_rejected(self):
+        """Non-RFC-3339 created_at is rejected."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            bad_fm = SAMPLE_FRONTMATTER.replace(
+                "created_at: 2026-07-21T00:00:00Z",
+                "created_at: yesterday",
+            )
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                bad_fm + "\n" + SAMPLE_BODY,
+            )
+            errors = check_protected_fields(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("created_at" in e for e in errors))
+
+    def test_invalid_updated_at_format_rejected(self):
+        """Non-RFC-3339 updated_at is rejected."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            bad_fm = SAMPLE_FRONTMATTER.replace(
+                "updated_at: 2026-07-21T00:00:00Z",
+                "updated_at: tomorrow",
+            )
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                bad_fm + "\n" + SAMPLE_BODY,
+            )
+            errors = check_protected_fields(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("updated_at" in e for e in errors))
+
+    def test_created_after_updated_rejected(self):
+        """created_at > updated_at is rejected."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            bad_fm = SAMPLE_FRONTMATTER.replace(
+                "updated_at: 2026-07-21T00:00:00Z",
+                "updated_at: 2026-01-01T00:00:00Z",
+            )
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                bad_fm + "\n" + SAMPLE_BODY,
+            )
+            errors = check_protected_fields(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("is after" in e for e in errors))
+
+    def test_rfc3339_with_timezone_offset_passes(self):
+        """RFC-3339 with +HH:MM offset is valid."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = SAMPLE_FRONTMATTER.replace(
+                "created_at: 2026-07-21T00:00:00Z",
+                "created_at: 2026-07-21T00:00:00+08:00",
+            ).replace(
+                "updated_at: 2026-07-21T00:00:00Z",
+                "updated_at: 2026-07-21T00:00:00+08:00",
+            )
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                fm + "\n" + SAMPLE_BODY,
+            )
+            errors = check_protected_fields(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_rfc3339_with_milliseconds_passes(self):
+        """RFC-3339 with fractional seconds is valid."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = SAMPLE_FRONTMATTER.replace(
+                "created_at: 2026-07-21T00:00:00Z",
+                "created_at: 2026-07-21T00:00:00.123Z",
+            ).replace(
+                "updated_at: 2026-07-21T00:00:00Z",
+                "updated_at: 2026-07-21T00:00:00.456Z",
+            )
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                fm + "\n" + SAMPLE_BODY,
+            )
+            errors = check_protected_fields(obj_file)
+            self.assertEqual(len(errors), 0)
+
+
+# ── Sensitivity policy tests ───────────────────────────────────────────────────
+
+
+RESTRICTED_FM = SAMPLE_FRONTMATTER.replace(
+    "sensitivity: ordinary", "sensitivity: restricted"
+)
+
+
+class TestCheckSensitivityPolicy(unittest.TestCase):
+    """test_sensitivity_policy_enforces_pointer_rule_for_restricted."""
+
+    def test_ordinary_object_exempt(self):
+        """Ordinary-sensitivity objects are not checked."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                SAMPLE_FRONTMATTER + "\n" + SAMPLE_BODY,
+            )
+            errors = check_sensitivity_policy(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_restricted_without_pointers_rejected(self):
+        """Restricted object without Pointers/References section fails."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            # SAMPLE_BODY doesn't have a Pointers section
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                RESTRICTED_FM + "\n" + SAMPLE_BODY,
+            )
+            errors = check_sensitivity_policy(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("Pointers" in e or "References" in e
+                               for e in errors))
+
+    def test_restricted_with_pointers_section_passes(self):
+        """Restricted object with a ## Pointers section passes."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            body_with_pointers = SAMPLE_BODY + (
+                "\n## Pointers\n\n"
+                "- Secret material: see vault entry `ops/credentials`\n"
+            )
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                RESTRICTED_FM + "\n" + body_with_pointers,
+            )
+            errors = check_sensitivity_policy(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_restricted_with_references_section_passes(self):
+        """Restricted object with a ## References section passes."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            body_with_refs = SAMPLE_BODY.replace(
+                "## Open questions",
+                "## References\n\n"
+                "- Key material: `/secure/vault/keys`\n\n"
+                "## Open questions",
+            )
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                RESTRICTED_FM + "\n" + body_with_refs,
+            )
+            errors = check_sensitivity_policy(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_restricted_with_substantial_inline_intent_rejected(self):
+        """Restricted object with substantial inline content in Intent fails."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            body = SAMPLE_BODY.replace(
+                "## Intent\n\nTest intent.",
+                "## Intent\n\nDetailed description of the restricted"
+                " material.\n\nThis contains specifics about the credential"
+                " rotation schedule.\n\nKey rotation happens every 30 days"
+                " and involves the production database master key.\n"
+            )
+            body += "\n## Pointers\n\n- Vault: `ops/vault`\n"
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                RESTRICTED_FM + "\n" + body,
+            )
+            errors = check_sensitivity_policy(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("intent" in e.lower() for e in errors))
+
+    def test_restricted_with_stub_sections_passes(self):
+        """Restricted object with brief descriptions + Pointers passes."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            body = (
+                "## Intent\n\nHandle credential rotation.\n\n"
+                "## Success evidence\n\n- [ ] Rotation completed\n\n"
+                "## Constraints and non-goals\n\n"
+                "Minimal scope only.\n\n"
+                "## Open questions\n\nNone.\n\n"
+                "## Pointers\n\n"
+                "- Credentials: `vault/production/db`\n"
+                "- Rotation script: `ops/rotate.sh`\n\n"
+                "## History\n\n"
+                "### 2026-07-21T00:00:00Z — Created\n\n"
+                "- **State:** notice\n"
+                "- **Actor:** system\n"
+            )
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                RESTRICTED_FM + "\n" + body,
+            )
+            errors = check_sensitivity_policy(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_multiple_stub_violations_reported(self):
+        """Multiple sections with substantial content each get flagged."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            body = (
+                "## Intent\n\nLine one.\nLine two.\nLine three.\n\n"
+                "## Success evidence\n\n- [x] A\n- [x] B\n- [x] C\n\n"
+                "## Pointers\n\n- Vault: `ops/vault`\n"
+            )
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                RESTRICTED_FM + "\n" + body,
+            )
+            errors = check_sensitivity_policy(obj_file)
+            # Intent has 3 substantive lines (> 2) → flagged
+            self.assertTrue(len(errors) >= 1)
+            self.assertTrue(any("intent" in e.lower() for e in errors))
+
+
+# ── History integrity tests ────────────────────────────────────────────────────
+
+
+# History with valid, chronologically ordered entries
+VALID_HISTORY = """## History
+
+### 2026-07-21T00:00:00Z — Created
+
+- **State:** notice
+- **Status:** active
+- **Actor:** system
+- **Rationale:** Initial creation
+
+### 2026-07-21T01:00:00Z — Transition to build
+
+- **State:** build
+- **Status:** active
+- **Actor:** user
+- **Rationale:** Approved for build
+"""
+
+# History with out-of-order timestamps
+DISORDERED_HISTORY = """## History
+
+### 2026-07-21T02:00:00Z — Late entry
+
+- **State:** build
+- **Status:** active
+- **Actor:** user
+
+### 2026-07-21T01:00:00Z — Earlier entry
+
+- **State:** notice
+- **Status:** active
+- **Actor:** system
+"""
+
+# History with a malformed heading (no timestamp)
+MALFORMED_HISTORY = """## History
+
+### 2026-07-21T00:00:00Z — Created
+
+- **State:** notice
+- **Status:** active
+- **Actor:** system
+
+### Just a note — no timestamp here
+
+- **State:** build
+- **Status:** active
+"""
+
+# History with duplicate headings
+DUPLICATE_HISTORY = """## History
+
+### 2026-07-21T00:00:00Z — Created
+
+- **State:** notice
+- **Status:** active
+- **Actor:** system
+
+### 2026-07-21T00:00:00Z — Created
+
+- **State:** build
+- **Status:** active
+- **Actor:** user
+"""
+
+
+class TestCheckHistoryIntegrity(unittest.TestCase):
+    """test_history_integrity_validates_append_only_order_and_structure."""
+
+    def test_valid_ordered_history_passes(self):
+        """Chronologically ordered history with valid entries passes."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            body = SAMPLE_BODY.replace(
+                "## History\n\n### 2026-07-21T00:00:00Z — Created",
+                VALID_HISTORY
+            )
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                SAMPLE_FRONTMATTER + "\n" + body,
+            )
+            errors = check_history_integrity(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_disordered_history_rejected(self):
+        """History entries out of chronological order are rejected."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            body = SAMPLE_BODY.replace(
+                "## History\n\n### 2026-07-21T00:00:00Z — Created",
+                DISORDERED_HISTORY
+            )
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                SAMPLE_FRONTMATTER + "\n" + body,
+            )
+            errors = check_history_integrity(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("chronological" in e for e in errors))
+
+    def test_malformed_heading_rejected(self):
+        """History entry without valid timestamp heading is rejected."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            body = SAMPLE_BODY.replace(
+                "## History\n\n### 2026-07-21T00:00:00Z — Created",
+                MALFORMED_HISTORY
+            )
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                SAMPLE_FRONTMATTER + "\n" + body,
+            )
+            errors = check_history_integrity(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("invalid format" in e for e in errors))
+
+    def test_duplicate_headings_rejected(self):
+        """Duplicate History entry headings are rejected."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            body = SAMPLE_BODY.replace(
+                "## History\n\n### 2026-07-21T00:00:00Z — Created",
+                DUPLICATE_HISTORY
+            )
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                SAMPLE_FRONTMATTER + "\n" + body,
+            )
+            errors = check_history_integrity(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("Duplicate" in e for e in errors))
+
+    def test_empty_history_for_notice_passes(self):
+        """Notice-state objects can have empty History."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            body = "## History\n\n"
+            fm = SAMPLE_FRONTMATTER  # state: notice
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                fm + "\n" + body,
+            )
+            errors = check_history_integrity(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_empty_history_past_notice_rejected(self):
+        """Objects past notice state must have History entries."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            body = "## History\n\n"
+            fm = SAMPLE_FRONTMATTER.replace("state: notice", "state: build")
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                fm + "\n" + body,
+            )
+            errors = check_history_integrity(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("empty" in e for e in errors))
+
+    def test_missing_history_section_handled(self):
+        """Missing History section returns no errors for notice state."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            body = "## Intent\n\nNo history.\n"
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                SAMPLE_FRONTMATTER + "\n" + body,
+            )
+            errors = check_history_integrity(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_single_entry_passes(self):
+        """Single History entry passes all checks."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            body = (
+                "## History\n\n"
+                "### 2026-07-21T00:00:00Z — Created\n\n"
+                "- **State:** notice\n"
+                "- **Status:** active\n"
+                "- **Actor:** system\n"
+            )
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                SAMPLE_FRONTMATTER + "\n" + body,
+            )
+            errors = check_history_integrity(obj_file)
+            self.assertEqual(len(errors), 0)
+
+
+# ── File integrity tests ───────────────────────────────────────────────────────
+
+
+class TestCheckFileIntegrity(unittest.TestCase):
+    """test_file_integrity_detects_partial_writes."""
+
+    def test_valid_file_passes(self):
+        """Complete, well-formed file passes integrity check."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                SAMPLE_FRONTMATTER + "\n" + SAMPLE_BODY,
+            )
+            errors = check_file_integrity(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_empty_file_rejected(self):
+        """Empty file is rejected."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            obj_file = make_object_file(tmpdir, "empty.md", "")
+            errors = check_file_integrity(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("empty" in e for e in errors))
+
+    def test_unclosed_frontmatter_rejected(self):
+        """File with unclosed YAML frontmatter is rejected."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            truncated = "---\nid: 2026-07-21-010\ntitle: Truncated\n"
+            obj_file = make_object_file(tmpdir, "2026-07-21-010-test.md", truncated)
+            errors = check_file_integrity(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("Unclosed" in e for e in errors))
+
+    def test_no_trailing_newline_rejected(self):
+        """File without trailing newline is flagged as potentially truncated."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            content = SAMPLE_FRONTMATTER + "\n" + SAMPLE_BODY
+            content = content.rstrip("\n")  # Remove trailing newline
+            obj_file = make_object_file(tmpdir, "2026-07-21-010-test.md", content)
+            errors = check_file_integrity(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("newline" in e for e in errors))
+
+    def test_trailing_hash_fragment_rejected(self):
+        """File ending with '##' is flagged as truncated heading."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            truncated = SAMPLE_FRONTMATTER + "\n\n##"
+            obj_file = make_object_file(tmpdir, "2026-07-21-010-test.md", truncated)
+            errors = check_file_integrity(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("incomplete" in e.lower() for e in errors))
+
+    def test_trailing_triple_hash_rejected(self):
+        """File ending with '###' is flagged as truncated subsection heading."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            truncated = SAMPLE_FRONTMATTER + "\n\n## History\n\n###"
+            obj_file = make_object_file(tmpdir, "2026-07-21-010-test.md", truncated)
+            errors = check_file_integrity(obj_file)
+            self.assertTrue(len(errors) > 0)
+
+    def test_truncated_evidence_table_row_rejected(self):
+        """Partial evidence table row is detected."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            body = (
+                "## Evidence ledger\n\n"
+                "| [system] | test\n"  # Truncated row — missing Entry column
+            )
+            fm = SAMPLE_FRONTMATTER + "\n" + body
+            obj_file = make_object_file(tmpdir, "2026-07-21-010-test.md", fm)
+            errors = check_file_integrity(obj_file)
+            self.assertTrue(len(errors) > 0)
+
+    def test_no_frontmatter_rejected(self):
+        """File without YAML frontmatter is rejected."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            no_fm = "# Just a markdown file\n\nNo frontmatter here.\n"
+            obj_file = make_object_file(tmpdir, "2026-07-21-010-test.md", no_fm)
+            errors = check_file_integrity(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("frontmatter" in e for e in errors))
+
+
+# ── Incident successor routing tests ───────────────────────────────────────────
+
+
+INCIDENT_FM = SAMPLE_FRONTMATTER.replace("type: change", "type: incident")
+
+
+class TestCheckIncidentRouting(unittest.TestCase):
+    """test_incident_routing_validates_successor_linkage."""
+
+    def test_active_incident_exempt(self):
+        """Active incidents are not checked for successor routing."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                INCIDENT_FM + "\n" + SAMPLE_BODY,
+            )
+            errors = check_incident_routing(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_non_incident_type_exempt(self):
+        """Non-incident types are not checked."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = SAMPLE_FRONTMATTER.replace("state: notice", "state: close")
+            fm = fm.replace("status: active", "status: closed")
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                fm + "\n" + SAMPLE_BODY,
+            )
+            errors = check_incident_routing(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_closed_incident_without_successor_rejected(self):
+        """Closed incident without successor link or resolution fails."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = INCIDENT_FM.replace("state: notice", "state: close")
+            fm = fm.replace("status: active", "status: closed")
+            body = SAMPLE_BODY  # No successor reference or resolution
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                fm + "\n" + body,
+            )
+            errors = check_incident_routing(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("successor" in e or "resolution" in e
+                               for e in errors))
+
+    def test_closed_incident_with_successor_passes(self):
+        """Closed incident with successor reference passes."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = INCIDENT_FM.replace("state: notice", "state: close")
+            fm = fm.replace("status: active", "status: closed")
+            body = SAMPLE_BODY.replace(
+                "### 2026-07-21T00:00:00Z — Created",
+                "### 2026-07-21T00:00:00Z — Created\n\n"
+                "- **Successor:** 2026-07-22-001"
+            )
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                fm + "\n" + body,
+            )
+            errors = check_incident_routing(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_closed_incident_with_resolution_passes(self):
+        """Closed incident with resolution decision passes."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = INCIDENT_FM.replace("state: notice", "state: close")
+            fm = fm.replace("status: active", "status: closed")
+            body = SAMPLE_BODY.replace(
+                "| **Result** | pass |",
+                "| **Result** | pass |"
+            ).replace(
+                "| **Rationale** | testing |",
+                "| **Rationale** | Resolution: root cause fixed |"
+            )
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                fm + "\n" + body,
+            )
+            errors = check_incident_routing(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_closed_incident_with_linked_id_passes(self):
+        """Closed incident with successor ID in History passes."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = INCIDENT_FM.replace("state: notice", "state: close")
+            fm = fm.replace("status: active", "status: closed")
+            body = SAMPLE_BODY.replace(
+                "### 2026-07-21T00:00:00Z — Created",
+                "### 2026-07-21T00:00:00Z — Superseded by 2026-07-22-005\n\n"
+                "- **State:** close\n- **Status:** closed\n- **Actor:** user"
+            )
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                fm + "\n" + body,
+            )
+            errors = check_incident_routing(obj_file)
+            self.assertEqual(len(errors), 0)
+
+
+# ── Prerequisites tests ────────────────────────────────────────────────────────
+
+
+# Body with a decision record containing result: pass and scope
+BODY_WITH_PASS_DECISION = SAMPLE_BODY.replace(
+    "| **Result** | pass |",
+    "| **Result** | pass |"
+)
+
+# Body without scope in the decision record
+BODY_WITHOUT_SCOPE = SAMPLE_BODY.replace(
+    "| **Scope** | test scope |",
+    "| **Scope** | <!-- what this decision applies to --> |"
+)
+
+# Body with a fail result instead of pass
+BODY_WITH_FAIL_DECISION = SAMPLE_BODY.replace(
+    "| **Result** | pass |",
+    "| **Result** | fail |"
+)
+
+# Body with no decisions at all
+BODY_WITHOUT_DECISIONS = SAMPLE_BODY.replace(
+    "### Decision 1 — Test decision",
+    "### Discussion 1 — Not a decision",
+)
+
+HIGH_CONSEQUENCE_FM = SAMPLE_FRONTMATTER.replace(
+    "consequence: meaningful", "consequence: high"
+)
+
+
+class TestCheckPrerequisites(unittest.TestCase):
+    """test_prerequisites_validates_state_reaches_via_gates."""
+
+    def test_notice_state_exempt(self):
+        """Notice state has no prerequisites."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                SAMPLE_FRONTMATTER + "\n" + BODY_WITHOUT_DECISIONS,
+            )
+            errors = check_prerequisites(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_close_state_exempt(self):
+        """Close state has no prerequisites."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = SAMPLE_FRONTMATTER.replace("state: notice", "state: close")
+            fm = fm.replace("status: active", "status: closed")
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                fm + "\n" + BODY_WITHOUT_DECISIONS,
+            )
+            errors = check_prerequisites(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_build_high_consequence_with_decision_passes(self):
+        """Build state + high consequence with decision_type: decision passes."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = HIGH_CONSEQUENCE_FM.replace("state: notice", "state: build")
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                fm + "\n" + SAMPLE_BODY,
+            )
+            errors = check_prerequisites(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_build_high_consequence_without_decision_fails(self):
+        """Build state + high consequence without decision record fails."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = HIGH_CONSEQUENCE_FM.replace("state: notice", "state: build")
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                fm + "\n" + BODY_WITHOUT_DECISIONS,
+            )
+            errors = check_prerequisites(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("decision_type" in e for e in errors))
+
+    def test_build_low_consequence_exempt(self):
+        """Build state with low/meaningful consequence is exempt from build gate."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = SAMPLE_FRONTMATTER.replace("state: notice", "state: build")
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                fm + "\n" + BODY_WITHOUT_DECISIONS,
+            )
+            errors = check_prerequisites(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_release_state_with_pass_and_scope_passes(self):
+        """Release state with result: pass and scope passes."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = SAMPLE_FRONTMATTER.replace("state: notice", "state: release")
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                fm + "\n" + SAMPLE_BODY,
+            )
+            errors = check_prerequisites(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_release_state_without_scope_fails(self):
+        """Release state without scope fails prerequisite check."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = SAMPLE_FRONTMATTER.replace("state: notice", "state: release")
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                fm + "\n" + BODY_WITHOUT_SCOPE,
+            )
+            errors = check_prerequisites(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("scope" in e for e in errors))
+
+    def test_release_state_with_fail_result_fails(self):
+        """Release state with result: fail fails prerequisite check."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = SAMPLE_FRONTMATTER.replace("state: notice", "state: release")
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                fm + "\n" + BODY_WITH_FAIL_DECISION,
+            )
+            errors = check_prerequisites(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("result" in e for e in errors)
+                            or any("pass" in e for e in errors))
+
+    def test_verify_state_with_decision_passes(self):
+        """Verify state with result: pass and scope passes."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = SAMPLE_FRONTMATTER.replace("state: notice", "state: verify")
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                fm + "\n" + SAMPLE_BODY,
+            )
+            errors = check_prerequisites(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_observe_state_without_pass_fails(self):
+        """Observe state without result: pass fails prerequisite check."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = SAMPLE_FRONTMATTER.replace("state: notice", "state: observe")
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                fm + "\n" + BODY_WITH_FAIL_DECISION,
+            )
+            errors = check_prerequisites(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("pass" in e for e in errors))
+
+    def test_observe_state_with_pass_passes(self):
+        """Observe state with result: pass passes."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = SAMPLE_FRONTMATTER.replace("state: notice", "state: observe")
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                fm + "\n" + SAMPLE_BODY,
+            )
+            errors = check_prerequisites(obj_file)
+            self.assertEqual(len(errors), 0)
+
+
+# ── Unsupported capabilities tests ─────────────────────────────────────────────
+
+
+# A minimal adapter SKILL.md with capability table
+ADAPTER_SKILL = """# Test Adapter
+
+## Platform Adapter
+
+### Capability Mappings
+
+| Abstract capability | Platform tool | Classification |
+|---------------------|---------------|----------------|
+| `file_read` | `read_file` | native |
+| `browser_automation` | `—` | manual-fallback |
+| `web_search` | `—` | manual-fallback |
+
+#### `browser_automation` (manual-fallback)
+
+- **Behavior**: Pause and ask user.
+- **Note**: Requires manual steps.
+
+#### `web_search` (manual-fallback)
+
+- **Behavior**: Pause and ask user.
+- **Note**: Use manual lookup.
+"""
+
+# Adapter with an unknown capability
+ADAPTER_WITH_UNKNOWN_CAP = ADAPTER_SKILL.replace(
+    "| `web_search` | `—` | manual-fallback |",
+    "| `foo_bar_baz` | `—` | native |"
+)
+
+# Adapter with invalid classification
+ADAPTER_WITH_BAD_CLASSIFICATION = ADAPTER_SKILL.replace(
+    "| `web_search` | `—` | manual-fallback |",
+    "| `web_search` | `—` | maybe-works |"
+)
+
+# Adapter missing degradation subsection for manual-fallback
+ADAPTER_MISSING_DEGRADATION = """# Test Adapter
+
+## Platform Adapter
+
+### Capability Mappings
+
+| Abstract capability | Platform tool | Classification |
+|---------------------|---------------|----------------|
+| `file_read` | `read_file` | native |
+| `browser_automation` | `—` | manual-fallback |
+"""
+
+
+class TestCheckUnsupportedCapabilities(unittest.TestCase):
+    """test_unsupported_capabilities_validates_degradation_declarations."""
+
+    def test_valid_adapter_passes(self):
+        """Adapter with valid capabilities and degradation sections passes."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            adapter = make_object_file(tmpdir, "SKILL.md", ADAPTER_SKILL)
+            errors = check_unsupported_capabilities(adapter)
+            self.assertEqual(len(errors), 0)
+
+    def test_no_capability_table_passes(self):
+        """File without a capability table is not checked."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            no_table = "# Just a regular file\n\nNo capability table here.\n"
+            obj_file = make_object_file(tmpdir, "README.md", no_table)
+            errors = check_unsupported_capabilities(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_unknown_capability_rejected(self):
+        """Unknown capability in mapping table is flagged."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            adapter = make_object_file(
+                tmpdir, "SKILL.md", ADAPTER_WITH_UNKNOWN_CAP)
+            errors = check_unsupported_capabilities(adapter)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("foo_bar_baz" in e for e in errors))
+
+    def test_invalid_classification_rejected(self):
+        """Invalid classification value is flagged."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            adapter = make_object_file(
+                tmpdir, "SKILL.md", ADAPTER_WITH_BAD_CLASSIFICATION)
+            errors = check_unsupported_capabilities(adapter)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("maybe-works" in e for e in errors))
+
+    def test_missing_degradation_subsection_rejected(self):
+        """Manual-fallback without degradation subsection is flagged."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            adapter = make_object_file(
+                tmpdir, "SKILL.md", ADAPTER_MISSING_DEGRADATION)
+            errors = check_unsupported_capabilities(adapter)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("browser_automation" in e for e in errors))
+
+    def test_unsupported_without_subsection_rejected(self):
+        """Unsupported classification without degradation subsection flagged."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            adapter_unsupported = ADAPTER_SKILL.replace(
+                "| `browser_automation` | `—` | manual-fallback |",
+                "| `browser_automation` | `—` | unsupported |"
+            )
+            adapter = make_object_file(
+                tmpdir, "SKILL.md", adapter_unsupported)
+            errors = check_unsupported_capabilities(adapter)
+            # The subsection exists (for manual-fallback), should pass
+            self.assertEqual(len(errors), 0)
+
+
+# ── Interrupted mutations tests ────────────────────────────────────────────────
+
+
+class TestCheckInterruptedMutations(unittest.TestCase):
+    """test_interrupted_mutations_detects_orphaned_temp_files."""
+
+    def test_clean_directory_passes(self):
+        """Work Object without sibling temp files passes."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                SAMPLE_FRONTMATTER + "\n" + SAMPLE_BODY,
+            )
+            errors = check_interrupted_mutations(obj_file)
+            self.assertEqual(len(errors), 0)
+
+    def test_orphaned_tmp_file_detected(self):
+        """Sibling .tmp file is flagged as interrupted mutation."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                SAMPLE_FRONTMATTER + "\n" + SAMPLE_BODY,
+            )
+            # Create orphaned temp file
+            (tmpdir / "2026-07-21-010-test.tmp").write_text("partial data")
+            errors = check_interrupted_mutations(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("temp" in e.lower() for e in errors))
+
+    def test_orphaned_swp_file_detected(self):
+        """Sibling .swp file is flagged as interrupted editor session."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                SAMPLE_FRONTMATTER + "\n" + SAMPLE_BODY,
+            )
+            (tmpdir / "2026-07-21-010-test.swp").write_text("vim swap")
+            errors = check_interrupted_mutations(obj_file)
+            self.assertTrue(len(errors) > 0)
+
+    def test_orphaned_lock_file_detected(self):
+        """Sibling .lock file is flagged."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                SAMPLE_FRONTMATTER + "\n" + SAMPLE_BODY,
+            )
+            (tmpdir / "2026-07-21-010-test.md.lock").write_text("locked")
+            errors = check_interrupted_mutations(obj_file)
+            self.assertTrue(len(errors) > 0)
+            self.assertTrue(any("lock" in e.lower() for e in errors))
+
+    def test_dot_lock_file_detected(self):
+        """Hidden dot-lock file is flagged."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                SAMPLE_FRONTMATTER + "\n" + SAMPLE_BODY,
+            )
+            (tmpdir / ".2026-07-21-010-test.md.lock").write_text("locked")
+            errors = check_interrupted_mutations(obj_file)
+            self.assertTrue(len(errors) > 0)
+
+    def test_vim_backup_detected(self):
+        """Vim-style backup file (name~) is flagged."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                SAMPLE_FRONTMATTER + "\n" + SAMPLE_BODY,
+            )
+            (tmpdir / "2026-07-21-010-test.md~").write_text("backup")
+            errors = check_interrupted_mutations(obj_file)
+            self.assertTrue(len(errors) > 0)
+
+    def test_unrelated_files_ignored(self):
+        """Unrelated sibling files are not flagged."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                SAMPLE_FRONTMATTER + "\n" + SAMPLE_BODY,
+            )
+            # Unrelated file — different prefix
+            (tmpdir / "2026-07-21-999-other.md").write_text("other")
+            (tmpdir / "README.md").write_text("readme")
+            errors = check_interrupted_mutations(obj_file)
+            self.assertEqual(len(errors), 0)
+
+
 class TestCheckRegistry(unittest.TestCase):
     """All declared checks are registered."""
 
     def test_all_checks_registered(self):
         """Every check name has a handler."""
         expected = {"schema", "sections", "append-only", "attention",
-                     "sensitivity", "lifecycle", "structure"}
+                     "attention-limits", "sensitivity", "sensitivity-policy",
+                     "lifecycle", "claims", "lanes",
+                     "authority", "protected-fields", "history-integrity",
+                     "file-integrity", "incident-routing", "prerequisites",
+                     "unsupported-capabilities", "interrupted-mutations",
+                     "structure"}
         self.assertEqual(set(CHECK_REGISTRY.keys()), expected)
 
 

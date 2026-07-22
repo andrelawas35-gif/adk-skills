@@ -1,10 +1,6 @@
 ---
 name: design-tracer-bullet
-description: >
-  From a Design-state Work Object, agree and record the smallest demoable
-  end-to-end tracer bullet that tests its riskiest assumption. Use when a
-  bounded work item needs a design before implementation. This skill designs
-  and routes; it never implements the tracer bullet.
+description: "Use when an accepted direction needs the smallest end-to-end experiment; returns a bounded, observable, reversible tracer design; does not implement it or authorize production effects."
 ---
 
 # Design Tracer Bullet

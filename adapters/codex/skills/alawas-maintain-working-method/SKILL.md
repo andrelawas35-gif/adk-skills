@@ -136,8 +136,8 @@ not erase its evidence.
 
 Apply `references/EVIDENCE-MODEL.md`.
 
-- Label direct local observations `[system]` or `[lived]`, interpretations
-  `[inference]`, approval `[decision]`, and missing material `[unresolved]`.
+- Label direct local observations `[system]` or `[testimony]`, interpretations
+  `[inference]`, approval `[decision]`, and missing material `[gap]`.
 - Preserve supporting evidence and contrary evidence with their source,
   date, scope, and limits. Contradictory evidence is not a reason to edit
   history or silently narrow a rule.

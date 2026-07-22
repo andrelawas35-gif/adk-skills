@@ -1,10 +1,6 @@
 ---
 name: grilling-session
-description: >
-  Run a continuous, codebase-grounded Grilling Session for a Work Studio
-  project. Use when the user says "grill me" or "grill this" in a pinned
-  project. Ask exactly one question per turn, adapt from each answer, and do
-  not create durable work unless the user explicitly promotes the session.
+description: "Use when the user explicitly requests continuous grilling or accepts a candidate; maintains one decision frontier and one question at a time; does not persist or execute without the owning skill's authority."
 ---
 
 # Grilling Session

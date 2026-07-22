@@ -56,6 +56,8 @@ unsupported and follows `references/CAPABILITY-DEGRADATION.md` when needed.
 - `content_search` — find the accepted path and focused verification seam.
 - `file_write` — apply only the bounded implementation change.
 - `terminal_run` — inspect status and run focused verification where safe.
+- `background_processes` — start a local server or service when focused
+  verification requires it; without it, ask the user to start the service.
 - `structured_output` — report scope, verification evidence, and deviations.
 - `user_confirmation` — obtain authority for a material deviation when needed.
 
@@ -257,5 +259,6 @@ Invocation-relevant wiring only; installation and maintainer guidance live outsi
 | `content_search` | `Grep` | native |
 | `file_write` | `Write / Edit` | native |
 | `terminal_run` | `Bash` | native |
+| `background_processes` | `Bash (background) / Monitor` | native |
 | `structured_output` | `—` | native |
 | `user_confirmation` | `conversation turn` | native |

@@ -386,7 +386,8 @@ def cmd_append_evidence(args: argparse.Namespace) -> int:
 
     # Generate evidence entry
     try:
-        entry = generate_evidence_entry(args.tag, args.source, args.text)
+        entry = generate_evidence_entry(args.tag, args.source, args.text,
+                                         sha=getattr(args, 'sha', None))
     except ValueError as e:
         print(f"Error: {e}", file=sys.stderr)
         return 1
@@ -449,6 +450,7 @@ def cmd_append_history(args: argparse.Namespace) -> int:
         status=args.status,
         actor=args.actor,
         rationale=args.rationale,
+        commit=getattr(args, 'commit', None),
     )
 
     # Append
@@ -694,6 +696,7 @@ def build_parser() -> argparse.ArgumentParser:
     append_evidence_parser.add_argument("--tag", required=True, help="Evidence tag")
     append_evidence_parser.add_argument("--text", required=True, help="Evidence text")
     append_evidence_parser.add_argument("--source", required=True, help="Evidence source")
+    append_evidence_parser.add_argument("--sha", default=None, help="Git commit SHA (optional, [system] only per ADR 0023)")
     append_evidence_parser.add_argument(
         "--expect-updated", required=True,
         help="Expected updated_at timestamp",
@@ -720,6 +723,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     append_history_parser.add_argument("--actor", default="system", help="Actor identifier")
     append_history_parser.add_argument("--rationale", required=True, help="Entry rationale")
+    append_history_parser.add_argument("--commit", default=None, help="Git commit SHA (optional, per ADR 0023)")
     append_history_parser.add_argument(
         "--expect-updated", required=True,
         help="Expected updated_at timestamp",

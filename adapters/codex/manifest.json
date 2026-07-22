@@ -7,17 +7,12 @@
     {
       "name": "alawas-conduct-work-object",
       "path": "adapters/codex/skills/alawas-conduct-work-object/SKILL.md",
-      "sha256": "d9db3c687e76a11709359a5946dff5739de3a46f88e065d591d736155bfc90d4"
+      "sha256": "dada9eb3ce8eaac8445e6779e87a1d561424174474e042dd15aa9dcdbb6c9c77"
     },
     {
       "name": "alawas-conduct-work-object/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
       "path": "adapters/codex/skills/alawas-conduct-work-object/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
       "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-conduct-work-object/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/codex/skills/alawas-conduct-work-object/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
     },
     {
       "name": "alawas-conduct-work-object/references/AGREEMENT-LOOP.md",
@@ -32,17 +27,12 @@
     {
       "name": "alawas-conduct-work-object/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/codex/skills/alawas-conduct-work-object/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
       "name": "alawas-conduct-work-object/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-conduct-work-object/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
-    },
-    {
-      "name": "alawas-conduct-work-object/references/EVIDENCE-MODEL.md",
-      "path": "adapters/codex/skills/alawas-conduct-work-object/references/EVIDENCE-MODEL.md",
-      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
       "name": "alawas-conduct-work-object/references/SHARED-PROTOCOL.md",
@@ -52,17 +42,7 @@
     {
       "name": "alawas-deploy-with-recovery",
       "path": "adapters/codex/skills/alawas-deploy-with-recovery/SKILL.md",
-      "sha256": "4208175403fa37f43d46c25dba59d03ce27831c596ff8b875a1579d29c6ebfc5"
-    },
-    {
-      "name": "alawas-deploy-with-recovery/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "path": "adapters/codex/skills/alawas-deploy-with-recovery/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-deploy-with-recovery/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/codex/skills/alawas-deploy-with-recovery/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
+      "sha256": "f24390f1ecbaf16fa2c7e9613aabf9c5de501acb1202515cca48bf1b18319c3f"
     },
     {
       "name": "alawas-deploy-with-recovery/references/AGREEMENT-LOOP.md",
@@ -77,7 +57,7 @@
     {
       "name": "alawas-deploy-with-recovery/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/codex/skills/alawas-deploy-with-recovery/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
       "name": "alawas-deploy-with-recovery/references/CONSEQUENCE-AUTHORITY.md",
@@ -85,29 +65,9 @@
       "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     },
     {
-      "name": "alawas-deploy-with-recovery/references/EVIDENCE-MODEL.md",
-      "path": "adapters/codex/skills/alawas-deploy-with-recovery/references/EVIDENCE-MODEL.md",
-      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
-    },
-    {
-      "name": "alawas-deploy-with-recovery/references/SHARED-PROTOCOL.md",
-      "path": "adapters/codex/skills/alawas-deploy-with-recovery/references/SHARED-PROTOCOL.md",
-      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
-    },
-    {
       "name": "alawas-design-tracer-bullet",
       "path": "adapters/codex/skills/alawas-design-tracer-bullet/SKILL.md",
       "sha256": "0badb961b35ff5c2d2ff4fa19ee10ae5168cbe6afd3097d4f9d183399749f814"
-    },
-    {
-      "name": "alawas-design-tracer-bullet/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "path": "adapters/codex/skills/alawas-design-tracer-bullet/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-design-tracer-bullet/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/codex/skills/alawas-design-tracer-bullet/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
     },
     {
       "name": "alawas-design-tracer-bullet/references/AGREEMENT-LOOP.md",
@@ -122,7 +82,7 @@
     {
       "name": "alawas-design-tracer-bullet/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/codex/skills/alawas-design-tracer-bullet/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
       "name": "alawas-design-tracer-bullet/references/CONSEQUENCE-AUTHORITY.md",
@@ -135,24 +95,9 @@
       "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
-      "name": "alawas-design-tracer-bullet/references/SHARED-PROTOCOL.md",
-      "path": "adapters/codex/skills/alawas-design-tracer-bullet/references/SHARED-PROTOCOL.md",
-      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
-    },
-    {
       "name": "alawas-diagnose-production-incident",
       "path": "adapters/codex/skills/alawas-diagnose-production-incident/SKILL.md",
-      "sha256": "f897c0872dd52c8ef4b97af91aa57b1937931176e4f351b80b36060af3d88658"
-    },
-    {
-      "name": "alawas-diagnose-production-incident/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "path": "adapters/codex/skills/alawas-diagnose-production-incident/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-diagnose-production-incident/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/codex/skills/alawas-diagnose-production-incident/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
+      "sha256": "a328b4d09dad3afa351c5c604db7e4f7fa8ae717c923a1482845e66da82dc033"
     },
     {
       "name": "alawas-diagnose-production-incident/references/AGREEMENT-LOOP.md",
@@ -167,7 +112,7 @@
     {
       "name": "alawas-diagnose-production-incident/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/codex/skills/alawas-diagnose-production-incident/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
       "name": "alawas-diagnose-production-incident/references/CONSEQUENCE-AUTHORITY.md",
@@ -180,24 +125,9 @@
       "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
-      "name": "alawas-diagnose-production-incident/references/SHARED-PROTOCOL.md",
-      "path": "adapters/codex/skills/alawas-diagnose-production-incident/references/SHARED-PROTOCOL.md",
-      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
-    },
-    {
       "name": "alawas-govern-scorecards",
       "path": "adapters/codex/skills/alawas-govern-scorecards/SKILL.md",
-      "sha256": "1fbd36806c25509f5dd208f1192df9ffaef7e3a0b0195c257be3f6d59f83fda8"
-    },
-    {
-      "name": "alawas-govern-scorecards/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "path": "adapters/codex/skills/alawas-govern-scorecards/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-govern-scorecards/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/codex/skills/alawas-govern-scorecards/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
+      "sha256": "a881030dd9b2defb1a2e6cfb9e6aa8e838f03eb57605e313dc1369f11f0acbb2"
     },
     {
       "name": "alawas-govern-scorecards/references/AGREEMENT-LOOP.md",
@@ -212,7 +142,7 @@
     {
       "name": "alawas-govern-scorecards/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/codex/skills/alawas-govern-scorecards/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
       "name": "alawas-govern-scorecards/references/CONSEQUENCE-AUTHORITY.md",
@@ -225,24 +155,9 @@
       "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
-      "name": "alawas-govern-scorecards/references/SHARED-PROTOCOL.md",
-      "path": "adapters/codex/skills/alawas-govern-scorecards/references/SHARED-PROTOCOL.md",
-      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
-    },
-    {
       "name": "alawas-grilling-session",
       "path": "adapters/codex/skills/alawas-grilling-session/SKILL.md",
       "sha256": "28fd166664a364d717724eabb865242bbe158a2835c931e34bc1e39f70d584bc"
-    },
-    {
-      "name": "alawas-grilling-session/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "path": "adapters/codex/skills/alawas-grilling-session/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-grilling-session/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/codex/skills/alawas-grilling-session/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
     },
     {
       "name": "alawas-grilling-session/references/AGREEMENT-LOOP.md",
@@ -255,39 +170,9 @@
       "sha256": "3e312ebacc7eb0b34e6552f2e7eb9fa4a9c2cad9a8c16d83bd7d077d961262fe"
     },
     {
-      "name": "alawas-grilling-session/references/CAPABILITY-DEGRADATION.md",
-      "path": "adapters/codex/skills/alawas-grilling-session/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
-    },
-    {
-      "name": "alawas-grilling-session/references/CONSEQUENCE-AUTHORITY.md",
-      "path": "adapters/codex/skills/alawas-grilling-session/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
-    },
-    {
-      "name": "alawas-grilling-session/references/EVIDENCE-MODEL.md",
-      "path": "adapters/codex/skills/alawas-grilling-session/references/EVIDENCE-MODEL.md",
-      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
-    },
-    {
-      "name": "alawas-grilling-session/references/SHARED-PROTOCOL.md",
-      "path": "adapters/codex/skills/alawas-grilling-session/references/SHARED-PROTOCOL.md",
-      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
-    },
-    {
       "name": "alawas-implement-bounded-change",
       "path": "adapters/codex/skills/alawas-implement-bounded-change/SKILL.md",
-      "sha256": "2fbe4c93b61a235536056681798e1c45a8bed0efc8e9599d781e0e7fa1f4f505"
-    },
-    {
-      "name": "alawas-implement-bounded-change/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "path": "adapters/codex/skills/alawas-implement-bounded-change/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-implement-bounded-change/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/codex/skills/alawas-implement-bounded-change/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
+      "sha256": "2b1b3297ea50116fb22f91247cf8435dd4b1d7780bee436b08560dcfb2a0521c"
     },
     {
       "name": "alawas-implement-bounded-change/references/AGREEMENT-LOOP.md",
@@ -302,7 +187,7 @@
     {
       "name": "alawas-implement-bounded-change/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/codex/skills/alawas-implement-bounded-change/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
       "name": "alawas-implement-bounded-change/references/CONSEQUENCE-AUTHORITY.md",
@@ -315,24 +200,9 @@
       "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
-      "name": "alawas-implement-bounded-change/references/SHARED-PROTOCOL.md",
-      "path": "adapters/codex/skills/alawas-implement-bounded-change/references/SHARED-PROTOCOL.md",
-      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
-    },
-    {
       "name": "alawas-investigate-live-question",
       "path": "adapters/codex/skills/alawas-investigate-live-question/SKILL.md",
-      "sha256": "a7bf38b2ff0c4014ae6828f20d8c2fbab7d285193fdc85aca010372ac6d6569e"
-    },
-    {
-      "name": "alawas-investigate-live-question/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "path": "adapters/codex/skills/alawas-investigate-live-question/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-investigate-live-question/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/codex/skills/alawas-investigate-live-question/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
+      "sha256": "a00b5bf049448b537b2cee355928ce5a7130552b056023f5bcb5670fc34f4128"
     },
     {
       "name": "alawas-investigate-live-question/references/AGREEMENT-LOOP.md",
@@ -347,7 +217,7 @@
     {
       "name": "alawas-investigate-live-question/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/codex/skills/alawas-investigate-live-question/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
       "name": "alawas-investigate-live-question/references/CONSEQUENCE-AUTHORITY.md",
@@ -367,17 +237,7 @@
     {
       "name": "alawas-maintain-working-method",
       "path": "adapters/codex/skills/alawas-maintain-working-method/SKILL.md",
-      "sha256": "2b1acf726b7bccac518f8dbeb09e318655352c721abc27e22a0bc6fe465334a4"
-    },
-    {
-      "name": "alawas-maintain-working-method/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "path": "adapters/codex/skills/alawas-maintain-working-method/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-maintain-working-method/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/codex/skills/alawas-maintain-working-method/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
+      "sha256": "a9e006fcdfd90f62680197386bc1d52e38f2fc95206d4a1a0acca38cf5b69114"
     },
     {
       "name": "alawas-maintain-working-method/references/AGREEMENT-LOOP.md",
@@ -392,7 +252,7 @@
     {
       "name": "alawas-maintain-working-method/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/codex/skills/alawas-maintain-working-method/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
       "name": "alawas-maintain-working-method/references/CONSEQUENCE-AUTHORITY.md",
@@ -405,24 +265,9 @@
       "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
-      "name": "alawas-maintain-working-method/references/SHARED-PROTOCOL.md",
-      "path": "adapters/codex/skills/alawas-maintain-working-method/references/SHARED-PROTOCOL.md",
-      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
-    },
-    {
       "name": "alawas-pressure-test-decision",
       "path": "adapters/codex/skills/alawas-pressure-test-decision/SKILL.md",
       "sha256": "23ea4c69747b7d1d48c9735d1dcbe6766e3e1d6ba4af591821898bbb19b19ba0"
-    },
-    {
-      "name": "alawas-pressure-test-decision/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "path": "adapters/codex/skills/alawas-pressure-test-decision/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-pressure-test-decision/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/codex/skills/alawas-pressure-test-decision/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
     },
     {
       "name": "alawas-pressure-test-decision/references/AGREEMENT-LOOP.md",
@@ -437,17 +282,12 @@
     {
       "name": "alawas-pressure-test-decision/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/codex/skills/alawas-pressure-test-decision/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
       "name": "alawas-pressure-test-decision/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-pressure-test-decision/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
-    },
-    {
-      "name": "alawas-pressure-test-decision/references/EVIDENCE-MODEL.md",
-      "path": "adapters/codex/skills/alawas-pressure-test-decision/references/EVIDENCE-MODEL.md",
-      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
       "name": "alawas-pressure-test-decision/references/SHARED-PROTOCOL.md",
@@ -457,17 +297,7 @@
     {
       "name": "alawas-review-outcome-and-adapt",
       "path": "adapters/codex/skills/alawas-review-outcome-and-adapt/SKILL.md",
-      "sha256": "e083f0ec3e4e0084f249d981983def7914c9d66e165c3f18a953db60d436c9fd"
-    },
-    {
-      "name": "alawas-review-outcome-and-adapt/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "path": "adapters/codex/skills/alawas-review-outcome-and-adapt/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-review-outcome-and-adapt/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/codex/skills/alawas-review-outcome-and-adapt/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
+      "sha256": "eb23b57cf3aba2d73d6d99d7c85f9fa3895abc3d77ddf58561f7fbeba53426bb"
     },
     {
       "name": "alawas-review-outcome-and-adapt/references/AGREEMENT-LOOP.md",
@@ -482,7 +312,7 @@
     {
       "name": "alawas-review-outcome-and-adapt/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/codex/skills/alawas-review-outcome-and-adapt/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
       "name": "alawas-review-outcome-and-adapt/references/CONSEQUENCE-AUTHORITY.md",
@@ -495,11 +325,6 @@
       "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
-      "name": "alawas-review-outcome-and-adapt/references/SHARED-PROTOCOL.md",
-      "path": "adapters/codex/skills/alawas-review-outcome-and-adapt/references/SHARED-PROTOCOL.md",
-      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
-    },
-    {
       "name": "alawas-track-components",
       "path": "adapters/codex/skills/alawas-track-components/SKILL.md",
       "sha256": "c67bfd45a8c090c623a049748281aa98a0f3e40ef7d43d951b6f29a57a32994a"
@@ -508,11 +333,6 @@
       "name": "alawas-track-components/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
       "path": "adapters/codex/skills/alawas-track-components/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
       "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-track-components/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/codex/skills/alawas-track-components/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
     },
     {
       "name": "alawas-track-components/references/AGREEMENT-LOOP.md",
@@ -525,39 +345,14 @@
       "sha256": "3e312ebacc7eb0b34e6552f2e7eb9fa4a9c2cad9a8c16d83bd7d077d961262fe"
     },
     {
-      "name": "alawas-track-components/references/CAPABILITY-DEGRADATION.md",
-      "path": "adapters/codex/skills/alawas-track-components/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
-    },
-    {
       "name": "alawas-track-components/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-track-components/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     },
     {
-      "name": "alawas-track-components/references/EVIDENCE-MODEL.md",
-      "path": "adapters/codex/skills/alawas-track-components/references/EVIDENCE-MODEL.md",
-      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
-    },
-    {
-      "name": "alawas-track-components/references/SHARED-PROTOCOL.md",
-      "path": "adapters/codex/skills/alawas-track-components/references/SHARED-PROTOCOL.md",
-      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
-    },
-    {
       "name": "alawas-turn-signal-into-work",
       "path": "adapters/codex/skills/alawas-turn-signal-into-work/SKILL.md",
-      "sha256": "15f7b1308ee83cd8a535b2629af0635b0de495427a188a585e1e5b3bb98d4f7f"
-    },
-    {
-      "name": "alawas-turn-signal-into-work/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "path": "adapters/codex/skills/alawas-turn-signal-into-work/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-turn-signal-into-work/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/codex/skills/alawas-turn-signal-into-work/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
+      "sha256": "51fd9dc4895d9546a34647114f9f68e4bb8e934fdf73c5a5a0c7eeaff4877fa1"
     },
     {
       "name": "alawas-turn-signal-into-work/references/AGREEMENT-LOOP.md",
@@ -572,7 +367,7 @@
     {
       "name": "alawas-turn-signal-into-work/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/codex/skills/alawas-turn-signal-into-work/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
       "name": "alawas-turn-signal-into-work/references/CONSEQUENCE-AUTHORITY.md",
@@ -585,24 +380,9 @@
       "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
-      "name": "alawas-turn-signal-into-work/references/SHARED-PROTOCOL.md",
-      "path": "adapters/codex/skills/alawas-turn-signal-into-work/references/SHARED-PROTOCOL.md",
-      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
-    },
-    {
       "name": "alawas-verify-release-evidence",
       "path": "adapters/codex/skills/alawas-verify-release-evidence/SKILL.md",
-      "sha256": "c1684d7c96fb38fc1780f64b99b463dd2aaf5619b02d40732b0b57f4c26550c4"
-    },
-    {
-      "name": "alawas-verify-release-evidence/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "path": "adapters/codex/skills/alawas-verify-release-evidence/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "sha256": "97d08dbbd81b3d37e7f30eefd14886369f074072adca8d86abf9b9c1d6f33960"
-    },
-    {
-      "name": "alawas-verify-release-evidence/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/codex/skills/alawas-verify-release-evidence/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
+      "sha256": "a95fece4bbecd6b809d200868fb146c22fca0941095cff8eb13afc71f8a7d5aa"
     },
     {
       "name": "alawas-verify-release-evidence/references/AGREEMENT-LOOP.md",
@@ -617,22 +397,12 @@
     {
       "name": "alawas-verify-release-evidence/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/codex/skills/alawas-verify-release-evidence/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "81ed855dd48c21adf3933b4e35e2a93a9119eaef71c2d6c06118a1851f5791a3"
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
       "name": "alawas-verify-release-evidence/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-verify-release-evidence/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
-    },
-    {
-      "name": "alawas-verify-release-evidence/references/EVIDENCE-MODEL.md",
-      "path": "adapters/codex/skills/alawas-verify-release-evidence/references/EVIDENCE-MODEL.md",
-      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
-    },
-    {
-      "name": "alawas-verify-release-evidence/references/SHARED-PROTOCOL.md",
-      "path": "adapters/codex/skills/alawas-verify-release-evidence/references/SHARED-PROTOCOL.md",
-      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
     }
   ]
 }

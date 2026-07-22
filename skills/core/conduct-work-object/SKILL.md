@@ -1,11 +1,6 @@
 ---
 name: conduct-work-object
-description: >
-  Detect, create, activate, resume, update, and close Work Objects — the
-  canonical continuity surface of Andrelawas Work Studio. Use when the user
-  asks to start or resume work, check what's active, move work forward,
-  record a decision, or close something out. This skill owns the Work Object
-  lifecycle and routes to specialists for domain-specific work.
+description: "Use when work must start, resume, transition, or close; maintains the canonical Work Object and routes its next stage; does not perform specialist domain work."
 ---
 
 # Conduct Work Object
@@ -300,7 +295,7 @@ On any meaningful transition:
    **Appending Evidence:**
    ```sh
    python3 -m tools.ws append-evidence <id> \
-     --tag "[system]|[decision]|[inference]|[observed]|[lived]|[claimed]|[inferred]" \
+     --tag "[system]|[decision]|[inference]|[gap]|[testimony]|[memory]" \
      --source "<source>" \
      --text "<entry>" \
      --expect-updated <current-updated_at>

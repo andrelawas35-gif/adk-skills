@@ -59,6 +59,12 @@ unsupported and follows `references/CAPABILITY-DEGRADATION.md` when needed.
   platform runbook, verified evidence, and local deployment artifacts.
 - `terminal_run` — execute only the runbook-approved incremental deployment,
   verification, and rollback commands.
+- `deployment` — execute only the runbook-approved incremental deployment
+  command; without it, give the user the exact command to run.
+- `secret_access` — access deployment credentials from the authorized source;
+  without it, ask the user to provide or confirm credentials are available.
+- `file_uploads` — upload deployment artifacts to the target platform; without
+  it, give the user the exact upload instruction.
 - `web_fetch` — retrieve a referenced platform runbook or status page at a
   known location when the authorized route permits it.
 - `user_confirmation` — obtain explicit deployment authority or authority for
@@ -251,6 +257,34 @@ Invocation-relevant wiring only; installation and maintainer guidance live outsi
 | `directory_list` | `list_dir` | native |
 | `content_search` | `grep_search` | native |
 | `terminal_run` | `run_in_terminal` | native |
+| `deployment` | `—` | manual-fallback |
+| `secret_access` | `—` | manual-fallback |
+| `file_uploads` | `—` | manual-fallback |
 | `web_fetch` | `open_browser_page / mcp tools` | native |
 | `user_confirmation` | `conversation turn` | native |
 | `structured_output` | `—` | native |
+
+### Capability Degradation
+
+Apply `references/CAPABILITY-DEGRADATION.md`. Per-capability
+classifications and notes below.
+
+#### `deployment` (manual-fallback)
+
+- **Behavior**: Pause and give one concrete manual instruction.
+- **Record**: Append History entry noting the capability gap, the
+  manual action taken, and what remains unverified.
+- **Note**: No platform has first-class deployment tooling. Deployment commands execute through the shell. The skill's authority gate provides the authorization ceremony; the capability layer provides the execution instruction.
+
+#### `secret_access` (manual-fallback)
+
+- **Behavior**: Pause and give one concrete manual instruction.
+- **Record**: Append History entry noting the capability gap, the
+  manual action taken, and what remains unverified.
+- **Note**: No platform has first-class vault or secret-store access. Credentials are provided by the user or environment. The skill must not invent, infer, or cache credentials.
+
+#### `file_uploads` (manual-fallback)
+
+- **Behavior**: Pause and give one concrete manual instruction.
+- **Record**: Append History entry noting the capability gap, the
+  manual action taken, and what remains unverified.

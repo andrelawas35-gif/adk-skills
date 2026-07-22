@@ -87,8 +87,8 @@ Outside an explicit grilling request, nominate a Grilling Candidate only under t
 Use as many progressive one-question turns as the evidence frontier requires,
 while keeping each evidence move minimal:
 
-1. **Orient:** Label what is known as `[lived]`, `[source]`, `[system]`,
-   `[inference]`, `[decision]`, or `[unresolved]`; state the current
+1. **Orient:** Label what is known as `[testimony]`, `[system]`,
+   `[inference]`, `[decision]`, or `[gap]`; state the current
    hypothesis and missing evidence.
 2. **Map:** Identify the smallest claim whose answer changes the Inquiry's
    route. Prefer primary-source evidence for that claim and name any required
@@ -162,10 +162,10 @@ contradictions, missing evidence, and confidence. Route only to:
 - Record source evidence with attributable author or institution, date,
   durable location, relevant claim, confidence, and corroboration or
   contradiction.
-- Record reality contact as `[lived]` or `[system]`, including consent or
+- Record reality contact as `[testimony]` or `[system]`, including consent or
   authorization boundary, method, observation, and limits. Never imply
   unobserved use.
-- Name missing evidence as `[unresolved]`, including the consequence of acting
+- Name missing evidence as `[gap]`, including the consequence of acting
   without it. Do not launder a gap into confidence.
 
 ## Personal Institution handoff
@@ -291,21 +291,8 @@ stop instead of silently falling back to the global copy.
 
 ### Capability Degradation
 
-This adapter classifies every required capability. When a capability
-is unavailable, the workflow degrades explicitly — it never pretends
-that equivalent verification occurred.
-
-**Degradation rules**:
-
-- **`manual-fallback`**: Pause with ONE concrete manual instruction.
-  Record in the Work Object what was done and what remains unverified.
-  Never mark verification, export, or deployment as "successful" when
-  the required capability was unavailable.
-- **`unsupported`**: Stop the affected path immediately. Record the
-  platform limitation. Route to a supported platform or ask the user.
-- **Stricter safety wins**: When this platform imposes a stricter
-  constraint than the core, the platform rule takes precedence.
-  Divergences are disclosed below.
+Apply `references/CAPABILITY-DEGRADATION.md`. Per-capability
+classifications and notes below.
 
 #### `web_search` (manual-fallback)
 

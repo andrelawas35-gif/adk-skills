@@ -1,9 +1,6 @@
 ---
 name: implement-bounded-change
-description: >
-  Implement an accepted tracer bullet within its recorded scope, continuously
-  verify the smallest change, preserve unrelated working-tree changes, and
-  stop for a material new decision or authority boundary.
+description: "Use when a Work Object contains an accepted tracer bullet; implements and checks only that reversible path while preserving dirty work; stops for any material scope or authority deviation."
 ---
 
 # Implement Bounded Change
@@ -59,6 +56,8 @@ unsupported and follows `references/CAPABILITY-DEGRADATION.md` when needed.
 - `content_search` — find the accepted path and focused verification seam.
 - `file_write` — apply only the bounded implementation change.
 - `terminal_run` — inspect status and run focused verification where safe.
+- `background_processes` — start a local server or service when focused
+  verification requires it; without it, ask the user to start the service.
 - `structured_output` — report scope, verification evidence, and deviations.
 - `user_confirmation` — obtain authority for a material deviation when needed.
 
