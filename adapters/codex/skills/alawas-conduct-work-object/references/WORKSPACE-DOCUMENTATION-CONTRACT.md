@@ -154,6 +154,22 @@ artifacts:
     supersession: regeneration; cleanup needs scoped authority
     status: generated
     validation: python3 tools/generate-adapters.py --check
+  - type: kernel-manifest
+    path: work-studio/kernel-manifest.yaml
+    purpose: >
+      Declares the portable kernel — the minimum set of source-of-truth files
+      required to bootstrap Work Studio on any supported platform. Platform
+      capability mappings and path-boundary integrity rules are co-located.
+      Generated adapters, installed skill copies, and .work-studio/ runtime
+      state are outputs, not kernel.
+    owner: conduct-work-object
+    stage_trigger: accepted kernel migration decision
+    required_evidence: grilling-converged migration shape
+    creation_update_authority: scoped user authority
+    provenance_freshness: review when kernel entries or platform mappings change
+    supersession: explicit successor link
+    status: canonical
+    validation: python3 tools/verify-kernel.py
 ```
 
 Changing this registry's schema or taxonomy requires an ADR and explicit owner

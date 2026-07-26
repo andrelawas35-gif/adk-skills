@@ -198,3 +198,139 @@ source of truth; generated adapters are deliberately not listed.
 - **last-grilled-SHA:** not-yet-grilled
 - **best-case anchor:** Option-B-refined; no surviving finding against applicable dimensions and owning profile; reopen on git drift, owning-skill-version change, or contrary govern-scorecards outcome evidence
 - **status rationale / findings:** backfill pending first pass
+
+## COMP-014 — Component tracking
+
+- **status:** active
+- **location(s):** `skills/core/track-components/SKILL.md`
+- **built-by Work Object(s):** pre-ledger backfill
+- **depends-on:** COMP-001, COMP-002, COMP-012
+- **depended-on-by:** none declared
+- **applicable dimensions:** artifact value, novelty yield
+- **owning skill/profile:** `track-components`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** Option-B-refined; no surviving finding against applicable dimensions and owning profile; reopen on git drift, owning-skill-version change, or contrary govern-scorecards outcome evidence
+- **status rationale / findings:** backfill pending first pass
+
+## Design skills (Phase 1 — contract shells)
+
+The entries below are the 9 design skill contract shells created in WO
+`2026-07-22-006`. They are shells (structure and contracts defined, workflow
+not yet implemented) and enter the ledger as `active` with `not-yet-grilled`.
+
+## COMP-015 — Product interface audit
+
+- **status:** active
+- **location(s):** `skills/core/audit-product-interface/SKILL.md`
+- **built-by Work Object(s):** `2026-07-22-006`, `2026-07-23-002`
+- **depends-on:** COMP-001, COMP-002
+- **depended-on-by:** COMP-016, COMP-022
+- **applicable dimensions:** artifact value, novelty yield
+- **owning skill/profile:** `audit-product-interface`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** Option-B-refined; no surviving finding against applicable dimensions and owning profile; reopen on git drift, owning-skill-version change, or contrary govern-scorecards outcome evidence
+- **status rationale / findings:** Contract amended per Grilling Session 13 Phase 1; Figma references removed, host→target project terminology. Pending implementation and first grilling pass.
+
+## COMP-016 — Design foundation (token audit)
+
+- **status:** active
+- **location(s):** `skills/core/build-design-foundation/SKILL.md`
+- **built-by Work Object(s):** `2026-07-22-006`, `2026-07-23-002`
+- **depends-on:** COMP-001, COMP-002
+- **depended-on-by:** COMP-022
+- **applicable dimensions:** artifact value, novelty yield
+- **owning skill/profile:** `build-design-foundation`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** Option-B-refined; no surviving finding against applicable dimensions and owning profile; reopen on git drift, owning-skill-version change, or contrary govern-scorecards outcome evidence
+- **status rationale / findings:** Contract amended per Grilling Session 13 Phase 1; Figma sync references removed, host→target project terminology. Pending implementation and first grilling pass.
+
+## COMP-017 — User flow modeling
+
+- **status:** retired
+- **location(s):** `skills/core/model-user-flow/SKILL.md`
+- **built-by Work Object(s):** `2026-07-22-006`, `2026-07-23-002`
+- **depends-on:** COMP-001, COMP-002, COMP-015
+- **depended-on-by:** none (downstream deps also deferred)
+- **applicable dimensions:** artifact value, novelty yield
+- **owning skill/profile:** `model-user-flow`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** n/a (deferred)
+- **status rationale / findings:** Deferred per Grilling Session 13 DEC-A11: all structure emerges from conversation. Revisit trigger: project complexity requires upfront flow planning.
+
+## COMP-018 — Interface architecture definition
+
+- **status:** retired
+- **location(s):** `skills/core/define-interface-architecture/SKILL.md`
+- **built-by Work Object(s):** `2026-07-22-006`, `2026-07-23-002`
+- **depends-on:** COMP-001, COMP-002, COMP-015, COMP-017
+- **depended-on-by:** none (downstream deps also deferred)
+- **applicable dimensions:** artifact value, novelty yield
+- **owning skill/profile:** `define-interface-architecture`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** n/a (deferred)
+- **status rationale / findings:** Deferred per Grilling Session 13 DEC-A11: all structure emerges from conversation. Revisit trigger: project complexity requires upfront architectural planning.
+
+## COMP-019 — Interface specification definition
+
+- **status:** retired
+- **location(s):** `skills/core/define-interface-specification/SKILL.md`
+- **built-by Work Object(s):** `2026-07-22-006`, `2026-07-23-002`
+- **depends-on:** COMP-001, COMP-002, COMP-016, COMP-018
+- **depended-on-by:** none (downstream deps also deferred)
+- **applicable dimensions:** artifact value, novelty yield
+- **owning skill/profile:** `define-interface-specification`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** n/a (deferred)
+- **status rationale / findings:** Deferred per Grilling Session 13 DEC-A11/DEC-A13: specs extracted after the fact, not authored upfront. Revisit trigger: user needs to communicate design intent before implementation.
+
+## COMP-020 — Figma rendering (governed Figwright wrapper)
+
+- **status:** retired
+- **location(s):** `skills/core/render-to-figma/SKILL.md`
+- **built-by Work Object(s):** `2026-07-22-006`, `2026-07-23-002`
+- **depends-on:** COMP-001, COMP-002, COMP-019, COMP-021
+- **depended-on-by:** none
+- **applicable dimensions:** recovery quality, artifact value
+- **owning skill/profile:** `render-to-figma`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** n/a (deferred)
+- **status rationale / findings:** Deferred per Grilling Session 13 DEC-A5: Figma never used. Revisit trigger: collaboration with a designer who uses Figma.
+
+## COMP-021 — Design-to-code connection (component registry)
+
+- **status:** retired
+- **location(s):** `skills/core/connect-design-to-code/SKILL.md`
+- **built-by Work Object(s):** `2026-07-22-006`, `2026-07-23-002`
+- **depends-on:** COMP-001, COMP-002, COMP-015
+- **depended-on-by:** none
+- **applicable dimensions:** artifact value, novelty yield
+- **owning skill/profile:** `connect-design-to-code`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** n/a (deferred)
+- **status rationale / findings:** Deferred per Grilling Session 13 DEC-A5: no Figma component mapping needed. Revisit trigger: external design tool integration requires component mapping.
+
+## COMP-022 — Design direction application (creative authority loop)
+
+- **status:** active
+- **location(s):** `skills/core/apply-design-direction/SKILL.md`
+- **built-by Work Object(s):** `2026-07-22-006`, `2026-07-23-002`
+- **depends-on:** COMP-001, COMP-002, COMP-015, COMP-016
+- **depended-on-by:** COMP-023
+- **applicable dimensions:** artifact value, novelty yield
+- **owning skill/profile:** `apply-design-direction`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** Option-B-refined; no surviving finding against applicable dimensions and owning profile; reopen on git drift, owning-skill-version change, or contrary govern-scorecards outcome evidence
+- **status rationale / findings:** Contract rewritten per Grilling Session 13 Phase 1; changed from revision-manifest producer to propose/confirm/execute creative authority loop. Now writes code after confirmation (meaningful consequence). Pending implementation and first grilling pass.
+
+## COMP-023 — Design implementation verification
+
+- **status:** active
+- **location(s):** `skills/core/verify-design-implementation/SKILL.md`
+- **built-by Work Object(s):** `2026-07-22-006`, `2026-07-23-002`
+- **depends-on:** COMP-001, COMP-002, COMP-022
+- **depended-on-by:** none declared
+- **applicable dimensions:** artifact value, novelty yield
+- **owning skill/profile:** `verify-design-implementation`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** Option-B-refined; no surviving finding against applicable dimensions and owning profile; reopen on git drift, owning-skill-version change, or contrary govern-scorecards outcome evidence
+- **status rationale / findings:** Renamed from verify-design-code-parity per Grilling Session 13 Phase 1; contract rewritten for browser-only verification against confirmed proposals (no Figma parity, no specification parity). Pending implementation and first grilling pass.

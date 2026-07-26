@@ -85,6 +85,15 @@ Apply the same continuity contract to all profiles:
 - `maintain-working-method`
 - `govern-scorecards`
 - `track-components`
+- `audit-product-interface`
+- `build-design-foundation`
+- `model-user-flow`
+- `define-interface-architecture`
+- `define-interface-specification`
+- `render-to-figma`
+- `connect-design-to-code`
+- `apply-design-direction`
+- `verify-design-code-parity`
 
 ## Scenario 7 — Stage-specific challenge follows project reality
 

@@ -255,3 +255,178 @@ evidence-gathering or owner decision before re-stamping the entry.
 **Pressure scenario** — A high-blast-radius component is settled and inside its
 cooldown, but a dependent declares a contract change: does the cascade reopen
 it before any ordinary debt ranking, and is the declared edge sufficient?
+
+### `apply-design-direction`
+
+**Gates** — (1) Direction specificity: confirm the natural-language direction
+can be translated into observable specification changes before producing a
+revision manifest. (2) Preserve/revise boundary: confirm that preserve targets
+are explicit and grounded in current state, not inferred as "everything else."
+
+**Escalation** — Default: parse the direction, read current specifications and
+evidence, classify each affected target as preserve/revise/prohibited, present
+the manifest for confirmation, and record it. Information value overrides the
+default when the direction is ambiguous between two conflicting specification
+changes — escalate to clarifying the user's intent before producing a manifest
+that silently picks one interpretation.
+
+**Pressure scenario** — The user's direction says "simplify the layout" but
+the current specification has two layout regions serving different user goals:
+does the revision manifest preserve both and simplify within each, or does it
+merge them and risk losing a goal the user didn't intend to drop?
+
+### `audit-product-interface`
+
+**Gates** — (1) Discovery scope: confirm the discovery covers the routes,
+components, and layouts actually present in the codebase, not an assumed or
+remembered set. (2) Zero-onboarding boundary: confirm the discovery requires
+no project-specific configuration or onboarding from the user (DEC-2).
+
+**Escalation** — Default: scan routes, components, layouts, and patterns;
+produce a `[system:discovery]` Evidence Ledger entry with structural inventory
+and framework detection. Information value overrides the default when the
+discovered structure conflicts with an existing Work Object's assumptions —
+escalate to reconciling the conflict before recording discovery as settled.
+
+**Pressure scenario** — The scan finds a component that appears in routes but
+has no corresponding source file (dynamically generated or aliased): does the
+discovery record it as present with a gap, or omit it and risk an incomplete
+inventory downstream?
+
+### `build-design-foundation`
+
+**Gates** — (1) Token source authority: confirm tokens are discovered from
+code, not invented or assumed from a design tool. (2) Independence from
+structural discovery: confirm the token audit does not depend on or wait for
+`audit-product-interface` results (DEC-6).
+
+**Escalation** — Default: scan the codebase for design tokens (colors,
+typography, spacing, breakpoints), audit their usage and consistency, and
+produce a `[system:token-inventory]` Evidence Ledger entry. Information value
+overrides the default when discovered tokens conflict with each other (e.g.,
+two competing color scales) — escalate to documenting the conflict rather than
+silently picking one as canonical.
+
+**Pressure scenario** — The codebase uses both a CSS custom property system
+and a JS theme object with overlapping but not identical token values: does the
+inventory record both sources and flag the divergence, or does it pick one as
+canonical and risk the other's consumers being silently wrong?
+
+### `connect-design-to-code`
+
+**Gates** — (1) Mapping accuracy: confirm that a code component and its
+proposed Figma counterpart are actually the same component, not just similarly
+named. (2) Registry durability: confirm the registry is append-and-update,
+never regenerated from scratch (DEC-13).
+
+**Escalation** — Default: compare the discovery snapshot against the existing
+registry, query Figma components when available, propose mappings with
+confidence levels, and update the registry after confirmation. Information
+value overrides the default when a proposed mapping has low confidence and the
+component has high blast radius — escalate to requiring explicit user
+verification before recording the mapping.
+
+**Pressure scenario** — A code component has been refactored and renamed since
+the last registry entry, but its Figma counterpart still uses the old name:
+does the registry update the mapping or create a new entry, and does the old
+entry get marked stale or deleted?
+
+### `define-interface-architecture`
+
+**Gates** — (1) Architecture grounding: confirm the screen hierarchy and
+navigation structure are grounded in discovery evidence and user flows, not
+assumed from intent alone. (2) Specification boundary: confirm the architecture
+document defines structure and navigation, not visual design or implementation.
+
+**Escalation** — Default: define the screen hierarchy, navigation patterns,
+information architecture, and responsive strategy; produce a durable YAML
+document at `design/architecture/`. Information value overrides the default
+when the architecture reveals a navigation pattern that conflicts with an
+existing user flow — escalate to reconciling the conflict before recording the
+architecture as settled.
+
+**Pressure scenario** — The user flow requires a screen transition that the
+discovered framework's router doesn't natively support (e.g., nested modals
+with independent back-stack): does the architecture document this as a
+constraint and route to implementation investigation, or assume the framework
+can handle it?
+
+### `define-interface-specification`
+
+**Gates** — (1) Token grounding: confirm every token reference in the
+specification points to a token that exists in the inventory, not an assumed or
+wished-for token. (2) Framework feasibility: confirm the layout structure is
+feasible for the discovered framework, not an idealized layout that ignores
+implementation constraints.
+
+**Escalation** — Default: translate architecture and design direction into a
+machine-readable YAML specification with layout, components, tokens, responsive
+behavior, and interactions. Information value overrides the default when a
+specification field requires a token that doesn't exist in the inventory —
+escalate to routing back to `build-design-foundation` before recording a
+specification with phantom token references.
+
+**Pressure scenario** — The specification needs a responsive breakpoint that
+the token inventory doesn't define, but the architecture document assumes it
+exists: does the specification invent the breakpoint value, defer the
+responsive behavior, or route back to update the inventory first?
+
+### `model-user-flow`
+
+**Gates** — (1) Goal grounding: confirm each user flow starts from a real user
+goal, not a system capability or feature name. (2) State completeness: confirm
+the flow maps happy path, error, and edge-case states, not just the golden
+path.
+
+**Escalation** — Default: identify user goals, map actions to states and
+responses, produce a durable YAML flow document at `design/flows/`.
+Information value overrides the default when a user flow reveals a goal that no
+existing Work Object covers — escalate to signaling the gap to the conductor
+before recording the flow as complete.
+
+**Pressure scenario** — Two user goals share the same entry point but diverge
+at the second step: does the flow model them as one flow with a branch or two
+separate flows, and does the choice affect how the architecture will handle
+navigation state?
+
+### `render-to-figma`
+
+**Gates** — (1) Browser evidence gate: confirm `[system:browser-evidence]`
+exists and references the specification being rendered before any Figwright
+invocation (ADR 0027, no bypass). (2) Always-new write policy: confirm the
+render creates a new Figma page, never modifies an existing one without
+governed update authority (ADR 0026).
+
+**Escalation** — Default: verify preconditions (browser evidence, Figwright
+availability), prepare the invocation with specification and token/component
+mappings, apply the authority gate, invoke Figwright, record results, and
+update the Figma manifest. Information value overrides the default when the
+Figma manifest shows a prior render of the same specification — escalate to
+confirming the user intends a new pass rather than assuming iteration.
+
+**Pressure scenario** — The specification has changed since the last Figma
+render, but the browser evidence was collected against the old specification
+version: does the render proceed with stale evidence, or does it block until
+new browser evidence is collected against the current specification?
+
+### `verify-design-code-parity`
+
+**Gates** — (1) Dimension honesty: confirm that deferred parity dimensions
+(behavioral, full-stack, accessibility) are explicitly reported with reasons,
+never silently omitted (DEC-18). (2) Evidence grounding: confirm structural
+and visual checks reference the specification, not assumptions about what the
+implementation should look like.
+
+**Escalation** — Default: load the specification, check spec-to-browser
+structural and visual parity, check spec-to-Figma parity when available,
+produce a `[system:parity-report]` with per-dimension checked/deferred status.
+Information value overrides the default when a structural match hides a visual
+mismatch (e.g., correct layout but wrong colors) — escalate to investigating
+whether the token inventory is stale before reporting the mismatch as a simple
+implementation error.
+
+**Pressure scenario** — The implementation matches the specification
+structurally, but the specification's token references point to tokens whose
+values have changed since the specification was written: is this a parity pass
+(implementation matches spec) or a parity fail (implementation doesn't match
+current token values)?
