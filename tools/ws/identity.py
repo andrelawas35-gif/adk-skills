@@ -3,6 +3,11 @@
 Scans objects/YYYY/MM/ for existing IDs on the current date, derives the next
 zero-padded sequence number, and verifies no existing file conflicts with the
 allocated ID.
+
+Sequences 900-999 are a reserved fixture band. Allocation ignores them when
+computing the next sequence, so a synthetic fixture parked at a high number
+cannot exhaust the day. Without this, allocation was ``max(existing) + 1`` and
+a single ``-999-`` fixture blocked every creation for that date.
 """
 
 import os
@@ -12,6 +17,10 @@ from pathlib import Path
 from typing import Optional
 
 ID_PATTERN = re.compile(r"^(\d{4})-(\d{2})-(\d{2})-(\d{3})-.+\.md$")
+
+# Sequences at or above this value are reserved for synthetic fixtures and are
+# never auto-allocated. Real objects allocate from 001 to RESERVED_FIXTURE_MIN-1.
+RESERVED_FIXTURE_MIN = 900
 
 
 def allocate_id(objects_dir: Path, today: Optional[date] = None) -> str:
@@ -44,14 +53,18 @@ def allocate_id(objects_dir: Path, today: Optional[date] = None) -> str:
                 y, m, d, seq = match.groups()
                 if f"{y}-{m}-{d}" == date_prefix:
                     seq_num = int(seq)
+                    # Reserved fixture band never participates in allocation.
+                    if seq_num >= RESERVED_FIXTURE_MIN:
+                        continue
                     if seq_num > max_seq:
                         max_seq = seq_num
 
     next_seq = max_seq + 1
-    if next_seq > 999:
+    if next_seq >= RESERVED_FIXTURE_MIN:
         raise RuntimeError(
-            f"Maximum ID sequence (999) reached for {date_prefix}. "
-            "Cannot allocate more than 999 objects per day."
+            f"Maximum ID sequence ({RESERVED_FIXTURE_MIN - 1}) reached for "
+            f"{date_prefix}. Sequences {RESERVED_FIXTURE_MIN}-999 are reserved "
+            "for synthetic fixtures and are not auto-allocated."
         )
 
     obj_id = f"{date_prefix}-{next_seq:03d}"

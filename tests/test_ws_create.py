@@ -98,6 +98,33 @@ class TestIDAllocation(unittest.TestCase):
             obj_id = allocate_id(objects_dir, today=test_date)
             self.assertEqual(obj_id, "2026-07-21-001")
 
+    def test_allocate_ignores_reserved_fixture_band(self):
+        """A fixture parked at 999 does not exhaust the day's sequence."""
+        with tempfile.TemporaryDirectory() as tmp:
+            objects_dir = Path(tmp)
+            test_date = date(2026, 7, 21)
+
+            month_dir = objects_dir / "2026" / "07"
+            month_dir.mkdir(parents=True, exist_ok=True)
+            (month_dir / "2026-07-21-003-real-object.md").write_text("")
+            (month_dir / "2026-07-21-999-tracer-fixture.md").write_text("")
+
+            obj_id = allocate_id(objects_dir, today=test_date)
+            self.assertEqual(obj_id, "2026-07-21-004")
+
+    def test_allocate_raises_when_real_band_exhausted(self):
+        """Exhausting 001-899 raises rather than allocating into the fixture band."""
+        with tempfile.TemporaryDirectory() as tmp:
+            objects_dir = Path(tmp)
+            test_date = date(2026, 7, 21)
+
+            month_dir = objects_dir / "2026" / "07"
+            month_dir.mkdir(parents=True, exist_ok=True)
+            (month_dir / "2026-07-21-899-last-real-object.md").write_text("")
+
+            with self.assertRaises(RuntimeError):
+                allocate_id(objects_dir, today=test_date)
+
     def test_slugify(self):
         """Title to slug conversion is stable."""
         self.assertEqual(slugify("Fix auth middleware"), "fix-auth-middleware")
