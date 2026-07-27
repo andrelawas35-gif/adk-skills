@@ -59,9 +59,9 @@ Offer a conductor handoff only when the user explicitly asks to retain the
 session or an accepted decision needs durable project continuity.
 
 Convergence identifies that the frontier is exhausted; it does not itself end
-the conversation. Present the Coverage Proof, ask one explicit confirmation of
-shared understanding, and keep grilling if the user withholds or qualifies that
-confirmation. Only confirmed shared understanding authorizes the agreed next
+the conversation. Present the Convergence Checklist, ask one explicit
+confirmation of shared understanding, and keep grilling if the user withholds
+or qualifies that confirmation. Only confirmed shared understanding authorizes the agreed next
 action. This preserves Matt Pocock-style grilling: one branch, one question,
 one answer, repeated until the user confirms the model is shared.
 
@@ -139,6 +139,26 @@ Generate a novel recommendation only when evidence, a contradiction, a
 counterexample, or a dependency opens a real new option. Do not brainstorm for
 its own sake.
 
+### Mode
+
+The Agreement Loop operates in one of two traversal modes set at invocation time:
+
+- **`serial-depth`** (default): One decision-bearing question per turn, depth-first.
+  The active branch is the single unresolved branch. Compatible with all existing
+  skill profiles and Work Objects. This is the historical behavior of the engine.
+
+- **`breadth-sweep`**: One decision-bearing question per turn, rotating across
+  multiple active branches. The active branch cycles through all unresolved
+  branches in round-robin order across consecutive turns. The per-turn contract
+  (one question, wait for answer) is preserved — only the *active branch* changes.
+  When the turn contract says "State what changed because of the last answer," the
+  last answer is the most recent answer on the branch currently being rotated to;
+  the branch-rotation clause resolves the ambiguity.
+
+The mode is set by the conductor when routing to a skill and recorded in the Work
+Object frontmatter. Skill profiles are mode-agnostic: they define the grilling
+lens, not the traversal strategy.
+
 ## Conversational turn contract
 
 Each turn must feel like a response to the user, not a form being filled out:
@@ -153,7 +173,9 @@ Each turn must feel like a response to the user, not a form being filled out:
 4. Give one recommended answer or next move, its principal trade-off, and what
    evidence would change it. When credible, materially distinct alternatives
    exist, use the Choice Frame below; otherwise do not invent options.
-5. Ask exactly one decision-bearing question and wait.
+5. Ask exactly one decision-bearing question on the current active branch and wait.
+
+**Branch-rotation clause.** In `breadth-sweep` mode, step 2 ("State what changed because of the last answer") refers to the most recent answer on the branch being rotated *to*, not the branch just rotated *from*. The question in step 5 names its active branch so the user can track which branch they are answering. In `serial-depth` mode (default) this clause has no effect — there is exactly one active branch at all times.
 
 Use natural prose. Labels are optional unless they clarify provenance,
 contradiction, or a coverage checkpoint. Never emit a completed plan, design,
@@ -254,7 +276,8 @@ state, never a transcript or hidden reasoning:
 - **Revision:** <Work Object revision used for optimistic concurrency>
 - **Context Card:** <goal, stage, approved preferences, inspected evidence>
 - **Active profile and activation reason:** <skill + detected tension>
-- **Decision Frontier:** <one active unresolved branch and why it matters>
+- **Mode:** <serial-depth | breadth-sweep>
+- **Decision Frontier:** <active unresolved branch(es) — one for serial-depth, list for breadth-sweep — and why each matters>
 - **Coverage:** <resolved | active | deferred with trigger | ruled out by evidence>
 - **Current recommendation:** <one answer, trade-off, and change condition>
 - **Confirmed decisions:** <links to canonical decisions>
@@ -297,14 +320,24 @@ unpersisted summary before continuing.
 
 ## Convergence and action authority
 
-Converge only with a **Coverage Proof** showing that:
+Converge only with a **Convergence Checklist** that is falsifiable — each
+condition can be tested. Present:
 
-- material high-probability/high-impact branches are resolved;
-- safety-floor branches are resolved, routed, or explicitly accepted by an
-  accountable owner;
-- codebase and record contradictions are addressed;
-- remaining branches are deferred with revisit triggers; and
-- no remaining question is likely to change the recommendation.
+1. **Branch inventory.** The complete list of branches opened during this
+   Grilling Session, each with one of: `resolved` (supporting evidence cited),
+   `deferred` (revisit trigger and owner named), `routed` (receiving skill
+   stated), or `ruled out` (contradicting evidence cited).
+2. **Counterexample test.** The single strongest codebase-grounded
+   counterexample to the current recommendation — and why it does not change
+   the result. If no counterexample was found, state `none found` rather than
+   asserting impossibility.
+3. **Changed-condition trigger.** The exact new evidence or assumption change
+   that would reopen the recommendation. Named as an observable condition
+   (e.g., "a new Work Object appears with evidence that contradicts Decision
+   1's rationale"), not as a vague risk.
+4. **Coverage count.** Number of open (unresolved, not deferred, not routed)
+   branches remaining. Convergence requires zero. If any remain, they are the
+   new Decision Frontier; do not claim convergence.
 
 Then present the agreed outcome, evidence, accepted recommendations, residual
 risks, deferred branches, and exact next action. Obtain separately scoped

@@ -5,6 +5,9 @@ that weren't already covered by test_ws_create.py.
 """
 
 import os
+import contextlib
+import io
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -13,7 +16,7 @@ from pathlib import Path
 TOOLS_DIR = Path(__file__).resolve().parent.parent / "tools"
 sys.path.insert(0, str(TOOLS_DIR))
 
-from ws.schema import generate_frontmatter, parse_frontmatter
+from ws.schema import generate_frontmatter, parse_frontmatter, validate_campaign
 from ws.template import generate_body_template
 from ws.concurrency import check_concurrency
 from ws.lifecycle import (
@@ -63,6 +66,9 @@ from ws.validate import (
     check_prerequisites,
     check_unsupported_capabilities,
     check_interrupted_mutations,
+    check_campaign_anchor,
+    check_consequence_plausibility,
+    run_checks,
     CHECK_REGISTRY,
 )
 
@@ -581,6 +587,18 @@ class TestValidateSchema(unittest.TestCase):
             errors = check_schema(obj_file)
             self.assertTrue(any("type" in e for e in errors))
 
+    def test_sensitivity_enum_matches_adr_0019(self):
+        """VALID_SENSITIVITIES must carry all three ADR 0019 classes.
+
+        ADR 0019 (references/WORK-OBJECT.md, tools/pre-commit) treats
+        `private` as a real sensitivity class enforced by storage location
+        (gitignore), distinct from `ordinary` and `restricted`. A CLI enum
+        missing `private` would let `ws create`/`ws validate` reject a value
+        that `tools/pre-commit` already has a dedicated rule for.
+        """
+        from ws.schema import VALID_SENSITIVITIES
+        self.assertEqual(VALID_SENSITIVITIES, {"ordinary", "private", "restricted"})
+
     def test_catches_id_mismatch(self):
         """Frontmatter id must match filename prefix."""
         with tempfile.TemporaryDirectory() as tmp:
@@ -591,6 +609,52 @@ class TestValidateSchema(unittest.TestCase):
             )
             errors = check_schema(obj_file)
             self.assertTrue(any("does not match filename" in e for e in errors))
+
+    def test_optional_campaign_is_backward_compatible(self):
+        """Legacy objects remain valid and campaign paths are optional."""
+        generated_legacy = generate_frontmatter(
+            "2026-07-21-010", "Legacy", "change", "meaningful", "ordinary"
+        )
+        generated_campaign = generate_frontmatter(
+            "2026-07-21-011", "Campaign", "change", "meaningful", "ordinary",
+            campaign="docs/design/campaign.md",
+        )
+        self.assertNotIn("campaign:", generated_legacy)
+        self.assertIn("campaign: docs/design/campaign.md", generated_campaign)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            legacy = make_object_file(
+                tmpdir, "2026-07-21-010-legacy.md",
+                SAMPLE_FRONTMATTER + "\n" + SAMPLE_BODY,
+            )
+            with_campaign = make_object_file(
+                tmpdir, "2026-07-21-011-campaign.md",
+                SAMPLE_FRONTMATTER.replace(
+                    "id: 2026-07-21-010",
+                    "id: 2026-07-21-011",
+                ).replace(
+                    "sensitivity: ordinary",
+                    "sensitivity: ordinary\ncampaign: docs/design/campaign.md",
+                ) + "\n" + SAMPLE_BODY,
+            )
+
+            self.assertEqual(check_schema(legacy), [])
+            self.assertEqual(check_schema(with_campaign), [])
+
+    def test_campaign_must_be_repo_relative_design_markdown(self):
+        """Campaign anchors stay inside docs/design and name Markdown files."""
+        self.assertIsNone(validate_campaign("docs/design/campaign.md"))
+        for invalid in [
+            "",
+            "/docs/design/campaign.md",
+            "docs/design//campaign.md",
+            "docs/design/../campaign.md",
+            "docs/adr/campaign.md",
+            "docs/design/campaign.txt",
+        ]:
+            with self.subTest(invalid=invalid):
+                self.assertIsNotNone(validate_campaign(invalid))
 
 
 class TestValidateSections(unittest.TestCase):
@@ -2344,6 +2408,287 @@ class TestCheckRegistry(unittest.TestCase):
                      "unsupported-capabilities", "interrupted-mutations",
                      "structure"}
         self.assertEqual(set(CHECK_REGISTRY.keys()), expected)
+
+
+class TestCampaignAndPlausibilityWarnings(unittest.TestCase):
+    """Non-blocking campaign-anchor and consequence-plausibility checks."""
+
+    def _workspace_object(self, root: Path, frontmatter: str, body: str) -> Path:
+        obj_dir = root / ".work-studio" / "objects" / "2026" / "07"
+        obj_dir.mkdir(parents=True, exist_ok=True)
+        return make_object_file(
+            obj_dir,
+            "2026-07-21-010-test.md",
+            frontmatter + "\n" + body,
+        )
+
+    def test_missing_campaign_anchor_warns_without_error(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            fm = SAMPLE_FRONTMATTER.replace(
+                "sensitivity: ordinary",
+                "sensitivity: ordinary\ncampaign: docs/design/missing.md",
+            )
+            obj_file = self._workspace_object(root, fm, SAMPLE_BODY)
+
+            warnings = check_campaign_anchor(obj_file)
+
+            self.assertEqual(len(warnings), 1)
+            self.assertIn("does not exist", warnings[0])
+
+    def test_existing_campaign_anchor_does_not_warn(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            anchor = root / "docs" / "design" / "campaign.md"
+            anchor.parent.mkdir(parents=True)
+            anchor.write_text("# Campaign\n")
+            fm = SAMPLE_FRONTMATTER.replace(
+                "sensitivity: ordinary",
+                "sensitivity: ordinary\ncampaign: docs/design/campaign.md",
+            )
+            obj_file = self._workspace_object(root, fm, SAMPLE_BODY)
+
+            self.assertEqual(check_campaign_anchor(obj_file), [])
+
+    def test_low_consequence_scope_indicators_warn(self):
+        indicators = {
+            "files touched": "\nChanged files: `tools/ws/schema.py`\n",
+            "ADR amended": "\nAmended ADR 0021 to record the new boundary.\n",
+            "supersedes link": None,
+            "external effect": (
+                "\n| [system] | external-effect check | "
+                "An external effect requires authority. |\n"
+            ),
+        }
+
+        for expected_reason, addition in indicators.items():
+            with self.subTest(expected_reason=expected_reason):
+                with tempfile.TemporaryDirectory() as tmp:
+                    root = Path(tmp)
+                    fm = SAMPLE_FRONTMATTER.replace(
+                        "consequence: meaningful",
+                        "consequence: low",
+                    )
+                    body = SAMPLE_BODY
+                    if expected_reason == "supersedes link":
+                        fm = fm.replace(
+                            "sensitivity: ordinary",
+                            "sensitivity: ordinary\nsupersedes: 2026-07-20-001",
+                        )
+                    elif expected_reason == "external effect":
+                        body = body.replace(
+                            "## Open questions",
+                            addition + "\n## Open questions",
+                        )
+                    else:
+                        body += addition
+                    obj_file = self._workspace_object(root, fm, body)
+
+                    warnings = check_consequence_plausibility(obj_file)
+
+                    self.assertEqual(len(warnings), 1)
+                    self.assertIn(expected_reason, warnings[0])
+
+    def test_warning_only_validation_returns_success(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            objects_dir = root / ".work-studio" / "objects"
+            fm = SAMPLE_FRONTMATTER.replace(
+                "sensitivity: ordinary",
+                "sensitivity: ordinary\ncampaign: docs/design/missing.md",
+            )
+            obj_file = self._workspace_object(root, fm, SAMPLE_BODY)
+            stderr = io.StringIO()
+            stdout = io.StringIO()
+
+            with contextlib.redirect_stderr(stderr), contextlib.redirect_stdout(stdout):
+                result = run_checks(None, [obj_file], objects_dir=objects_dir)
+
+            self.assertEqual(result, 0)
+            self.assertIn("Warning:", stderr.getvalue())
+            self.assertIn("All validation checks passed.", stdout.getvalue())
+
+    def test_warning_does_not_suppress_validation_error(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            objects_dir = root / ".work-studio" / "objects"
+            fm = SAMPLE_FRONTMATTER.replace(
+                "status: active",
+                "status: invalid",
+            ).replace(
+                "sensitivity: ordinary",
+                "sensitivity: ordinary\ncampaign: docs/design/missing.md",
+            )
+            obj_file = self._workspace_object(root, fm, SAMPLE_BODY)
+            stderr = io.StringIO()
+
+            with contextlib.redirect_stderr(stderr):
+                result = run_checks(None, [obj_file], objects_dir=objects_dir)
+
+            self.assertEqual(result, 1)
+            self.assertIn("Warning:", stderr.getvalue())
+            self.assertIn("Invalid status", stderr.getvalue())
+
+
+class TestMembersCommand(unittest.TestCase):
+    """End-to-end campaign member listing."""
+
+    REPO_ROOT = TOOLS_DIR.parent
+
+    def _run_ws(self, root: Path, *args: str):
+        env = os.environ.copy()
+        existing = env.get("PYTHONPATH", "")
+        env["PYTHONPATH"] = str(self.REPO_ROOT) + (
+            f":{existing}" if existing else ""
+        )
+        return subprocess.run(
+            [sys.executable, "-m", "tools.ws", *args],
+            capture_output=True,
+            text=True,
+            cwd=str(root),
+            env=env,
+        )
+
+    def test_members_lists_exact_campaign_matches_in_id_order(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            objects_dir = root / ".work-studio" / "objects"
+            obj_dir = objects_dir / "2026" / "07"
+            obj_dir.mkdir(parents=True)
+            (objects_dir / "README.md").write_text(
+                "# Work Objects\n\nThis registered documentation file is not an object.\n"
+            )
+            for obj_id, title, campaign in [
+                ("2026-07-21-003", "Third", "docs/design/campaign.md"),
+                ("2026-07-21-001", "First", "docs/design/campaign.md"),
+                ("2026-07-21-002", "Other", "docs/design/other.md"),
+            ]:
+                fm = SAMPLE_FRONTMATTER.replace(
+                    "id: 2026-07-21-010",
+                    f"id: {obj_id}",
+                ).replace(
+                    "title: Test Object",
+                    f"title: {title}",
+                ).replace(
+                    "sensitivity: ordinary",
+                    f"sensitivity: ordinary\ncampaign: {campaign}",
+                )
+                make_object_file(
+                    obj_dir,
+                    f"{obj_id}-{title.lower()}.md",
+                    fm + "\n" + SAMPLE_BODY,
+                )
+
+            result = self._run_ws(root, "members", "docs/design/campaign.md")
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(
+                result.stdout.strip().splitlines(),
+                [
+                    "2026-07-21-001 — First",
+                    "2026-07-21-003 — Third",
+                ],
+            )
+
+    def test_set_campaign_updates_frontmatter_timestamp_and_history(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            obj_dir = root / ".work-studio" / "objects" / "2026" / "07"
+            obj_dir.mkdir(parents=True)
+            obj_file = make_object_file(
+                obj_dir,
+                "2026-07-21-010-test.md",
+                SAMPLE_FRONTMATTER + "\n" + SAMPLE_BODY,
+            )
+
+            result = self._run_ws(
+                root,
+                "set-campaign",
+                "2026-07-21-010",
+                "docs/design/campaign.md",
+                "--expect-updated",
+                "2026-07-21T00:00:00Z",
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            content = obj_file.read_text()
+            fm = parse_frontmatter(content)
+            self.assertEqual(fm["campaign"], "docs/design/campaign.md")
+            self.assertNotEqual(fm["updated_at"], "2026-07-21T00:00:00Z")
+            self.assertIn("Campaign set: docs/design/campaign.md", content)
+            self.assertTrue(content.endswith("\n"))
+
+    def test_members_still_reports_malformed_work_object(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            objects_dir = root / ".work-studio" / "objects"
+            obj_dir = objects_dir / "2026" / "07"
+            obj_dir.mkdir(parents=True)
+            (objects_dir / "README.md").write_text("# Work Objects\n")
+            make_object_file(
+                obj_dir,
+                "2026-07-21-010-malformed.md",
+                "not frontmatter\n",
+            )
+
+            result = self._run_ws(
+                root,
+                "members",
+                "docs/design/campaign.md",
+            )
+
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("Cannot inspect Work Object", result.stderr)
+
+    def test_set_campaign_rejects_stale_timestamp_without_mutation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            obj_dir = root / ".work-studio" / "objects" / "2026" / "07"
+            obj_dir.mkdir(parents=True)
+            obj_file = make_object_file(
+                obj_dir,
+                "2026-07-21-010-test.md",
+                SAMPLE_FRONTMATTER + "\n" + SAMPLE_BODY,
+            )
+            before = obj_file.read_text()
+
+            result = self._run_ws(
+                root,
+                "set-campaign",
+                "2026-07-21-010",
+                "docs/design/campaign.md",
+                "--expect-updated",
+                "2026-07-20T00:00:00Z",
+            )
+
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("Concurrent write detected", result.stderr)
+            self.assertEqual(obj_file.read_text(), before)
+
+    def test_set_campaign_rejects_invalid_anchor_without_mutation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            obj_dir = root / ".work-studio" / "objects" / "2026" / "07"
+            obj_dir.mkdir(parents=True)
+            obj_file = make_object_file(
+                obj_dir,
+                "2026-07-21-010-test.md",
+                SAMPLE_FRONTMATTER + "\n" + SAMPLE_BODY,
+            )
+            before = obj_file.read_text()
+
+            result = self._run_ws(
+                root,
+                "set-campaign",
+                "2026-07-21-010",
+                "../campaign.md",
+                "--expect-updated",
+                "2026-07-21T00:00:00Z",
+            )
+
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("Invalid campaign", result.stderr)
+            self.assertEqual(obj_file.read_text(), before)
 
 
 if __name__ == "__main__":

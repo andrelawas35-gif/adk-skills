@@ -54,7 +54,8 @@ owning Grilling Profile, current Git SHA where Git is available, and a human
 request selecting the pass or manual sweep.
 
 If the contract, pointer, required lineage, authority, or profile is absent,
-record the explicit gap and route to `conduct-work-object`; do not guess it.
+record the explicit gap per `references/MISSING-ARTIFACT-GAP.md` and route to
+`conduct-work-object`; do not guess it.
 
 ## Required capabilities
 

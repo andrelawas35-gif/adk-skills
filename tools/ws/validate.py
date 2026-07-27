@@ -33,6 +33,7 @@ from typing import Dict, List, Optional, Tuple
 
 from .schema import (
     parse_frontmatter,
+    validate_campaign,
     validate_consequence,
     validate_sensitivity,
     validate_state,
@@ -90,7 +91,7 @@ def check_schema(file_path: Path) -> List[str]:
         ("status", validate_status, {"active", "waiting", "paused", "closed"}),
         ("state", validate_state, VALID_STATES),
         ("consequence", validate_consequence, {"low", "meaningful", "high"}),
-        ("sensitivity", validate_sensitivity, {"ordinary", "restricted"}),
+        ("sensitivity", validate_sensitivity, {"ordinary", "private", "restricted"}),
     ]:
         value = fm.get(field)
         if value is not None:
@@ -105,7 +106,96 @@ def check_schema(file_path: Path) -> List[str]:
             f"{file_path}: Frontmatter id '{fm_id}' does not match filename"
         )
 
+    if "campaign" in fm:
+        err = validate_campaign(fm["campaign"])
+        if err:
+            errors.append(f"{file_path}: {err}")
+
     return errors
+
+
+# ── Non-blocking plausibility warnings ────────────────────────────────────────
+
+
+def _find_workspace_root(file_path: Path) -> Optional[Path]:
+    """Return the workspace root containing a .work-studio object."""
+    for parent in file_path.resolve().parents:
+        if parent.name == ".work-studio":
+            return parent.parent
+    return None
+
+
+def check_campaign_anchor(file_path: Path) -> List[str]:
+    """Warn when a valid campaign field points to a missing design document."""
+    try:
+        content = file_path.read_text()
+        fm = parse_frontmatter(content)
+    except (OSError, ValueError):
+        return []
+
+    campaign = fm.get("campaign")
+    if campaign is None or validate_campaign(campaign):
+        return []
+
+    workspace_root = _find_workspace_root(file_path)
+    if workspace_root is None:
+        return []
+
+    anchor = workspace_root / str(campaign)
+    if anchor.is_file():
+        return []
+    return [
+        f"{file_path}: campaign anchor '{campaign}' does not exist"
+    ]
+
+
+def check_consequence_plausibility(file_path: Path) -> List[str]:
+    """Warn when explicit scope markers make a low consequence implausible."""
+    try:
+        content = file_path.read_text()
+        fm = parse_frontmatter(content)
+    except (OSError, ValueError):
+        return []
+
+    if str(fm.get("consequence", "")) != "low":
+        return []
+
+    body = _extract_body(content)
+    reasons: List[str] = []
+
+    supersedes = fm.get("supersedes")
+    if supersedes not in (None, "", "None", "none"):
+        reasons.append("supersedes link")
+
+    if re.search(
+        r"(?im)^\s*(?:[-*]\s*)?(?:\*\*)?"
+        r"(?:files touched|changed files)(?:\*\*)?\s*:",
+        body,
+    ):
+        reasons.append("files touched")
+
+    adr_action = re.compile(
+        r"(?im)^.*(?:"
+        r"(?:amend|update|modify|supersed)\w*.*\bADR[- ]?\d+"
+        r"|\bADR[- ]?\d+.*(?:amend|update|modify|supersed)\w*"
+        r").*$"
+    )
+    if adr_action.search(body):
+        reasons.append("ADR amended")
+
+    try:
+        evidence = parse_sections(body).get("evidence ledger", "")
+    except ValueError:
+        evidence = ""
+    if re.search(r"(?i)\bexternal[- ]effect\b", evidence):
+        reasons.append("external effect")
+
+    if not reasons:
+        return []
+    return [
+        f"{file_path}: consequence 'low' may be implausible; "
+        f"scope indicators: {', '.join(reasons)}"
+    ]
 
 
 # ── Sections check ────────────────────────────────────────────────────────────
@@ -1479,6 +1569,11 @@ DEFAULT_CHECKS = [
     "file-integrity", "incident-routing", "prerequisites",
 ]
 
+DEFAULT_WARNING_CHECKS = [
+    check_campaign_anchor,
+    check_consequence_plausibility,
+]
+
 
 # ── Entry point ───────────────────────────────────────────────────────────────
 
@@ -1500,10 +1595,17 @@ def run_checks(
     Returns:
         Exit code: 0 if all checks pass, 1 if any fail.
     """
-    if check_names is None:
+    run_default_checks = check_names is None
+    if run_default_checks:
         check_names = list(DEFAULT_CHECKS)
 
     all_errors: List[str] = []
+    all_warnings: List[str] = []
+
+    if run_default_checks:
+        for warning_check in DEFAULT_WARNING_CHECKS:
+            for fp in file_paths:
+                all_warnings.extend(warning_check(fp))
 
     for name in check_names:
         if name not in CHECK_REGISTRY:
@@ -1538,6 +1640,9 @@ def run_checks(
         for fp in file_paths:
             errs = check_fn(fp)
             all_errors.extend(errs)
+
+    for warning in all_warnings:
+        print(f"Warning: {warning}", file=sys.stderr)
 
     for err in all_errors:
         print(err, file=sys.stderr)

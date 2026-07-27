@@ -5,13 +5,14 @@ and validates enum membership and required fields.
 """
 
 from datetime import datetime, timezone
+from pathlib import PurePosixPath
 from typing import Dict, Optional
 
 # ── Enums ─────────────────────────────────────────────────────────────────────
 
 VALID_TYPES = frozenset({"change", "inquiry", "project", "incident"})
 VALID_CONSEQUENCES = frozenset({"low", "meaningful", "high"})
-VALID_SENSITIVITIES = frozenset({"ordinary", "restricted"})
+VALID_SENSITIVITIES = frozenset({"ordinary", "private", "restricted"})
 VALID_STATES = frozenset({
     "notice", "explore", "design", "build",
     "verify", "release", "observe", "close",
@@ -42,6 +43,31 @@ def validate_sensitivity(value: str) -> Optional[str]:
     return None
 
 
+def validate_campaign(value: object) -> Optional[str]:
+    """Return an error when a campaign is not a canonical design-doc anchor."""
+    if not isinstance(value, str) or not value:
+        return "Invalid campaign. Must be a repository-relative docs/design/*.md path"
+    if value.startswith("/") or "\\" in value:
+        return (
+            f"Invalid campaign '{value}'. "
+            "Must be a repository-relative docs/design/*.md path"
+        )
+
+    path = PurePosixPath(value)
+    if (
+        str(path) != value
+        or len(path.parts) != 3
+        or path.parts[:2] != ("docs", "design")
+        or path.suffix != ".md"
+        or any(part in {".", ".."} for part in path.parts)
+    ):
+        return (
+            f"Invalid campaign '{value}'. "
+            "Must be a repository-relative docs/design/*.md path"
+        )
+    return None
+
+
 def validate_state(value: str) -> Optional[str]:
     """Return error message if state is invalid, or None."""
     if value not in VALID_STATES:
@@ -64,6 +90,7 @@ def generate_frontmatter(
     obj_type: str,
     consequence: str,
     sensitivity: str,
+    campaign: Optional[str] = None,
 ) -> str:
     """Generate YAML frontmatter for a new Work Object.
 
@@ -89,11 +116,15 @@ def generate_frontmatter(
         f"state: notice",
         f"consequence: {consequence}",
         f"sensitivity: {sensitivity}",
+    ]
+    if campaign is not None:
+        lines.append(f"campaign: {campaign}")
+    lines.extend([
         f"created_at: {now}",
         f"updated_at: {now}",
         "---",
         "",
-    ]
+    ])
 
     return "\n".join(lines)
 

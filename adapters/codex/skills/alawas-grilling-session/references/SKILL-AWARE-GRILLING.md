@@ -67,6 +67,29 @@ irreversible after the next deploy: does that change which branch should be
 recommended, and does the decision need to be made before or after that
 deploy?
 
+### `develop-idea`
+
+**Gates** — (1) Explore-state validity: confirm the Work Object is in
+`explore` state with `type: inquiry` before generating directions; generating
+for a concrete or committed work object is a category error. (2) Creative
+authority boundary: confirm that direction generation is explicitly
+divergent — the agent generates, the user selects, and no direction is
+presented as recommended over others.
+
+**Escalation** — Default: discover project context, generate at least three
+materially distinct directions with five-field structure (title, core idea,
+distinctness claim, key assumption, smallest test), surface information
+gaps, and present neutrally for user selection. Information value overrides
+the default when the existing evidence ledger already discriminates between
+potential directions — escalate to `investigate-live-question` for targeted
+gap resolution rather than generating full directions that the evidence has
+already narrowed.
+
+**Pressure scenario** — The user says "explore this" but the Work Object's
+evidence ledger already contains a clearly superior path: does the skill
+still generate divergent directions, or does it route to convergence,
+and what tells the agent which is appropriate?
+
 ### `design-tracer-bullet`
 
 **Gates** — (1) External-effect and data boundary: confirm the design's

@@ -35,7 +35,6 @@ VERSION_FILE = ROOT / "VERSION"
 PLATFORMS = ["codex", "claude-code", "github-copilot"]
 SKILL_NAMESPACE = "alawas"
 SHARED_REFERENCES = [
-    "../WORKSPACE-DOCUMENTATION-CONTRACT.md",
     "MISSING-ARTIFACT-GAP.md",
     "AGREEMENT-LOOP.md",
     "SKILL-AWARE-GRILLING.md",
@@ -44,6 +43,12 @@ SHARED_REFERENCES = [
     "EVIDENCE-MODEL.md",
     "SHARED-PROTOCOL.md",
 ]
+
+# Kernel/overlay split: AGREEMENT-LOOP.md and SKILL-AWARE-GRILLING.md form the
+# grilling overlay. They ship only with the grilling-session skill; all other
+# skills get kernel-only output (Decision 3, WO 2026-07-26-004).
+GRILLING_OVERLAY_REFS = {"AGREEMENT-LOOP.md", "SKILL-AWARE-GRILLING.md"}
+GRILLING_CORE_NAME = "grilling-session"
 SHARED_PROTOCOL_FILE = ROOT / "references" / "SHARED-PROTOCOL.md"
 
 
@@ -456,6 +461,15 @@ def adapter_skill_name(core_skill_name):
     return f"{SKILL_NAMESPACE}-{core_skill_name}"
 
 
+def is_grilling_skill(skill_name):
+    """Return True if skill_name is the grilling-session skill (full overlay).
+
+    Matches both the core name and the adapter-prefixed name so that
+    build_reference_entries works identically in generation and check paths.
+    """
+    return skill_name in (GRILLING_CORE_NAME, adapter_skill_name(GRILLING_CORE_NAME))
+
+
 def namespace_skill_references(body):
     """Rewrite only backticked Work Studio skill references for adapters."""
     for skill_dir in sorted(CORE_DIR.iterdir(), key=lambda item: len(item.name), reverse=True):
@@ -510,6 +524,10 @@ def build_reference_entries(skill_name, output_dir, core_skill_dir=None, write=F
     Scans the canonical skill body for each shared reference filename and
     only copies files the skill explicitly references (Decision 88, Session 11).
     When core_skill_dir is None (legacy path), includes all references.
+
+    Kernel/overlay split (Decision 3, WO 2026-07-26-004): grilling overlay
+    references (AGREEMENT-LOOP.md, SKILL-AWARE-GRILLING.md) are filtered out
+    for all skills except grilling-session, which gets the full overlay.
     """
     entries = []
     reference_dir = output_dir / "references"
@@ -519,6 +537,11 @@ def build_reference_entries(skill_name, output_dir, core_skill_dir=None, write=F
         active_refs = [f for f in SHARED_REFERENCES if Path(f).name in body]
     else:
         active_refs = SHARED_REFERENCES
+
+    # Kernel/overlay split: grilling overlay references only ship with the
+    # grilling-session skill. All other skills get kernel-only output.
+    if not is_grilling_skill(skill_name):
+        active_refs = [f for f in active_refs if f not in GRILLING_OVERLAY_REFS]
 
     if write:
         if active_refs:

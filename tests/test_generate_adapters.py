@@ -267,7 +267,7 @@ class GeneratorContract(unittest.TestCase):
         """Each generated skill receives only the reference files its core body
         mentions (Decision 88). Skills that mention none get no references dir."""
         references = [
-            "WORKSPACE-DOCUMENTATION-CONTRACT.md",
+            "MISSING-ARTIFACT-GAP.md",
             "AGREEMENT-LOOP.md",
             "SKILL-AWARE-GRILLING.md",
             "CAPABILITY-DEGRADATION.md",

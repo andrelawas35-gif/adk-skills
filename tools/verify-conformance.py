@@ -17,6 +17,7 @@ Usage:
 """
 
 import hashlib
+import importlib.util
 import json
 import re
 import sys
@@ -28,6 +29,18 @@ ADAPTERS_DIR = ROOT / "adapters"
 PLATFORMS = ["codex", "claude-code", "github-copilot"]
 SKILLS = sorted(path.name for path in CORE_DIR.iterdir() if path.is_dir())
 SKILL_NAMESPACE = "alawas"
+
+
+def _load_shared_references():
+    """Load SHARED_REFERENCES from generate-adapters.py without a package import."""
+    spec = importlib.util.spec_from_file_location(
+        "generate_adapters", ROOT / "tools" / "generate-adapters.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.SHARED_REFERENCES
+
+
+SHARED_REFERENCES = _load_shared_references()
 
 
 def adapter_skill_name(skill):
@@ -301,6 +314,23 @@ def verify_structure():
             if core_body not in content:
                 errors.append(
                     f"{platform}/{skill}: core body not preserved verbatim")
+
+            # Check per-skill reference citation matches shipped references
+            # (Decision 88): a skill's generated body must cite exactly the
+            # reference files present in its references/ dir, and vice versa.
+            core_text = (CORE_DIR / skill / "SKILL.md").read_text()
+            core_body_text = core_text.split("---", 2)[2]
+            cited = {Path(f).name for f in SHARED_REFERENCES
+                     if Path(f).name in core_body_text}
+            refs_dir = ADAPTERS_DIR / platform / "skills" / adapter_skill_name(skill) / "references"
+            shipped = ({p.name for p in refs_dir.iterdir() if p.is_file()}
+                       if refs_dir.is_dir() else set())
+            for missing in cited - shipped:
+                errors.append(
+                    f"{platform}/{skill}: cites '{missing}' but it is not shipped")
+            for extra in shipped - cited:
+                errors.append(
+                    f"{platform}/{skill}: ships '{extra}' but it is not cited")
 
     # Verify core skills have Required capabilities
     for skill in SKILLS:

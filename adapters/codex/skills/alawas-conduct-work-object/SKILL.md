@@ -146,7 +146,8 @@ in their canonical sections and never store a transcript.
 
 First inspect root `WORKSPACE-DOCUMENTATION-CONTRACT.md` when it exists. Use
 its registry to locate artifacts; do not search for plausible alternatives. If
-it is absent, report a Missing Artifact Gap and recommend bootstrap. Create
+it is absent, report a Missing Artifact Gap per `references/MISSING-ARTIFACT-GAP.md`
+and recommend bootstrap. Create
 only the contract after explicit bootstrap authority, except that an accepted
 `component-ledger` registry entry also seeds its empty per-project ledger. For a legacy workspace,
 inspect existing files but do not move, rename, import, or canonicalize them
@@ -316,13 +317,18 @@ Based on current state and next_action, route to the appropriate skill:
 | State | Typical route |
 |-------|---------------|
 | notice | turn-signal-into-work |
-| explore | investigate-live-question |
+| explore | develop-idea |
 | design | design-tracer-bullet |
 | build | implement-bounded-change |
 | verify | verify-release-evidence |
 | release | deploy-with-recovery |
 | observe | review-outcome-and-adapt |
 | close | review-outcome-and-adapt (outcome review) |
+
+> `alawas-investigate-live-question` is reachable as a **downstream route** from
+> `alawas-develop-idea` when a specific falsifiable question emerges during
+> exploration. The conductor does not route to `alawas-investigate-live-question`
+> directly from the `explore` state — that path goes through `alawas-develop-idea`.
 
 Route by stating: "Routing to [skill] for [specific task]." Include the Work
 Object ID and the concrete question or task.
@@ -392,6 +398,7 @@ delegated to the routed specialist, not performed by this skill directly.
 
 This skill composes with:
 - `alawas-turn-signal-into-work` — for classifying and activating signals
+- `alawas-develop-idea` — for divergent exploration in the explore state
 - `alawas-pressure-test-decision` — for unresolved decisions
 - `alawas-design-tracer-bullet` — for design work
 - `alawas-implement-bounded-change` — for implementation

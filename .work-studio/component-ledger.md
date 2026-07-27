@@ -16,25 +16,33 @@
 
 ## COMP-001 — Grilling engine (Agreement Loop)
 
-- **status:** needs-regrill
+- **status:** settled
 - **location(s):** `references/AGREEMENT-LOOP.md` (canonical; copied into every skill's `references/` by `tools/generate-adapters.py`)
-- **built-by Work Object(s):** pre-ledger backfill; recent shaping in WO `2026-07-16-004` (two-tier lenses)
+- **built-by Work Object(s):** pre-ledger backfill; recent shaping in WO `2026-07-16-004` (two-tier lenses); resolved in WO `2026-07-27-003`
 - **depends-on:** none declared
 - **depended-on-by:** COMP-002 through COMP-013 (every skill's Grilling Session; widest blast radius)
 - **applicable dimensions:** personal fit, artifact value, novelty yield (recovery quality deferred — engine-level, not outcome-level)
 - **owning skill/profile:** all skill profiles via `references/SKILL-AWARE-GRILLING.md`
-- **last-grilled-SHA:** `d0cb044`
+- **last-grilled-SHA:** `57d0412`
 - **best-case anchor:** Option-B-refined (WO 2026-07-18-001, 2026-07-18T05:00:00Z) — settled = no surviving finding against the applicable dimensions; auto-reopen on git-drift since `last-grilled-SHA`, owning-skill version change, or contrary govern-scorecards outcome evidence. No standing scorecard artifact.
 - **first grilled:** 2026-07-18 (tracer pass, WO 2026-07-18-001)
-- **open findings:** SIG-1 (see `.work-studio/inbox.md`) — cadence ambiguity, plus 3 secondary findings recorded in the pass below
+- **open findings:** none — all 4 findings resolved in WO `2026-07-27-003`
 
 ### Grilling pass — 2026-07-18 (against Grilling Profile + inline criteria)
 
 - **F1 [artifact value / HIGH]** `AGREEMENT-LOOP.md:103` (*"Ask exactly one decision-bearing question and wait"*) vs `:129` (*"no numerical question cap: three, 200, or more turns are valid"*): the doc never states that the one-question limit is **per turn** while continuity is **per session**. A reader can read "continuous Grilling Session" as "many questions at once." This ambiguity **actively misled in this very session** — lived evidence, not hypothetical.
+  - **Resolution (WO 2026-07-27-003):** `### Mode` subsection added to Decision Frontier defining `serial-depth` (per-turn, single-branch) and `breadth-sweep` (per-turn, rotating branches). Branch-rotation clause in turn contract clarifies "last answer" refers to the branch being rotated to. Cadence is now explicit per mode.
+
 - **F2 [personal fit / HIGH]** The engine encodes only **depth-first serial** grilling. It has no **breadth/sweep mode** for covering many independent branches, which is exactly the coverage the component-sweep needs — the engine can't yet express the behavior the project it governs requires.
+  - **Resolution (WO 2026-07-27-003):** `breadth-sweep` mode added alongside existing `serial-depth` default. Mode set by conductor at invocation time. Durable continuity template updated to list multiple active branches.
+
 - **F3 [novelty yield / MED]** `:24` "*`do recommended` accepts only the recommendation currently in focus*" leaves **"in focus" undefined** when multiple recommendations were presented in one turn; caused real friction this session.
+  - **Resolution (WO 2026-07-27-003):** Branch-rotation clause in turn contract names the active branch explicitly. In breadth-sweep mode, "in focus" is the branch named in the current question.
+
 - **F4 [artifact value / MED]** Convergence (`:176` Coverage Proof) asserts branch-map completeness but gives **no test for whether the branch map is actually complete** — "no remaining question is likely to change the recommendation" is unfalsifiable as written.
-- **Verdict:** NOT settled. ≥1 concrete, file-grounded, actionable finding → the mechanism produces real signal. Highest-value finding (F1) queued as `SIG-1`.
+  - **Resolution (WO 2026-07-27-003):** Coverage Proof replaced with **Convergence Checklist** — 4 falsifiable conditions: branch inventory with disposition, counterexample test, changed-condition trigger, and zero open branches required.
+
+- **Verdict:** SETTLED. All 4 findings resolved by WO `2026-07-27-003`. Auto-reopen on git-drift since SHA `57d0412`, owning-skill version change, or contrary govern-scorecards outcome evidence.
 
 ## Backfilled components
 
@@ -334,3 +342,16 @@ not yet implemented) and enter the ledger as `active` with `not-yet-grilled`.
 - **last-grilled-SHA:** not-yet-grilled
 - **best-case anchor:** Option-B-refined; no surviving finding against applicable dimensions and owning profile; reopen on git drift, owning-skill-version change, or contrary govern-scorecards outcome evidence
 - **status rationale / findings:** Renamed from verify-design-code-parity per Grilling Session 13 Phase 1; contract rewritten for browser-only verification against confirmed proposals (no Figma parity, no specification parity). Pending implementation and first grilling pass.
+
+## COMP-024 — Divergent idea development
+
+- **status:** active
+- **location(s):** `skills/core/develop-idea/SKILL.md`
+- **built-by Work Object(s):** `2026-07-26-002`
+- **depends-on:** COMP-001, COMP-002
+- **depended-on-by:** none declared
+- **applicable dimensions:** personal fit, artifact value, novelty yield
+- **owning skill/profile:** `develop-idea`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** Option-B-refined; no surviving finding against applicable dimensions and owning profile; reopen on git drift, owning-skill-version change, or contrary govern-scorecards outcome evidence
+- **status rationale / findings:** First divergent exploration capability in the system. Skill contract created from Idea Development Grilling Session (17 decisions). Pending first tracer bullet run and grilling pass.

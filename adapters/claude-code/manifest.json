@@ -10,16 +10,6 @@
       "sha256": "0bb2510b36e32b759ec77d565d2d416484c3ac3628b863ad89becfa8549a66eb"
     },
     {
-      "name": "alawas-apply-design-direction/references/AGREEMENT-LOOP.md",
-      "path": "adapters/claude-code/skills/alawas-apply-design-direction/references/AGREEMENT-LOOP.md",
-      "sha256": "29ddb29bdd804e5ff28a627ea357855e9918bf7f1a9fa1268f1a29037fe377e8"
-    },
-    {
-      "name": "alawas-apply-design-direction/references/SKILL-AWARE-GRILLING.md",
-      "path": "adapters/claude-code/skills/alawas-apply-design-direction/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "a1ef8ee710b1106b8a3633576fb8e8ca5e3ebb348512e9134a14744b19bc5d6b"
-    },
-    {
       "name": "alawas-apply-design-direction/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/claude-code/skills/alawas-apply-design-direction/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
@@ -28,16 +18,6 @@
       "name": "alawas-audit-product-interface",
       "path": "adapters/claude-code/skills/alawas-audit-product-interface/SKILL.md",
       "sha256": "c7f6564a3b688183f0a2f02b0c6f880dc026f89ccef02945dcb9c3d074678e61"
-    },
-    {
-      "name": "alawas-audit-product-interface/references/AGREEMENT-LOOP.md",
-      "path": "adapters/claude-code/skills/alawas-audit-product-interface/references/AGREEMENT-LOOP.md",
-      "sha256": "29ddb29bdd804e5ff28a627ea357855e9918bf7f1a9fa1268f1a29037fe377e8"
-    },
-    {
-      "name": "alawas-audit-product-interface/references/SKILL-AWARE-GRILLING.md",
-      "path": "adapters/claude-code/skills/alawas-audit-product-interface/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "a1ef8ee710b1106b8a3633576fb8e8ca5e3ebb348512e9134a14744b19bc5d6b"
     },
     {
       "name": "alawas-audit-product-interface/references/CONSEQUENCE-AUTHORITY.md",
@@ -50,16 +30,6 @@
       "sha256": "53ad4349af9496533fd4bdab1bf882d2ccdf4355ce24f091d73fafb4c67ea3b3"
     },
     {
-      "name": "alawas-build-design-foundation/references/AGREEMENT-LOOP.md",
-      "path": "adapters/claude-code/skills/alawas-build-design-foundation/references/AGREEMENT-LOOP.md",
-      "sha256": "29ddb29bdd804e5ff28a627ea357855e9918bf7f1a9fa1268f1a29037fe377e8"
-    },
-    {
-      "name": "alawas-build-design-foundation/references/SKILL-AWARE-GRILLING.md",
-      "path": "adapters/claude-code/skills/alawas-build-design-foundation/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "a1ef8ee710b1106b8a3633576fb8e8ca5e3ebb348512e9134a14744b19bc5d6b"
-    },
-    {
       "name": "alawas-build-design-foundation/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/claude-code/skills/alawas-build-design-foundation/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
@@ -67,22 +37,12 @@
     {
       "name": "alawas-conduct-work-object",
       "path": "adapters/claude-code/skills/alawas-conduct-work-object/SKILL.md",
-      "sha256": "e3fbbab845fc00f15f8a09056a7bb01dc95202b2ae4837768b5972cc1f485c0d"
+      "sha256": "ee12fea0c522820ea4d3dbe1dfc7c83cab72db3085f7ad8702cde75e63884e2c"
     },
     {
-      "name": "alawas-conduct-work-object/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "path": "adapters/claude-code/skills/alawas-conduct-work-object/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "sha256": "48dcad3b269e16961e16784f3ae4f61529a7bc164da121ce402cf5801532aff2"
-    },
-    {
-      "name": "alawas-conduct-work-object/references/AGREEMENT-LOOP.md",
-      "path": "adapters/claude-code/skills/alawas-conduct-work-object/references/AGREEMENT-LOOP.md",
-      "sha256": "29ddb29bdd804e5ff28a627ea357855e9918bf7f1a9fa1268f1a29037fe377e8"
-    },
-    {
-      "name": "alawas-conduct-work-object/references/SKILL-AWARE-GRILLING.md",
-      "path": "adapters/claude-code/skills/alawas-conduct-work-object/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "a1ef8ee710b1106b8a3633576fb8e8ca5e3ebb348512e9134a14744b19bc5d6b"
+      "name": "alawas-conduct-work-object/references/MISSING-ARTIFACT-GAP.md",
+      "path": "adapters/claude-code/skills/alawas-conduct-work-object/references/MISSING-ARTIFACT-GAP.md",
+      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
     },
     {
       "name": "alawas-conduct-work-object/references/CAPABILITY-DEGRADATION.md",
@@ -105,16 +65,6 @@
       "sha256": "ef4ea8bdd58b29bf30c186b3c7fac89bc69fb34af5b6bc9138deb53b88b0c7c1"
     },
     {
-      "name": "alawas-connect-design-to-code/references/AGREEMENT-LOOP.md",
-      "path": "adapters/claude-code/skills/alawas-connect-design-to-code/references/AGREEMENT-LOOP.md",
-      "sha256": "29ddb29bdd804e5ff28a627ea357855e9918bf7f1a9fa1268f1a29037fe377e8"
-    },
-    {
-      "name": "alawas-connect-design-to-code/references/SKILL-AWARE-GRILLING.md",
-      "path": "adapters/claude-code/skills/alawas-connect-design-to-code/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "a1ef8ee710b1106b8a3633576fb8e8ca5e3ebb348512e9134a14744b19bc5d6b"
-    },
-    {
       "name": "alawas-connect-design-to-code/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/claude-code/skills/alawas-connect-design-to-code/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
@@ -123,16 +73,6 @@
       "name": "alawas-define-interface-architecture",
       "path": "adapters/claude-code/skills/alawas-define-interface-architecture/SKILL.md",
       "sha256": "f5a6184fcab0e4786a4e49017f3d1d392cc0f544d61e78fae717f2f9b927d0cd"
-    },
-    {
-      "name": "alawas-define-interface-architecture/references/AGREEMENT-LOOP.md",
-      "path": "adapters/claude-code/skills/alawas-define-interface-architecture/references/AGREEMENT-LOOP.md",
-      "sha256": "29ddb29bdd804e5ff28a627ea357855e9918bf7f1a9fa1268f1a29037fe377e8"
-    },
-    {
-      "name": "alawas-define-interface-architecture/references/SKILL-AWARE-GRILLING.md",
-      "path": "adapters/claude-code/skills/alawas-define-interface-architecture/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "a1ef8ee710b1106b8a3633576fb8e8ca5e3ebb348512e9134a14744b19bc5d6b"
     },
     {
       "name": "alawas-define-interface-architecture/references/CONSEQUENCE-AUTHORITY.md",
@@ -145,16 +85,6 @@
       "sha256": "7996f1e7f7f3f159e9196ccf9e035cd9df27913a4a9c5a7bafa7009e978db65e"
     },
     {
-      "name": "alawas-define-interface-specification/references/AGREEMENT-LOOP.md",
-      "path": "adapters/claude-code/skills/alawas-define-interface-specification/references/AGREEMENT-LOOP.md",
-      "sha256": "29ddb29bdd804e5ff28a627ea357855e9918bf7f1a9fa1268f1a29037fe377e8"
-    },
-    {
-      "name": "alawas-define-interface-specification/references/SKILL-AWARE-GRILLING.md",
-      "path": "adapters/claude-code/skills/alawas-define-interface-specification/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "a1ef8ee710b1106b8a3633576fb8e8ca5e3ebb348512e9134a14744b19bc5d6b"
-    },
-    {
       "name": "alawas-define-interface-specification/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/claude-code/skills/alawas-define-interface-specification/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
@@ -163,16 +93,6 @@
       "name": "alawas-deploy-with-recovery",
       "path": "adapters/claude-code/skills/alawas-deploy-with-recovery/SKILL.md",
       "sha256": "ccf275806977cbe2e1e5fe62535a7a6044a223209dca1f925df9df7846799946"
-    },
-    {
-      "name": "alawas-deploy-with-recovery/references/AGREEMENT-LOOP.md",
-      "path": "adapters/claude-code/skills/alawas-deploy-with-recovery/references/AGREEMENT-LOOP.md",
-      "sha256": "29ddb29bdd804e5ff28a627ea357855e9918bf7f1a9fa1268f1a29037fe377e8"
-    },
-    {
-      "name": "alawas-deploy-with-recovery/references/SKILL-AWARE-GRILLING.md",
-      "path": "adapters/claude-code/skills/alawas-deploy-with-recovery/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "a1ef8ee710b1106b8a3633576fb8e8ca5e3ebb348512e9134a14744b19bc5d6b"
     },
     {
       "name": "alawas-deploy-with-recovery/references/CAPABILITY-DEGRADATION.md",
@@ -190,16 +110,6 @@
       "sha256": "c585f1fe9c55f468ef7f69a6d14f78253f39bd50d480758514bd283bbefded7e"
     },
     {
-      "name": "alawas-design-tracer-bullet/references/AGREEMENT-LOOP.md",
-      "path": "adapters/claude-code/skills/alawas-design-tracer-bullet/references/AGREEMENT-LOOP.md",
-      "sha256": "29ddb29bdd804e5ff28a627ea357855e9918bf7f1a9fa1268f1a29037fe377e8"
-    },
-    {
-      "name": "alawas-design-tracer-bullet/references/SKILL-AWARE-GRILLING.md",
-      "path": "adapters/claude-code/skills/alawas-design-tracer-bullet/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "a1ef8ee710b1106b8a3633576fb8e8ca5e3ebb348512e9134a14744b19bc5d6b"
-    },
-    {
       "name": "alawas-design-tracer-bullet/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/claude-code/skills/alawas-design-tracer-bullet/references/CAPABILITY-DEGRADATION.md",
       "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
@@ -215,19 +125,29 @@
       "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
+      "name": "alawas-develop-idea",
+      "path": "adapters/claude-code/skills/alawas-develop-idea/SKILL.md",
+      "sha256": "ad1c8055e5b7b890d6b7da0adcc5114fd7a58f825c4306b54d3526b05c0a5896"
+    },
+    {
+      "name": "alawas-develop-idea/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/claude-code/skills/alawas-develop-idea/references/CAPABILITY-DEGRADATION.md",
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
+    },
+    {
+      "name": "alawas-develop-idea/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/claude-code/skills/alawas-develop-idea/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
+    },
+    {
+      "name": "alawas-develop-idea/references/SHARED-PROTOCOL.md",
+      "path": "adapters/claude-code/skills/alawas-develop-idea/references/SHARED-PROTOCOL.md",
+      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
+    },
+    {
       "name": "alawas-diagnose-production-incident",
       "path": "adapters/claude-code/skills/alawas-diagnose-production-incident/SKILL.md",
       "sha256": "064a02d96d4acbf33805126de8ca777beb6e84164f98c7595f933d83d4bfea56"
-    },
-    {
-      "name": "alawas-diagnose-production-incident/references/AGREEMENT-LOOP.md",
-      "path": "adapters/claude-code/skills/alawas-diagnose-production-incident/references/AGREEMENT-LOOP.md",
-      "sha256": "29ddb29bdd804e5ff28a627ea357855e9918bf7f1a9fa1268f1a29037fe377e8"
-    },
-    {
-      "name": "alawas-diagnose-production-incident/references/SKILL-AWARE-GRILLING.md",
-      "path": "adapters/claude-code/skills/alawas-diagnose-production-incident/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "a1ef8ee710b1106b8a3633576fb8e8ca5e3ebb348512e9134a14744b19bc5d6b"
     },
     {
       "name": "alawas-diagnose-production-incident/references/CAPABILITY-DEGRADATION.md",
@@ -248,16 +168,6 @@
       "name": "alawas-govern-scorecards",
       "path": "adapters/claude-code/skills/alawas-govern-scorecards/SKILL.md",
       "sha256": "1c1f747a2dc3da8048096a152a1b366ffe798261fe18e368a4c8772270e42539"
-    },
-    {
-      "name": "alawas-govern-scorecards/references/AGREEMENT-LOOP.md",
-      "path": "adapters/claude-code/skills/alawas-govern-scorecards/references/AGREEMENT-LOOP.md",
-      "sha256": "29ddb29bdd804e5ff28a627ea357855e9918bf7f1a9fa1268f1a29037fe377e8"
-    },
-    {
-      "name": "alawas-govern-scorecards/references/SKILL-AWARE-GRILLING.md",
-      "path": "adapters/claude-code/skills/alawas-govern-scorecards/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "a1ef8ee710b1106b8a3633576fb8e8ca5e3ebb348512e9134a14744b19bc5d6b"
     },
     {
       "name": "alawas-govern-scorecards/references/CAPABILITY-DEGRADATION.md",
@@ -282,27 +192,17 @@
     {
       "name": "alawas-grilling-session/references/AGREEMENT-LOOP.md",
       "path": "adapters/claude-code/skills/alawas-grilling-session/references/AGREEMENT-LOOP.md",
-      "sha256": "29ddb29bdd804e5ff28a627ea357855e9918bf7f1a9fa1268f1a29037fe377e8"
+      "sha256": "2a4f19913812656f73939d6b6b8ff29c4dcb08675f4f35b89de946bcf8c88a7d"
     },
     {
       "name": "alawas-grilling-session/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/claude-code/skills/alawas-grilling-session/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "a1ef8ee710b1106b8a3633576fb8e8ca5e3ebb348512e9134a14744b19bc5d6b"
+      "sha256": "5c29a70298e85c1f2c1918404d6fc40d81aaaf79e29f00d58dbc57201599560f"
     },
     {
       "name": "alawas-implement-bounded-change",
       "path": "adapters/claude-code/skills/alawas-implement-bounded-change/SKILL.md",
       "sha256": "04751c4e8da77e62089c34577dd0e7105ce2125072332c1fa50fbd24eb0142a7"
-    },
-    {
-      "name": "alawas-implement-bounded-change/references/AGREEMENT-LOOP.md",
-      "path": "adapters/claude-code/skills/alawas-implement-bounded-change/references/AGREEMENT-LOOP.md",
-      "sha256": "29ddb29bdd804e5ff28a627ea357855e9918bf7f1a9fa1268f1a29037fe377e8"
-    },
-    {
-      "name": "alawas-implement-bounded-change/references/SKILL-AWARE-GRILLING.md",
-      "path": "adapters/claude-code/skills/alawas-implement-bounded-change/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "a1ef8ee710b1106b8a3633576fb8e8ca5e3ebb348512e9134a14744b19bc5d6b"
     },
     {
       "name": "alawas-implement-bounded-change/references/CAPABILITY-DEGRADATION.md",
@@ -323,16 +223,6 @@
       "name": "alawas-investigate-live-question",
       "path": "adapters/claude-code/skills/alawas-investigate-live-question/SKILL.md",
       "sha256": "3def5fcd0c45a8208c434a1b2a4d2d0f0f37ea4ed51568e9a2bdbaf6db7da8b8"
-    },
-    {
-      "name": "alawas-investigate-live-question/references/AGREEMENT-LOOP.md",
-      "path": "adapters/claude-code/skills/alawas-investigate-live-question/references/AGREEMENT-LOOP.md",
-      "sha256": "29ddb29bdd804e5ff28a627ea357855e9918bf7f1a9fa1268f1a29037fe377e8"
-    },
-    {
-      "name": "alawas-investigate-live-question/references/SKILL-AWARE-GRILLING.md",
-      "path": "adapters/claude-code/skills/alawas-investigate-live-question/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "a1ef8ee710b1106b8a3633576fb8e8ca5e3ebb348512e9134a14744b19bc5d6b"
     },
     {
       "name": "alawas-investigate-live-question/references/CAPABILITY-DEGRADATION.md",
@@ -360,16 +250,6 @@
       "sha256": "aae3902479abab3fc2fb5f3aae3ab96dc885b27bfd4d7ec373cc43865b3f4e6d"
     },
     {
-      "name": "alawas-maintain-working-method/references/AGREEMENT-LOOP.md",
-      "path": "adapters/claude-code/skills/alawas-maintain-working-method/references/AGREEMENT-LOOP.md",
-      "sha256": "29ddb29bdd804e5ff28a627ea357855e9918bf7f1a9fa1268f1a29037fe377e8"
-    },
-    {
-      "name": "alawas-maintain-working-method/references/SKILL-AWARE-GRILLING.md",
-      "path": "adapters/claude-code/skills/alawas-maintain-working-method/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "a1ef8ee710b1106b8a3633576fb8e8ca5e3ebb348512e9134a14744b19bc5d6b"
-    },
-    {
       "name": "alawas-maintain-working-method/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/claude-code/skills/alawas-maintain-working-method/references/CAPABILITY-DEGRADATION.md",
       "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
@@ -390,16 +270,6 @@
       "sha256": "794cad99c227b2232837e44ebc185feb7ba669d874f267750b400e8cf30dc3e1"
     },
     {
-      "name": "alawas-model-user-flow/references/AGREEMENT-LOOP.md",
-      "path": "adapters/claude-code/skills/alawas-model-user-flow/references/AGREEMENT-LOOP.md",
-      "sha256": "29ddb29bdd804e5ff28a627ea357855e9918bf7f1a9fa1268f1a29037fe377e8"
-    },
-    {
-      "name": "alawas-model-user-flow/references/SKILL-AWARE-GRILLING.md",
-      "path": "adapters/claude-code/skills/alawas-model-user-flow/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "a1ef8ee710b1106b8a3633576fb8e8ca5e3ebb348512e9134a14744b19bc5d6b"
-    },
-    {
       "name": "alawas-model-user-flow/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/claude-code/skills/alawas-model-user-flow/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
@@ -408,16 +278,6 @@
       "name": "alawas-pressure-test-decision",
       "path": "adapters/claude-code/skills/alawas-pressure-test-decision/SKILL.md",
       "sha256": "9542f3f513a9c7b93d73cd189429514a24a117079e3e5c4ce3ce53971cca3ad1"
-    },
-    {
-      "name": "alawas-pressure-test-decision/references/AGREEMENT-LOOP.md",
-      "path": "adapters/claude-code/skills/alawas-pressure-test-decision/references/AGREEMENT-LOOP.md",
-      "sha256": "29ddb29bdd804e5ff28a627ea357855e9918bf7f1a9fa1268f1a29037fe377e8"
-    },
-    {
-      "name": "alawas-pressure-test-decision/references/SKILL-AWARE-GRILLING.md",
-      "path": "adapters/claude-code/skills/alawas-pressure-test-decision/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "a1ef8ee710b1106b8a3633576fb8e8ca5e3ebb348512e9134a14744b19bc5d6b"
     },
     {
       "name": "alawas-pressure-test-decision/references/CAPABILITY-DEGRADATION.md",
@@ -440,16 +300,6 @@
       "sha256": "8993627284e909197fac43c52bde10f00626d4eccdc86096b78442b61bb13a9c"
     },
     {
-      "name": "alawas-render-to-figma/references/AGREEMENT-LOOP.md",
-      "path": "adapters/claude-code/skills/alawas-render-to-figma/references/AGREEMENT-LOOP.md",
-      "sha256": "29ddb29bdd804e5ff28a627ea357855e9918bf7f1a9fa1268f1a29037fe377e8"
-    },
-    {
-      "name": "alawas-render-to-figma/references/SKILL-AWARE-GRILLING.md",
-      "path": "adapters/claude-code/skills/alawas-render-to-figma/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "a1ef8ee710b1106b8a3633576fb8e8ca5e3ebb348512e9134a14744b19bc5d6b"
-    },
-    {
       "name": "alawas-render-to-figma/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/claude-code/skills/alawas-render-to-figma/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
@@ -458,16 +308,6 @@
       "name": "alawas-review-outcome-and-adapt",
       "path": "adapters/claude-code/skills/alawas-review-outcome-and-adapt/SKILL.md",
       "sha256": "dece7e5c38a16cf582396262e21643e66bcefdf4146a59a443efe0fb1287b32a"
-    },
-    {
-      "name": "alawas-review-outcome-and-adapt/references/AGREEMENT-LOOP.md",
-      "path": "adapters/claude-code/skills/alawas-review-outcome-and-adapt/references/AGREEMENT-LOOP.md",
-      "sha256": "29ddb29bdd804e5ff28a627ea357855e9918bf7f1a9fa1268f1a29037fe377e8"
-    },
-    {
-      "name": "alawas-review-outcome-and-adapt/references/SKILL-AWARE-GRILLING.md",
-      "path": "adapters/claude-code/skills/alawas-review-outcome-and-adapt/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "a1ef8ee710b1106b8a3633576fb8e8ca5e3ebb348512e9134a14744b19bc5d6b"
     },
     {
       "name": "alawas-review-outcome-and-adapt/references/CAPABILITY-DEGRADATION.md",
@@ -487,22 +327,12 @@
     {
       "name": "alawas-track-components",
       "path": "adapters/claude-code/skills/alawas-track-components/SKILL.md",
-      "sha256": "ace16f28e31c5ab2ae0e4ad632b2c2bf634bf8a8243c8fa2f3d7a6daa88c7976"
+      "sha256": "0a0fe2a5337e0b7a03188315d21f8b52d2f78c883997a81490eb60877d9a223e"
     },
     {
-      "name": "alawas-track-components/references/../WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "path": "adapters/claude-code/skills/alawas-track-components/references/WORKSPACE-DOCUMENTATION-CONTRACT.md",
-      "sha256": "48dcad3b269e16961e16784f3ae4f61529a7bc164da121ce402cf5801532aff2"
-    },
-    {
-      "name": "alawas-track-components/references/AGREEMENT-LOOP.md",
-      "path": "adapters/claude-code/skills/alawas-track-components/references/AGREEMENT-LOOP.md",
-      "sha256": "29ddb29bdd804e5ff28a627ea357855e9918bf7f1a9fa1268f1a29037fe377e8"
-    },
-    {
-      "name": "alawas-track-components/references/SKILL-AWARE-GRILLING.md",
-      "path": "adapters/claude-code/skills/alawas-track-components/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "a1ef8ee710b1106b8a3633576fb8e8ca5e3ebb348512e9134a14744b19bc5d6b"
+      "name": "alawas-track-components/references/MISSING-ARTIFACT-GAP.md",
+      "path": "adapters/claude-code/skills/alawas-track-components/references/MISSING-ARTIFACT-GAP.md",
+      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
     },
     {
       "name": "alawas-track-components/references/CONSEQUENCE-AUTHORITY.md",
@@ -513,16 +343,6 @@
       "name": "alawas-turn-signal-into-work",
       "path": "adapters/claude-code/skills/alawas-turn-signal-into-work/SKILL.md",
       "sha256": "97115f49f195abd9aed5393c76a5c9e6ce5f64e2eed72ba1f014007b572ffd9a"
-    },
-    {
-      "name": "alawas-turn-signal-into-work/references/AGREEMENT-LOOP.md",
-      "path": "adapters/claude-code/skills/alawas-turn-signal-into-work/references/AGREEMENT-LOOP.md",
-      "sha256": "29ddb29bdd804e5ff28a627ea357855e9918bf7f1a9fa1268f1a29037fe377e8"
-    },
-    {
-      "name": "alawas-turn-signal-into-work/references/SKILL-AWARE-GRILLING.md",
-      "path": "adapters/claude-code/skills/alawas-turn-signal-into-work/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "a1ef8ee710b1106b8a3633576fb8e8ca5e3ebb348512e9134a14744b19bc5d6b"
     },
     {
       "name": "alawas-turn-signal-into-work/references/CAPABILITY-DEGRADATION.md",
@@ -545,16 +365,6 @@
       "sha256": "2d67292545e2b4f7159c2dad46c31bf5f9f5f290f68c893c96b0b6643cb5e1a1"
     },
     {
-      "name": "alawas-verify-design-implementation/references/AGREEMENT-LOOP.md",
-      "path": "adapters/claude-code/skills/alawas-verify-design-implementation/references/AGREEMENT-LOOP.md",
-      "sha256": "29ddb29bdd804e5ff28a627ea357855e9918bf7f1a9fa1268f1a29037fe377e8"
-    },
-    {
-      "name": "alawas-verify-design-implementation/references/SKILL-AWARE-GRILLING.md",
-      "path": "adapters/claude-code/skills/alawas-verify-design-implementation/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "a1ef8ee710b1106b8a3633576fb8e8ca5e3ebb348512e9134a14744b19bc5d6b"
-    },
-    {
       "name": "alawas-verify-design-implementation/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/claude-code/skills/alawas-verify-design-implementation/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
@@ -563,16 +373,6 @@
       "name": "alawas-verify-release-evidence",
       "path": "adapters/claude-code/skills/alawas-verify-release-evidence/SKILL.md",
       "sha256": "f73edb3314dfd71dff0cbab53d5ac2e97f5dedfbab7bd768d66d24fba91b6eb4"
-    },
-    {
-      "name": "alawas-verify-release-evidence/references/AGREEMENT-LOOP.md",
-      "path": "adapters/claude-code/skills/alawas-verify-release-evidence/references/AGREEMENT-LOOP.md",
-      "sha256": "29ddb29bdd804e5ff28a627ea357855e9918bf7f1a9fa1268f1a29037fe377e8"
-    },
-    {
-      "name": "alawas-verify-release-evidence/references/SKILL-AWARE-GRILLING.md",
-      "path": "adapters/claude-code/skills/alawas-verify-release-evidence/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "a1ef8ee710b1106b8a3633576fb8e8ca5e3ebb348512e9134a14744b19bc5d6b"
     },
     {
       "name": "alawas-verify-release-evidence/references/CAPABILITY-DEGRADATION.md",

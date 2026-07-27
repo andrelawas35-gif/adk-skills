@@ -16,7 +16,7 @@ from .attention import (
     update_active_entry,
 )
 from .concurrency import check_concurrency
-from .identity import allocate_id, build_path
+from .identity import ID_PATTERN, allocate_id, build_path
 from .lifecycle import (
     check_gates_for_transition,
     get_close_route,
@@ -25,6 +25,7 @@ from .lifecycle import (
 from .schema import (
     generate_frontmatter,
     parse_frontmatter,
+    validate_campaign,
     validate_consequence,
     validate_sensitivity,
     validate_type,
@@ -143,6 +144,109 @@ def cmd_create(args: argparse.Namespace) -> int:
     print(f"Created: {relative_path}")
     print(f"ID: {obj_id}")
 
+    return 0
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ws members
+# ═══════════════════════════════════════════════════════════════════════════════
+
+
+def cmd_members(args: argparse.Namespace) -> int:
+    """List Work Objects sharing an exact campaign anchor."""
+    err = validate_campaign(args.campaign)
+    if err:
+        print(f"Error: {err}", file=sys.stderr)
+        return 1
+
+    try:
+        ws_root = _find_work_studio_root()
+    except FileNotFoundError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+
+    objects_dir = ws_root / ".work-studio" / "objects"
+    members = []
+    if objects_dir.exists():
+        for obj_file in sorted(objects_dir.rglob("*.md")):
+            if not ID_PATTERN.match(obj_file.name):
+                continue
+            try:
+                fm = parse_frontmatter(obj_file.read_text())
+            except (OSError, ValueError) as e:
+                print(
+                    f"Error: Cannot inspect Work Object '{obj_file}': {e}",
+                    file=sys.stderr,
+                )
+                return 1
+            if fm.get("campaign") == args.campaign:
+                members.append((
+                    str(fm.get("id", obj_file.stem)),
+                    str(fm.get("title", obj_file.stem)),
+                ))
+
+    for obj_id, title in sorted(members):
+        print(f"{obj_id} — {title}")
+    return 0
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ws set-campaign
+# ═══════════════════════════════════════════════════════════════════════════════
+
+
+def cmd_set_campaign(args: argparse.Namespace) -> int:
+    """Assign a campaign anchor to an existing Work Object."""
+    err = validate_campaign(args.campaign)
+    if err:
+        print(f"Error: {err}", file=sys.stderr)
+        return 1
+
+    try:
+        ws_root = _find_work_studio_root()
+    except FileNotFoundError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+
+    objects_dir = ws_root / ".work-studio" / "objects"
+    try:
+        obj_file = _resolve_object_file(objects_dir, args.id)
+    except FileNotFoundError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+
+    err = check_concurrency(obj_file, args.expect_updated)
+    if err:
+        print(f"Error: {err}", file=sys.stderr)
+        return 1
+
+    content = obj_file.read_text()
+    fm = parse_frontmatter(content)
+    if fm.get("campaign") == args.campaign:
+        print(f"Campaign unchanged for {args.id}: {args.campaign}")
+        return 0
+
+    body = (
+        content[content.find("---", 3) + 3:].strip()
+        if content.startswith("---")
+        else content
+    )
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    new_fm = _update_frontmatter_fields(content, {
+        "campaign": args.campaign,
+        "updated_at": now,
+    })
+    history_entry = generate_history_entry(
+        action=f"Campaign set: {args.campaign}",
+        state=str(fm.get("state", "")),
+        status=str(fm.get("status", "")),
+        actor=args.actor,
+        rationale=args.rationale,
+    )
+    new_body = append_to_section(body, "history", history_entry)
+    obj_file.write_text(new_fm + "\n" + new_body.rstrip("\n") + "\n")
+
+    print(f"Campaign set for {args.id}: {args.campaign}")
     return 0
 
 
@@ -635,6 +739,42 @@ def build_parser() -> argparse.ArgumentParser:
         help="Sensitivity classification",
     )
 
+    # ── ws members ────────────────────────────────────────────────────────
+    members_parser = subparsers.add_parser(
+        "members",
+        help="List Work Objects sharing a campaign anchor",
+    )
+    members_parser.add_argument(
+        "campaign",
+        help="Repository-relative docs/design/*.md campaign anchor",
+    )
+
+    # ── ws set-campaign ───────────────────────────────────────────────────
+    set_campaign_parser = subparsers.add_parser(
+        "set-campaign",
+        help="Assign a campaign anchor to an existing Work Object",
+    )
+    set_campaign_parser.add_argument("id", help="Work Object ID")
+    set_campaign_parser.add_argument(
+        "campaign",
+        help="Repository-relative docs/design/*.md campaign anchor",
+    )
+    set_campaign_parser.add_argument(
+        "--expect-updated",
+        required=True,
+        help="Expected updated_at timestamp",
+    )
+    set_campaign_parser.add_argument(
+        "--actor",
+        default="system",
+        help="Actor identifier",
+    )
+    set_campaign_parser.add_argument(
+        "--rationale",
+        default="Campaign assigned through ws set-campaign.",
+        help="History rationale",
+    )
+
     # ── ws transition ─────────────────────────────────────────────────────
     trans_parser = subparsers.add_parser("transition", help="Transition state/status")
     trans_parser.add_argument("id", help="Work Object ID")
@@ -756,6 +896,8 @@ def main() -> int:
     commands = {
         "init": cmd_init,
         "create": cmd_create,
+        "members": cmd_members,
+        "set-campaign": cmd_set_campaign,
         "transition": cmd_transition,
         "close": cmd_close,
         "activate": cmd_activate,
