@@ -251,6 +251,18 @@ and History. If it cannot record, report the exact record and manual step.
 
 Invocation-relevant wiring only; installation and maintainer guidance live outside this file.
 
+### Epistemic rules
+
+This skill uses the **essential 3‑tag system** (`references/epistemic/epistemic-rules-essential.md`).
+
+The epistemic tier is resolved from the skill's `default_tier` (medium).
+**Consequence-based escalation:** When a Work Object has `consequence: meaningful`,
+the epistemic tier is upgraded to at least `medium` (essential 3‑tag).
+When `consequence: high`, the epistemic tier is upgraded to the strongest
+available tier (full 6‑tag).
+`actual_epistemic_tier = max(skill.default_tier, consequence_escalation(wo.consequence))`.
+
+
 ### Runtime pin resolution
 
 Codex can discover both user and repository skills with the same name.

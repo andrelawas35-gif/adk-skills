@@ -51,6 +51,41 @@ GRILLING_OVERLAY_REFS = {"AGREEMENT-LOOP.md", "SKILL-AWARE-GRILLING.md"}
 GRILLING_CORE_NAME = "thinking-grilling-session"
 SHARED_PROTOCOL_FILE = ROOT / "references" / "SHARED-PROTOCOL.md"
 
+# Epistemic reference variants (WO 2026-07-26-006)
+EPISTEMIC_REF_DIR = ROOT / "references" / "epistemic"
+EPISTEMIC_VARIANTS = {
+    "high": "epistemic-rules-full.md",
+    "medium": "epistemic-rules-essential.md",
+    "low": "epistemic-rules-binary.md",
+}
+
+TIER_ORDER = {"high": 3, "medium": 2, "low": 1}
+
+
+def resolve_epistemic_tier(default_tier, wo_consequence=None):
+    """Resolve the epistemic tier for a skill.
+
+    Applies the same consequence-based escalation as model tier selection:
+    actual_epistemic_tier = max(skill.default_tier, consequence_escalation(wo.consequence)).
+
+    When wo_consequence is None, returns the skill's default tier (safe default
+    for generation, since the WO context is not available at adapter-build time).
+    """
+    if wo_consequence is None:
+        return default_tier
+
+    consequence_escalation = {"low": "low", "meaningful": "medium", "high": "high"}
+    escalated = consequence_escalation.get(wo_consequence, "low")
+
+    if TIER_ORDER.get(escalated, 1) > TIER_ORDER.get(default_tier, 1):
+        return escalated
+    return default_tier
+
+
+def epistemic_variant_filename(epistemic_tier: str) -> str:
+    """Return the epistemic reference filename for the given tier."""
+    return EPISTEMIC_VARIANTS.get(epistemic_tier, "epistemic-rules-essential.md")
+
 
 def read_version() -> str:
     """Read the release version, pinned in the VERSION file.
@@ -315,12 +350,33 @@ def generate_adapter_section(overlay, required, default_tier="medium"):
     lines.append("")
     lines.append("Invocation-relevant wiring only; installation and maintainer guidance live outside this file.")
 
+    # Epistemic rules tier resolution
+    epistemic_tier = resolve_epistemic_tier(default_tier)
+    variant_file = epistemic_variant_filename(epistemic_tier)
+    lines.append("")
+    lines.append("### Epistemic rules")
+    lines.append("")
+    epistemic_labels = {
+        "high": "full 6‑tag system",
+        "medium": "essential 3‑tag system",
+        "low": "binary 2‑tag system",
+    }
+    label = epistemic_labels.get(epistemic_tier, "essential 3‑tag system")
+    lines.append(f"This skill uses the **{label}** (`references/epistemic/{variant_file}`).")
+    lines.append("")
+    lines.append(f"The epistemic tier is resolved from the skill's `default_tier` ({default_tier}).")
+    lines.append("**Consequence-based escalation:** When a Work Object has `consequence: meaningful`,")
+    lines.append("the epistemic tier is upgraded to at least `medium` (essential 3‑tag).")
+    lines.append("When `consequence: high`, the epistemic tier is upgraded to the strongest")
+    lines.append("available tier (full 6‑tag).")
+    lines.append("`actual_epistemic_tier = max(skill.default_tier, consequence_escalation(wo.consequence))`.")
+    lines.append("")
+
     # Model tier resolution
     model_tiers = overlay.get("model_tiers", {})
     prompt_budgets = overlay.get("prompt_budgets", {})
     if model_tiers:
         resolved_model = model_tiers.get(default_tier, model_tiers.get("medium", "—"))
-        lines.append("")
         lines.append("### Model tier")
         lines.append("")
         lines.append(f"This skill declares `default_tier: {default_tier}`.")
@@ -589,6 +645,9 @@ def build_reference_entries(skill_name, output_dir, core_skill_dir=None, write=F
     Kernel/overlay split (Decision 3, WO 2026-07-26-004): grilling overlay
     references (AGREEMENT-LOOP.md, SKILL-AWARE-GRILLING.md) are filtered out
     for all skills except grilling-session, which gets the full overlay.
+
+    Tier-scaled epistemic rules (WO 2026-07-26-006): the correct epistemic
+    reference variant is included based on the skill's default_tier.
     """
     entries = []
     reference_dir = output_dir / "references"
@@ -625,6 +684,32 @@ def build_reference_entries(skill_name, output_dir, core_skill_dir=None, write=F
             "path": str(destination.relative_to(ROOT)),
             "sha256": hashlib.sha256(content).hexdigest(),
         })
+
+    # Tier-scaled epistemic rules variant (WO 2026-07-26-006)
+    if core_skill_dir is not None:
+        default_tier = extract_default_tier(core_skill_dir)
+        epistemic_tier = resolve_epistemic_tier(default_tier)
+        variant_filename = epistemic_variant_filename(epistemic_tier)
+        # Use a consistent reference name so the Platform Adapter section can
+        # reference it without knowing the tier at body-writing time.
+        epistemic_source = EPISTEMIC_REF_DIR / variant_filename
+        if epistemic_source.exists():
+            epistemic_dest = reference_dir / "epistemic" / variant_filename
+            content = epistemic_source.read_bytes()
+            if write:
+                epistemic_dest.parent.mkdir(parents=True, exist_ok=True)
+                # Remove stale epistemic variants for this skill
+                if epistemic_dest.parent.exists():
+                    for existing in epistemic_dest.parent.iterdir():
+                        if existing.is_file() and existing.name != variant_filename:
+                            existing.unlink()
+                epistemic_dest.write_bytes(content)
+            entries.append({
+                "name": f"{skill_name}/references/epistemic/{variant_filename}",
+                "path": str(epistemic_dest.relative_to(ROOT)),
+                "sha256": hashlib.sha256(content).hexdigest(),
+            })
+
     return entries
 
 
