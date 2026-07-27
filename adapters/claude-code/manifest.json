@@ -366,7 +366,7 @@
     {
       "name": "alawas-thinking-grilling-session",
       "path": "adapters/claude-code/skills/alawas-thinking-grilling-session/SKILL.md",
-      "sha256": "9c9a788977059318908d3bc0791ced803f4bb329b0e8dc3a653386c5ab3ffe94"
+      "sha256": "4445b2a28d4508609f5375b96f4ef959c1e55324cc2c1211696a8229bbe8fdf0"
     },
     {
       "name": "alawas-thinking-grilling-session/references/AGREEMENT-LOOP.md",

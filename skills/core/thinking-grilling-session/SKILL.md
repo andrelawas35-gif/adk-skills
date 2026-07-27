@@ -30,6 +30,21 @@ Stage skills may nominate a Grilling Candidate under the Agreement Loop's
 three-part threshold, but must show its Candidate Card and wait for explicit
 entry rather than silently starting this session.
 
+## Subject resolution
+
+When no explicit subject is named, the five-rung evidence inspection passes
+through the steps named in `references/AGREEMENT-LOOP.md` and this skill's
+entry instructions. If those rungs all miss, the following ladder closes the
+gap (rungs 6-7):
+
+- **rung 6** — resolve to `active.md` Primary and state it in the Context
+  Card as a correctable claim with its basis. Permitted without new machinery
+  by the existing correctability guarantee at `AGREEMENT-LOOP.md:68`.
+- **rung 7** — when there is no register, no Primary, or the guess is
+  rejected: construct nothing. No Context Card, no profile, no frontier.
+  Ask one wide question about what is unresolved, and resolve the subject
+  from the answer.
+
 ## Required capabilities
 
 - `file_read` — inspect relevant code, records, and local instructions.
