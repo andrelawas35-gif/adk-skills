@@ -4,7 +4,7 @@ status: deferred
 deferred_date: 2026-07-23
 deferred_reason: "All structure emerges from conversation (Grilling Session 13, DEC-A11)"
 revisit_trigger: "Project complexity requires upfront architectural planning"
-description: "DEFERRED. Use when screen hierarchy, navigation, and information architecture need defining; produces durable architecture documents grounded in discovery; does not implement or modify code."
+description: "Use when screen hierarchy, navigation, and information architecture need defining; produces durable architecture documents grounded in discovery; does not implement or modify code."
 ---
 
 # Define Interface Architecture

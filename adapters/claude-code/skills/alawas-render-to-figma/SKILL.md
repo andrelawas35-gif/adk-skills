@@ -1,6 +1,6 @@
 ---
 name: alawas-render-to-figma
-description: "DEFERRED. Use when a verified interface specification needs Figma output; wraps Figwright with authority gates and preservation policy; does not modify approved frames without high-consequence confirmation."
+description: "Use when a verified interface specification needs Figma output; wraps Figwright with authority gates and preservation policy; does not modify approved frames without high-consequence confirmation."
 platform: claude-code
 ---
 # Render to Figma
@@ -148,7 +148,7 @@ When Figwright is unavailable at any step:
 
 **Route when:**
 - Render is complete — return to `alawas-conduct-work-object`.
-- Parity verification is needed — route to `verify-design-code-parity`.
+- Parity verification is needed — route to `alawas-verify-design-implementation`.
 
 **Terminate when:**
 - Figma page is created and manifest updated, or

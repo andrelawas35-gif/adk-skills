@@ -4,7 +4,7 @@ status: deferred
 deferred_date: 2026-07-23
 deferred_reason: "No Figma component mapping needed (Grilling Session 13, DEC-A5)"
 revisit_trigger: "External design tool integration requires component mapping"
-description: "DEFERRED. Use when code components need mapping to Figma components; governs Figwright's component_map to maintain a durable component registry; does not modify code or canvas content."
+description: "Use when code components need mapping to Figma components; governs Figwright's component_map to maintain a durable component registry; does not modify code or canvas content."
 ---
 
 # Connect Design to Code

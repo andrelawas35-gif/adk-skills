@@ -4,7 +4,7 @@ status: deferred
 deferred_date: 2026-07-23
 deferred_reason: "Figma never used (Grilling Session 13, DEC-A5)"
 revisit_trigger: "Collaboration with a designer who uses Figma"
-description: "DEFERRED. Use when a verified interface specification needs Figma output; wraps Figwright with authority gates and preservation policy; does not modify approved frames without high-consequence confirmation."
+description: "Use when a verified interface specification needs Figma output; wraps Figwright with authority gates and preservation policy; does not modify approved frames without high-consequence confirmation."
 ---
 
 # Render to Figma
@@ -152,7 +152,7 @@ When Figwright is unavailable at any step:
 
 **Route when:**
 - Render is complete — return to `conduct-work-object`.
-- Parity verification is needed — route to `verify-design-code-parity`.
+- Parity verification is needed — route to `verify-design-implementation`.
 
 **Terminate when:**
 - Figma page is created and manifest updated, or

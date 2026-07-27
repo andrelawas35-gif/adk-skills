@@ -47,7 +47,7 @@ EXPECTED_CAPABILITIES = {
     },
     "design_diff": {
         "description": "Compare Figma output against specification",
-        "required_by": ["verify-design-code-parity"],
+        "required_by": ["verify-design-implementation"],
         "criticality": "optional",
     },
 }

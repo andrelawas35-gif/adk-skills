@@ -1,6 +1,6 @@
 ---
 name: alawas-model-user-flow
-description: "DEFERRED. Use when user goals need mapping to interface actions; translates user objectives into goal-action-state-response flows; does not implement interface changes."
+description: "Use when user goals need mapping to interface actions; translates user objectives into goal-action-state-response flows; does not implement interface changes."
 platform: codex
 ---
 # Model User Flow

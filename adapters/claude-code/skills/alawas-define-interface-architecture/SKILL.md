@@ -1,6 +1,6 @@
 ---
 name: alawas-define-interface-architecture
-description: "DEFERRED. Use when screen hierarchy, navigation, and information architecture need defining; produces durable architecture documents grounded in discovery; does not implement or modify code."
+description: "Use when screen hierarchy, navigation, and information architecture need defining; produces durable architecture documents grounded in discovery; does not implement or modify code."
 platform: claude-code
 ---
 # Define Interface Architecture

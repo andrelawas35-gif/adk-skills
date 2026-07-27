@@ -93,7 +93,7 @@ Apply the same continuity contract to all profiles:
 - `render-to-figma`
 - `connect-design-to-code`
 - `apply-design-direction`
-- `verify-design-code-parity`
+- `verify-design-implementation`
 
 ## Scenario 7 — Stage-specific challenge follows project reality
 

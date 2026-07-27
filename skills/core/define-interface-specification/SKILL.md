@@ -4,7 +4,7 @@ status: deferred
 deferred_date: 2026-07-23
 deferred_reason: "Specs are extracted after the fact, not authored upfront (Grilling Session 13, DEC-A11, DEC-A13)"
 revisit_trigger: "User needs to communicate design intent before implementation"
-description: "DEFERRED. Use when a screen needs a machine-readable specification connecting natural language, code, and Figma; produces durable YAML specs; does not implement the specified interface."
+description: "Use when a screen needs a machine-readable specification connecting natural language, code, and Figma; produces durable YAML specs; does not implement the specified interface."
 ---
 
 # Define Interface Specification

@@ -4,7 +4,7 @@ status: deferred
 deferred_date: 2026-07-23
 deferred_reason: "All structure emerges from conversation (Grilling Session 13, DEC-A11)"
 revisit_trigger: "Project complexity requires upfront flow planning"
-description: "DEFERRED. Use when user goals need mapping to interface actions; translates user objectives into goal-action-state-response flows; does not implement interface changes."
+description: "Use when user goals need mapping to interface actions; translates user objectives into goal-action-state-response flows; does not implement interface changes."
 ---
 
 # Model User Flow

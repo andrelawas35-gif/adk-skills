@@ -1,6 +1,6 @@
 ---
 name: alawas-apply-design-direction
-description: "Use when natural-language design direction needs interpretation and execution; proposes concrete changes, executes after user confirmation; the core creative authority loop."
+description: "Use when natural-language design direction needs interpretation and execution; proposes concrete changes, executes only after user confirmation, and does not modify code beyond confirmed scope."
 platform: codex
 ---
 # Apply Design Direction

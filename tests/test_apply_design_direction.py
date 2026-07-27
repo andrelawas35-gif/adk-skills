@@ -15,7 +15,7 @@ PLATFORMS = ("codex", "claude-code", "github-copilot")
 
 
 class ApplyDesignDirectionContract(unittest.TestCase):
-    def test_core_skill_translates_direction_to_revision_manifest(self):
+    def test_core_skill_runs_confirmed_creative_authority_loop(self):
         text = CORE.read_text()
 
         for required_clause in (
@@ -23,12 +23,12 @@ class ApplyDesignDirectionContract(unittest.TestCase):
             "## Boundaries and non-goals",
             "## Required capabilities",
             "Natural language",
-            "revision manifest",
-            "preserve",
-            "revise",
-            "prohibited",
-            "DEC-17",
-            "does not execute",
+            "proposes an interpretation",
+            "user confirmation",
+            "confirmed interpretation",
+            "[system:design-direction]",
+            "Modify code beyond the confirmed scope",
+            "Execute changes without user confirmation",
             "## Final self-check",
         ):
             with self.subTest(required_clause=required_clause):

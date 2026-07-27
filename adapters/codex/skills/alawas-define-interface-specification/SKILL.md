@@ -1,6 +1,6 @@
 ---
 name: alawas-define-interface-specification
-description: "DEFERRED. Use when a screen needs a machine-readable specification connecting natural language, code, and Figma; produces durable YAML specs; does not implement the specified interface."
+description: "Use when a screen needs a machine-readable specification connecting natural language, code, and Figma; produces durable YAML specs; does not implement the specified interface."
 platform: codex
 ---
 # Define Interface Specification

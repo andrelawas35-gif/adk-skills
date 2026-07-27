@@ -1,6 +1,6 @@
 ---
 name: alawas-connect-design-to-code
-description: "DEFERRED. Use when code components need mapping to Figma components; governs Figwright's component_map to maintain a durable component registry; does not modify code or canvas content."
+description: "Use when code components need mapping to Figma components; governs Figwright's component_map to maintain a durable component registry; does not modify code or canvas content."
 platform: codex
 ---
 # Connect Design to Code

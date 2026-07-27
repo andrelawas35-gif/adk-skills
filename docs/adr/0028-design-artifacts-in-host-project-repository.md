@@ -169,7 +169,8 @@ Coding Studio), not with the governance system.
 ### 2026-07-23 — Grilling Session 13: Move artifacts to Creative Coding Studio
 
 **Authority:** DEC-A1 (design practice lives in Creative Coding Studio),
-DEC-A8 (automatic filesystem sync), Grilling Session 13 (14 accepted decisions)
+DEC-A4 (review artifacts live locally in the studio), DEC-A9 (IndexedDB +
+automatic filesystem sync), Grilling Session 13 (14 accepted decisions)
 
 **Changes:**
 - Title changed from "Design Artifacts in Host Project Repository" to "Design

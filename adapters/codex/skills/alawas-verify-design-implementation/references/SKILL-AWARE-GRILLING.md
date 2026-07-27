@@ -409,24 +409,27 @@ render, but the browser evidence was collected against the old specification
 version: does the render proceed with stale evidence, or does it block until
 new browser evidence is collected against the current specification?
 
-### `verify-design-code-parity`
+### `verify-design-implementation`
 
-**Gates** — (1) Dimension honesty: confirm that deferred parity dimensions
+**Gates** — (1) Dimension honesty: confirm that deferred dimensions
 (behavioral, full-stack, accessibility) are explicitly reported with reasons,
-never silently omitted (DEC-18). (2) Evidence grounding: confirm structural
-and visual checks reference the specification, not assumptions about what the
-implementation should look like.
+never silently omitted (DEC-18). (2) Evidence grounding: confirm structural and
+visual checks reference the confirmed proposal (`[system:design-direction]`),
+not assumptions about what the implementation should look like, and that a
+manual-fallback visual confirmation is recorded as attributable testimony
+rather than system-observed rendering.
 
-**Escalation** — Default: load the specification, check spec-to-browser
-structural and visual parity, check spec-to-Figma parity when available,
-produce a `[system:parity-report]` with per-dimension checked/deferred status.
-Information value overrides the default when a structural match hides a visual
-mismatch (e.g., correct layout but wrong colors) — escalate to investigating
-whether the token inventory is stale before reporting the mismatch as a simple
-implementation error.
+**Escalation** — Default: load the confirmed proposal, check that each
+confirmed change is present in the code and that preserve targets are intact,
+compare the browser rendering against the confirmed intent at the specified
+viewports, and produce a `[system:verification-report]` with per-change and
+per-dimension status. Information value overrides the default when a structural
+match hides a visual mismatch (the change is present in code but the browser
+does not reflect it) — escalate to establishing which layer diverges before
+reporting it as a simple implementation error.
 
-**Pressure scenario** — The implementation matches the specification
-structurally, but the specification's token references point to tokens whose
-values have changed since the specification was written: is this a parity pass
-(implementation matches spec) or a parity fail (implementation doesn't match
-current token values)?
+**Pressure scenario** — Every confirmed change is present in the code and the
+browser matches at all three viewports, but the diff also touches a file
+outside the confirmed scope: does the report pass on the confirmed changes
+alone, or does the unintended change make this a fail that routes back to
+`apply-design-direction`?
