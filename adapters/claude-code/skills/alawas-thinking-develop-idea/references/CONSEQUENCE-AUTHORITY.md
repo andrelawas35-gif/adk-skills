@@ -20,6 +20,12 @@ Consequence follows effects, not emotional intensity or urgency.
 | **Private** | Personal, proprietary, financial, relationship, or internal operational information. | `.work-studio/` (Git-excluded). No automatic export. |
 | **Restricted** | Credentials, intimate regulation history, security-sensitive infrastructure, identity documents, or similarly harmful material. | Never store in Work Objects. Link to protected sources; reference by pointer only. |
 
+Work Studio must not scan, read, or mutate a personal archive it does not own.
+Personal context enters a Work Object only as a minimum-necessary summary the
+user supplies and approves for that Work Object, recorded with its provenance
+and sensitivity. An interpretation of personal context remains `[inference]`
+and must never be relabelled as system evidence.
+
 ## Authority gates
 
 | Action | Low consequence | Meaningful consequence | High consequence |

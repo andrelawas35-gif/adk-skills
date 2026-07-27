@@ -95,19 +95,6 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
   action, migration, or export — even on `just execute`.
 - Personal memory is read-only during decision work.
 
-## Personal Institution handoff
-
-When a decision needs personal context, apply Shared Protocol v0.1
-(`references/SHARED-PROTOCOL.md`). Work Studio must not scan, read, or mutate
-the Personal Institution archive. It may use an Evidence Bridge only after the
-user approves a minimum-necessary handoff for the receiving Work Object.
-
-Keep a bridge's provenance and sensitivity explicit; never relabel inference
-as source or system evidence. Do not persist personalization from chat, infer
-identity, or apply inactive or irrelevant contract entries. If the protocol is
-unavailable or incompatible, report the limitation and offer only a manual,
-user-approved summary.
-
 ## Grilling entry and stage lens
 
 Follow `references/AGREEMENT-LOOP.md` in full; this skill contributes only its stage-specific lens below.
@@ -149,12 +136,11 @@ Read the full Work Object. Extract:
 Before any recommendation, classify every claim in the Work Object:
 
 ```
-[evidence/lived]   — direct observation or experience
-[evidence/source]  — attributable external material
-[evidence/system]  — code, tests, logs, metrics
-[inference]        — interpretation connecting evidence
-[decision]         — previously confirmed human choice
-[unresolved]       — not yet classified or decided
+[testimony]  — direct observation or experience (attributable human observation)
+[system]     — attributable external material, code, tests, logs, metrics
+[inference]  — interpretation connecting evidence
+[decision]   — previously confirmed human choice
+[gap]        — not yet classified or decided
 ```
 
 Surface contradictions: "The evidence ledger says X [evidence/source], but

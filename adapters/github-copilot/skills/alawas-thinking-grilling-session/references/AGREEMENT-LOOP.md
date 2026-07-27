@@ -110,6 +110,14 @@ present inference, stale documentation, or remembered context as current system
 fact. When sources conflict, expose the conflict and compare freshness,
 directness, and authority instead of inventing a reconciliation.
 
+Evidence is never accepted as true. What is accepted is a **link**: that a
+given piece of evidence is relevant support or counterevidence for a specific
+claim, within a stated scope. An entry therefore carries provenance, not a
+verdict — no `verified` flag, no confidence score, no state meaning
+"established." Strengthening support means adding a link, and withdrawing it
+means recording that the link no longer holds; neither changes the evidence
+itself.
+
 Use current conversation and Work Object context first. Treat Codex memory as a
 discovery aid, not a silent source of truth. A newly inferred preference remains
 session-local until the user approves it as reusable. State when remembered

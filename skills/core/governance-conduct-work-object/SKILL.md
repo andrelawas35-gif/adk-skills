@@ -62,19 +62,6 @@ the active.md register is advisory, not a concurrency constraint.
 - The workspace root must be identifiable (search upward for `.git`,
   `.work-studio/`, or filesystem boundary)
 
-## Personal Institution handoff
-
-When personal context is relevant, apply Shared Protocol v0.1
-(`references/SHARED-PROTOCOL.md`). Work Studio must not scan, read, or mutate
-the Personal Institution archive. It may receive an Evidence Bridge only after
-the user approves a minimum-necessary handoff for the receiving Work Object.
-
-Record the bridge's provenance and sensitivity in the Evidence ledger. Do not
-copy a personal-memory record, treat chat history as persistent
-personalization, or let an inactive or irrelevant contract entry guide work.
-If the protocol is unavailable or incompatible, report the limitation and
-offer only a manual, user-approved summary.
-
 ## Required capabilities
 
 This skill requires the following abstract capabilities. The platform adapter
@@ -423,6 +410,7 @@ This skill composes with:
 - `maintain-working-method` — for workflow candidate governance
 - `govern-scorecards` — for outcome scorecard review and candidate proposals
 - `track-components` — for registering, sweeping, and grilling durable components
+- `diagnose-homogenization` — for diagnosing and revising generic or unearned prose
 
 Missing dependencies must be reported as reduced capability rather than
 silently imitated.

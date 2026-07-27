@@ -152,7 +152,7 @@ Each update appends attributable History with the evidence summary, selected rou
 ## Production incident diagnosis
 
 - **Incident boundary:** <id, affected path, impact, consequence, time window>
-- **Evidence:** <sanitized [system], [lived], [decision], [unresolved] record>
+- **Evidence:** <sanitized [system], [testimony], [decision], [gap] record>
 - **Containment:** <authorized action, effect, rollback, or gap>
 - **Restoration and verification:** <action and affected-path result>
 - **Hypothesis ledger:** <ranked one-at-a-time tests and outcomes>

@@ -191,7 +191,7 @@ validation, state/status transitions, History, and successor creation.
 
 - **Work Object and boundary:** <id, state, consequence, authority>
 - **Hypothesis and shipped output:** <recorded hypothesis and delivered artifact>
-- **Observed outcomes:** <attributable [system] and [lived] evidence>
+- **Observed outcomes:** <attributable [system] and [testimony] evidence>
 - **Assessment:** <confirmed | contradicted | insufficient observation, with inference>
 - **Uncertainty:** <gaps, consequence, and revisit trigger>
 - **Recommended direction:** <one bounded direction and trade-off>

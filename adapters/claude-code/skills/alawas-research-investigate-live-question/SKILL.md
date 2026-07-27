@@ -169,16 +169,6 @@ contradictions, missing evidence, and confidence. Route only to:
 - Name missing evidence as `[gap]`, including the consequence of acting
   without it. Do not launder a gap into confidence.
 
-## Personal Institution handoff
-
-Work Studio must not scan, read, or mutate the Personal Institution archive.
-Personal context may enter this Inquiry only through an Approved Evidence Bridge
-governed by `references/SHARED-PROTOCOL.md`. Before using one, verify
-explicit user approval, this receiving Work Object, relevance, minimum-
-necessary summary or stable reference, provenance, sensitivity, and limits.
-Without a valid bridge, name the missing context as an evidence gap and offer
-one manual, user-approved summary; never request direct archive access.
-
 ## Work Object updates
 
 This skill returns a concise record to `conduct-work-object`, which validates and persists it.
@@ -231,7 +221,7 @@ conductor requests the already-specified scoped confirmation before mutation.
 ## Live-question investigation
 
 - **Inquiry:** <id, question, hypothesis, intended decision>
-- **Evidence:** <attributed [source], [lived], and [system] observations>
+- **Evidence:** <attributed [system] and [testimony] observations>
 - **Inference:** <what the evidence supports, with confidence>
 - **Contradictions and gaps:** <conflicting or missing evidence>
 - **Reality contact:** <observed result, limit, or not needed/authorized>
