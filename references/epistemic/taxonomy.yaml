@@ -1,11 +1,19 @@
 # Canonical provenance tag taxonomy
 #
-# Source of truth: references/AGREEMENT-LOOP.md (lines 96–111)
-# This file enumerates the six base provenance tags and all registered
-# base:subtype pairs. ws epistemic lint uses this as its normative source.
+# Source of truth for the six base tags: references/AGREEMENT-LOOP.md
+# (lines 96-111). AGREEMENT-LOOP.md does not mention subtypes; this file
+# is the sole normative source for the base:subtype registry below.
 #
 # Bare base tags are always valid. Subtype syntax ([base:subtype]) is
 # valid only for registered pairs enumerated below.
+#
+# Three surfaces, three rules — do not conflate:
+#   - Work Object evidence ledger rows: bare six only. tools/ws/validate.py
+#     rejects subtype tokens here; see _CANONICAL_EVIDENCE_TAGS.
+#   - Skill prose: six base tags plus registered base:subtype pairs from
+#     this file, enforced by `ws epistemic lint` (tools/ws/epistemic.py).
+#   - Claims (tools/ws/claim.py): kind is a structured sidecar field, not
+#     a bracket token — {observation, inference, decision}.
 #
 # schema_version must be bumped on any breaking change to the taxonomy
 # structure (adding/removing required fields, changing semantics).
