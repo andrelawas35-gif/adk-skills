@@ -55,8 +55,6 @@ unsupported and follows `references/CAPABILITY-DEGRADATION.md` when needed.
 
 ## Consequence and authority rules
 
-Apply `references/CONSEQUENCE-AUTHORITY.md`.
-
 - Designing and recommending do not authorize implementation or any external
   action.
 - A low- or meaningful-consequence accepted design may be recorded only after

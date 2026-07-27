@@ -74,8 +74,6 @@ when it did not.
 
 ## Consequence and authority rules
 
-Apply `references/CONSEQUENCE-AUTHORITY.md`.
-
 - Capturing an unactivated signal is a routine private Work Studio update.
 - Creating or updating low- or meaningful-consequence Work Objects after the
   user explicitly activates the signal may proceed through the conductor.

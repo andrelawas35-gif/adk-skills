@@ -64,8 +64,6 @@ unsupported and follows `references/CAPABILITY-DEGRADATION.md` when needed.
 
 ## Consequence and authority rules
 
-Apply `references/CONSEQUENCE-AUTHORITY.md`.
-
 - Read-only source research within the approved Inquiry is allowed. A question
   about real people or use requires reality contact only when it can safely and
   proportionately test the claim; plan the contact before carrying it out.

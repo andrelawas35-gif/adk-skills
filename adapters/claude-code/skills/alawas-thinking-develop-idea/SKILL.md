@@ -87,7 +87,7 @@ explicitly when one is unavailable (see `references/CAPABILITY-DEGRADATION.md`).
 
 ## Consequence and authority rules
 
-Apply `references/CONSEQUENCE-AUTHORITY.md`:
+Apply `references/CONSEQUENCE-AUTHORITY.md`.
 
 - The skill generates; the user selects. Authority never transfers.
 - The agent never decides which direction is "better" beyond citing evidence.

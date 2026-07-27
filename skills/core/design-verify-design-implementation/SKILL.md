@@ -57,8 +57,6 @@ project dev server is running and accessible.
 
 ## Consequence and authority rules
 
-Apply `references/CONSEQUENCE-AUTHORITY.md`.
-
 - This skill performs only reads and observations — **low consequence**.
 - No code or design artifacts are modified.
 - The verification report is written to the Evidence Ledger through the

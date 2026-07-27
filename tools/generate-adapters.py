@@ -59,6 +59,15 @@ EPISTEMIC_VARIANTS = {
     "low": "epistemic-rules-binary.md",
 }
 
+# Shared preamble sections (WO 2026-07-27-009).
+# Sections whose common preamble lives in a shared reference file and is
+# injected at generation time, so each core skill contains only its per-skill
+# custom content.
+SHARED_PREAMBLE_SECTIONS = {
+    "## Consequence and authority rules":
+        ROOT / "references" / "shared" / "consequence-authority-preamble.md",
+}
+
 TIER_ORDER = {"high": 3, "medium": 2, "low": 1}
 
 
@@ -586,6 +595,40 @@ def namespace_skill_references(body):
     return body
 
 
+# Core skills whose Consequence section is intentionally different and
+# should NOT receive the shared preamble injection (WO 2026-07-27-009).
+SHARED_PREAMBLE_SKIP_SKILLS = {"thinking-grilling-session"}
+
+
+def inject_shared_preamble(body, skill_name=None):
+    """For each registered preamble section, inject shared preamble if missing.
+
+    Core skills have shared preamble stripped (WO 2026-07-27-009). This
+    function re-inserts it at generation time so that generated adapters
+    remain semantically equivalent.
+
+    Skills in SHARED_PREAMBLE_SKIP_SKILLS are left as-is (they have completely
+    different content for the registered heading).
+    """
+    if skill_name in SHARED_PREAMBLE_SKIP_SKILLS:
+        return body
+    for heading, ref_path in SHARED_PREAMBLE_SECTIONS.items():
+        if heading not in body:
+            continue
+        preamble = ref_path.read_text().strip()
+        idx = body.index(heading)
+        after_heading = body[idx + len(heading):]
+        # Skip blank lines after the heading
+        rest = after_heading.lstrip("\n")
+        # Check if preamble is already present (e.g. design-track-components
+        # which has an extended preamble not suitable for extraction)
+        first_line = rest.split("\n", 1)[0] if rest else ""
+        if first_line and not first_line.startswith("Apply `"):
+            injection = "\n\n" + preamble + "\n\n"
+            body = body[:idx + len(heading)] + injection + rest
+    return body
+
+
 def build_skill_output(core_skill_dir, overlay):
     """Build the exact adapter SKILL.md text for a core skill + overlay.
 
@@ -593,6 +636,7 @@ def build_skill_output(core_skill_dir, overlay):
     paths can never diverge.
     """
     body = namespace_skill_references(extract_body(core_skill_dir / "SKILL.md"))
+    body = inject_shared_preamble(body, core_skill_dir.name)
     frontmatter = generate_frontmatter(core_skill_dir, overlay)
     default_tier = extract_default_tier(core_skill_dir)
     adapter_section = generate_adapter_section(
@@ -655,6 +699,17 @@ def build_reference_entries(skill_name, output_dir, core_skill_dir=None, write=F
     if core_skill_dir is not None:
         body = extract_body(core_skill_dir / "SKILL.md")
         active_refs = [f for f in SHARED_REFERENCES if Path(f).name in body]
+        # Shared preamble sections may reference additional files not present
+        # in the stripped body (WO 2026-07-27-009). Include them so that
+        # companion reference files are still shipped with generated adapters.
+        skill_name_clean = core_skill_dir.name if core_skill_dir else skill_name
+        if skill_name_clean not in SHARED_PREAMBLE_SKIP_SKILLS:
+            for heading, ref_path in SHARED_PREAMBLE_SECTIONS.items():
+                if heading in body:
+                    preamble = ref_path.read_text()
+                    for ref in SHARED_REFERENCES:
+                        if ref not in active_refs and ref in preamble:
+                            active_refs.append(ref)
     else:
         active_refs = SHARED_REFERENCES
 

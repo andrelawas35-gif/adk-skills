@@ -53,8 +53,6 @@ run at least once. The user has provided design direction.
 
 ## Consequence and authority rules
 
-Apply `references/CONSEQUENCE-AUTHORITY.md`.
-
 - Proposing an interpretation is **low consequence** (no files modified).
 - Executing confirmed changes is **meaningful consequence** — target project
   code is modified.

@@ -64,8 +64,6 @@ unsupported and follows `references/CAPABILITY-DEGRADATION.md` when needed.
 
 ## Consequence and authority rules
 
-Apply `references/CONSEQUENCE-AUTHORITY.md`.
-
 **Authority gate:** Verification steps that access production, secrets, or
 external systems require explicit human confirmation at ALL consequence
 levels. Before proceeding: (1) verify the Work Object's consequence and

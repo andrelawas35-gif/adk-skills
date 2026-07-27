@@ -53,8 +53,6 @@ discovery is required — this skill produces the first discovery snapshot.
 
 ## Consequence and authority rules
 
-Apply `references/CONSEQUENCE-AUTHORITY.md`.
-
 - This skill performs only reads and observations — **low consequence**.
 - No host-project files are created, modified, or deleted.
 - The discovery snapshot is written to the Work Object's Evidence Ledger

@@ -59,8 +59,6 @@ unsupported and follows `references/CAPABILITY-DEGRADATION.md` when needed.
 
 ## Consequence and authority rules
 
-Apply `references/CONSEQUENCE-AUTHORITY.md`.
-
 **Authority gate:** Proposing a Workflow Candidate that would change a
 workflow rule requires explicit human confirmation at ALL consequence levels.
 Before proceeding: (1) verify the receiving Work Object's consequence and

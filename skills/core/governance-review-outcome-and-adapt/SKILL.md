@@ -62,8 +62,6 @@ unsupported and follows `references/CAPABILITY-DEGRADATION.md` when needed.
 
 ## Consequence and authority rules
 
-Apply `references/CONSEQUENCE-AUTHORITY.md`.
-
 **Authority gate:** Sharing review outcomes or creating a successor Work
 Object at `high` consequence requires explicit human confirmation. Before
 proceeding: (1) verify the Work Object's consequence and sensitivity fields,

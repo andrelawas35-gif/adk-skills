@@ -55,8 +55,6 @@ and foundation).
 
 ## Consequence and authority rules
 
-Apply `references/CONSEQUENCE-AUTHORITY.md`.
-
 - This skill performs only reads and observations — **low consequence**.
 - No host-project files are created, modified, or deleted.
 - The token inventory is written to the Work Object's Evidence Ledger

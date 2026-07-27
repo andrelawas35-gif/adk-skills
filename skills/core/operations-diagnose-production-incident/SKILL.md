@@ -49,8 +49,6 @@ The platform adapter classifies capabilities as native, manual-fallback, or unsu
 
 ## Consequence and authority rules
 
-Apply `references/CONSEQUENCE-AUTHORITY.md`.
-
 **Authority gate:** Production changes, destructive containment, customer
 contact, and external escalation require explicit human confirmation at ALL
 consequence levels. Before proceeding: (1) verify the Incident Work Object's

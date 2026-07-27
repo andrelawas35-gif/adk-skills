@@ -64,8 +64,6 @@ unsupported and follows `references/CAPABILITY-DEGRADATION.md` when needed.
 
 ## Consequence and authority rules
 
-Apply `references/CONSEQUENCE-AUTHORITY.md`.
-
 **Authority gate:** Writing files outside `.work-studio/` and the accepted
 bounded path requires explicit human confirmation. Destructive operations
 (delete, reset, force-push) require explicit human confirmation at ALL

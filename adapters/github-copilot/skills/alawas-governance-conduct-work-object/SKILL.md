@@ -92,7 +92,7 @@ explicitly when one is unavailable (see `references/CAPABILITY-DEGRADATION.md`).
 
 ## Consequence and authority rules
 
-Apply the rules in `references/CONSEQUENCE-AUTHORITY.md`:
+Apply `references/CONSEQUENCE-AUTHORITY.md`.
 
 - Creating or updating a Work Object of **low** or **meaningful** consequence:
   proceed, append History.
