@@ -41,7 +41,6 @@ SHARED_REFERENCES = [
     "CAPABILITY-DEGRADATION.md",
     "CONSEQUENCE-AUTHORITY.md",
     "EVIDENCE-MODEL.md",
-    "SHARED-PROTOCOL.md",
 ]
 
 # Kernel/overlay split: AGREEMENT-LOOP.md and SKILL-AWARE-GRILLING.md form the
@@ -49,14 +48,13 @@ SHARED_REFERENCES = [
 # skills get kernel-only output (Decision 3, WO 2026-07-26-004).
 GRILLING_OVERLAY_REFS = {"AGREEMENT-LOOP.md", "SKILL-AWARE-GRILLING.md"}
 GRILLING_CORE_NAME = "thinking-grilling-session"
-SHARED_PROTOCOL_FILE = ROOT / "references" / "SHARED-PROTOCOL.md"
 
 # Epistemic reference variants (WO 2026-07-26-006)
 EPISTEMIC_REF_DIR = ROOT / "references" / "epistemic"
 EPISTEMIC_VARIANTS = {
     "high": "epistemic-rules-full.md",
     "medium": "epistemic-rules-essential.md",
-    "low": "epistemic-rules-binary.md",
+    "low": "epistemic-rules-essential.md",
 }
 
 # Shared preamble sections (WO 2026-07-27-009).
@@ -109,14 +107,6 @@ def read_version() -> str:
     if VERSION_FILE.exists():
         return VERSION_FILE.read_text().strip()
     return "0.0.0"
-
-
-def read_protocol_version() -> str:
-    """Read the released Shared Protocol version from its canonical reference."""
-    match = re.search(r"Protocol version: `([^`]+)`", SHARED_PROTOCOL_FILE.read_text())
-    if not match:
-        raise ValueError("Shared Protocol version declaration is missing")
-    return match.group(1)
 
 
 # ── Minimal YAML parser ──────────────────────────────────────────────────────
@@ -372,7 +362,7 @@ def generate_adapter_section(overlay, required, default_tier="medium"):
     epistemic_labels = {
         "high": "full 6‑tag system",
         "medium": "essential 3‑tag system",
-        "low": "binary 2‑tag system",
+        "low": "essential 3‑tag system",
     }
     label = epistemic_labels.get(epistemic_tier, "essential 3‑tag system")
     lines.append(f"This skill uses the **{label}** (`references/epistemic/{variant_file}`).")
@@ -840,7 +830,6 @@ def build_manifest(platform_name, entries):
     return {
         "platform": platform_name,
         "version": read_version(),
-        "protocol_version": read_protocol_version(),
         "generated_by": "tools/generate-adapters.py",
         "files": entries,
     }

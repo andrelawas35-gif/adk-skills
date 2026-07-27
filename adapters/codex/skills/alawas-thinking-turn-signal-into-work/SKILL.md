@@ -14,11 +14,11 @@ by creating a Work Object only when the user explicitly activates work.
 
 ## Memory Candidate gate
 
-A Memory Candidate that depends on Personal Institution context may enter Work
-Studio only as an approved, redacted Evidence Bridge. Direct personal-memory
-content must not enter a Work Object or inbox entry. Explicit activation does
-not bypass this gate: when no approved bridge exists, retain no personal
-content and request the minimum necessary user-approved summary instead.
+A Memory Candidate that depends on personal context may enter Work Studio only
+as a user-approved summary that is minimum-necessary and redacted. Direct personal-archive
+content must not enter a Work Object or inbox entry. Explicit activation does not
+bypass this gate: when no approved summary exists, retain no personal content and
+request one instead.
 
 ## Personal working lens
 
@@ -40,7 +40,7 @@ This skill does not:
 
 - Implement, investigate, design, deploy, export, or write personal memory.
 - Treat chat history as durable evidence or personalization.
-- Scan, read, or mutate the Personal Institution archive.
+- Scan, read, or mutate a personal archive Work Studio does not own.
 - Infer activation from enthusiasm, urgency, or a detailed idea.
 
 ## Inputs and preconditions
@@ -48,9 +48,8 @@ This skill does not:
 **Required input:** a live signal in the user's language, such as an idea,
 observation, request, concern, or possible change.
 
-**Optional input:** an approved, redacted Evidence Bridge or a stable reference
-supplied by the user. Never request or retrieve the Personal Institution
-archive directly.
+**Optional input:** a user-approved summary that is redacted or a stable reference
+supplied by the user. Never request or retrieve a personal archive directly.
 
 Discover the workspace by searching upward for `.work-studio/config.md`,
 stopping at the repository or filesystem boundary. Read the inbox and active
@@ -125,9 +124,9 @@ evidence.
 
 Search for a matching active Work Object, a recent related Work Object, and a
 relevant existing inbox entry. Summarize only what changes the classification.
-If personal context would help, request an approved, minimum-necessary
-Evidence Bridge. Work Studio must not scan, read, or mutate Personal
-Institution records.
+If personal context would help, request a user-approved summary that is
+minimum-necessary. Work Studio must not scan, read, or mutate a personal archive it does
+not own.
 
 ### 3. Classify
 
@@ -140,10 +139,10 @@ Institution records.
 Recommend one classification when unclear. State any inference and uncertainty.
 
 For a Memory Candidate, apply the Memory Candidate gate before activation. If
-the candidate needs personal context, accept only an approved, redacted
-Evidence Bridge with a stable source reference and sensitivity. Otherwise do
-not copy the candidate's personal-memory content into Work Studio; request the
-minimum necessary approved summary or stop with that evidence gap.
+the candidate needs personal context, accept only a user-approved, redacted
+summary with a stable source reference and sensitivity. Otherwise do not copy the
+candidate's personal-archive content into Work Studio; request the minimum
+necessary approved summary or stop with that evidence gap.
 
 ### 4. Persist the smallest appropriate artifact
 
@@ -167,10 +166,10 @@ conductor to manufacture a Work Object.
   transcripts or hidden reasoning.
 - Label interpretation as `[inference]`, user choice as `[decision]`, and any
   user report as `[testimony]` unless a stronger source is supplied.
-- An Evidence Bridge must be user-approved, minimum-necessary, and record its
-  provenance, sensitivity, source reference, and receiving Work Object.
-- Before recording a Memory Candidate, confirm that it is an approved, redacted
-  Evidence Bridge; direct personal-memory content must not enter a Work Object
+- A user-approved summary must be user-approved, minimum-necessary, and
+  record its provenance, sensitivity, source reference, and receiving Work Object.
+- Before recording a Memory Candidate, confirm that it is a user-approved,
+  redacted summary; direct personal-archive content must not enter a Work Object
   or inbox entry.
 - Restricted material is never copied into inbox entries or Work Objects.
 
@@ -212,8 +211,8 @@ If the workspace cannot be discovered, stop and ask for the workspace path.
 If writing the inbox is unavailable, return the exact user-language capture and
 one concrete manual instruction; do not claim it was retained. If a matching
 Work Object cannot be read, say the classification is based only on the current
-signal. If an Evidence Bridge is unavailable, continue without personal context
-or request a user-approved summary; never substitute a personal-memory scan.
+signal. If an approved summary is unavailable, continue without personal context;
+never substitute a personal-archive scan.
 
 ## Anti-patterns
 
@@ -229,7 +228,7 @@ or request a user-approved summary; never substitute a personal-memory scan.
 - Did I preserve the user's language and separate evidence from inference?
 - Did I choose the smallest handling and avoid project inflation?
 - Did explicit activation occur before any Work Object creation or resumption?
-- Did I protect Personal Institution boundaries and restricted material?
+- Did I protect personal-archive boundaries and restricted material?
 - Did I state the artifact, next move, and any capability gap honestly?
 ---
 

@@ -21,7 +21,7 @@ This skill does:
 - Create, retrieve, revise, retire, and review Workflow Candidates arising
   from permitted Work Studio work such as an outcome-review.
 - Maintain a candidate's immutable identity, proposed rule, scope, origin
-  references, append-only evidence and lifecycle events, including bounded test references, timestamps, and optional approved Evidence Bridge reference.
+  references, append-only evidence and lifecycle events, including bounded test references, timestamps, and an optional user-approved summary reference.
 - Assess attributable bounded-test evidence as `supported`, `contradicted`,
   or `insufficient`; distinguish a scoped result from a universal claim.
 - Promote an eligible candidate to a separate, linked, versioned Working Method
@@ -29,7 +29,7 @@ This skill does:
 
 This skill does not:
 
-- Read, search, copy, or mutate Personal Institution records, chat history,
+- Read, search, copy, or mutate a personal archive Work Studio does not own, chat history,
   external systems, production data, or personal archives.
 - Treat `none observed within scope` as `no contradiction exists`, turn a
   candidate into a rule in place, or infer proof from an unrun test.
@@ -67,7 +67,7 @@ or unsupported and follows `references/CAPABILITY-DEGRADATION.md` when needed.
 
 **Authority gate:** Promotion of a Workflow Candidate to a Working Method
 requires explicit human confirmation at ALL consequence levels. Referencing
-an Evidence Bridge requires explicit human confirmation. Before proceeding:
+a user-approved summary requires explicit human confirmation. Before proceeding:
 (1) verify the receiving Work Object's consequence and sensitivity fields,
 (2) request confirmation naming the candidate, bounded scope, and target,
 (3) record a structured authority History entry per the authority recording
@@ -83,9 +83,9 @@ contract in `references/CONSEQUENCE-AUTHORITY.md`.
 - Promotion always requires explicit human confirmation, even when the
   candidate has supporting evidence. The confirmation names the candidate,
   bounded scope, target Working Method, and version relationship.
-- An Evidence Bridge may be referenced only when the user has approved the
-  minimum necessary bridge for this receiving Work Object. Record its
-  provenance and sensitivity; do not copy its source material.
+- A user-approved summary may be referenced only when the user has
+  approved the minimum necessary summary for this receiving Work Object. Record
+  its provenance and sensitivity; do not copy its source material.
 
 ## Grilling entry and stage lens
 
@@ -119,7 +119,7 @@ Create or maintain a candidate with these minimum fields:
 - **Evidence and lifecycle events:** <append-only, dated, attributable entries>
 - **Bounded test references:** <predeclared hypothesis, scope, signal, result>
 - **Timestamps:** <created, updated, and event times>
-- **Evidence Bridge:** <none | approved reference, provenance, sensitivity>
+- **Personal summary:** <none | approved reference, provenance, sensitivity>
 - **Status:** <active | promoted | retired>
 - **Relationships:** <none | supersedes | superseded by | promoted to>
 ```
@@ -144,8 +144,8 @@ Apply `references/EVIDENCE-MODEL.md`.
   scope and period, what was found, what was unavailable, and the resulting
   limitation. `none observed within scope` means only that no contrary evidence
   was found in that stated review; it never means no contradiction exists.
-- An approved Evidence Bridge is a reference, not authorization to inspect the
-  Personal Institution. If no approved bridge exists, record the absence as an
+- A user-approved summary is a reference, not authorization to inspect the
+  archive it came from. If no approved summary exists, record the absence as an
   uncertainty and continue only with permitted local evidence.
 
 ## Stage workflow
@@ -164,7 +164,7 @@ safe maintenance move before asking one decision-bearing question, following
 For a new candidate, assign immutable identity and capture only the minimum
 record fields. For an existing one, retrieve its record and append new material
 only when its source and scope are attributable. Do not manufacture an origin,
-test result, Evidence Bridge, or contrary-evidence review from chat context.
+test result, personal summary, or contrary-evidence review from chat context.
 
 ### 3. Record bounded tests and assess their result
 
@@ -211,7 +211,7 @@ not deleted or converted into a successful Working Method.
 Return a concise record to `alawas-governance-conduct-work-object` containing the candidate
 identity, proposed rule, scope, origin references, append-only events, test
 reference and assessment, supporting and contrary evidence, contrary-evidence
-review boundary, Evidence Bridge reference or absence, decision status,
+review boundary, user-approved summary reference or absence, decision status,
 relationship, next action, and uncertainty. The conductor owns schema
 validation, durable record placement, History, and state/status transitions.
 
@@ -243,7 +243,7 @@ validation, durable record placement, History, and state/status transitions.
 - **Evidence:** <supporting, contrary, attribution, and limits>
 - **Contrary-evidence review:** <sources, scope, period, findings, unavailable material>
 - **Bounded test:** <Work Object, hypothesis, signal, result: supported | contradicted | insufficient>
-- **Evidence Bridge:** <none | approved reference, provenance, sensitivity>
+- **Personal summary:** <none | approved reference, provenance, sensitivity>
 - **Recommendation:** <retain | revise | retire | bounded test | propose promotion>
 - **Decision status:** <proposed | accepted and recorded | awaiting authority>
 - **Promotion:** <none | separate linked versioned Working Method>
@@ -257,7 +257,7 @@ validation, durable record placement, History, and state/status transitions.
 - Treating no contrary evidence found within a review scope as proof that none
   exists.
 - Overwriting candidate identity, scope, prior evidence, or lifecycle history.
-- Reading personal records through an Evidence Bridge reference.
+- Reading personal records through an approved-summary reference.
 - Promoting, deploying, or applying a method without the separate authority
   required for that act.
 
@@ -273,7 +273,7 @@ validation, durable record placement, History, and state/status transitions.
   completed bounded test rather than a universal claim?
 - Is any promoted method separate, linked, versioned, scoped, and explicitly
   human-confirmed?
-- Did I avoid external, Personal Institution, implementation, deployment,
+- Did I avoid external, personal-archive, implementation, deployment,
   export, and automatic-application work without separate authority?
 ---
 

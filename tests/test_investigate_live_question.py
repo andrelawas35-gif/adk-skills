@@ -30,8 +30,8 @@ class InvestigateLiveQuestionContract(unittest.TestCase):
             "reality contact",
             "Recommend before asking one decision-bearing question.",
             "answered", "reframed", "prototype-ready", "unresolved",
-            "Evidence Bridge",
-            "must not scan, read, or mutate the Personal Institution archive",
+            "user-approved summary",
+            "mutate a personal archive Work Studio does not own",
             "durable transition",
             "prototype-ready:",
             "creates and links",
@@ -46,7 +46,7 @@ class InvestigateLiveQuestionContract(unittest.TestCase):
         for required_clause in (
             "Scenario 1", "Scenario 2", "Scenario 3", "Scenario 4", "Scenario 5",
             "primary-source", "reality contact", "contradiction", "unresolved",
-            "Approved Evidence Bridge", "Personal Institution archive",
+            "user-approved summary", "personal archive",
             "Outcome persistence", "Work Object is never left unchanged",
         ):
             with self.subTest(required_clause=required_clause):
@@ -64,7 +64,6 @@ class InvestigateLiveQuestionContract(unittest.TestCase):
                 adapter_dir = ROOT / "adapters" / platform / "skills" / "alawas-investigate-live-question"
                 self.assertIn(core_body, (adapter_dir / "SKILL.md").read_text())
                 self.assertTrue((adapter_dir / "references" / "EVIDENCE-MODEL.md").is_file())
-                self.assertTrue((adapter_dir / "references" / "SHARED-PROTOCOL.md").is_file())
 
 
 if __name__ == "__main__":

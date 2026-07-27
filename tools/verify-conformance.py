@@ -141,14 +141,6 @@ def verify_matrix(fixture_files):
                 "native", "manual-fallback", "unsupported",
                 "no false verification",
             ])
-        elif name == "personal-institution-work-studio-contract.md":
-            _check_patterns(errors, name, content, [
-                "Scenario 1", "Scenario 2", "Scenario 3", "Scenario 4",
-                "Scenario 5", "Scenario 6", "Private record does not enter",
-                "Approved Evidence Bridge", "Chat does not silently",
-                "stale Active-lens", "missing evidence as a gap",
-                "Incompatible protocol versions", "manual, user-approved summary",
-            ])
         elif "behavioral-matrix" in name:
             _check_patterns(errors, name, content, [
                 "Discovery and Workspace",
@@ -176,7 +168,7 @@ def verify_matrix(fixture_files):
         elif "turn-signal-into-work" in name:
             _check_patterns(errors, name, content, [
                 "Scenario 1", "Scenario 2", "Scenario 3", "Scenario 4",
-                "user's language", "explicit activation", "Evidence Bridge",
+                "user's language", "explicit activation", "user-approved",
                 "manual-fallback", "unsupported",
             ])
         elif "design-tracer-bullet" in name:
@@ -203,7 +195,7 @@ def verify_matrix(fixture_files):
             _check_patterns(errors, name, content, [
                 "Scenario 1", "Scenario 2", "Scenario 3", "Scenario 4", "Scenario 5",
                 "primary-source", "reality contact", "contradiction", "unresolved",
-                "Approved Evidence Bridge", "Personal Institution archive",
+                "user-approved summary", "personal archive",
             ])
         elif "deploy-with-recovery" in name:
             _check_patterns(errors, name, content, [

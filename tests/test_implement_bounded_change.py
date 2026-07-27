@@ -61,7 +61,6 @@ class ImplementBoundedChangeContract(unittest.TestCase):
             with self.subTest(platform=platform):
                 adapter_dir = ROOT / "adapters" / platform / "skills" / "alawas-implement-bounded-change"
                 self.assertIn(core_body, (adapter_dir / "SKILL.md").read_text())
-                self.assertTrue((adapter_dir / "references" / "SHARED-PROTOCOL.md").is_file())
                 self.assertTrue((adapter_dir / "references" / "CAPABILITY-DEGRADATION.md").is_file())
 
 

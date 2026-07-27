@@ -51,7 +51,7 @@
     {
       "name": "alawas-design-design-tracer-bullet",
       "path": "adapters/github-copilot/skills/alawas-design-design-tracer-bullet/SKILL.md",
-      "sha256": "c6d3f84a9dde2f08a670de526c61e5c3f61463fca14e8850d2c04c498513ca1a"
+      "sha256": "b681672ef39388e75403c59ebca7c78cabf33d989e79dfe3a5d221dd914a5af6"
     },
     {
       "name": "alawas-design-design-tracer-bullet/references/CAPABILITY-DEGRADATION.md",
@@ -61,7 +61,7 @@
     {
       "name": "alawas-design-design-tracer-bullet/references/EVIDENCE-MODEL.md",
       "path": "adapters/github-copilot/skills/alawas-design-design-tracer-bullet/references/EVIDENCE-MODEL.md",
-      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
+      "sha256": "386324a5482d63a15ba58ecc3030d0336690a0fb85fc7ccad15e9ab014a511b9"
     },
     {
       "name": "alawas-design-design-tracer-bullet/references/CONSEQUENCE-AUTHORITY.md",
@@ -126,7 +126,7 @@
     {
       "name": "alawas-engineering-implement-bounded-change/references/EVIDENCE-MODEL.md",
       "path": "adapters/github-copilot/skills/alawas-engineering-implement-bounded-change/references/EVIDENCE-MODEL.md",
-      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
+      "sha256": "386324a5482d63a15ba58ecc3030d0336690a0fb85fc7ccad15e9ab014a511b9"
     },
     {
       "name": "alawas-engineering-implement-bounded-change/references/epistemic/epistemic-rules-essential.md",
@@ -181,7 +181,7 @@
     {
       "name": "alawas-governance-govern-scorecards",
       "path": "adapters/github-copilot/skills/alawas-governance-govern-scorecards/SKILL.md",
-      "sha256": "44605cda5b30808649784dd8181b3fd324c0ccc1e16ac227886684c791942ba7"
+      "sha256": "21e1fc1071848465b9636d216e59c279d372a790e0ab055c4e9ed151908f7836"
     },
     {
       "name": "alawas-governance-govern-scorecards/references/CAPABILITY-DEGRADATION.md",
@@ -196,7 +196,7 @@
     {
       "name": "alawas-governance-govern-scorecards/references/EVIDENCE-MODEL.md",
       "path": "adapters/github-copilot/skills/alawas-governance-govern-scorecards/references/EVIDENCE-MODEL.md",
-      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
+      "sha256": "386324a5482d63a15ba58ecc3030d0336690a0fb85fc7ccad15e9ab014a511b9"
     },
     {
       "name": "alawas-governance-govern-scorecards/references/epistemic/epistemic-rules-full.md",
@@ -206,7 +206,7 @@
     {
       "name": "alawas-governance-maintain-working-method",
       "path": "adapters/github-copilot/skills/alawas-governance-maintain-working-method/SKILL.md",
-      "sha256": "191e749fbd965481465f7675d76b35fe44788be0984d17ced7a88214df262048"
+      "sha256": "9b49367a28c0db292147f682f390a43771e369ba83ba96ed9a45a77f588e81dd"
     },
     {
       "name": "alawas-governance-maintain-working-method/references/CAPABILITY-DEGRADATION.md",
@@ -221,7 +221,7 @@
     {
       "name": "alawas-governance-maintain-working-method/references/EVIDENCE-MODEL.md",
       "path": "adapters/github-copilot/skills/alawas-governance-maintain-working-method/references/EVIDENCE-MODEL.md",
-      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
+      "sha256": "386324a5482d63a15ba58ecc3030d0336690a0fb85fc7ccad15e9ab014a511b9"
     },
     {
       "name": "alawas-governance-maintain-working-method/references/epistemic/epistemic-rules-full.md",
@@ -246,7 +246,7 @@
     {
       "name": "alawas-governance-review-outcome-and-adapt/references/EVIDENCE-MODEL.md",
       "path": "adapters/github-copilot/skills/alawas-governance-review-outcome-and-adapt/references/EVIDENCE-MODEL.md",
-      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
+      "sha256": "386324a5482d63a15ba58ecc3030d0336690a0fb85fc7ccad15e9ab014a511b9"
     },
     {
       "name": "alawas-governance-review-outcome-and-adapt/references/epistemic/epistemic-rules-full.md",
@@ -291,7 +291,7 @@
     {
       "name": "alawas-operations-diagnose-production-incident/references/EVIDENCE-MODEL.md",
       "path": "adapters/github-copilot/skills/alawas-operations-diagnose-production-incident/references/EVIDENCE-MODEL.md",
-      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
+      "sha256": "386324a5482d63a15ba58ecc3030d0336690a0fb85fc7ccad15e9ab014a511b9"
     },
     {
       "name": "alawas-operations-diagnose-production-incident/references/epistemic/epistemic-rules-full.md",
@@ -301,7 +301,7 @@
     {
       "name": "alawas-research-investigate-live-question",
       "path": "adapters/github-copilot/skills/alawas-research-investigate-live-question/SKILL.md",
-      "sha256": "0753543004040527820fc0c08e4d2cce9f552d8205abd0ef6341a42f588b93cb"
+      "sha256": "ecd6233f3c86527a17c9ea962aac29c4787f43083d808d245c539f72b3967b9a"
     },
     {
       "name": "alawas-research-investigate-live-question/references/CAPABILITY-DEGRADATION.md",
@@ -311,7 +311,7 @@
     {
       "name": "alawas-research-investigate-live-question/references/EVIDENCE-MODEL.md",
       "path": "adapters/github-copilot/skills/alawas-research-investigate-live-question/references/EVIDENCE-MODEL.md",
-      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
+      "sha256": "386324a5482d63a15ba58ecc3030d0336690a0fb85fc7ccad15e9ab014a511b9"
     },
     {
       "name": "alawas-research-investigate-live-question/references/CONSEQUENCE-AUTHORITY.md",
@@ -406,7 +406,7 @@
     {
       "name": "alawas-thinking-turn-signal-into-work",
       "path": "adapters/github-copilot/skills/alawas-thinking-turn-signal-into-work/SKILL.md",
-      "sha256": "b8beac9523ff43a3414604ae15a8b41285c0b1d4b47f79d9cef8fea8ed6fb183"
+      "sha256": "8e07e77f14fa4b7fa81b448fe69c2e1558fe5592b99bfa37c3a48cf05d3d78fe"
     },
     {
       "name": "alawas-thinking-turn-signal-into-work/references/CAPABILITY-DEGRADATION.md",
@@ -416,7 +416,7 @@
     {
       "name": "alawas-thinking-turn-signal-into-work/references/EVIDENCE-MODEL.md",
       "path": "adapters/github-copilot/skills/alawas-thinking-turn-signal-into-work/references/EVIDENCE-MODEL.md",
-      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
+      "sha256": "386324a5482d63a15ba58ecc3030d0336690a0fb85fc7ccad15e9ab014a511b9"
     },
     {
       "name": "alawas-thinking-turn-signal-into-work/references/CONSEQUENCE-AUTHORITY.md",

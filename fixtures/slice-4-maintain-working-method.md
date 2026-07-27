@@ -92,19 +92,19 @@ handoffs requiring legal review, while a separate candidate is no longer useful.
 
 **Verification**: Revision and retirement preserve an auditable lifecycle.
 
-## Scenario 6 — Evidence Bridge is reference-only and approval-bound
+## Scenario 6 — user-approved summary is reference-only and approval-bound
 
-**Given**: A user has supplied an approved Evidence Bridge reference with
+**Given**: A user has supplied a user-approved summary reference with
 provenance and sensitivity for this Work Object, while another candidate has no
 such approval.
 **When**: The skill records contextual evidence.
 **Then**:
 
-1. It records the approved Evidence Bridge reference without reading or
-   copying Personal Institution source material.
+1. It records the user-approved summary reference without reading or
+   copying personal-archive source material.
 2. It records the missing bridge as an uncertainty for the other candidate.
 3. It continues only with permitted local evidence and does not scan personal
    archives, external systems, or production data.
 
-**Verification**: The Evidence Bridge is minimum-necessary, attributable, and
+**Verification**: The user-approved summary is minimum-necessary, attributable, and
 never a backdoor to personal records.

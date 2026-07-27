@@ -35,7 +35,7 @@ This skill does not:
   reality-contact result.
 - Contact people, use live systems, collect sensitive data, or make an
   external commitment without explicit authority.
-- Implement, deploy, export, or mutate the Personal Institution archive.
+- Implement, deploy, export, or mutate a personal archive Work Studio does not own.
 
 ## Inputs and preconditions
 
@@ -249,8 +249,7 @@ conductor requests the already-specified scoped confirmation before mutation.
   contact or state why it was not needed, authorized, or available?
 - Did I recommend one move before asking one decision-bearing question?
 - Did I route only as answered, reframed, prototype-ready, or unresolved?
-- Did I avoid Personal Institution archive access without an Approved Evidence
-  Bridge?
+- Did I avoid personal-archive access without a user-approved summary?
 ---
 
 ## Platform Adapter

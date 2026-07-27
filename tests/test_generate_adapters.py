@@ -273,7 +273,6 @@ class GeneratorContract(unittest.TestCase):
             "CAPABILITY-DEGRADATION.md",
             "CONSEQUENCE-AUTHORITY.md",
             "EVIDENCE-MODEL.md",
-            "SHARED-PROTOCOL.md",
         ]
         for platform in PLATFORMS:
             for skill in core_skill_names():
