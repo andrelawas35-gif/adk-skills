@@ -39,6 +39,8 @@ from .sections import (
 )
 from .template import generate_body_template
 from .validate import DEFAULT_CHECKS, CHECK_REGISTRY, run_checks
+from .epistemic import cmd_epistemic_lint
+from .epistemic_controls import audit_epistemic_state
 
 
 def _find_work_studio_root() -> Path:
@@ -318,6 +320,28 @@ def cmd_transition(args: argparse.Namespace) -> int:
     obj_file.write_text(new_fm + "\n" + new_body)
 
     print(f"Transitioned {args.id}: {from_state}/{from_status} → {args.state}/{args.status}")
+
+    # ── Post-transition epistemic audit (async advisory) ──────────────────
+    # Use new_body (with history entry appended) so the audit sees the complete
+    # post-transition state and any gap entries are appended alongside history.
+    updated_body, audit_msg = audit_epistemic_state(
+        new_body, args.state, consequence
+    )
+    if audit_msg is not None:
+        # Re-read current file to get the frontmatter with the new updated_at
+        current_content = obj_file.read_text()
+        current_fm_end = current_content.find("---", 3)
+        current_body = current_content[current_fm_end + 3:].strip()
+
+        if current_body != updated_body:
+            obj_file.write_text(
+                current_content[:current_fm_end + 3] + "\n" + updated_body
+            )
+            print(f"  {audit_msg}")
+        else:
+            # Body unchanged (shouldn't happen if audit_msg is set, but safe)
+            print(f"  {audit_msg}")
+
     return 0
 
 
@@ -871,6 +895,27 @@ def build_parser() -> argparse.ArgumentParser:
     append_history_parser.add_argument("--force", action="store_true",
                                        help="Bypass optimistic concurrency check")
 
+    # ── ws epistemic lint ─────────────────────────────────────────────────
+    epi_parser = subparsers.add_parser(
+        "epistemic", help="Epistemic provenance-tag checks"
+    )
+    epi_sub = epi_parser.add_subparsers(dest="epistemic_command")
+    lint_parser = epi_sub.add_parser(
+        "lint",
+        help="Lint tag usage against the canonical taxonomy "
+             "(references/epistemic/taxonomy.yaml)",
+    )
+    lint_parser.add_argument(
+        "paths", nargs="*",
+        help="Glob patterns or paths to scan (default: all canonical sources)",
+    )
+    lint_parser.add_argument(
+        "--allowlist", default=None,
+        help="Path to allowlist YAML file (relative to workspace root). "
+             "Use 'none' to disable allowlist. Default: "
+             "references/epistemic/lint-allowlist.yaml",
+    )
+
     # ── ws validate ───────────────────────────────────────────────────────
     validate_parser = subparsers.add_parser("validate", help="Run validation checks")
     validate_parser.add_argument(
@@ -908,6 +953,14 @@ def main() -> int:
 
     if args.command in commands:
         return commands[args.command](args)
+
+    # Dispatch grouped commands
+    if args.command == "epistemic":
+        if args.epistemic_command == "lint":
+            return cmd_epistemic_lint(args)
+        print("Error: Unknown epistemic command. Use 'ws epistemic lint'.",
+              file=sys.stderr)
+        return 1
 
     print(f"Unknown command: {args.command}", file=sys.stderr)
     return 1
