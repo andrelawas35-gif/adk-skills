@@ -35,7 +35,7 @@ class MaintainWorkingMethodContract(unittest.TestCase):
             "separate, linked, versioned Working Method",
             "explicit human confirmation",
             "supersedes",
-            "Evidence Bridge",
+            "user-approved summary",
             "manual-fallback",
             "unsupported",
             "## Final self-check",
@@ -63,7 +63,7 @@ class MaintainWorkingMethodContract(unittest.TestCase):
             "separate Working Method",
             "explicit human confirmation",
             "supersedes",
-            "approved Evidence Bridge",
+            "user-approved summary",
         ):
             with self.subTest(required_clause=required_clause):
                 self.assertIn(required_clause, text)

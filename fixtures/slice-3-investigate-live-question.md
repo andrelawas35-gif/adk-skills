@@ -74,18 +74,18 @@ outside the current authority boundary.
 `explore`, and sets `waiting` only when the gap requires external authority or
 dependency; the Work Object is never left unchanged after the route.
 
-## Scenario 5 — Personal context requires an Approved Evidence Bridge
+## Scenario 5 — Personal context requires an user-approved summary
 
-**Given**: A potentially relevant record exists in the Personal Institution
-archive, but the Inquiry has no Approved Evidence Bridge.
+**Given**: A potentially relevant record exists in the personal-archive
+archive, but the Inquiry has no user-approved summary.
 **When**: The skill investigates the question.
 **Then**:
 
-1. It does not scan, read, copy, or mutate the Personal Institution archive.
+1. It does not scan, read, copy, or mutate the a personal archive Work Studio does not own.
 2. It treats the absent personal context as an evidence gap.
 3. It offers one manual, user-approved minimum-necessary summary or stable
    reference for the receiving Inquiry.
-4. Only an Approved Evidence Bridge with approval, provenance, sensitivity,
+4. Only an user-approved summary with approval, provenance, sensitivity,
    relevance, and limits may enter the Work Object.
 
 **Verification**: The Inquiry contains bridge metadata or an explicit gap,

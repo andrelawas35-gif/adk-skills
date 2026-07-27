@@ -1,0 +1,103 @@
+#!/usr/bin/env python3
+"""commit-msg hook — constitutional file protection (moved CHECK 5 from pre-commit).
+
+Install: ln -sf ../../tools/commit-msg .git/hooks/commit-msg
+(Or copy to .git/hooks/commit-msg and chmod +x)
+
+Why this lives in commit-msg and not pre-commit: pre-commit runs before git
+writes the commit message to any file, so a check reading .git/COMMIT_EDITMSG
+from pre-commit sees the *previous* commit's message, not the one being made.
+That is a silent bypass for -m/-F commits and a silent false rejection for
+interactive commits made in quick succession. commit-msg receives the actual
+message file as $1 and runs after the message is finalized but before the
+commit is created, which is the only point where this check can be correct
+for every commit path.
+
+Check: modifications to files in .work-studio/constitutional-files.list
+require a linked authority record or a CONSTITUTIONAL-OVERRIDE: tag in the
+commit message being made.
+
+Decision reference: Decisions 53-62 (Grilling Session 8).
+"""
+
+import subprocess
+import sys
+from pathlib import Path
+
+
+def repo_root():
+    result = subprocess.run(
+        ["git", "rev-parse", "--show-toplevel"],
+        capture_output=True, text=True,
+    )
+    if result.returncode != 0:
+        print("commit-msg: ERROR — not in a git repository")
+        sys.exit(1)
+    return Path(result.stdout.strip())
+
+
+def staged_files(root):
+    """Return list of staged file paths relative to repo root."""
+    result = subprocess.run(
+        ["git", "diff", "--cached", "--name-only", "--diff-filter=ACM"],
+        capture_output=True, text=True, cwd=str(root),
+    )
+    if result.returncode != 0:
+        return []
+    return [f for f in result.stdout.strip().split("\n") if f]
+
+
+def read_constitutional_files(root):
+    """Read the list of constitutionally protected files."""
+    cf_path = root / ".work-studio" / "constitutional-files.list"
+    if not cf_path.exists():
+        return []
+    files = []
+    for line in cf_path.read_text().split("\n"):
+        line = line.strip()
+        if line and not line.startswith("#"):
+            files.append(line)
+    return files
+
+
+def main():
+    if len(sys.argv) < 2:
+        print("commit-msg: ERROR — no commit message file path given")
+        sys.exit(1)
+
+    msg_path = Path(sys.argv[1])
+    if not msg_path.exists():
+        print(f"commit-msg: ERROR — message file not found: {msg_path}")
+        sys.exit(1)
+
+    message = msg_path.read_text()
+
+    root = repo_root()
+    files = staged_files(root)
+    constitutional_files = read_constitutional_files(root)
+
+    if not constitutional_files:
+        sys.exit(0)
+
+    changed_constitutional = [f for f in files if f in constitutional_files]
+    if not changed_constitutional:
+        sys.exit(0)
+
+    if "CONSTITUTIONAL-OVERRIDE:" in message:
+        sys.exit(0)
+
+    print("┌─────────────────────────────────────────────────────────────┐")
+    print("│  COMMIT-MSG REJECTED — Constitutional file protection       │")
+    print("└─────────────────────────────────────────────────────────────┘")
+    print()
+    print(
+        f"CHECK 5 FAIL: Constitutional file(s) modified without authority: "
+        f"{', '.join(changed_constitutional)}. "
+        f"Either include a linked authority record in the commit message "
+        f"or add 'CONSTITUTIONAL-OVERRIDE:' tag."
+    )
+    sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

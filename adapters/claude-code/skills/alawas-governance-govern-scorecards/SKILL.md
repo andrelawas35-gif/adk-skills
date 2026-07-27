@@ -32,7 +32,7 @@ This skill does not:
   scorecard.
 - Promote, apply, retire, deploy, export, or directly alter a Working Method,
   skill, adapter, or workflow rule.
-- Read or copy Personal Institution content without an approved Evidence Bridge.
+- Read or copy personal-archive content without a user-approved summary.
 
 ## Inputs and preconditions
 
@@ -142,7 +142,7 @@ than a new rule.
 ### 4. Protect personal fit and novelty yield
 
 Personal fit is a scoped, user-provided outcome signal when attributable; it
-is not an identity claim and cannot authorize Personal Institution access.
+is not an identity claim and cannot authorize personal-archive access.
 Novelty yield records whether a bounded review produced a useful new option or
 falsified an assumption. It must not reward novelty churn, artifact volume, or
 changes made merely to improve a scorecard.
@@ -152,8 +152,8 @@ changes made merely to improve a scorecard.
 - Label source, system, lived, inference, decision, and unresolved material
   according to `references/EVIDENCE-MODEL.md`.
 - A missing signal is an evidence gap, not an unfavorable result.
-- An approved Evidence Bridge is a minimum-necessary reference only; it does
-  not authorize reading the Personal Institution archive.
+- A user-approved summary is a minimum-necessary reference only; it does
+  not authorize reading the archive it came from.
 - State `none observed within scope` only for the sources and period actually
   reviewed.
 

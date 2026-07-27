@@ -65,7 +65,7 @@ personal-fit signal for one bounded context.
    score or optimization target.
 2. It records personal fit only as scoped attributable evidence and does not
    infer identity, personality, enduring preference, or capability.
-3. It does not read Personal Institution content without an approved Evidence
+3. It does not read personal-archive content without an approved Evidence
    Bridge reference.
 4. It records novelty yield only when a useful option or falsified assumption
    is attributable; it does not reward novelty churn.

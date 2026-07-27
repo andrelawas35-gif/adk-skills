@@ -29,3 +29,40 @@ Evidence entries carry provenance markers at capture time — what is known
 now, not what might be known later. The producer writes a tag and free text
 without needing confidence, corroboration, or structured field values that
 may not be available at the moment of observation.
+
+## Confidence on a decision record
+
+A decision's `Confidence` field states a label **and its basis**. A bare
+`high` records a feeling, not a judgement someone else can check or revisit.
+
+When the parts of a decision are not equally well supported, scope-qualify the
+label rather than averaging it:
+
+```
+| **Confidence** | high for the bounded local behavior; no claim about later
+lived use — basis: the check ran here, nothing observed in use |
+```
+
+This is not a new requirement so much as a recorded one. Authors have already
+written scope-qualified confidence by hand when a single label could not carry
+what they meant; the field permits it explicitly so the practice is uniform.
+
+Do not decompose confidence into a fixed set of sub-scores, and do not
+aggregate the label with any other field into a single epistemic number. A
+single score obscures calibration, resolution, base rates, and decision
+utility, and optimizing one scoring rule need not serve every decision that
+reads it ([Kleinberg et al., 2023](https://proceedings.mlr.press/v195/kleinberg23a.html)).
+Probabilities and scoring rules earn their keep on repeated forecasts with
+observable outcomes; a one-off architectural judgement is not that. Use a
+qualitative label, always with a reason and a revisit condition.
+
+## Projections of the record
+
+Any view over Work Objects — a report, a summary, a graph, a dashboard — is a
+read-only projection. It never becomes a source, and writing to it is not a
+way to change what the record says.
+
+**A missing edge means "not recorded," not "false."** An absent link, an empty
+section, or a sparse graph reports the limits of what was captured. Reading it
+as a negative finding converts a gap into evidence, which is the laundering
+this model exists to prevent.

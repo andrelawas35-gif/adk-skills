@@ -98,20 +98,6 @@ explicitly when one is unavailable (see `references/CAPABILITY-DEGRADATION.md`).
   creative authority boundaries, safety gates, or the user's right to
   select among directions.
 
-## Personal Institution handoff
-
-When exploring an idea that may draw on personal context, apply Shared
-Protocol v0.1 (`references/SHARED-PROTOCOL.md`). Work Studio must not scan,
-read, or mutate the Personal Institution archive. It may receive an Evidence
-Bridge only after the user approves a minimum-necessary handoff for the
-receiving Work Object.
-
-Record the bridge's provenance and sensitivity in the Evidence ledger.
-Do not copy a personal-memory record, treat chat history as persistent
-personalization, or let an inactive or irrelevant contract entry guide
-exploration. If the protocol is unavailable or incompatible, report the
-limitation and offer only a manual, user-approved summary.
-
 ## Grilling entry and stage lens
 
 This is the divergence lens: pursue breadth over depth, surface the

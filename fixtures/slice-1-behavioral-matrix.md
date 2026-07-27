@@ -146,7 +146,7 @@ Source: `fixtures/slice-1-capability-degradation.md` All scenarios
 | T1 | Preserve a live signal in the user's language | ✅ | ✅ | ✅ |
 | T2 | Classify without creating a Work Object | ✅ | ✅ | ✅ |
 | T3 | Route explicit activation through the conductor | ✅ | ✅ | ✅ |
-| T4 | Require an approved Evidence Bridge for personal context | ✅ | ✅ | ✅ |
+| T4 | Require a user-approved summary for personal context | ✅ | ✅ | ✅ |
 | T5 | Disclose manual-fallback or unsupported capability paths | ✅ | ✅ | ✅ |
 
 Source: `fixtures/slice-2-turn-signal-into-work.md` All scenarios
@@ -190,7 +190,7 @@ Source: `fixtures/slice-2-verify-release-evidence.md` All scenarios
 | L2 | Attribute primary-source evidence and separate inference | ✅ | ✅ | ✅ |
 | L3 | Require scoped authority for proportionate reality contact | ✅ | ✅ | ✅ |
 | L4 | Preserve contradictions and route unresolved evidence honestly | ✅ | ✅ | ✅ |
-| L5 | Block Personal Institution archive access without an Approved Evidence Bridge | ✅ | ✅ | ✅ |
+| L5 | Block a personal archive Work Studio does not own access without an user-approved summary | ✅ | ✅ | ✅ |
 
 Source: `fixtures/slice-3-investigate-live-question.md` All scenarios
 

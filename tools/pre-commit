@@ -12,9 +12,10 @@ Checks:
   3. Private data in Git — no .work-studio/objects/ files may be staged.
   4. Misplaced sensitive files — staged files outside .work-studio/ with sensitivity
      private or restricted in frontmatter are rejected.
-  5. Constitutional file protection — modifications to files in
-     .work-studio/constitutional-files.list require a linked authority record or
-     CONSTITUTIONAL-OVERRIDE: tag in the commit message.
+  5. (moved to tools/commit-msg) — Constitutional file protection cannot run
+     correctly in pre-commit: this hook runs before git writes the commit
+     message to any file, so a check reading .git/COMMIT_EDITMSG here sees the
+     *previous* commit's message. See tools/commit-msg.
 
 Configuration:
   Constitutional files list: .work-studio/constitutional-files.list
@@ -117,19 +118,6 @@ def read_constitutional_files(root):
     return files
 
 
-def check_commit_message_for_override(root):
-    """Check if the commit message contains CONSTITUTIONAL-OVERRIDE: tag."""
-    # The commit message file is passed as the first argument to the hook
-    # when using `git commit -m`, but for `git commit` with editor, we check
-    # the staged commit message file if available.
-    commit_msg_file = root / ".git" / "COMMIT_EDITMSG"
-    if commit_msg_file.exists():
-        content = commit_msg_file.read_text()
-        if "CONSTITUTIONAL-OVERRIDE:" in content:
-            return True
-    return False
-
-
 def main():
     root = repo_root()
     files = staged_files(root)
@@ -212,18 +200,7 @@ def main():
                 f"Move the file to .work-studio/ or reclassify sensitivity to ordinary."
             )
 
-    # ── Check 5: Constitutional file protection ──────────────────────────
-    constitutional_files = read_constitutional_files(root)
-    if constitutional_files:
-        changed_constitutional = [f for f in files if f in constitutional_files]
-        if changed_constitutional:
-            if not check_commit_message_for_override(root):
-                errors.append(
-                    f"CHECK 5 FAIL: Constitutional file(s) modified without authority: "
-                    f"{', '.join(changed_constitutional)}. "
-                    f"Either include a linked authority record in the commit message "
-                    f"or add 'CONSTITUTIONAL-OVERRIDE:' tag."
-                )
+    # ── Check 5 moved to tools/commit-msg — see module docstring. ─────────
 
     # ── Check 6: CLI validation (ws validate) ───────────────────────────
     # Run ws validate on any staged Work Objects or .work-studio/ files

@@ -39,6 +39,7 @@ from .sections import (
 )
 from .template import generate_body_template
 from .validate import DEFAULT_CHECKS, CHECK_REGISTRY, run_checks
+from .claim import cmd_claim_inspect, cmd_claim_register
 from .epistemic import cmd_epistemic_lint
 from .epistemic_controls import audit_epistemic_state
 
@@ -895,6 +896,45 @@ def build_parser() -> argparse.ArgumentParser:
     append_history_parser.add_argument("--force", action="store_true",
                                        help="Bypass optimistic concurrency check")
 
+    # ── ws claim ──────────────────────────────────────────────────────────
+    claim_parser = subparsers.add_parser(
+        "claim", help="Claim sidecar register and inspect"
+    )
+    claim_sub = claim_parser.add_subparsers(dest="claim_command")
+
+    claim_register_parser = claim_sub.add_parser(
+        "register",
+        help="Register a new claim in a Work Object's ## Claims section",
+    )
+    claim_register_parser.add_argument("id", help="Work Object ID")
+    claim_register_parser.add_argument("--text", required=True, help="Claim text")
+    claim_register_parser.add_argument(
+        "--kind", required=True,
+        help="Claim kind: observation, inference, decision",
+    )
+    claim_register_parser.add_argument(
+        "--scope", required=True,
+        help="Scope or path the claim applies to",
+    )
+    claim_register_parser.add_argument(
+        "--expect-updated", required=True,
+        help="Expected updated_at timestamp",
+    )
+    claim_register_parser.add_argument(
+        "--force", action="store_true",
+        help="Bypass optimistic concurrency check",
+    )
+
+    claim_inspect_parser = claim_sub.add_parser(
+        "inspect",
+        help="List claims for a Work Object, optionally filtered by state",
+    )
+    claim_inspect_parser.add_argument("id", help="Work Object ID")
+    claim_inspect_parser.add_argument(
+        "--state", default=None,
+        help="Filter by claim state: captured, supported, accepted_for_action",
+    )
+
     # ── ws epistemic lint ─────────────────────────────────────────────────
     epi_parser = subparsers.add_parser(
         "epistemic", help="Epistemic provenance-tag checks"
@@ -955,6 +995,15 @@ def main() -> int:
         return commands[args.command](args)
 
     # Dispatch grouped commands
+    if args.command == "claim":
+        if args.claim_command == "register":
+            return cmd_claim_register(args)
+        if args.claim_command == "inspect":
+            return cmd_claim_inspect(args)
+        print("Error: Unknown claim command. Use 'ws claim register' or 'ws claim inspect'.",
+              file=sys.stderr)
+        return 1
+
     if args.command == "epistemic":
         if args.epistemic_command == "lint":
             return cmd_epistemic_lint(args)

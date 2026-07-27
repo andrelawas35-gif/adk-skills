@@ -25,7 +25,7 @@ class TurnSignalIntoWorkContract(unittest.TestCase):
             "## Required capabilities",
             "explicit activation",
             "discard", "remember", "incubate", "activate",
-            "Evidence Bridge",
+            "user-approved summary",
             "must not scan, read, or mutate",
             "## Final self-check",
         ):
@@ -37,7 +37,7 @@ class TurnSignalIntoWorkContract(unittest.TestCase):
 
         for required_clause in (
             "Scenario 1", "Scenario 2", "Scenario 3", "Scenario 4",
-            "user's language", "explicit activation", "Evidence Bridge",
+            "user's language", "explicit activation", "user-approved",
             "manual-fallback", "unsupported",
         ):
             with self.subTest(required_clause=required_clause):
@@ -57,7 +57,6 @@ class TurnSignalIntoWorkContract(unittest.TestCase):
             with self.subTest(platform=platform):
                 adapter_dir = ROOT / "adapters" / platform / "skills" / "alawas-turn-signal-into-work"
                 self.assertIn(core_body, (adapter_dir / "SKILL.md").read_text())
-                self.assertTrue((adapter_dir / "references" / "SHARED-PROTOCOL.md").is_file())
                 self.assertTrue((adapter_dir / "references" / "EVIDENCE-MODEL.md").is_file())
 
 

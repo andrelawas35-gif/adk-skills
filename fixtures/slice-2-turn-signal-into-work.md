@@ -36,14 +36,14 @@ classification, and a concrete revisit trigger when incubated.
 **Verification**: The output names the Work Object ID only after the conductor
 creates or resumes it and routes to the appropriate next specialist.
 
-## Scenario 3 - Personal context requires an Evidence Bridge
+## Scenario 3 - Personal context requires a user-approved summary
 
-**Given**: The user says related Personal Institution material would help.  
-**When**: No approved Evidence Bridge or stable reference is supplied.  
+**Given**: The user says related personal-archive material would help.  
+**When**: No user-approved summary or stable reference is supplied.  
 **Then**:
 
-1. The skill does not scan, read, or mutate the Personal Institution archive.
-2. It asks for one user-approved, minimum-necessary Evidence Bridge or manual
+1. The skill does not scan, read, or mutate the a personal archive Work Studio does not own.
+2. It asks for one user-approved, minimum-necessary user-approved summary or manual
    summary only if the context changes classification.
 3. It records provenance and sensitivity if an approved bridge is supplied.
 

@@ -157,9 +157,9 @@ to bounded implementation with the recorded constraints.
 - Label source, system, lived, inference, and decision material according to
   `references/EVIDENCE-MODEL.md`.
 - Treat a proposed tracer bullet as an inference until the user accepts it.
-- Use only minimum-necessary Work Object context. Do not scan Personal
-  Institution records; request an approved Evidence Bridge if personal context
-  would materially change the recommendation.
+- Use only minimum-necessary Work Object context. Do not scan a personal
+  archive Work Studio does not own; request a user-approved summary if personal
+  context would materially change the recommendation.
 - Observability evidence must distinguish an executed demo from an unrun plan.
 
 ## Work Object updates

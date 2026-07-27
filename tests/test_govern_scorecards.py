@@ -38,7 +38,7 @@ class GovernScorecardsContract(unittest.TestCase):
             "maintain-working-method",
             "explicit human confirmation",
             "supersedes",
-            "Evidence Bridge",
+            "user-approved summary",
             "## Final self-check",
         ):
             with self.subTest(required_clause=required_clause):
@@ -59,7 +59,7 @@ class GovernScorecardsContract(unittest.TestCase):
             "supersedes",
             "message counts",
             "identity",
-            "Personal Institution",
+            "personal-archive",
             "novelty churn",
         ):
             with self.subTest(required_clause=required_clause):
