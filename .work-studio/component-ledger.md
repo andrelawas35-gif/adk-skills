@@ -54,12 +54,12 @@ source of truth; generated adapters are deliberately not listed.
 ## COMP-002 — Work Object conductor
 
 - **status:** active
-- **location(s):** `skills/core/conduct-work-object/SKILL.md`
+- **location(s):** `skills/core/governance-conduct-work-object/SKILL.md`
 - **built-by Work Object(s):** pre-ledger backfill
 - **depends-on:** COMP-001
 - **depended-on-by:** COMP-003 through COMP-013
 - **applicable dimensions:** recovery quality, artifact value, novelty yield
-- **owning skill/profile:** `conduct-work-object`
+- **owning skill/profile:** `governance-conduct-work-object`
 - **last-grilled-SHA:** not-yet-grilled
 - **best-case anchor:** Option-B-refined; no surviving finding against applicable dimensions and owning profile; reopen on git drift, owning-skill-version change, or contrary govern-scorecards outcome evidence
 - **status rationale / findings:** backfill pending first pass
@@ -67,12 +67,12 @@ source of truth; generated adapters are deliberately not listed.
 ## COMP-003 — Decision pressure testing
 
 - **status:** active
-- **location(s):** `skills/core/pressure-test-decision/SKILL.md`
+- **location(s):** `skills/core/thinking-pressure-test-decision/SKILL.md`
 - **built-by Work Object(s):** pre-ledger backfill
 - **depends-on:** COMP-001, COMP-002
 - **depended-on-by:** none declared
 - **applicable dimensions:** personal fit, artifact value, novelty yield
-- **owning skill/profile:** `pressure-test-decision`
+- **owning skill/profile:** `thinking-pressure-test-decision`
 - **last-grilled-SHA:** not-yet-grilled
 - **best-case anchor:** Option-B-refined; no surviving finding against applicable dimensions and owning profile; reopen on git drift, owning-skill-version change, or contrary govern-scorecards outcome evidence
 - **status rationale / findings:** backfill pending first pass
@@ -80,12 +80,12 @@ source of truth; generated adapters are deliberately not listed.
 ## COMP-004 — Tracer-bullet design
 
 - **status:** active
-- **location(s):** `skills/core/design-tracer-bullet/SKILL.md`
+- **location(s):** `skills/core/design-design-tracer-bullet/SKILL.md`
 - **built-by Work Object(s):** pre-ledger backfill
 - **depends-on:** COMP-001, COMP-002
 - **depended-on-by:** COMP-005
 - **applicable dimensions:** recovery quality, artifact value, novelty yield
-- **owning skill/profile:** `design-tracer-bullet`
+- **owning skill/profile:** `design-design-tracer-bullet`
 - **last-grilled-SHA:** not-yet-grilled
 - **best-case anchor:** Option-B-refined; no surviving finding against applicable dimensions and owning profile; reopen on git drift, owning-skill-version change, or contrary govern-scorecards outcome evidence
 - **status rationale / findings:** backfill pending first pass
@@ -93,12 +93,12 @@ source of truth; generated adapters are deliberately not listed.
 ## COMP-005 — Bounded implementation
 
 - **status:** active
-- **location(s):** `skills/core/implement-bounded-change/SKILL.md`
+- **location(s):** `skills/core/engineering-implement-bounded-change/SKILL.md`
 - **built-by Work Object(s):** pre-ledger backfill
 - **depends-on:** COMP-001, COMP-002, COMP-004
 - **depended-on-by:** COMP-006
 - **applicable dimensions:** recovery quality, artifact value, novelty yield
-- **owning skill/profile:** `implement-bounded-change`
+- **owning skill/profile:** `engineering-implement-bounded-change`
 - **last-grilled-SHA:** not-yet-grilled
 - **best-case anchor:** Option-B-refined; no surviving finding against applicable dimensions and owning profile; reopen on git drift, owning-skill-version change, or contrary govern-scorecards outcome evidence
 - **status rationale / findings:** backfill pending first pass
@@ -106,12 +106,12 @@ source of truth; generated adapters are deliberately not listed.
 ## COMP-006 — Release-evidence verification
 
 - **status:** active
-- **location(s):** `skills/core/verify-release-evidence/SKILL.md`
+- **location(s):** `skills/core/engineering-verify-release-evidence/SKILL.md`
 - **built-by Work Object(s):** pre-ledger backfill
 - **depends-on:** COMP-001, COMP-002, COMP-005
 - **depended-on-by:** none declared
 - **applicable dimensions:** recovery quality, artifact value
-- **owning skill/profile:** `verify-release-evidence`
+- **owning skill/profile:** `engineering-verify-release-evidence`
 - **last-grilled-SHA:** not-yet-grilled
 - **best-case anchor:** Option-B-refined; no surviving finding against applicable dimensions and owning profile; reopen on git drift, owning-skill-version change, or contrary govern-scorecards outcome evidence
 - **status rationale / findings:** backfill pending first pass
@@ -119,12 +119,12 @@ source of truth; generated adapters are deliberately not listed.
 ## COMP-007 — Deployment with recovery
 
 - **status:** active
-- **location(s):** `skills/core/deploy-with-recovery/SKILL.md`
+- **location(s):** `skills/core/operations-deploy-with-recovery/SKILL.md`
 - **built-by Work Object(s):** pre-ledger backfill
 - **depends-on:** COMP-001, COMP-002, COMP-006
 - **depended-on-by:** none declared
 - **applicable dimensions:** recovery quality, artifact value
-- **owning skill/profile:** `deploy-with-recovery`
+- **owning skill/profile:** `operations-deploy-with-recovery`
 - **last-grilled-SHA:** not-yet-grilled
 - **best-case anchor:** Option-B-refined; no surviving finding against applicable dimensions and owning profile; reopen on git drift, owning-skill-version change, or contrary govern-scorecards outcome evidence
 - **status rationale / findings:** backfill pending first pass
@@ -132,12 +132,12 @@ source of truth; generated adapters are deliberately not listed.
 ## COMP-008 — Outcome review and adaptation
 
 - **status:** active
-- **location(s):** `skills/core/review-outcome-and-adapt/SKILL.md`
+- **location(s):** `skills/core/governance-review-outcome-and-adapt/SKILL.md`
 - **built-by Work Object(s):** pre-ledger backfill
 - **depends-on:** COMP-001, COMP-002
 - **depended-on-by:** COMP-011, COMP-012
 - **applicable dimensions:** recovery quality, personal fit, artifact value, novelty yield
-- **owning skill/profile:** `review-outcome-and-adapt`
+- **owning skill/profile:** `governance-review-outcome-and-adapt`
 - **last-grilled-SHA:** not-yet-grilled
 - **best-case anchor:** Option-B-refined; no surviving finding against applicable dimensions and owning profile; reopen on git drift, owning-skill-version change, or contrary govern-scorecards outcome evidence
 - **status rationale / findings:** backfill pending first pass
@@ -145,12 +145,12 @@ source of truth; generated adapters are deliberately not listed.
 ## COMP-009 — Live-question investigation
 
 - **status:** active
-- **location(s):** `skills/core/investigate-live-question/SKILL.md`
+- **location(s):** `skills/core/research-investigate-live-question/SKILL.md`
 - **built-by Work Object(s):** pre-ledger backfill
 - **depends-on:** COMP-001, COMP-002
 - **depended-on-by:** none declared
 - **applicable dimensions:** artifact value, novelty yield
-- **owning skill/profile:** `investigate-live-question`
+- **owning skill/profile:** `research-investigate-live-question`
 - **last-grilled-SHA:** not-yet-grilled
 - **best-case anchor:** Option-B-refined; no surviving finding against applicable dimensions and owning profile; reopen on git drift, owning-skill-version change, or contrary govern-scorecards outcome evidence
 - **status rationale / findings:** backfill pending first pass
@@ -158,12 +158,12 @@ source of truth; generated adapters are deliberately not listed.
 ## COMP-010 — Production incident diagnosis
 
 - **status:** active
-- **location(s):** `skills/core/diagnose-production-incident/SKILL.md`
+- **location(s):** `skills/core/operations-diagnose-production-incident/SKILL.md`
 - **built-by Work Object(s):** pre-ledger backfill
 - **depends-on:** COMP-001, COMP-002
 - **depended-on-by:** none declared
 - **applicable dimensions:** recovery quality, artifact value
-- **owning skill/profile:** `diagnose-production-incident`
+- **owning skill/profile:** `operations-diagnose-production-incident`
 - **last-grilled-SHA:** not-yet-grilled
 - **best-case anchor:** Option-B-refined; no surviving finding against applicable dimensions and owning profile; reopen on git drift, owning-skill-version change, or contrary govern-scorecards outcome evidence
 - **status rationale / findings:** backfill pending first pass
@@ -171,12 +171,12 @@ source of truth; generated adapters are deliberately not listed.
 ## COMP-011 — Working-method governance
 
 - **status:** active
-- **location(s):** `skills/core/maintain-working-method/SKILL.md`
+- **location(s):** `skills/core/governance-maintain-working-method/SKILL.md`
 - **built-by Work Object(s):** pre-ledger backfill
 - **depends-on:** COMP-001, COMP-002, COMP-008
 - **depended-on-by:** none declared
 - **applicable dimensions:** personal fit, artifact value, novelty yield
-- **owning skill/profile:** `maintain-working-method`
+- **owning skill/profile:** `governance-maintain-working-method`
 - **last-grilled-SHA:** not-yet-grilled
 - **best-case anchor:** Option-B-refined; no surviving finding against applicable dimensions and owning profile; reopen on git drift, owning-skill-version change, or contrary govern-scorecards outcome evidence
 - **status rationale / findings:** backfill pending first pass
@@ -184,12 +184,12 @@ source of truth; generated adapters are deliberately not listed.
 ## COMP-012 — Outcome scorecard governance
 
 - **status:** active
-- **location(s):** `skills/core/govern-scorecards/SKILL.md`
+- **location(s):** `skills/core/governance-govern-scorecards/SKILL.md`
 - **built-by Work Object(s):** pre-ledger backfill
 - **depends-on:** COMP-001, COMP-002, COMP-008
 - **depended-on-by:** COMP-013
 - **applicable dimensions:** recovery quality, personal fit, artifact value, novelty yield
-- **owning skill/profile:** `govern-scorecards`
+- **owning skill/profile:** `governance-govern-scorecards`
 - **last-grilled-SHA:** not-yet-grilled
 - **best-case anchor:** Option-B-refined; no surviving finding against applicable dimensions and owning profile; reopen on git drift, owning-skill-version change, or contrary govern-scorecards outcome evidence
 - **status rationale / findings:** backfill pending first pass
@@ -197,12 +197,12 @@ source of truth; generated adapters are deliberately not listed.
 ## COMP-013 — Signal-to-work routing
 
 - **status:** active
-- **location(s):** `skills/core/turn-signal-into-work/SKILL.md`
+- **location(s):** `skills/core/thinking-turn-signal-into-work/SKILL.md`
 - **built-by Work Object(s):** pre-ledger backfill
 - **depends-on:** COMP-001, COMP-002
 - **depended-on-by:** none declared
 - **applicable dimensions:** personal fit, artifact value, novelty yield
-- **owning skill/profile:** `turn-signal-into-work`
+- **owning skill/profile:** `thinking-turn-signal-into-work`
 - **last-grilled-SHA:** not-yet-grilled
 - **best-case anchor:** Option-B-refined; no surviving finding against applicable dimensions and owning profile; reopen on git drift, owning-skill-version change, or contrary govern-scorecards outcome evidence
 - **status rationale / findings:** backfill pending first pass
@@ -210,12 +210,12 @@ source of truth; generated adapters are deliberately not listed.
 ## COMP-014 — Component tracking
 
 - **status:** active
-- **location(s):** `skills/core/track-components/SKILL.md`
+- **location(s):** `skills/core/design-track-components/SKILL.md`
 - **built-by Work Object(s):** pre-ledger backfill
 - **depends-on:** COMP-001, COMP-002, COMP-012
 - **depended-on-by:** none declared
 - **applicable dimensions:** artifact value, novelty yield
-- **owning skill/profile:** `track-components`
+- **owning skill/profile:** `design-track-components`
 - **last-grilled-SHA:** not-yet-grilled
 - **best-case anchor:** Option-B-refined; no surviving finding against applicable dimensions and owning profile; reopen on git drift, owning-skill-version change, or contrary govern-scorecards outcome evidence
 - **status rationale / findings:** backfill pending first pass
@@ -229,12 +229,12 @@ not yet implemented) and enter the ledger as `active` with `not-yet-grilled`.
 ## COMP-015 — Product interface audit
 
 - **status:** active
-- **location(s):** `skills/core/audit-product-interface/SKILL.md`
+- **location(s):** `skills/core/design-audit-product-interface/SKILL.md`
 - **built-by Work Object(s):** `2026-07-22-006`, `2026-07-23-002`
 - **depends-on:** COMP-001, COMP-002
 - **depended-on-by:** COMP-016, COMP-022
 - **applicable dimensions:** artifact value, novelty yield
-- **owning skill/profile:** `audit-product-interface`
+- **owning skill/profile:** `design-audit-product-interface`
 - **last-grilled-SHA:** not-yet-grilled
 - **best-case anchor:** Option-B-refined; no surviving finding against applicable dimensions and owning profile; reopen on git drift, owning-skill-version change, or contrary govern-scorecards outcome evidence
 - **status rationale / findings:** Contract amended per Grilling Session 13 Phase 1; Figma references removed, host→target project terminology. Pending implementation and first grilling pass.
@@ -242,12 +242,12 @@ not yet implemented) and enter the ledger as `active` with `not-yet-grilled`.
 ## COMP-016 — Design foundation (token audit)
 
 - **status:** active
-- **location(s):** `skills/core/build-design-foundation/SKILL.md`
+- **location(s):** `skills/core/design-build-design-foundation/SKILL.md`
 - **built-by Work Object(s):** `2026-07-22-006`, `2026-07-23-002`
 - **depends-on:** COMP-001, COMP-002
 - **depended-on-by:** COMP-022
 - **applicable dimensions:** artifact value, novelty yield
-- **owning skill/profile:** `build-design-foundation`
+- **owning skill/profile:** `design-build-design-foundation`
 - **last-grilled-SHA:** not-yet-grilled
 - **best-case anchor:** Option-B-refined; no surviving finding against applicable dimensions and owning profile; reopen on git drift, owning-skill-version change, or contrary govern-scorecards outcome evidence
 - **status rationale / findings:** Contract amended per Grilling Session 13 Phase 1; Figma sync references removed, host→target project terminology. Pending implementation and first grilling pass.
@@ -255,7 +255,7 @@ not yet implemented) and enter the ledger as `active` with `not-yet-grilled`.
 ## COMP-017 — User flow modeling
 
 - **status:** retired
-- **location(s):** `skills/core/model-user-flow/SKILL.md`
+- **location(s):** removed from canonical skill set
 - **built-by Work Object(s):** `2026-07-22-006`, `2026-07-23-002`
 - **depends-on:** COMP-001, COMP-002, COMP-015
 - **depended-on-by:** none (downstream deps also deferred)
@@ -268,7 +268,7 @@ not yet implemented) and enter the ledger as `active` with `not-yet-grilled`.
 ## COMP-018 — Interface architecture definition
 
 - **status:** retired
-- **location(s):** `skills/core/define-interface-architecture/SKILL.md`
+- **location(s):** removed from canonical skill set
 - **built-by Work Object(s):** `2026-07-22-006`, `2026-07-23-002`
 - **depends-on:** COMP-001, COMP-002, COMP-015, COMP-017
 - **depended-on-by:** none (downstream deps also deferred)
@@ -281,7 +281,7 @@ not yet implemented) and enter the ledger as `active` with `not-yet-grilled`.
 ## COMP-019 — Interface specification definition
 
 - **status:** retired
-- **location(s):** `skills/core/define-interface-specification/SKILL.md`
+- **location(s):** removed from canonical skill set
 - **built-by Work Object(s):** `2026-07-22-006`, `2026-07-23-002`
 - **depends-on:** COMP-001, COMP-002, COMP-016, COMP-018
 - **depended-on-by:** none (downstream deps also deferred)
@@ -294,7 +294,7 @@ not yet implemented) and enter the ledger as `active` with `not-yet-grilled`.
 ## COMP-020 — Figma rendering (governed Figwright wrapper)
 
 - **status:** retired
-- **location(s):** `skills/core/render-to-figma/SKILL.md`
+- **location(s):** removed from canonical skill set
 - **built-by Work Object(s):** `2026-07-22-006`, `2026-07-23-002`
 - **depends-on:** COMP-001, COMP-002, COMP-019, COMP-021
 - **depended-on-by:** none
@@ -307,7 +307,7 @@ not yet implemented) and enter the ledger as `active` with `not-yet-grilled`.
 ## COMP-021 — Design-to-code connection (component registry)
 
 - **status:** retired
-- **location(s):** `skills/core/connect-design-to-code/SKILL.md`
+- **location(s):** removed from canonical skill set
 - **built-by Work Object(s):** `2026-07-22-006`, `2026-07-23-002`
 - **depends-on:** COMP-001, COMP-002, COMP-015
 - **depended-on-by:** none
@@ -320,12 +320,12 @@ not yet implemented) and enter the ledger as `active` with `not-yet-grilled`.
 ## COMP-022 — Design direction application (creative authority loop)
 
 - **status:** active
-- **location(s):** `skills/core/apply-design-direction/SKILL.md`
+- **location(s):** `skills/core/design-apply-design-direction/SKILL.md`
 - **built-by Work Object(s):** `2026-07-22-006`, `2026-07-23-002`
 - **depends-on:** COMP-001, COMP-002, COMP-015, COMP-016
 - **depended-on-by:** COMP-023
 - **applicable dimensions:** artifact value, novelty yield
-- **owning skill/profile:** `apply-design-direction`
+- **owning skill/profile:** `design-apply-design-direction`
 - **last-grilled-SHA:** not-yet-grilled
 - **best-case anchor:** Option-B-refined; no surviving finding against applicable dimensions and owning profile; reopen on git drift, owning-skill-version change, or contrary govern-scorecards outcome evidence
 - **status rationale / findings:** Contract rewritten per Grilling Session 13 Phase 1; changed from revision-manifest producer to propose/confirm/execute creative authority loop. Now writes code after confirmation (meaningful consequence). Pending implementation and first grilling pass.
@@ -333,12 +333,12 @@ not yet implemented) and enter the ledger as `active` with `not-yet-grilled`.
 ## COMP-023 — Design implementation verification
 
 - **status:** active
-- **location(s):** `skills/core/verify-design-implementation/SKILL.md`
+- **location(s):** `skills/core/design-verify-design-implementation/SKILL.md`
 - **built-by Work Object(s):** `2026-07-22-006`, `2026-07-23-002`
 - **depends-on:** COMP-001, COMP-002, COMP-022
 - **depended-on-by:** none declared
 - **applicable dimensions:** artifact value, novelty yield
-- **owning skill/profile:** `verify-design-implementation`
+- **owning skill/profile:** `design-verify-design-implementation`
 - **last-grilled-SHA:** not-yet-grilled
 - **best-case anchor:** Option-B-refined; no surviving finding against applicable dimensions and owning profile; reopen on git drift, owning-skill-version change, or contrary govern-scorecards outcome evidence
 - **status rationale / findings:** Renamed from verify-design-code-parity per Grilling Session 13 Phase 1; contract rewritten for browser-only verification against confirmed proposals (no Figma parity, no specification parity). Pending implementation and first grilling pass.
@@ -346,12 +346,12 @@ not yet implemented) and enter the ledger as `active` with `not-yet-grilled`.
 ## COMP-024 — Divergent idea development
 
 - **status:** active
-- **location(s):** `skills/core/develop-idea/SKILL.md`
+- **location(s):** `skills/core/thinking-develop-idea/SKILL.md`
 - **built-by Work Object(s):** `2026-07-26-002`
 - **depends-on:** COMP-001, COMP-002
 - **depended-on-by:** none declared
 - **applicable dimensions:** personal fit, artifact value, novelty yield
-- **owning skill/profile:** `develop-idea`
+- **owning skill/profile:** `thinking-develop-idea`
 - **last-grilled-SHA:** not-yet-grilled
 - **best-case anchor:** Option-B-refined; no surviving finding against applicable dimensions and owning profile; reopen on git drift, owning-skill-version change, or contrary govern-scorecards outcome evidence
 - **status rationale / findings:** First divergent exploration capability in the system. Skill contract created from Idea Development Grilling Session (17 decisions). Pending first tracer bullet run and grilling pass.

@@ -67,19 +67,18 @@ sh tests/run.sh                                     # full generator + installer
 
 ## Existing Skills
 
-| Skill | Description |
-|-------|-------------|
-| [google-adk-agent-builder](skills/google-adk-agent-builder/SKILL.md) | Build and iterate on local Google ADK agents in Python — scaffolding, tools, multi-agent flows, session/memory wiring, and local dev loop |
-| [grilling-session](skills/core/grilling-session/SKILL.md) | Run an ephemeral or durable, codebase-grounded continuous grilling session; one adaptive question per turn |
-| [conduct-work-object](skills/core/conduct-work-object/SKILL.md) | Detect, create, activate, resume, update, and close Work Objects — the canonical continuity surface of Andrelawas Work Studio |
-| [pressure-test-decision](skills/core/pressure-test-decision/SKILL.md) | Resume a Work Object, identify the highest-leverage unresolved decision, recommend before asking one question, and safely persist the confirmed choice |
-| [turn-signal-into-work](skills/core/turn-signal-into-work/SKILL.md) | Capture a live signal, classify its smallest durable handling, and activate a Work Object only with explicit user authority |
-| [design-tracer-bullet](skills/core/design-tracer-bullet/SKILL.md) | Design and record the smallest demoable end-to-end slice that tests a Design-state Work Object's riskiest assumption, then route it without implementing |
-| [implement-bounded-change](skills/core/implement-bounded-change/SKILL.md) | Implement only an accepted tracer bullet while preserving unrelated work, continuously verifying the bounded path, and stopping for new authority |
-| [verify-release-evidence](skills/core/verify-release-evidence/SKILL.md) | Report proportionate verification evidence for an implemented bounded change, including operational recovery, dependency, privacy, security, and evidence gaps without releasing |
-| [investigate-live-question](skills/core/investigate-live-question/SKILL.md) | Investigate an activated Inquiry with attributable primary-source research, proportionate reality contact, and explicit uncertainty routing |
-| [deploy-with-recovery](skills/core/deploy-with-recovery/SKILL.md) | Deploy a verified Work Object in authorized recoverable increments with readiness, rollback, sanitized evidence, and an Observe route |
-| [diagnose-production-incident](skills/core/diagnose-production-incident/SKILL.md) | Contain, restore, diagnose, and prevent operational failures with sanitized evidence and bounded follow-up Change Work Objects |
+Canonical skills are namespace-prefixed by role so the capability is visible at
+the point of invocation:
+
+- `design-*`: design discovery, architecture, tracer bullets, and verification
+- `engineering-*`: bounded implementation and release verification
+- `governance-*`: Work Object continuity, method, scorecards, and review
+- `operations-*`: deployment and production incident response
+- `research-*`: live-question investigation
+- `thinking-*`: signal capture, ideation, decision pressure-testing, and grilling
+
+The original Google ADK builder remains at
+[skills/google-adk-agent-builder/SKILL.md](skills/google-adk-agent-builder/SKILL.md).
 
 ## Platform Adapters
 
@@ -92,9 +91,9 @@ python3 tools/generate-adapters.py --check   # verify no drift
 
 | Platform | Adapters | Manifest |
 |----------|----------|----------|
-| Codex | [grilling-session](adapters/codex/skills/alawas-grilling-session/SKILL.md), [conduct-work-object](adapters/codex/skills/alawas-conduct-work-object/SKILL.md), [pressure-test-decision](adapters/codex/skills/alawas-pressure-test-decision/SKILL.md), [turn-signal-into-work](adapters/codex/skills/alawas-turn-signal-into-work/SKILL.md), [design-tracer-bullet](adapters/codex/skills/alawas-design-tracer-bullet/SKILL.md), [implement-bounded-change](adapters/codex/skills/alawas-implement-bounded-change/SKILL.md), [verify-release-evidence](adapters/codex/skills/alawas-verify-release-evidence/SKILL.md), [investigate-live-question](adapters/codex/skills/alawas-investigate-live-question/SKILL.md), [deploy-with-recovery](adapters/codex/skills/alawas-deploy-with-recovery/SKILL.md), [diagnose-production-incident](adapters/codex/skills/alawas-diagnose-production-incident/SKILL.md) | [manifest.json](adapters/codex/manifest.json) |
-| Claude Code | [grilling-session](adapters/claude-code/skills/alawas-grilling-session/SKILL.md), [conduct-work-object](adapters/claude-code/skills/alawas-conduct-work-object/SKILL.md), [pressure-test-decision](adapters/claude-code/skills/alawas-pressure-test-decision/SKILL.md), [turn-signal-into-work](adapters/claude-code/skills/alawas-turn-signal-into-work/SKILL.md), [design-tracer-bullet](adapters/claude-code/skills/alawas-design-tracer-bullet/SKILL.md), [implement-bounded-change](adapters/claude-code/skills/alawas-implement-bounded-change/SKILL.md), [verify-release-evidence](adapters/claude-code/skills/alawas-verify-release-evidence/SKILL.md), [investigate-live-question](adapters/claude-code/skills/alawas-investigate-live-question/SKILL.md), [deploy-with-recovery](adapters/claude-code/skills/alawas-deploy-with-recovery/SKILL.md), [diagnose-production-incident](adapters/claude-code/skills/alawas-diagnose-production-incident/SKILL.md) | [manifest.json](adapters/claude-code/manifest.json) |
-| GitHub Copilot | [grilling-session](adapters/github-copilot/skills/alawas-grilling-session/SKILL.md), [conduct-work-object](adapters/github-copilot/skills/alawas-conduct-work-object/SKILL.md), [pressure-test-decision](adapters/github-copilot/skills/alawas-pressure-test-decision/SKILL.md), [turn-signal-into-work](adapters/github-copilot/skills/alawas-turn-signal-into-work/SKILL.md), [design-tracer-bullet](adapters/github-copilot/skills/alawas-design-tracer-bullet/SKILL.md), [implement-bounded-change](adapters/github-copilot/skills/alawas-implement-bounded-change/SKILL.md), [verify-release-evidence](adapters/github-copilot/skills/alawas-verify-release-evidence/SKILL.md), [investigate-live-question](adapters/github-copilot/skills/alawas-investigate-live-question/SKILL.md), [deploy-with-recovery](adapters/github-copilot/skills/alawas-deploy-with-recovery/SKILL.md), [diagnose-production-incident](adapters/github-copilot/skills/alawas-diagnose-production-incident/SKILL.md) | [manifest.json](adapters/github-copilot/manifest.json) |
+| Codex | Namespace-prefixed generated skills | [manifest.json](adapters/codex/manifest.json) |
+| Claude Code | Namespace-prefixed generated skills | [manifest.json](adapters/claude-code/manifest.json) |
+| GitHub Copilot | Namespace-prefixed generated skills | [manifest.json](adapters/github-copilot/manifest.json) |
 
 ## Conformance Gate
 

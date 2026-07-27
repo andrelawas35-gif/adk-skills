@@ -8,7 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 GENERATOR = ROOT / "tools" / "generate-adapters.py"
-CORE = ROOT / "skills" / "core" / "turn-signal-into-work" / "SKILL.md"
+CORE = ROOT / "skills" / "core" / "thinking-turn-signal-into-work" / "SKILL.md"
 CONTRACT = ROOT / "fixtures" / "personal-institution-work-studio-contract.md"
 QUALIFICATION = (
     ROOT / ".work-studio" / "objects" / "2026" / "07"

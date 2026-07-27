@@ -11,5 +11,9 @@ def namespaced_core_body(core_file):
     names = sorted((path.name for path in (ROOT / "skills" / "core").iterdir()
                     if path.is_dir()), key=len, reverse=True)
     for name in names:
-        body = body.replace(f"`{name}`", f"`alawas-{name}`")
+        public_name = f"alawas-{name}"
+        body = body.replace(f"`{name}`", f"`{public_name}`")
+        _, separator, legacy_name = name.partition("-")
+        if separator:
+            body = body.replace(f"`{legacy_name}`", f"`{public_name}`")
     return body

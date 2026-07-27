@@ -25,9 +25,9 @@ repository or filesystem boundary.
 
 ## Active skills
 
-- `conduct-work-object` (core + codex, claude-code, github-copilot adapters)
-- `pressure-test-decision` (core + codex, claude-code, github-copilot adapters)
-- `turn-signal-into-work` (core + codex, claude-code, github-copilot adapters)
+- `governance-conduct-work-object` (canonical core + generated adapters)
+- `thinking-pressure-test-decision` (canonical core + generated adapters)
+- `thinking-turn-signal-into-work` (canonical core + generated adapters)
 - `google-adk-agent-builder`
 
 ## Tools

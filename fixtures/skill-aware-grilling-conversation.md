@@ -89,9 +89,6 @@ Apply the same continuity contract to all profiles:
 - `build-design-foundation`
 - `model-user-flow`
 - `define-interface-architecture`
-- `define-interface-specification`
-- `render-to-figma`
-- `connect-design-to-code`
 - `apply-design-direction`
 - `verify-design-implementation`
 

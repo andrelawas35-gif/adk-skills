@@ -126,7 +126,7 @@ def package(root: Path, output: Path, scenario: str) -> dict:
 
 
 def baseline(root: Path) -> dict:
-    adapter = root / "adapters" / "codex" / "skills" / "alawas-turn-signal-into-work"
+    adapter = root / "adapters" / "codex" / "skills" / "alawas-thinking-turn-signal-into-work"
     files = sorted(path for path in adapter.rglob("*") if path.is_file())
     if not files:
         raise TraceError(f"generated Codex adapter is missing: {adapter}")

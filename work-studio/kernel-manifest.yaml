@@ -52,20 +52,25 @@ kernel:
       purpose: "Canonical skill definitions — single source of truth for all adapters"
       required_for_bootstrap: true
       skills:
-        - conduct-work-object
-        - deploy-with-recovery
-        - design-tracer-bullet
-        - diagnose-production-incident
-        - govern-scorecards
-        - grilling-session
-        - implement-bounded-change
-        - investigate-live-question
-        - maintain-working-method
-        - pressure-test-decision
-        - review-outcome-and-adapt
-        - track-components
-        - turn-signal-into-work
-        - verify-release-evidence
+        - design-apply-design-direction
+        - design-audit-product-interface
+        - design-build-design-foundation
+        - design-design-tracer-bullet
+        - design-track-components
+        - design-verify-design-implementation
+        - engineering-implement-bounded-change
+        - engineering-verify-release-evidence
+        - governance-conduct-work-object
+        - governance-govern-scorecards
+        - governance-maintain-working-method
+        - governance-review-outcome-and-adapt
+        - operations-deploy-with-recovery
+        - operations-diagnose-production-incident
+        - research-investigate-live-question
+        - thinking-develop-idea
+        - thinking-grilling-session
+        - thinking-pressure-test-decision
+        - thinking-turn-signal-into-work
 
     - path: tools/
       purpose: "CLI tools and generators — the ws CLI is the sole write path for .work-studio/"

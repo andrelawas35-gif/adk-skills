@@ -7,7 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 CORE = ROOT / "skills" / "core"
-ENGINE = CORE / "grilling-session" / "SKILL.md"
+ENGINE = CORE / "thinking-grilling-session" / "SKILL.md"
 AGREEMENT = ROOT / "references" / "AGREEMENT-LOOP.md"
 PROFILES = ROOT / "references" / "SKILL-AWARE-GRILLING.md"
 WORK_OBJECT = ROOT / "references" / "WORK-OBJECT.md"
@@ -129,7 +129,7 @@ class SkillAwareGrillingContract(unittest.TestCase):
             self.assertNotIn(forbidden, profiles)
 
     def test_conductor_owns_lazy_persistence_and_concurrency(self):
-        conductor = (CORE / "conduct-work-object" / "SKILL.md").read_text()
+        conductor = (CORE / "governance-conduct-work-object" / "SKILL.md").read_text()
         work_object = WORK_OBJECT.read_text()
         self.assertIn("conductor owns durable checkpoint writes only", conductor)
         self.assertIn("sole writer", conductor)
@@ -138,7 +138,7 @@ class SkillAwareGrillingContract(unittest.TestCase):
 
     def test_stage_skills_do_not_reimplement_the_engine(self):
         for path in sorted(CORE.glob("*/SKILL.md")):
-            if path.parent.name in {"conduct-work-object", "grilling-session"}:
+            if path.parent.name in {"governance-conduct-work-object", "thinking-grilling-session"}:
                 continue
             text = " ".join(path.read_text().split())
             with self.subTest(skill=path.parent.name):

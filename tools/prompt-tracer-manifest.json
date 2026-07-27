@@ -4,7 +4,7 @@
   "description": "Capture and route a signal with turn-signal-into-work while preserving authority, evidence, and privacy boundaries.",
   "nodes": {
     "kernel": {
-      "path": "skills/core/turn-signal-into-work/SKILL.md",
+      "path": "skills/core/thinking-turn-signal-into-work/SKILL.md",
       "package_path": "SKILL.md",
       "requires": []
     },
@@ -19,7 +19,7 @@
       "requires": ["kernel"]
     },
     "conductor": {
-      "path": "skills/core/conduct-work-object/SKILL.md",
+      "path": "skills/core/governance-conduct-work-object/SKILL.md",
       "package_path": "modules/conduct-work-object/SKILL.md",
       "requires": ["evidence-model", "consequence-authority"]
     },

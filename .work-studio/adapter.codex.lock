@@ -1,4 +1,4 @@
 # Work Studio adapter pin — this project overrides the global install.
 platform=codex
 version=0.1.0
-dest=.agents/skills
+dest=adapters/codex/skills

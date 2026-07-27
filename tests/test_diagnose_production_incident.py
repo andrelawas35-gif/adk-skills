@@ -10,7 +10,7 @@ from adapter_helpers import namespaced_core_body
 
 ROOT = Path(__file__).resolve().parent.parent
 GENERATOR = ROOT / "tools" / "generate-adapters.py"
-CORE = ROOT / "skills" / "core" / "diagnose-production-incident" / "SKILL.md"
+CORE = ROOT / "skills" / "core" / "operations-diagnose-production-incident" / "SKILL.md"
 FIXTURE = ROOT / "fixtures" / "slice-3-diagnose-production-incident.md"
 PLATFORMS = ("codex", "claude-code", "github-copilot")
 

@@ -10,7 +10,7 @@ from adapter_helpers import namespaced_core_body
 
 ROOT = Path(__file__).resolve().parent.parent
 GENERATOR = ROOT / "tools" / "generate-adapters.py"
-CORE = ROOT / "skills" / "core" / "build-design-foundation" / "SKILL.md"
+CORE = ROOT / "skills" / "core" / "design-build-design-foundation" / "SKILL.md"
 PLATFORMS = ("codex", "claude-code", "github-copilot")
 
 
@@ -46,7 +46,7 @@ class BuildDesignFoundationContract(unittest.TestCase):
         core_body = namespaced_core_body(CORE)
         for platform in PLATFORMS:
             with self.subTest(platform=platform):
-                adapter_dir = ROOT / "adapters" / platform / "skills" / "alawas-build-design-foundation"
+                adapter_dir = ROOT / "adapters" / platform / "skills" / "alawas-design-build-design-foundation"
                 self.assertIn(core_body, (adapter_dir / "SKILL.md").read_text())
                 self.assertTrue((adapter_dir / "references" / "CONSEQUENCE-AUTHORITY.md").is_file())
 

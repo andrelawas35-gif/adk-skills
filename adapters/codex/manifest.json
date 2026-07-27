@@ -5,384 +5,334 @@
   "generated_by": "tools/generate-adapters.py",
   "files": [
     {
-      "name": "alawas-apply-design-direction",
-      "path": "adapters/codex/skills/alawas-apply-design-direction/SKILL.md",
-      "sha256": "c886706c5dbe4300bac0f1c46afa9ebe4836ef315aeadaf66e7a32fa5fc8e56e"
+      "name": "alawas-design-apply-design-direction",
+      "path": "adapters/codex/skills/alawas-design-apply-design-direction/SKILL.md",
+      "sha256": "43450bd1edd9608d5d7221bc4815526c28796c2270db1308eb655e0b3e482cb3"
     },
     {
-      "name": "alawas-apply-design-direction/references/CONSEQUENCE-AUTHORITY.md",
-      "path": "adapters/codex/skills/alawas-apply-design-direction/references/CONSEQUENCE-AUTHORITY.md",
+      "name": "alawas-design-apply-design-direction/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/codex/skills/alawas-design-apply-design-direction/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     },
     {
-      "name": "alawas-audit-product-interface",
-      "path": "adapters/codex/skills/alawas-audit-product-interface/SKILL.md",
-      "sha256": "21e97e6a4681de2dc335fa8c785f3e59293428c1611397c2ea7207e177d3657c"
+      "name": "alawas-design-audit-product-interface",
+      "path": "adapters/codex/skills/alawas-design-audit-product-interface/SKILL.md",
+      "sha256": "6a5acffccdeac7eae50852f04cd374b4ba0788715a5b8f0b8c9a7e99e3ce9ae0"
     },
     {
-      "name": "alawas-audit-product-interface/references/CONSEQUENCE-AUTHORITY.md",
-      "path": "adapters/codex/skills/alawas-audit-product-interface/references/CONSEQUENCE-AUTHORITY.md",
+      "name": "alawas-design-audit-product-interface/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/codex/skills/alawas-design-audit-product-interface/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     },
     {
-      "name": "alawas-build-design-foundation",
-      "path": "adapters/codex/skills/alawas-build-design-foundation/SKILL.md",
-      "sha256": "966c705efb7da399436f96a79449bda342445b10f766d719cf46db5258190887"
+      "name": "alawas-design-build-design-foundation",
+      "path": "adapters/codex/skills/alawas-design-build-design-foundation/SKILL.md",
+      "sha256": "0c016b599b8bb8f560923ca3752954331bedaca1004d122c934761b32a8e2a18"
     },
     {
-      "name": "alawas-build-design-foundation/references/CONSEQUENCE-AUTHORITY.md",
-      "path": "adapters/codex/skills/alawas-build-design-foundation/references/CONSEQUENCE-AUTHORITY.md",
+      "name": "alawas-design-build-design-foundation/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/codex/skills/alawas-design-build-design-foundation/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     },
     {
-      "name": "alawas-conduct-work-object",
-      "path": "adapters/codex/skills/alawas-conduct-work-object/SKILL.md",
-      "sha256": "df3a37adcc69a73ef64dec5737209f445eb738d2452e3520a0c52d4db7310599"
+      "name": "alawas-design-design-tracer-bullet",
+      "path": "adapters/codex/skills/alawas-design-design-tracer-bullet/SKILL.md",
+      "sha256": "2cc68841c5bf3e29acd49f4323c14c517e6924146b4a05ab83382b15b232b53b"
     },
     {
-      "name": "alawas-conduct-work-object/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/codex/skills/alawas-conduct-work-object/references/MISSING-ARTIFACT-GAP.md",
+      "name": "alawas-design-design-tracer-bullet/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/codex/skills/alawas-design-design-tracer-bullet/references/CAPABILITY-DEGRADATION.md",
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
+    },
+    {
+      "name": "alawas-design-design-tracer-bullet/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/codex/skills/alawas-design-design-tracer-bullet/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
+    },
+    {
+      "name": "alawas-design-design-tracer-bullet/references/EVIDENCE-MODEL.md",
+      "path": "adapters/codex/skills/alawas-design-design-tracer-bullet/references/EVIDENCE-MODEL.md",
+      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
+    },
+    {
+      "name": "alawas-design-track-components",
+      "path": "adapters/codex/skills/alawas-design-track-components/SKILL.md",
+      "sha256": "5b6932942e6b7082b2e67cb2bc57c937b4a88eac69ff15d900468f8a7a508824"
+    },
+    {
+      "name": "alawas-design-track-components/references/MISSING-ARTIFACT-GAP.md",
+      "path": "adapters/codex/skills/alawas-design-track-components/references/MISSING-ARTIFACT-GAP.md",
       "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
     },
     {
-      "name": "alawas-conduct-work-object/references/CAPABILITY-DEGRADATION.md",
-      "path": "adapters/codex/skills/alawas-conduct-work-object/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
-    },
-    {
-      "name": "alawas-conduct-work-object/references/CONSEQUENCE-AUTHORITY.md",
-      "path": "adapters/codex/skills/alawas-conduct-work-object/references/CONSEQUENCE-AUTHORITY.md",
+      "name": "alawas-design-track-components/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/codex/skills/alawas-design-track-components/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     },
     {
-      "name": "alawas-conduct-work-object/references/SHARED-PROTOCOL.md",
-      "path": "adapters/codex/skills/alawas-conduct-work-object/references/SHARED-PROTOCOL.md",
+      "name": "alawas-design-verify-design-implementation",
+      "path": "adapters/codex/skills/alawas-design-verify-design-implementation/SKILL.md",
+      "sha256": "798a279395d0c89ce1beee018fc5b32cf2d2cf5eb81f7a18a35d65260cf6ed9a"
+    },
+    {
+      "name": "alawas-design-verify-design-implementation/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/codex/skills/alawas-design-verify-design-implementation/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
+    },
+    {
+      "name": "alawas-engineering-implement-bounded-change",
+      "path": "adapters/codex/skills/alawas-engineering-implement-bounded-change/SKILL.md",
+      "sha256": "e24226e597e385f82cff3b016c462b5bdcebc6f997bffc12db8148e7f569203a"
+    },
+    {
+      "name": "alawas-engineering-implement-bounded-change/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/codex/skills/alawas-engineering-implement-bounded-change/references/CAPABILITY-DEGRADATION.md",
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
+    },
+    {
+      "name": "alawas-engineering-implement-bounded-change/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/codex/skills/alawas-engineering-implement-bounded-change/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
+    },
+    {
+      "name": "alawas-engineering-implement-bounded-change/references/EVIDENCE-MODEL.md",
+      "path": "adapters/codex/skills/alawas-engineering-implement-bounded-change/references/EVIDENCE-MODEL.md",
+      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
+    },
+    {
+      "name": "alawas-engineering-verify-release-evidence",
+      "path": "adapters/codex/skills/alawas-engineering-verify-release-evidence/SKILL.md",
+      "sha256": "a4f45bc4b11793ce8874142448484c8f2154dd4dc8516bbcbe51d2867ed269fd"
+    },
+    {
+      "name": "alawas-engineering-verify-release-evidence/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/codex/skills/alawas-engineering-verify-release-evidence/references/CAPABILITY-DEGRADATION.md",
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
+    },
+    {
+      "name": "alawas-engineering-verify-release-evidence/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/codex/skills/alawas-engineering-verify-release-evidence/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
+    },
+    {
+      "name": "alawas-governance-conduct-work-object",
+      "path": "adapters/codex/skills/alawas-governance-conduct-work-object/SKILL.md",
+      "sha256": "83f4f9525b4b54868b829ea7d6352c20101667cb537c6a6a5af32d71d1e5acfe"
+    },
+    {
+      "name": "alawas-governance-conduct-work-object/references/MISSING-ARTIFACT-GAP.md",
+      "path": "adapters/codex/skills/alawas-governance-conduct-work-object/references/MISSING-ARTIFACT-GAP.md",
+      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
+    },
+    {
+      "name": "alawas-governance-conduct-work-object/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/codex/skills/alawas-governance-conduct-work-object/references/CAPABILITY-DEGRADATION.md",
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
+    },
+    {
+      "name": "alawas-governance-conduct-work-object/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/codex/skills/alawas-governance-conduct-work-object/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
+    },
+    {
+      "name": "alawas-governance-conduct-work-object/references/SHARED-PROTOCOL.md",
+      "path": "adapters/codex/skills/alawas-governance-conduct-work-object/references/SHARED-PROTOCOL.md",
       "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
     },
     {
-      "name": "alawas-connect-design-to-code",
-      "path": "adapters/codex/skills/alawas-connect-design-to-code/SKILL.md",
-      "sha256": "a52760d8e1b61153d3edbbff1ed061923b992cd79c5b88fa0dc6c4d1a41f82af"
+      "name": "alawas-governance-govern-scorecards",
+      "path": "adapters/codex/skills/alawas-governance-govern-scorecards/SKILL.md",
+      "sha256": "fd576fad0c4ecf328d015fcc44e6a20af664a064f69dd318f3093236cfd41f51"
     },
     {
-      "name": "alawas-connect-design-to-code/references/CONSEQUENCE-AUTHORITY.md",
-      "path": "adapters/codex/skills/alawas-connect-design-to-code/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
-    },
-    {
-      "name": "alawas-define-interface-architecture",
-      "path": "adapters/codex/skills/alawas-define-interface-architecture/SKILL.md",
-      "sha256": "415e59013894de79c389ec64b218c802c776c908cd63526c082704f3564d93ea"
-    },
-    {
-      "name": "alawas-define-interface-architecture/references/CONSEQUENCE-AUTHORITY.md",
-      "path": "adapters/codex/skills/alawas-define-interface-architecture/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
-    },
-    {
-      "name": "alawas-define-interface-specification",
-      "path": "adapters/codex/skills/alawas-define-interface-specification/SKILL.md",
-      "sha256": "90668686d63edef829dce84a681201061d9fc825a29c0ac7fec31283b91f6c31"
-    },
-    {
-      "name": "alawas-define-interface-specification/references/CONSEQUENCE-AUTHORITY.md",
-      "path": "adapters/codex/skills/alawas-define-interface-specification/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
-    },
-    {
-      "name": "alawas-deploy-with-recovery",
-      "path": "adapters/codex/skills/alawas-deploy-with-recovery/SKILL.md",
-      "sha256": "f24390f1ecbaf16fa2c7e9613aabf9c5de501acb1202515cca48bf1b18319c3f"
-    },
-    {
-      "name": "alawas-deploy-with-recovery/references/CAPABILITY-DEGRADATION.md",
-      "path": "adapters/codex/skills/alawas-deploy-with-recovery/references/CAPABILITY-DEGRADATION.md",
+      "name": "alawas-governance-govern-scorecards/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/codex/skills/alawas-governance-govern-scorecards/references/CAPABILITY-DEGRADATION.md",
       "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
-      "name": "alawas-deploy-with-recovery/references/CONSEQUENCE-AUTHORITY.md",
-      "path": "adapters/codex/skills/alawas-deploy-with-recovery/references/CONSEQUENCE-AUTHORITY.md",
+      "name": "alawas-governance-govern-scorecards/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/codex/skills/alawas-governance-govern-scorecards/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     },
     {
-      "name": "alawas-design-tracer-bullet",
-      "path": "adapters/codex/skills/alawas-design-tracer-bullet/SKILL.md",
-      "sha256": "0badb961b35ff5c2d2ff4fa19ee10ae5168cbe6afd3097d4f9d183399749f814"
-    },
-    {
-      "name": "alawas-design-tracer-bullet/references/CAPABILITY-DEGRADATION.md",
-      "path": "adapters/codex/skills/alawas-design-tracer-bullet/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
-    },
-    {
-      "name": "alawas-design-tracer-bullet/references/CONSEQUENCE-AUTHORITY.md",
-      "path": "adapters/codex/skills/alawas-design-tracer-bullet/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
-    },
-    {
-      "name": "alawas-design-tracer-bullet/references/EVIDENCE-MODEL.md",
-      "path": "adapters/codex/skills/alawas-design-tracer-bullet/references/EVIDENCE-MODEL.md",
+      "name": "alawas-governance-govern-scorecards/references/EVIDENCE-MODEL.md",
+      "path": "adapters/codex/skills/alawas-governance-govern-scorecards/references/EVIDENCE-MODEL.md",
       "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
     },
     {
-      "name": "alawas-develop-idea",
-      "path": "adapters/codex/skills/alawas-develop-idea/SKILL.md",
-      "sha256": "4cb9df0d67296c4804e134f86003e3dab4cf60c1cb7fded6e7f85d48f9070e91"
+      "name": "alawas-governance-maintain-working-method",
+      "path": "adapters/codex/skills/alawas-governance-maintain-working-method/SKILL.md",
+      "sha256": "996d33a8af8015235be831f79c68513de2c9889b1ce13472b546540bd07daa97"
     },
     {
-      "name": "alawas-develop-idea/references/CAPABILITY-DEGRADATION.md",
-      "path": "adapters/codex/skills/alawas-develop-idea/references/CAPABILITY-DEGRADATION.md",
+      "name": "alawas-governance-maintain-working-method/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/codex/skills/alawas-governance-maintain-working-method/references/CAPABILITY-DEGRADATION.md",
       "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
-      "name": "alawas-develop-idea/references/CONSEQUENCE-AUTHORITY.md",
-      "path": "adapters/codex/skills/alawas-develop-idea/references/CONSEQUENCE-AUTHORITY.md",
+      "name": "alawas-governance-maintain-working-method/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/codex/skills/alawas-governance-maintain-working-method/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     },
     {
-      "name": "alawas-develop-idea/references/SHARED-PROTOCOL.md",
-      "path": "adapters/codex/skills/alawas-develop-idea/references/SHARED-PROTOCOL.md",
+      "name": "alawas-governance-maintain-working-method/references/EVIDENCE-MODEL.md",
+      "path": "adapters/codex/skills/alawas-governance-maintain-working-method/references/EVIDENCE-MODEL.md",
+      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
+    },
+    {
+      "name": "alawas-governance-review-outcome-and-adapt",
+      "path": "adapters/codex/skills/alawas-governance-review-outcome-and-adapt/SKILL.md",
+      "sha256": "d70d7b223cb6cada71fa340827b9672699f2c8f12ab1f69d12bc7aee88f9ca2d"
+    },
+    {
+      "name": "alawas-governance-review-outcome-and-adapt/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/codex/skills/alawas-governance-review-outcome-and-adapt/references/CAPABILITY-DEGRADATION.md",
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
+    },
+    {
+      "name": "alawas-governance-review-outcome-and-adapt/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/codex/skills/alawas-governance-review-outcome-and-adapt/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
+    },
+    {
+      "name": "alawas-governance-review-outcome-and-adapt/references/EVIDENCE-MODEL.md",
+      "path": "adapters/codex/skills/alawas-governance-review-outcome-and-adapt/references/EVIDENCE-MODEL.md",
+      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
+    },
+    {
+      "name": "alawas-operations-deploy-with-recovery",
+      "path": "adapters/codex/skills/alawas-operations-deploy-with-recovery/SKILL.md",
+      "sha256": "4927571d069a04e5174c1addbebf24f9840a1ea5f56c2bc133c621ef013f8f2f"
+    },
+    {
+      "name": "alawas-operations-deploy-with-recovery/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/codex/skills/alawas-operations-deploy-with-recovery/references/CAPABILITY-DEGRADATION.md",
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
+    },
+    {
+      "name": "alawas-operations-deploy-with-recovery/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/codex/skills/alawas-operations-deploy-with-recovery/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
+    },
+    {
+      "name": "alawas-operations-diagnose-production-incident",
+      "path": "adapters/codex/skills/alawas-operations-diagnose-production-incident/SKILL.md",
+      "sha256": "a6647ef8c1db4e2fbc8ef0416f0e42ed103d8c31a2e6f6076bb0e35b3b8bc576"
+    },
+    {
+      "name": "alawas-operations-diagnose-production-incident/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/codex/skills/alawas-operations-diagnose-production-incident/references/CAPABILITY-DEGRADATION.md",
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
+    },
+    {
+      "name": "alawas-operations-diagnose-production-incident/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/codex/skills/alawas-operations-diagnose-production-incident/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
+    },
+    {
+      "name": "alawas-operations-diagnose-production-incident/references/EVIDENCE-MODEL.md",
+      "path": "adapters/codex/skills/alawas-operations-diagnose-production-incident/references/EVIDENCE-MODEL.md",
+      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
+    },
+    {
+      "name": "alawas-research-investigate-live-question",
+      "path": "adapters/codex/skills/alawas-research-investigate-live-question/SKILL.md",
+      "sha256": "4259553e284c4961fd5dc934890fb4b0d5262ca550a7a3fe12a7592319deff87"
+    },
+    {
+      "name": "alawas-research-investigate-live-question/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/codex/skills/alawas-research-investigate-live-question/references/CAPABILITY-DEGRADATION.md",
+      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
+    },
+    {
+      "name": "alawas-research-investigate-live-question/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/codex/skills/alawas-research-investigate-live-question/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
+    },
+    {
+      "name": "alawas-research-investigate-live-question/references/EVIDENCE-MODEL.md",
+      "path": "adapters/codex/skills/alawas-research-investigate-live-question/references/EVIDENCE-MODEL.md",
+      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
+    },
+    {
+      "name": "alawas-research-investigate-live-question/references/SHARED-PROTOCOL.md",
+      "path": "adapters/codex/skills/alawas-research-investigate-live-question/references/SHARED-PROTOCOL.md",
       "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
     },
     {
-      "name": "alawas-diagnose-production-incident",
-      "path": "adapters/codex/skills/alawas-diagnose-production-incident/SKILL.md",
-      "sha256": "a328b4d09dad3afa351c5c604db7e4f7fa8ae717c923a1482845e66da82dc033"
+      "name": "alawas-thinking-develop-idea",
+      "path": "adapters/codex/skills/alawas-thinking-develop-idea/SKILL.md",
+      "sha256": "163a103deef64489a84d8289b0675bf90fe69aefecb8f790acfa866e272c218c"
     },
     {
-      "name": "alawas-diagnose-production-incident/references/CAPABILITY-DEGRADATION.md",
-      "path": "adapters/codex/skills/alawas-diagnose-production-incident/references/CAPABILITY-DEGRADATION.md",
+      "name": "alawas-thinking-develop-idea/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/codex/skills/alawas-thinking-develop-idea/references/CAPABILITY-DEGRADATION.md",
       "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
-      "name": "alawas-diagnose-production-incident/references/CONSEQUENCE-AUTHORITY.md",
-      "path": "adapters/codex/skills/alawas-diagnose-production-incident/references/CONSEQUENCE-AUTHORITY.md",
+      "name": "alawas-thinking-develop-idea/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/codex/skills/alawas-thinking-develop-idea/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     },
     {
-      "name": "alawas-diagnose-production-incident/references/EVIDENCE-MODEL.md",
-      "path": "adapters/codex/skills/alawas-diagnose-production-incident/references/EVIDENCE-MODEL.md",
-      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
+      "name": "alawas-thinking-develop-idea/references/SHARED-PROTOCOL.md",
+      "path": "adapters/codex/skills/alawas-thinking-develop-idea/references/SHARED-PROTOCOL.md",
+      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
     },
     {
-      "name": "alawas-govern-scorecards",
-      "path": "adapters/codex/skills/alawas-govern-scorecards/SKILL.md",
-      "sha256": "a881030dd9b2defb1a2e6cfb9e6aa8e838f03eb57605e313dc1369f11f0acbb2"
+      "name": "alawas-thinking-grilling-session",
+      "path": "adapters/codex/skills/alawas-thinking-grilling-session/SKILL.md",
+      "sha256": "fef02e2f107ea7725f6600b02d6dea64d73251013bfa5b38bdc25a9a39c966f9"
     },
     {
-      "name": "alawas-govern-scorecards/references/CAPABILITY-DEGRADATION.md",
-      "path": "adapters/codex/skills/alawas-govern-scorecards/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
-    },
-    {
-      "name": "alawas-govern-scorecards/references/CONSEQUENCE-AUTHORITY.md",
-      "path": "adapters/codex/skills/alawas-govern-scorecards/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
-    },
-    {
-      "name": "alawas-govern-scorecards/references/EVIDENCE-MODEL.md",
-      "path": "adapters/codex/skills/alawas-govern-scorecards/references/EVIDENCE-MODEL.md",
-      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
-    },
-    {
-      "name": "alawas-grilling-session",
-      "path": "adapters/codex/skills/alawas-grilling-session/SKILL.md",
-      "sha256": "28fd166664a364d717724eabb865242bbe158a2835c931e34bc1e39f70d584bc"
-    },
-    {
-      "name": "alawas-grilling-session/references/AGREEMENT-LOOP.md",
-      "path": "adapters/codex/skills/alawas-grilling-session/references/AGREEMENT-LOOP.md",
+      "name": "alawas-thinking-grilling-session/references/AGREEMENT-LOOP.md",
+      "path": "adapters/codex/skills/alawas-thinking-grilling-session/references/AGREEMENT-LOOP.md",
       "sha256": "2a4f19913812656f73939d6b6b8ff29c4dcb08675f4f35b89de946bcf8c88a7d"
     },
     {
-      "name": "alawas-grilling-session/references/SKILL-AWARE-GRILLING.md",
-      "path": "adapters/codex/skills/alawas-grilling-session/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "5c29a70298e85c1f2c1918404d6fc40d81aaaf79e29f00d58dbc57201599560f"
+      "name": "alawas-thinking-grilling-session/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/codex/skills/alawas-thinking-grilling-session/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "10ba7b5f0d389ab7df0a5b14c9c390cf5619a785773f6b91ae5d56830033a655"
     },
     {
-      "name": "alawas-implement-bounded-change",
-      "path": "adapters/codex/skills/alawas-implement-bounded-change/SKILL.md",
-      "sha256": "2b1b3297ea50116fb22f91247cf8435dd4b1d7780bee436b08560dcfb2a0521c"
+      "name": "alawas-thinking-pressure-test-decision",
+      "path": "adapters/codex/skills/alawas-thinking-pressure-test-decision/SKILL.md",
+      "sha256": "d8b28a20356d9d1c34cd85176ea3e17d1ca1784ee96e833e9ee12d624f583727"
     },
     {
-      "name": "alawas-implement-bounded-change/references/CAPABILITY-DEGRADATION.md",
-      "path": "adapters/codex/skills/alawas-implement-bounded-change/references/CAPABILITY-DEGRADATION.md",
+      "name": "alawas-thinking-pressure-test-decision/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/codex/skills/alawas-thinking-pressure-test-decision/references/CAPABILITY-DEGRADATION.md",
       "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
-      "name": "alawas-implement-bounded-change/references/CONSEQUENCE-AUTHORITY.md",
-      "path": "adapters/codex/skills/alawas-implement-bounded-change/references/CONSEQUENCE-AUTHORITY.md",
+      "name": "alawas-thinking-pressure-test-decision/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/codex/skills/alawas-thinking-pressure-test-decision/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     },
     {
-      "name": "alawas-implement-bounded-change/references/EVIDENCE-MODEL.md",
-      "path": "adapters/codex/skills/alawas-implement-bounded-change/references/EVIDENCE-MODEL.md",
-      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
-    },
-    {
-      "name": "alawas-investigate-live-question",
-      "path": "adapters/codex/skills/alawas-investigate-live-question/SKILL.md",
-      "sha256": "a00b5bf049448b537b2cee355928ce5a7130552b056023f5bcb5670fc34f4128"
-    },
-    {
-      "name": "alawas-investigate-live-question/references/CAPABILITY-DEGRADATION.md",
-      "path": "adapters/codex/skills/alawas-investigate-live-question/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
-    },
-    {
-      "name": "alawas-investigate-live-question/references/CONSEQUENCE-AUTHORITY.md",
-      "path": "adapters/codex/skills/alawas-investigate-live-question/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
-    },
-    {
-      "name": "alawas-investigate-live-question/references/EVIDENCE-MODEL.md",
-      "path": "adapters/codex/skills/alawas-investigate-live-question/references/EVIDENCE-MODEL.md",
-      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
-    },
-    {
-      "name": "alawas-investigate-live-question/references/SHARED-PROTOCOL.md",
-      "path": "adapters/codex/skills/alawas-investigate-live-question/references/SHARED-PROTOCOL.md",
+      "name": "alawas-thinking-pressure-test-decision/references/SHARED-PROTOCOL.md",
+      "path": "adapters/codex/skills/alawas-thinking-pressure-test-decision/references/SHARED-PROTOCOL.md",
       "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
     },
     {
-      "name": "alawas-maintain-working-method",
-      "path": "adapters/codex/skills/alawas-maintain-working-method/SKILL.md",
-      "sha256": "a9e006fcdfd90f62680197386bc1d52e38f2fc95206d4a1a0acca38cf5b69114"
+      "name": "alawas-thinking-turn-signal-into-work",
+      "path": "adapters/codex/skills/alawas-thinking-turn-signal-into-work/SKILL.md",
+      "sha256": "ccec4e9181b18f90e09285403b92d1d7d4c8b73f95e24019c878b1617553ef03"
     },
     {
-      "name": "alawas-maintain-working-method/references/CAPABILITY-DEGRADATION.md",
-      "path": "adapters/codex/skills/alawas-maintain-working-method/references/CAPABILITY-DEGRADATION.md",
+      "name": "alawas-thinking-turn-signal-into-work/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/codex/skills/alawas-thinking-turn-signal-into-work/references/CAPABILITY-DEGRADATION.md",
       "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
     },
     {
-      "name": "alawas-maintain-working-method/references/CONSEQUENCE-AUTHORITY.md",
-      "path": "adapters/codex/skills/alawas-maintain-working-method/references/CONSEQUENCE-AUTHORITY.md",
+      "name": "alawas-thinking-turn-signal-into-work/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/codex/skills/alawas-thinking-turn-signal-into-work/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     },
     {
-      "name": "alawas-maintain-working-method/references/EVIDENCE-MODEL.md",
-      "path": "adapters/codex/skills/alawas-maintain-working-method/references/EVIDENCE-MODEL.md",
+      "name": "alawas-thinking-turn-signal-into-work/references/EVIDENCE-MODEL.md",
+      "path": "adapters/codex/skills/alawas-thinking-turn-signal-into-work/references/EVIDENCE-MODEL.md",
       "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
-    },
-    {
-      "name": "alawas-model-user-flow",
-      "path": "adapters/codex/skills/alawas-model-user-flow/SKILL.md",
-      "sha256": "2680d12df4d9ff239d153a7efc38aee48228267413d7a0f61186588d208d36e5"
-    },
-    {
-      "name": "alawas-model-user-flow/references/CONSEQUENCE-AUTHORITY.md",
-      "path": "adapters/codex/skills/alawas-model-user-flow/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
-    },
-    {
-      "name": "alawas-pressure-test-decision",
-      "path": "adapters/codex/skills/alawas-pressure-test-decision/SKILL.md",
-      "sha256": "23ea4c69747b7d1d48c9735d1dcbe6766e3e1d6ba4af591821898bbb19b19ba0"
-    },
-    {
-      "name": "alawas-pressure-test-decision/references/CAPABILITY-DEGRADATION.md",
-      "path": "adapters/codex/skills/alawas-pressure-test-decision/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
-    },
-    {
-      "name": "alawas-pressure-test-decision/references/CONSEQUENCE-AUTHORITY.md",
-      "path": "adapters/codex/skills/alawas-pressure-test-decision/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
-    },
-    {
-      "name": "alawas-pressure-test-decision/references/SHARED-PROTOCOL.md",
-      "path": "adapters/codex/skills/alawas-pressure-test-decision/references/SHARED-PROTOCOL.md",
-      "sha256": "3fe75e8bbc5d51af2b120e780c9e35a94c15477e95a7b04d45c4c491c293cfc9"
-    },
-    {
-      "name": "alawas-render-to-figma",
-      "path": "adapters/codex/skills/alawas-render-to-figma/SKILL.md",
-      "sha256": "b0e5ddbfa3a8855078ec8dfc2bde183e2b4c3e9057aac841b2b31dbfc96a16f9"
-    },
-    {
-      "name": "alawas-render-to-figma/references/CONSEQUENCE-AUTHORITY.md",
-      "path": "adapters/codex/skills/alawas-render-to-figma/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
-    },
-    {
-      "name": "alawas-review-outcome-and-adapt",
-      "path": "adapters/codex/skills/alawas-review-outcome-and-adapt/SKILL.md",
-      "sha256": "eb23b57cf3aba2d73d6d99d7c85f9fa3895abc3d77ddf58561f7fbeba53426bb"
-    },
-    {
-      "name": "alawas-review-outcome-and-adapt/references/CAPABILITY-DEGRADATION.md",
-      "path": "adapters/codex/skills/alawas-review-outcome-and-adapt/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
-    },
-    {
-      "name": "alawas-review-outcome-and-adapt/references/CONSEQUENCE-AUTHORITY.md",
-      "path": "adapters/codex/skills/alawas-review-outcome-and-adapt/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
-    },
-    {
-      "name": "alawas-review-outcome-and-adapt/references/EVIDENCE-MODEL.md",
-      "path": "adapters/codex/skills/alawas-review-outcome-and-adapt/references/EVIDENCE-MODEL.md",
-      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
-    },
-    {
-      "name": "alawas-track-components",
-      "path": "adapters/codex/skills/alawas-track-components/SKILL.md",
-      "sha256": "a3183000692890b0aba2b0be103bfd74b2bd7475a57f2e0537c41bdb76ebd430"
-    },
-    {
-      "name": "alawas-track-components/references/MISSING-ARTIFACT-GAP.md",
-      "path": "adapters/codex/skills/alawas-track-components/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
-    },
-    {
-      "name": "alawas-track-components/references/CONSEQUENCE-AUTHORITY.md",
-      "path": "adapters/codex/skills/alawas-track-components/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
-    },
-    {
-      "name": "alawas-turn-signal-into-work",
-      "path": "adapters/codex/skills/alawas-turn-signal-into-work/SKILL.md",
-      "sha256": "51fd9dc4895d9546a34647114f9f68e4bb8e934fdf73c5a5a0c7eeaff4877fa1"
-    },
-    {
-      "name": "alawas-turn-signal-into-work/references/CAPABILITY-DEGRADATION.md",
-      "path": "adapters/codex/skills/alawas-turn-signal-into-work/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
-    },
-    {
-      "name": "alawas-turn-signal-into-work/references/CONSEQUENCE-AUTHORITY.md",
-      "path": "adapters/codex/skills/alawas-turn-signal-into-work/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
-    },
-    {
-      "name": "alawas-turn-signal-into-work/references/EVIDENCE-MODEL.md",
-      "path": "adapters/codex/skills/alawas-turn-signal-into-work/references/EVIDENCE-MODEL.md",
-      "sha256": "beb6b1ebd489719214bdcfa27a20ae42f5566c725a09a5022d163312895e857a"
-    },
-    {
-      "name": "alawas-verify-design-implementation",
-      "path": "adapters/codex/skills/alawas-verify-design-implementation/SKILL.md",
-      "sha256": "1ca04be8afd9ea3ae8aef3063fcd9ecd1fb70865f11102d327cb3edde69bf033"
-    },
-    {
-      "name": "alawas-verify-design-implementation/references/CONSEQUENCE-AUTHORITY.md",
-      "path": "adapters/codex/skills/alawas-verify-design-implementation/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
-    },
-    {
-      "name": "alawas-verify-release-evidence",
-      "path": "adapters/codex/skills/alawas-verify-release-evidence/SKILL.md",
-      "sha256": "a95fece4bbecd6b809d200868fb146c22fca0941095cff8eb13afc71f8a7d5aa"
-    },
-    {
-      "name": "alawas-verify-release-evidence/references/CAPABILITY-DEGRADATION.md",
-      "path": "adapters/codex/skills/alawas-verify-release-evidence/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
-    },
-    {
-      "name": "alawas-verify-release-evidence/references/CONSEQUENCE-AUTHORITY.md",
-      "path": "adapters/codex/skills/alawas-verify-release-evidence/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "c1d2902857b5ac501163de4e766a47033d420303571e7d94ee93df8019fde367"
     }
   ]
 }

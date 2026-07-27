@@ -51,6 +51,9 @@ def namespaced_core_body(skill):
     body = (CORE_DIR / skill / "SKILL.md").read_text().split("---", 2)[2].lstrip("\n").rstrip("\n")
     for name in sorted(SKILLS, key=len, reverse=True):
         body = body.replace(f"`{name}`", f"`{adapter_skill_name(name)}`")
+        _, separator, legacy_name = name.partition("-")
+        if separator:
+            body = body.replace(f"`{legacy_name}`", f"`{adapter_skill_name(name)}`")
     return body
 
 
@@ -322,6 +325,8 @@ def verify_structure():
             core_body_text = core_text.split("---", 2)[2]
             cited = {Path(f).name for f in SHARED_REFERENCES
                      if Path(f).name in core_body_text}
+            if skill != "thinking-grilling-session":
+                cited -= {"AGREEMENT-LOOP.md", "SKILL-AWARE-GRILLING.md"}
             refs_dir = ADAPTERS_DIR / platform / "skills" / adapter_skill_name(skill) / "references"
             shipped = ({p.name for p in refs_dir.iterdir() if p.is_file()}
                        if refs_dir.is_dir() else set())

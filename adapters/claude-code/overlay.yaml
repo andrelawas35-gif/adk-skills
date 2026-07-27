@@ -77,6 +77,18 @@ declared_limitations:
     classification: manual-fallback
     description: "Claude Code browser automation differs from Codex. Complex page interactions may require manual steps."
 
+# Model tier resolution — abstract tiers → provider-specific models
+model_tiers:
+  high: "claude-sonnet-4-20250514"
+  medium: "claude-sonnet-4-20250514"
+  low: "claude-haiku-3-5-20241022"
+
+# Prompt budget warnings per tier (advisory, not blocking)
+prompt_budgets:
+  high: 80000
+  medium: 40000
+  low: 15000
+
 # Frontmatter overrides — merged into the core frontmatter
 frontmatter:
   add:

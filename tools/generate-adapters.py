@@ -48,7 +48,7 @@ SHARED_REFERENCES = [
 # grilling overlay. They ship only with the grilling-session skill; all other
 # skills get kernel-only output (Decision 3, WO 2026-07-26-004).
 GRILLING_OVERLAY_REFS = {"AGREEMENT-LOOP.md", "SKILL-AWARE-GRILLING.md"}
-GRILLING_CORE_NAME = "grilling-session"
+GRILLING_CORE_NAME = "thinking-grilling-session"
 SHARED_PROTOCOL_FILE = ROOT / "references" / "SHARED-PROTOCOL.md"
 
 
@@ -227,14 +227,40 @@ def extract_canonical_description(core_skill_dir):
         f"No description found in {core_skill_dir}/SKILL.md frontmatter")
 
 
+def extract_default_tier(core_skill_dir):
+    """Extract the default_tier field from a canonical SKILL.md frontmatter.
+
+    Returns 'medium' as the default if no tier is declared.
+    """
+    text = (core_skill_dir / "SKILL.md").read_text()
+    parts = text.split("---", 2)
+    if len(parts) < 3:
+        raise ValueError(f"No frontmatter found in {core_skill_dir}/SKILL.md")
+    fm_text = parts[1]
+
+    for line in fm_text.split("\n"):
+        stripped = line.strip()
+        if stripped.startswith("default_tier:"):
+            val = stripped[len("default_tier:"):].strip()
+            if val in ("high", "medium", "low"):
+                return val
+            raise ValueError(
+                f"Invalid default_tier '{val}' in {core_skill_dir}/SKILL.md")
+
+    return "medium"
+
+
 def generate_frontmatter(core_skill_dir, overlay):
     """Generate platform-specific YAML frontmatter.
 
-    Extracts the description from the canonical SKILL.md frontmatter — the
-    single source of truth (Decision 87, Session 11).
+    Extracts the description and default_tier from the canonical SKILL.md
+    frontmatter — the single source of truth (Decision 87, Session 11).
+    Includes the abstract tier declaration so platform loaders can resolve
+    it to provider-specific models via the overlay's model_tiers mapping.
     """
     description = extract_canonical_description(core_skill_dir)
     short_desc = " ".join(description.split())
+    default_tier = extract_default_tier(core_skill_dir)
 
     fm_add = overlay.get("frontmatter", {}).get("add", {})
     skill_name = core_skill_dir.name
@@ -245,6 +271,7 @@ def generate_frontmatter(core_skill_dir, overlay):
     # on one line avoids indentation-sensitive folded-block failures in skill
     # loaders while preserving quotes and Unicode deterministically.
     lines.append(f"description: {json.dumps(short_desc, ensure_ascii=False)}")
+    lines.append(f"default_tier: {default_tier}")
     for k, v in sorted(fm_add.items()):
         lines.append(f"{k}: {v}")
     lines.append("---")
@@ -277,7 +304,7 @@ def required_capabilities(core_skill_dir):
     return declared
 
 
-def generate_adapter_section(overlay, required):
+def generate_adapter_section(overlay, required, default_tier="medium"):
     """Generate only invocation-relevant platform wiring for one skill."""
 
     lines = []
@@ -287,6 +314,25 @@ def generate_adapter_section(overlay, required):
     lines.append("## Platform Adapter")
     lines.append("")
     lines.append("Invocation-relevant wiring only; installation and maintainer guidance live outside this file.")
+
+    # Model tier resolution
+    model_tiers = overlay.get("model_tiers", {})
+    prompt_budgets = overlay.get("prompt_budgets", {})
+    if model_tiers:
+        resolved_model = model_tiers.get(default_tier, model_tiers.get("medium", "—"))
+        lines.append("")
+        lines.append("### Model tier")
+        lines.append("")
+        lines.append(f"This skill declares `default_tier: {default_tier}`.")
+        lines.append(f"The platform overlay resolves this to `{resolved_model}`.")
+        if prompt_budgets:
+            budget = prompt_budgets.get(default_tier, "—")
+            lines.append(f"The prompt budget for this tier is approximately {budget} tokens (advisory).")
+        lines.append("")
+        lines.append("**Consequence-based escalation:** When a Work Object has `consequence: meaningful`,")
+        lines.append("the effective tier is upgraded to at least `medium`. When `consequence: high`,")
+        lines.append("the effective tier is upgraded to the strongest available model.")
+        lines.append("`actual_tier = max(skill.default_tier, consequence_escalation(wo.consequence))`.")
     lines.append("")
 
     if overlay["platform"] == "codex":
@@ -474,8 +520,13 @@ def namespace_skill_references(body):
     """Rewrite only backticked Work Studio skill references for adapters."""
     for skill_dir in sorted(CORE_DIR.iterdir(), key=lambda item: len(item.name), reverse=True):
         if skill_dir.is_dir():
-            body = body.replace(
-                f"`{skill_dir.name}`", f"`{adapter_skill_name(skill_dir.name)}`")
+            public_name = adapter_skill_name(skill_dir.name)
+            aliases = {skill_dir.name}
+            category, separator, legacy_name = skill_dir.name.partition("-")
+            if separator:
+                aliases.add(legacy_name)
+            for alias in sorted(aliases, key=len, reverse=True):
+                body = body.replace(f"`{alias}`", f"`{public_name}`")
     return body
 
 
@@ -487,8 +538,9 @@ def build_skill_output(core_skill_dir, overlay):
     """
     body = namespace_skill_references(extract_body(core_skill_dir / "SKILL.md"))
     frontmatter = generate_frontmatter(core_skill_dir, overlay)
+    default_tier = extract_default_tier(core_skill_dir)
     adapter_section = generate_adapter_section(
-        overlay, required_capabilities(core_skill_dir))
+        overlay, required_capabilities(core_skill_dir), default_tier)
     output = frontmatter + body.rstrip("\n") + adapter_section
     # Ensure exactly one trailing newline
     return output.rstrip("\n") + "\n"
@@ -505,6 +557,15 @@ def generate_skill(core_skill_dir, overlay, output_dir):
         return None
 
     output = build_skill_output(core_skill_dir, overlay)
+
+    # Prompt budget warning per tier (advisory, not blocking — DEC-5)
+    default_tier = extract_default_tier(core_skill_dir)
+    prompt_budgets = overlay.get("prompt_budgets", {})
+    if prompt_budgets:
+        budget = prompt_budgets.get(default_tier)
+        if budget is not None and len(output) > budget:
+            print(f"  WARNING: {output_skill_name} ({default_tier}) "
+                  f"output size {len(output)} exceeds budget {budget}")
 
     output_dir.mkdir(parents=True, exist_ok=True)
     output_file = output_dir / "SKILL.md"
