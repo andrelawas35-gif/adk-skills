@@ -86,10 +86,6 @@ authority History entry per the authority recording contract in
 
 ## Grilling entry and stage lens
 
-Follow `references/AGREEMENT-LOOP.md` in full; this skill contributes only its stage-specific lens below.
-
-Outside an explicit grilling request, nominate a Grilling Candidate only under the Agreement Loop's three-part threshold. Show its Candidate Card and wait for explicit entry; do not silently start a continuous session.
-
 When a review outcome needs a direction, state the recorded hypothesis,
 available evidence, inference, unresolved uncertainty, and consequence.
 Recommend the smallest direction justified by those facts before asking one

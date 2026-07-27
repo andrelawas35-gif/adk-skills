@@ -7,7 +7,7 @@
     {
       "name": "alawas-design-apply-design-direction",
       "path": "adapters/github-copilot/skills/alawas-design-apply-design-direction/SKILL.md",
-      "sha256": "4d032271eb6c412862e6352cd02eab5e4bf1196d196e65f84c07a49739610a29"
+      "sha256": "71e2c586fe34ea277821a4c7b2e7afe30042222f5cfed320e3d8421d764d5d1c"
     },
     {
       "name": "alawas-design-apply-design-direction/references/CONSEQUENCE-AUTHORITY.md",
@@ -22,7 +22,7 @@
     {
       "name": "alawas-design-audit-product-interface",
       "path": "adapters/github-copilot/skills/alawas-design-audit-product-interface/SKILL.md",
-      "sha256": "8a47c7a9c87342c0cc1434c385763f2a877d523c2e97986d43ff3ed6beae4169"
+      "sha256": "07da7e30311ab0eb2d0ec02c03d3855320095560d4f22ff4d9b77e598f23cdba"
     },
     {
       "name": "alawas-design-audit-product-interface/references/CONSEQUENCE-AUTHORITY.md",
@@ -37,7 +37,7 @@
     {
       "name": "alawas-design-build-design-foundation",
       "path": "adapters/github-copilot/skills/alawas-design-build-design-foundation/SKILL.md",
-      "sha256": "c1173a0ba72aeab3687eddc359db69e6e657516137e78630a1196faf531b7a40"
+      "sha256": "3129ea7a90c5c8131116722ea3e0cc2408e210252e757ce2a77c9908382ce239"
     },
     {
       "name": "alawas-design-build-design-foundation/references/CONSEQUENCE-AUTHORITY.md",
@@ -97,7 +97,7 @@
     {
       "name": "alawas-design-verify-design-implementation",
       "path": "adapters/github-copilot/skills/alawas-design-verify-design-implementation/SKILL.md",
-      "sha256": "139e3ad814a11de12c06a5e00512f2242d521939f6b3bbeffb3517ea1f3b3173"
+      "sha256": "3fc216b85a7a7b7c61986ca5fad63c0d47ac5d9be995004f69342d8b6118fb4f"
     },
     {
       "name": "alawas-design-verify-design-implementation/references/CONSEQUENCE-AUTHORITY.md",
@@ -212,7 +212,7 @@
     {
       "name": "alawas-governance-maintain-working-method",
       "path": "adapters/github-copilot/skills/alawas-governance-maintain-working-method/SKILL.md",
-      "sha256": "747427e42c726daaf65f070777f2b368422e6752a2de35fbf5017c7ea2ccdcf2"
+      "sha256": "191e749fbd965481465f7675d76b35fe44788be0984d17ced7a88214df262048"
     },
     {
       "name": "alawas-governance-maintain-working-method/references/CAPABILITY-DEGRADATION.md",
@@ -337,7 +337,7 @@
     {
       "name": "alawas-thinking-develop-idea",
       "path": "adapters/github-copilot/skills/alawas-thinking-develop-idea/SKILL.md",
-      "sha256": "e3a6d38d22159ed343ef0d355931b93df0cf0da4122ee5eb1397d0a93121c3cf"
+      "sha256": "537bd3c60d364829cc2ddcc9eebafd0f24a17ccb4b30a6438dff5581cb6ec228"
     },
     {
       "name": "alawas-thinking-develop-idea/references/CAPABILITY-DEGRADATION.md",

@@ -65,8 +65,6 @@ or unsupported and follows `references/CAPABILITY-DEGRADATION.md` when needed.
 
 ## Consequence and authority rules
 
-Apply `references/CONSEQUENCE-AUTHORITY.md`.
-
 **Authority gate:** Promotion of a Workflow Candidate to a Working Method
 requires explicit human confirmation at ALL consequence levels. Referencing
 an Evidence Bridge requires explicit human confirmation. Before proceeding:

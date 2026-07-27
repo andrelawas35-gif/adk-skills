@@ -65,13 +65,6 @@ run at least once. The user has provided design direction.
 
 ## Grilling entry and stage lens
 
-Follow `references/AGREEMENT-LOOP.md` in full; this skill contributes only
-its stage-specific lens below.
-
-Outside an explicit grilling request, nominate a Grilling Candidate only
-under the Agreement Loop's three-part threshold. Show its Candidate Card
-and wait for explicit entry; do not silently start a continuous session.
-
 The direction lens asks:
 
 1. Is the direction specific enough to produce observable changes?

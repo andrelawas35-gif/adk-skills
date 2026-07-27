@@ -87,10 +87,6 @@ per the authority recording contract in `references/CONSEQUENCE-AUTHORITY.md`.
 
 ## Grilling entry and stage lens
 
-Follow `references/AGREEMENT-LOOP.md` in full; this skill contributes only its stage-specific lens below.
-
-Outside an explicit grilling request, nominate a Grilling Candidate only under the Agreement Loop's three-part threshold. Show its Candidate Card and wait for explicit entry; do not silently start a continuous session.
-
 An explicit grilling request runs the full verification profile. Otherwise,
 nominate a Candidate Card when the recorded evidence plan is insufficient and
 the smallest useful check would cross a material authority or boundary change.

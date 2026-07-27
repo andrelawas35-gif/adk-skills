@@ -66,6 +66,8 @@ EPISTEMIC_VARIANTS = {
 SHARED_PREAMBLE_SECTIONS = {
     "## Consequence and authority rules":
         ROOT / "references" / "shared" / "consequence-authority-preamble.md",
+    "## Grilling entry and stage lens":
+        ROOT / "references" / "shared" / "grilling-entry-preamble.md",
 }
 
 TIER_ORDER = {"high": 3, "medium": 2, "low": 1}
@@ -597,7 +599,11 @@ def namespace_skill_references(body):
 
 # Core skills whose Consequence section is intentionally different and
 # should NOT receive the shared preamble injection (WO 2026-07-27-009).
-SHARED_PREAMBLE_SKIP_SKILLS = {"thinking-grilling-session"}
+SHARED_PREAMBLE_SKIP_SKILLS = {
+    "thinking-grilling-session",
+    "design-track-components",
+    "governance-maintain-working-method",
+}
 
 
 def inject_shared_preamble(body, skill_name=None):

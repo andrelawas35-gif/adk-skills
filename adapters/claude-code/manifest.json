@@ -7,7 +7,7 @@
     {
       "name": "alawas-design-apply-design-direction",
       "path": "adapters/claude-code/skills/alawas-design-apply-design-direction/SKILL.md",
-      "sha256": "954cf9ed37c49183b1e6d9d5a29bcd158c18b27ace0688ca6f66da7e3dee4047"
+      "sha256": "4102baf568551e6e82700b6fe269e96f68d802333ea4f92fd228e6a174e98d42"
     },
     {
       "name": "alawas-design-apply-design-direction/references/CONSEQUENCE-AUTHORITY.md",
@@ -22,7 +22,7 @@
     {
       "name": "alawas-design-audit-product-interface",
       "path": "adapters/claude-code/skills/alawas-design-audit-product-interface/SKILL.md",
-      "sha256": "706e1c091f6e487660ecfbabbb8bfd14ce927112dcc5002d33c7f86292446a05"
+      "sha256": "366379c4c5e7d45606bd805c1d4c1baf108de5df99c600c34ba773ae96710a2c"
     },
     {
       "name": "alawas-design-audit-product-interface/references/CONSEQUENCE-AUTHORITY.md",
@@ -37,7 +37,7 @@
     {
       "name": "alawas-design-build-design-foundation",
       "path": "adapters/claude-code/skills/alawas-design-build-design-foundation/SKILL.md",
-      "sha256": "0c05ccfb526997539ad4fdc813c52db8c71239a0670fb15c51a007b282db65d0"
+      "sha256": "e3a3e146815e9c2642e0ffa7f77e583e58290754f3dfebb4746dc125ddd8f669"
     },
     {
       "name": "alawas-design-build-design-foundation/references/CONSEQUENCE-AUTHORITY.md",
@@ -97,7 +97,7 @@
     {
       "name": "alawas-design-verify-design-implementation",
       "path": "adapters/claude-code/skills/alawas-design-verify-design-implementation/SKILL.md",
-      "sha256": "9e5de2bd09a556850d08986303b0991e13a438fd5f071a4e7e82c776653b4df0"
+      "sha256": "27ac8f5f12510c07416504674a3f4397e3dd526b87eba2e440d8d0fa970f3d52"
     },
     {
       "name": "alawas-design-verify-design-implementation/references/CONSEQUENCE-AUTHORITY.md",
@@ -212,7 +212,7 @@
     {
       "name": "alawas-governance-maintain-working-method",
       "path": "adapters/claude-code/skills/alawas-governance-maintain-working-method/SKILL.md",
-      "sha256": "cac1e429fab0a3630fcc32bd8720bed7f38b985cfcaa9223e3d5456d7dd4f086"
+      "sha256": "e969548024957d333598de99c3bf4d905f0706d995cab3ca40d428d1e8f0fa75"
     },
     {
       "name": "alawas-governance-maintain-working-method/references/CAPABILITY-DEGRADATION.md",
@@ -337,7 +337,7 @@
     {
       "name": "alawas-thinking-develop-idea",
       "path": "adapters/claude-code/skills/alawas-thinking-develop-idea/SKILL.md",
-      "sha256": "a5315bc6e1ed3bf3bb1178e824782c5356e7359073901f99dc2cc37bfb2758c1"
+      "sha256": "2e223eb971dccd5f238870246eaa600b4bbf4d4dc25d35dcfbb47ab883c14f58"
     },
     {
       "name": "alawas-thinking-develop-idea/references/CAPABILITY-DEGRADATION.md",

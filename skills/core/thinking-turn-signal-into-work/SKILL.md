@@ -85,9 +85,6 @@ when it did not.
 
 ## Grilling entry and stage lens
 
-Follow `references/AGREEMENT-LOOP.md` in full; this skill contributes only its stage-specific lens below.
-
-Outside an explicit grilling request, nominate a Grilling Candidate only under the Agreement Loop's three-part threshold. Show its Candidate Card and wait for explicit entry; do not silently start a continuous session.
 
 An explicit grilling request runs the full signal profile. Otherwise,
 classification is not a decision loop when the signal and next handling are
