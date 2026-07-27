@@ -39,7 +39,9 @@ from .sections import (
 )
 from .template import generate_body_template
 from .validate import DEFAULT_CHECKS, CHECK_REGISTRY, run_checks
+from .baseline import cmd_baseline_capture, cmd_baseline_check
 from .claim import cmd_claim_inspect, cmd_claim_register
+from .conflict import cmd_conflict_register
 from .epistemic import cmd_epistemic_lint
 from .epistemic_controls import audit_epistemic_state
 
@@ -956,6 +958,58 @@ def build_parser() -> argparse.ArgumentParser:
              "references/epistemic/lint-allowlist.yaml",
     )
 
+    # ── ws baseline ───────────────────────────────────────────────────────
+    baseline_parser = subparsers.add_parser(
+        "baseline", help="Baseline identity capture and check"
+    )
+    baseline_sub = baseline_parser.add_subparsers(dest="baseline_command")
+
+    baseline_capture_parser = baseline_sub.add_parser(
+        "capture",
+        help="Capture SHA256 fingerprint of git status --porcelain",
+    )
+
+    baseline_check_parser = baseline_sub.add_parser(
+        "check",
+        help="Check current state against stored baseline",
+    )
+
+    # ── ws conflict ──────────────────────────────────────────────────────
+    conflict_parser = subparsers.add_parser(
+        "conflict", help="Conflict register for Work Objects"
+    )
+    conflict_sub = conflict_parser.add_subparsers(dest="conflict_command")
+
+    conflict_register_parser = conflict_sub.add_parser(
+        "register",
+        help="Register a conflict in a Work Object's ## Claims section",
+    )
+    conflict_register_parser.add_argument("id", help="Work Object ID")
+    conflict_register_parser.add_argument(
+        "--claim-id", required=True,
+        help="Claim ID this conflict relates to",
+    )
+    conflict_register_parser.add_argument(
+        "--commit-sha", required=True, action="append",
+        help="Git commit SHA for a version (repeatable)",
+    )
+    conflict_register_parser.add_argument(
+        "--file-path", required=True, action="append",
+        help="File path for a version (repeatable, paired with --commit-sha)",
+    )
+    conflict_register_parser.add_argument(
+        "--dirty-hash", required=True, action="append",
+        help="Dirty-tree fingerprint for a version (repeatable, paired with --commit-sha)",
+    )
+    conflict_register_parser.add_argument(
+        "--expect-updated", required=True,
+        help="Expected updated_at timestamp",
+    )
+    conflict_register_parser.add_argument(
+        "--force", action="store_true",
+        help="Bypass optimistic concurrency check",
+    )
+
     # ── ws validate ───────────────────────────────────────────────────────
     validate_parser = subparsers.add_parser("validate", help="Run validation checks")
     validate_parser.add_argument(
@@ -1008,6 +1062,22 @@ def main() -> int:
         if args.epistemic_command == "lint":
             return cmd_epistemic_lint(args)
         print("Error: Unknown epistemic command. Use 'ws epistemic lint'.",
+              file=sys.stderr)
+        return 1
+
+    if args.command == "baseline":
+        if args.baseline_command == "capture":
+            return cmd_baseline_capture(args)
+        if args.baseline_command == "check":
+            return cmd_baseline_check(args)
+        print("Error: Unknown baseline command. Use 'ws baseline capture' or 'ws baseline check'.",
+              file=sys.stderr)
+        return 1
+
+    if args.command == "conflict":
+        if args.conflict_command == "register":
+            return cmd_conflict_register(args)
+        print("Error: Unknown conflict command. Use 'ws conflict register'.",
               file=sys.stderr)
         return 1
 
