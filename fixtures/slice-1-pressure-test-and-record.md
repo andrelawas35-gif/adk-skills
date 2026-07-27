@@ -39,7 +39,7 @@ with `type: change`, `state: decide`, and the storage question in Open questions
      dependencies"
    - `[inference]` — e.g., "A database would be faster for queries"
    - `[decision]` — any prior confirmed choices
-   - `[unresolved]` — "database vs. flat files for skill data"
+   - `[gap]` — "database vs. flat files for skill data"
 3. The agent surfaces contradictions if any exist (e.g., "You said X but the
    code shows Y")
 4. The agent looks up discoverable facts (e.g., reads existing config files,

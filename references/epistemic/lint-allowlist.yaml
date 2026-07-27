@@ -1,0 +1,36 @@
+# ws epistemic lint allowlist
+#
+# Patterns and specific tokens that the lint should ignore.
+# This file documents known false positive categories where bracket
+# tokens are used as documentation examples, checklist markers, or
+# non-evidence prose — not as ledger evidence entries.
+
+schema_version: 1
+
+# Exact tag tokens to ignore (glob patterns supported in file paths)
+ignore_tokens:
+  - "[x]"           # Markdown checklist markers
+  - "[tag]"         # Documentation examples showing tag syntax
+  - "[skill]"       # Prose reference to skills (not evidence)
+  - "[condition]"   # Prose in pressure-test-decision outputs
+  - "[alternative]" # Prose in pressure-test-decision outputs
+  - "[scenario]"    # Prose in pressure-test-decision outputs
+  - "[user]"        # Prose in epistemic-rules documentation
+  - "[platform]"    # Prose in epistemic-rules documentation
+  - "[configuration]" # Prose in epistemic-rules documentation
+  - "[capability]"  # Prose in epistemic-rules documentation
+  - "[decided]"     # Prose in epistemic-rules documentation
+  - "[open]"        # Prose in epistemic-rules documentation
+  - "[known]"       # Prose in epistemic-rules documentation
+  - "[contested]"   # Prose in epistemic-rules documentation
+  - "[emerging]"    # Prose in epistemic-rules documentation
+
+# File-glob patterns where all tag findings should be ignored.
+# Use for files that are purely documentation or reference material.
+ignore_files:
+  - "references/epistemic/epistemic-rules-*.md"
+  - "references/epistemic/epistemic-engineering-research-and-applied-architecture.md"
+
+# Comment: [observed] and [recommended] appear in epistemic-rules docs and
+# the engineering research doc as part of tag taxonomy definitions, not as
+# evidence entries. They are covered by the ignore_files patterns above.

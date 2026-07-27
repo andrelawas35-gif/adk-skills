@@ -1,0 +1,50 @@
+# Canonical provenance tag taxonomy
+#
+# Source of truth: references/AGREEMENT-LOOP.md (lines 96–111)
+# This file enumerates the six base provenance tags and all registered
+# base:subtype pairs. ws epistemic lint uses this as its normative source.
+#
+# Bare base tags are always valid. Subtype syntax ([base:subtype]) is
+# valid only for registered pairs enumerated below.
+#
+# schema_version must be bumped on any breaking change to the taxonomy
+# structure (adding/removing required fields, changing semantics).
+
+schema_version: 1
+
+base_tags:
+  - tag: system
+    description: >
+      Current code, configuration, executable results, and records.
+  - tag: decision
+    description: >
+      Explicit user or accountable-owner decisions.
+  - tag: inference
+    description: >
+      Agent reasoning and unverified hypotheses.
+  - tag: gap
+    description: >
+      Facts that could not be accessed or established.
+  - tag: testimony
+    description: >
+      Attributable human observations with context and uncertainty.
+  - tag: memory
+    description: >
+      Relevant, user-approved reusable preferences.
+
+subtypes:
+  - base: system
+    subtype: discovery
+    description: >
+      Discovery from codebase or artifact inspection (e.g., routes,
+      components, design tokens).
+  - base: system
+    subtype: predecessor
+    description: >
+      Link to a predecessor Work Object, ADR, or artifact that the
+      current object continues, supersedes, or extends.
+  - base: system
+    subtype: plan
+    description: >
+      Reference to a documented plan or design artifact (e.g., docs/design/
+      or planning document).
