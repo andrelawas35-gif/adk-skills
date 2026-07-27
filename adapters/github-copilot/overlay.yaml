@@ -31,6 +31,7 @@ capability_mappings:
   subagent_spawn: "runSubagent"
   subagent_isolation: "—"
   background_processes: "—"
+  claude_design: "MCP tool discovery (runtime)"
   deployment: "—"
   secret_access: "—"
   persistent_session_state: "—"
@@ -53,6 +54,7 @@ capabilities:
   structured_output: native
   user_confirmation: native
   browser_automation: manual-fallback
+  claude_design: native
   parallel_tool_execution: manual-fallback
   web_search: manual-fallback
   deployment: manual-fallback
@@ -82,6 +84,9 @@ declared_limitations:
   - capability: parallel_tool_execution
     classification: manual-fallback
     description: "GitHub Copilot may serialize some parallel tool calls. For performance-critical multi-step workflows, verify execution order manually."
+  - capability: claude_design
+    classification: native
+    description: "Claude Design requires pre-invocation authentication via MCP. When unauthenticated, the runtime degrades to manual-fallback with instruction to authenticate before invoking Claude Design."
 
 # Model tier resolution — abstract tiers → provider-specific models
 model_tiers:

@@ -32,6 +32,7 @@ capability_mappings:
   parallel_tool_execution: "—"
   subagent_isolation: "—"
   background_processes: "run_in_terminal (background)"
+  claude_design: "MCP tool discovery (runtime)"
   deployment: "—"
   secret_access: "—"
   persistent_session_state: "—"
@@ -55,6 +56,7 @@ capabilities:
   structured_output: native
   user_confirmation: native
   browser_automation: manual-fallback
+  claude_design: native
   web_search: manual-fallback
   deployment: manual-fallback
   secret_access: manual-fallback
@@ -77,6 +79,9 @@ declared_limitations:
   - capability: web_search
     classification: manual-fallback
     description: "Live web search requires manual lookup. The agent can fetch known URLs but cannot perform open-ended web searches."
+  - capability: claude_design
+    classification: native
+    description: "Claude Design requires pre-invocation authentication via MCP. When unauthenticated, the runtime degrades to manual-fallback with instruction to authenticate before invoking Claude Design."
 
 # Frontmatter overrides — merged into the core frontmatter
 frontmatter:

@@ -71,6 +71,7 @@ The canonical set of capabilities a skill may require:
 | `structured_output` | Produce structured (JSON, YAML) output | All platforms |
 | `user_confirmation` | Receive an explicit, scoped user decision or authorization | All platforms |
 | `browser_automation` | Automate browser interactions | Codex |
+| `claude_design` | Access Claude Design MCP tools for design generation and editing | All platforms |
 | `parallel_tool_execution` | Execute multiple tools simultaneously | Codex, Claude Code |
 | `subagent_isolation` | Strong isolation between sub-agents | Codex |
 | `web_search` | Search the live web | Varies |

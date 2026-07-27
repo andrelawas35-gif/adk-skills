@@ -31,6 +31,7 @@ capability_mappings:
   web_search: "WebSearch"
   subagent_spawn: "Task"
   background_processes: "Bash (background) / Monitor"
+  claude_design: "MCP tool discovery (runtime)"
   deployment: "—"
   secret_access: "—"
   persistent_session_state: "—"
@@ -52,6 +53,7 @@ capabilities:
   structured_output: native
   user_confirmation: native
   browser_automation: manual-fallback
+  claude_design: native
   web_search: manual-fallback
   subagent_isolation: manual-fallback
   parallel_tool_execution: manual-fallback
@@ -76,6 +78,9 @@ declared_limitations:
   - capability: browser_automation
     classification: manual-fallback
     description: "Claude Code browser automation differs from Codex. Complex page interactions may require manual steps."
+  - capability: claude_design
+    classification: native
+    description: "Claude Design requires pre-invocation authentication via MCP. When unauthenticated, the runtime degrades to manual-fallback with instruction to authenticate before invoking Claude Design."
 
 # Model tier resolution — abstract tiers → provider-specific models
 model_tiers:

@@ -7,7 +7,7 @@
     {
       "name": "alawas-design-apply-design-direction",
       "path": "adapters/codex/skills/alawas-design-apply-design-direction/SKILL.md",
-      "sha256": "37fd78038976fc480c4cb844197d7f872acda2234331f2807fa11ac7d2a5470b"
+      "sha256": "475f48a96be70cb6a862a0d013ed72c63c11127444a122f092bc883cb6ad9730"
     },
     {
       "name": "alawas-design-apply-design-direction/references/CONSEQUENCE-AUTHORITY.md",
@@ -57,7 +57,7 @@
     {
       "name": "alawas-design-design-tracer-bullet/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/codex/skills/alawas-design-design-tracer-bullet/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
+      "sha256": "ae7e228cf66bbb1b00ba6b67edc6cfe0fbc2eb26cca2717123923dddba3e3be7"
     },
     {
       "name": "alawas-design-design-tracer-bullet/references/EVIDENCE-MODEL.md",
@@ -97,7 +97,7 @@
     {
       "name": "alawas-design-verify-design-implementation",
       "path": "adapters/codex/skills/alawas-design-verify-design-implementation/SKILL.md",
-      "sha256": "7cb01bbacede3c81ef9b11886415ff10448264564a7bac8fedb8dfd6f3d85846"
+      "sha256": "2b9a96c9151e83c089f6294a2407bae54fd6f6d5a5c8e737a56e0d537c865823"
     },
     {
       "name": "alawas-design-verify-design-implementation/references/CONSEQUENCE-AUTHORITY.md",
@@ -117,7 +117,7 @@
     {
       "name": "alawas-engineering-implement-bounded-change/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/codex/skills/alawas-engineering-implement-bounded-change/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
+      "sha256": "ae7e228cf66bbb1b00ba6b67edc6cfe0fbc2eb26cca2717123923dddba3e3be7"
     },
     {
       "name": "alawas-engineering-implement-bounded-change/references/CONSEQUENCE-AUTHORITY.md",
@@ -142,7 +142,7 @@
     {
       "name": "alawas-engineering-verify-release-evidence/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/codex/skills/alawas-engineering-verify-release-evidence/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
+      "sha256": "ae7e228cf66bbb1b00ba6b67edc6cfe0fbc2eb26cca2717123923dddba3e3be7"
     },
     {
       "name": "alawas-engineering-verify-release-evidence/references/CONSEQUENCE-AUTHORITY.md",
@@ -167,7 +167,7 @@
     {
       "name": "alawas-governance-conduct-work-object/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/codex/skills/alawas-governance-conduct-work-object/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
+      "sha256": "ae7e228cf66bbb1b00ba6b67edc6cfe0fbc2eb26cca2717123923dddba3e3be7"
     },
     {
       "name": "alawas-governance-conduct-work-object/references/CONSEQUENCE-AUTHORITY.md",
@@ -192,7 +192,7 @@
     {
       "name": "alawas-governance-govern-scorecards/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/codex/skills/alawas-governance-govern-scorecards/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
+      "sha256": "ae7e228cf66bbb1b00ba6b67edc6cfe0fbc2eb26cca2717123923dddba3e3be7"
     },
     {
       "name": "alawas-governance-govern-scorecards/references/CONSEQUENCE-AUTHORITY.md",
@@ -217,7 +217,7 @@
     {
       "name": "alawas-governance-maintain-working-method/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/codex/skills/alawas-governance-maintain-working-method/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
+      "sha256": "ae7e228cf66bbb1b00ba6b67edc6cfe0fbc2eb26cca2717123923dddba3e3be7"
     },
     {
       "name": "alawas-governance-maintain-working-method/references/CONSEQUENCE-AUTHORITY.md",
@@ -242,7 +242,7 @@
     {
       "name": "alawas-governance-review-outcome-and-adapt/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/codex/skills/alawas-governance-review-outcome-and-adapt/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
+      "sha256": "ae7e228cf66bbb1b00ba6b67edc6cfe0fbc2eb26cca2717123923dddba3e3be7"
     },
     {
       "name": "alawas-governance-review-outcome-and-adapt/references/CONSEQUENCE-AUTHORITY.md",
@@ -267,7 +267,7 @@
     {
       "name": "alawas-operations-deploy-with-recovery/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/codex/skills/alawas-operations-deploy-with-recovery/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
+      "sha256": "ae7e228cf66bbb1b00ba6b67edc6cfe0fbc2eb26cca2717123923dddba3e3be7"
     },
     {
       "name": "alawas-operations-deploy-with-recovery/references/CONSEQUENCE-AUTHORITY.md",
@@ -287,7 +287,7 @@
     {
       "name": "alawas-operations-diagnose-production-incident/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/codex/skills/alawas-operations-diagnose-production-incident/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
+      "sha256": "ae7e228cf66bbb1b00ba6b67edc6cfe0fbc2eb26cca2717123923dddba3e3be7"
     },
     {
       "name": "alawas-operations-diagnose-production-incident/references/CONSEQUENCE-AUTHORITY.md",
@@ -312,7 +312,7 @@
     {
       "name": "alawas-research-investigate-live-question/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/codex/skills/alawas-research-investigate-live-question/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
+      "sha256": "ae7e228cf66bbb1b00ba6b67edc6cfe0fbc2eb26cca2717123923dddba3e3be7"
     },
     {
       "name": "alawas-research-investigate-live-question/references/EVIDENCE-MODEL.md",
@@ -342,7 +342,7 @@
     {
       "name": "alawas-thinking-develop-idea/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/codex/skills/alawas-thinking-develop-idea/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
+      "sha256": "ae7e228cf66bbb1b00ba6b67edc6cfe0fbc2eb26cca2717123923dddba3e3be7"
     },
     {
       "name": "alawas-thinking-develop-idea/references/SHARED-PROTOCOL.md",
@@ -387,7 +387,7 @@
     {
       "name": "alawas-thinking-pressure-test-decision/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/codex/skills/alawas-thinking-pressure-test-decision/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
+      "sha256": "ae7e228cf66bbb1b00ba6b67edc6cfe0fbc2eb26cca2717123923dddba3e3be7"
     },
     {
       "name": "alawas-thinking-pressure-test-decision/references/SHARED-PROTOCOL.md",
@@ -412,7 +412,7 @@
     {
       "name": "alawas-thinking-turn-signal-into-work/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/codex/skills/alawas-thinking-turn-signal-into-work/references/CAPABILITY-DEGRADATION.md",
-      "sha256": "647cb70fa44250d6d138b5918c1461605cad27ed637eba68349813ef46c04403"
+      "sha256": "ae7e228cf66bbb1b00ba6b67edc6cfe0fbc2eb26cca2717123923dddba3e3be7"
     },
     {
       "name": "alawas-thinking-turn-signal-into-work/references/EVIDENCE-MODEL.md",
