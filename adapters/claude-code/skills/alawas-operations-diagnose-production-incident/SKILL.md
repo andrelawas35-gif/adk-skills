@@ -123,7 +123,9 @@ After recovery is verified or the incident is safely bounded, distinguish confir
 
 ## Work Object updates
 
-This skill returns a concise record to `alawas-governance-conduct-work-object`, which validates and persists it. Include the sanitized intake; authority and runbook reference; containment and restoration actions; affected-path verification; ranked hypothesis ledger and individual test outcomes; external dependency and revisit trigger; remaining risks; and one next action.
+This skill returns a concise record to `conduct-work-object`, which validates and persists it.
+
+Include the sanitized intake; authority and runbook reference; containment and restoration actions; affected-path verification; ranked hypothesis ledger and individual test outcomes; external dependency and revisit trigger; remaining risks; and one next action.
 
 The conductor persists the appropriate durable transition:
 

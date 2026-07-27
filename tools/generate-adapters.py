@@ -68,6 +68,8 @@ SHARED_PREAMBLE_SECTIONS = {
         ROOT / "references" / "shared" / "consequence-authority-preamble.md",
     "## Grilling entry and stage lens":
         ROOT / "references" / "shared" / "grilling-entry-preamble.md",
+    "## Work Object updates":
+        ROOT / "references" / "shared" / "work-object-updates-preamble.md",
 }
 
 TIER_ORDER = {"high": 3, "medium": 2, "low": 1}
@@ -597,12 +599,28 @@ def namespace_skill_references(body):
     return body
 
 
-# Core skills whose Consequence section is intentionally different and
+# Core skills whose sections are intentionally different and
 # should NOT receive the shared preamble injection (WO 2026-07-27-009).
 SHARED_PREAMBLE_SKIP_SKILLS = {
     "thinking-grilling-session",
     "design-track-components",
     "governance-maintain-working-method",
+}
+
+# Per-section skip lists for sections whose shared preamble only applies
+# to a subset of skills with that heading (WO 2026-07-27-011).
+SHARED_PREAMBLE_PER_SECTION_SKIP = {
+    "## Work Object updates": {
+        "design-design-tracer-bullet",
+        "engineering-implement-bounded-change",
+        "engineering-verify-release-evidence",
+        "governance-conduct-work-object",
+        "governance-govern-scorecards",
+        "governance-review-outcome-and-adapt",
+        "thinking-develop-idea",
+        "thinking-pressure-test-decision",
+        "thinking-turn-signal-into-work",
+    },
 }
 
 
@@ -614,12 +632,18 @@ def inject_shared_preamble(body, skill_name=None):
     remain semantically equivalent.
 
     Skills in SHARED_PREAMBLE_SKIP_SKILLS are left as-is (they have completely
-    different content for the registered heading).
+    different content for the registered heading). Per-section skip lists in
+    SHARED_PREAMBLE_PER_SECTION_SKIP exclude specific skills from receiving
+    the shared preamble for a particular heading (WO 2026-07-27-011).
     """
     if skill_name in SHARED_PREAMBLE_SKIP_SKILLS:
         return body
     for heading, ref_path in SHARED_PREAMBLE_SECTIONS.items():
         if heading not in body:
+            continue
+        # Check per-section skip list
+        section_skips = SHARED_PREAMBLE_PER_SECTION_SKIP.get(heading, set())
+        if skill_name in section_skips:
             continue
         preamble = ref_path.read_text().strip()
         idx = body.index(heading)

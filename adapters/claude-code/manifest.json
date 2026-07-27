@@ -262,7 +262,7 @@
     {
       "name": "alawas-operations-deploy-with-recovery",
       "path": "adapters/claude-code/skills/alawas-operations-deploy-with-recovery/SKILL.md",
-      "sha256": "a08bcfe5fd245e6724a7a3b71f4710718f021475b8d65a5cada71a3275aa168d"
+      "sha256": "05b156adcec4b49af63636a2b7cc5f2e2ed8201c876f6e3b5ab4f5a9104bfee0"
     },
     {
       "name": "alawas-operations-deploy-with-recovery/references/CAPABILITY-DEGRADATION.md",
@@ -282,7 +282,7 @@
     {
       "name": "alawas-operations-diagnose-production-incident",
       "path": "adapters/claude-code/skills/alawas-operations-diagnose-production-incident/SKILL.md",
-      "sha256": "af77b07a1d9b2c9ced4135d0775e055a4af913982d67e682e1c99227d4b99d4f"
+      "sha256": "0c8d6c5184a105f999b2b76f90d4db7c3725bf2567eb05da57cbf60bc57f9ac3"
     },
     {
       "name": "alawas-operations-diagnose-production-incident/references/CAPABILITY-DEGRADATION.md",
@@ -307,7 +307,7 @@
     {
       "name": "alawas-research-investigate-live-question",
       "path": "adapters/claude-code/skills/alawas-research-investigate-live-question/SKILL.md",
-      "sha256": "279e7e35dd6946ad175516f60df95aa9f1874dfe77d997608d8af4cea682649b"
+      "sha256": "7de63a7e330e18d4205536da4ab948d3674ffdb4224be0aa8a72d8e9f3ef24ac"
     },
     {
       "name": "alawas-research-investigate-live-question/references/CAPABILITY-DEGRADATION.md",

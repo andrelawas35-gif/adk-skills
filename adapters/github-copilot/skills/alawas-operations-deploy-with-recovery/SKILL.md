@@ -183,8 +183,9 @@ investigation, or decision path named by the runbook.
 
 ## Work Object updates
 
-This skill returns a concise record to `alawas-governance-conduct-work-object`, which validates
-and persists it. Include:
+This skill returns a concise record to `conduct-work-object`, which validates and persists it.
+
+Include:
 
 - the explicit deployment authority, platform runbook reference, target,
   authorized increment, and artifact identity;

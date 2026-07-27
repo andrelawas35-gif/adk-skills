@@ -181,8 +181,9 @@ one manual, user-approved summary; never request direct archive access.
 
 ## Work Object updates
 
-This skill returns a concise record to `alawas-governance-conduct-work-object`, which validates
-and persists it. Include the framed question and hypothesis; evidence ledger
+This skill returns a concise record to `conduct-work-object`, which validates and persists it.
+
+Include the framed question and hypothesis; evidence ledger
 entries with provenance and attribution; contradictions; reality-contact
 authority and observations; missing evidence; recommended route; confidence;
 and one concrete next move. For an unavailable write capability, return the
