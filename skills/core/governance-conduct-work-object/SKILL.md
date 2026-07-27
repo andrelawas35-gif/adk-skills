@@ -141,6 +141,25 @@ Frontier, and accepted decisions. Create `## Grilling Session` lazily. Act as
 the sole writer of compact continuity state; keep full decisions and evidence
 in their canonical sections and never store a transcript.
 
+## Session-boundary rule
+
+This skill includes a session-boundary rule expressed as a bounded trial with
+an explicit review condition (per the `maintain-working-method` guardrail-expiry
+gate). The rule governs what happens when this skill is invoked at session
+start:
+
+| Condition | Default answer |
+|-----------|----------------|
+| Same repository, same plugin/connector set, same machine | **Stay in session.** Open a branch for the new Work Object; do not restart. Use `breadth-sweep` mode (`references/AGREEMENT-LOOP.md`) — the existing mechanism for holding multiple live Work Object branches in one session. |
+| Session context reaches ~150–200k tokens | **Compact the conversation tail; do not restart.** Discarding the cached position-0 prefix costs more than continuing. |
+| Position-0 changes (different repository, plugin/connector set, or machine) | **Hand off to a new session.** Position-0 is the session identity. |
+
+**Trial review:** These defaults hold until the earlier of (a) the review date
+recorded in the Work Object's `next_action` or (b) observed degradation at high
+context — a dropped constraint, a re-read of a file already in context, or a
+misremembered decision that survives a compaction. Either triggers a revisit
+via `maintain-working-method`.
+
 ## Stage workflow
 
 ### 1. Discover workspace
