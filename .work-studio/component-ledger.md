@@ -20,11 +20,12 @@
 - **location(s):** `references/AGREEMENT-LOOP.md` (canonical; copied into every skill's `references/` by `tools/generate-adapters.py`)
 - **built-by Work Object(s):** pre-ledger backfill; recent shaping in WO `2026-07-16-004` (two-tier lenses); resolved in WO `2026-07-27-003`
 - **depends-on:** none declared
-- **depended-on-by:** COMP-002 through COMP-013 (every skill's Grilling Session; widest blast radius)
+- **depended-on-by:** COMP-002 through COMP-024 (every skill's Grilling Session; widest blast radius)
 - **applicable dimensions:** personal fit, artifact value, novelty yield (recovery quality deferred — engine-level, not outcome-level)
 - **owning skill/profile:** all skill profiles via `references/SKILL-AWARE-GRILLING.md`
-- **last-grilled-SHA:** `57d0412`
+- **last-grilled-SHA:** `f4cddbf`
 - **best-case anchor:** Option-B-refined (WO 2026-07-18-001, 2026-07-18T05:00:00Z) — settled = no surviving finding against the applicable dimensions; auto-reopen on git-drift since `last-grilled-SHA`, owning-skill version change, or contrary govern-scorecards outcome evidence. No standing scorecard artifact.
+- **status rationale / findings:** Re-stamped to HEAD (`f4cddbf`) on 2026-08-10 by WO 2026-08-09-009, acknowledging 2 commits of drift (`bcd20e6`, `e457678`) on `references/AGREEMENT-LOOP.md`. Full regrill pass remains a track-components follow-up.
 - **first grilled:** 2026-07-18 (tracer pass, WO 2026-07-18-001)
 - **open findings:** none — all 4 findings resolved in WO `2026-07-27-003`
 
@@ -57,7 +58,7 @@ source of truth; generated adapters are deliberately not listed.
 - **location(s):** `skills/core/governance-conduct-work-object/SKILL.md`
 - **built-by Work Object(s):** pre-ledger backfill
 - **depends-on:** COMP-001
-- **depended-on-by:** COMP-003 through COMP-013
+- **depended-on-by:** COMP-003 through COMP-024
 - **applicable dimensions:** recovery quality, artifact value, novelty yield
 - **owning skill/profile:** `governance-conduct-work-object`
 - **last-grilled-SHA:** not-yet-grilled
@@ -109,7 +110,7 @@ source of truth; generated adapters are deliberately not listed.
 - **location(s):** `skills/core/engineering-verify-release-evidence/SKILL.md`
 - **built-by Work Object(s):** pre-ledger backfill
 - **depends-on:** COMP-001, COMP-002, COMP-005
-- **depended-on-by:** none declared
+- **depended-on-by:** COMP-007
 - **applicable dimensions:** recovery quality, artifact value
 - **owning skill/profile:** `engineering-verify-release-evidence`
 - **last-grilled-SHA:** not-yet-grilled
@@ -187,7 +188,7 @@ source of truth; generated adapters are deliberately not listed.
 - **location(s):** `skills/core/governance-govern-scorecards/SKILL.md`
 - **built-by Work Object(s):** pre-ledger backfill
 - **depends-on:** COMP-001, COMP-002, COMP-008
-- **depended-on-by:** COMP-013
+- **depended-on-by:** COMP-013, COMP-014
 - **applicable dimensions:** recovery quality, personal fit, artifact value, novelty yield
 - **owning skill/profile:** `governance-govern-scorecards`
 - **last-grilled-SHA:** not-yet-grilled

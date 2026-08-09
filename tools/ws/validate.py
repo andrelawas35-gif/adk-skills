@@ -24,9 +24,11 @@ Checks:
   unsupported-capabilities — Adapter degradation declarations
   interrupted-mutations    — Orphaned temp/lock file detection
   structure                — Composite: schema + sections
+  outcome-review           — Advisory observe/close outcome-review coverage
 """
 
 import re
+import subprocess
 import sys
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
@@ -52,6 +54,10 @@ from .lifecycle import (
     validate_transition,
 )
 from .attention import check_attention_consistency
+from .dashboard_signals import (
+    count_claims_below_support_adequacy,
+    count_unresolved_conflicts,
+)
 
 
 # ── Schema check ──────────────────────────────────────────────────────────────
@@ -269,11 +275,23 @@ def check_append_only(file_path: Path) -> List[str]:
     evidence = sections.get("evidence ledger", "")
     if evidence:
         lines = evidence.strip().split("\n")
-        # Skip heading and table header (first 3 lines)
+        # Skip heading and table header (first 3 lines).
+        # Track HTML comment blocks (the ws create template embeds a
+        # `<!-- Tagged evidence entries... -->` comment in the ledger); the
+        # comment opener can be inside the first 3 lines, so detect it before
+        # the header skip.
+        in_comment = False
         for i, line in enumerate(lines):
+            stripped = line.strip()
+            if "<!--" in stripped:
+                in_comment = True
+            if in_comment:
+                if "-->" in stripped:
+                    in_comment = False
+                continue
             if i < 3:
                 continue
-            if line.strip() and not line.strip().startswith("|"):
+            if stripped and not stripped.startswith("|"):
                 errors.append(
                     f"{file_path}: Evidence ledger line {i+1} does not follow table format"
                 )
@@ -603,6 +621,16 @@ _AUTHORITY_REQUIRED_FIELDS = [
     "constraints",
     "authority mode",
     "granted by",
+]
+
+# Optional fields recognized as part of the Authority record shape (Decision 2,
+# Branch C normalization). These extend the shipped five-field contract with
+# the doc's `subject` and `expiry/revocation` concepts. They are OPTIONAL:
+# existing entries without them remain valid (no silent rewrite), so they are
+# NOT part of _AUTHORITY_REQUIRED_FIELDS.
+_AUTHORITY_OPTIONAL_FIELDS = [
+    "subject",
+    "expiry",
 ]
 
 
@@ -1538,6 +1566,383 @@ def check_structure(file_path: Path) -> List[str]:
     return check_schema(file_path) + check_sections(file_path)
 
 
+def check_dashboard_signals(
+    objects_dir: Optional[Path] = None,
+) -> Tuple[List[str], List[str]]:
+    """Workspace-level advisory check relaying the epistemic-pressure signals.
+
+    Returns ``(warnings, errors)``:
+    - ``warnings`` carries each non-zero gauge count (unresolved conflicts,
+      claims below support adequacy) so the numbers surface where ``ws
+      validate`` already runs. Advisory only — never changes the exit code.
+    - ``errors`` carries a fail-closed message when a reader hits a malformed
+      ``CONF-``/``CLM-`` heading, matching the readers' ValueError contract.
+
+    The counts are computed by the readers in ``dashboard_signals.py`` (single
+    computation source); this check only relays them and does not reimplement
+    either count.
+    """
+    warnings: List[str] = []
+    if objects_dir is None or not objects_dir.is_dir():
+        return warnings, []
+    try:
+        conflicts = count_unresolved_conflicts(objects_dir)
+        below = count_claims_below_support_adequacy(objects_dir)
+    except ValueError as e:
+        return warnings, [str(e)]
+    if conflicts:
+        warnings.append(
+            f"epistemic-pressure: {conflicts} unresolved conflict(s) on record"
+        )
+    if below:
+        warnings.append(
+            f"epistemic-pressure: {below} claim(s) below support adequacy"
+        )
+    return warnings, []
+
+
+# ── Component ledger check ────────────────────────────────────────────────────
+
+
+_LEDGER_FILENAME = "component-ledger.md"
+_LEDGER_NOT_YET_GRILLED = "not-yet-grilled"
+
+
+def _parse_component_ledger(
+    ledger_text: str,
+) -> List[Dict[str, str]]:
+    """Parse the component ledger Markdown into per-component records.
+
+    Each ``## COMP-NNN — <name>`` section yields a record with the fields
+    the ledger's entry schema declares: status, location(s), depends-on,
+    depended-on-by, and last-grilled-SHA. Unknown or absent fields are
+    empty strings so the caller can classify them explicitly.
+    """
+    records: List[Dict[str, str]] = []
+    for block in re.split(r"\n(?=## COMP-\d+ )", ledger_text):
+        header = re.match(r"## (COMP-\d+) — .+", block)
+        if not header:
+            continue
+        cid = header.group(1)
+        rec: Dict[str, str] = {"id": cid}
+        for key in ("status", "location(s)", "depends-on", "depended-on-by",
+                    "last-grilled-SHA"):
+            m = re.search(
+                r"- \*\*" + re.escape(key) + r":\*\*\s*(.*)", block
+            )
+            rec[key] = m.group(1).strip() if m else ""
+        records.append(rec)
+    return records
+
+
+def _expand_comp_list(value: str) -> List[str]:
+    """Expand a declared edge value into concrete COMP-NNN ids.
+
+    Handles ``COMP-002 through COMP-013`` shorthand by expanding against the
+    live component ids, plus comma-separated lists and single ids. The
+    ``through`` form is expanded to the inclusive numeric range, so a range
+    that no longer covers every actual dependent is reported rather than
+    silently accepted (Decision 2, tracer bullet).
+    """
+    ids: List[str] = []
+    if not value or value.lower().startswith("none"):
+        return ids
+
+    # Expand each ``COMP-A through COMP-B`` run to its inclusive numeric range.
+    def _expand_range(m: "re.Match") -> str:
+        a = int(m.group(1))
+        b = int(m.group(2))
+        lo, hi = min(a, b), max(a, b)
+        return " ".join(f"COMP-{i:03d}" for i in range(lo, hi + 1))
+
+    expanded = re.sub(r"COMP-(\d+) through COMP-(\d+)", _expand_range, value)
+    for cid in re.findall(r"COMP-\d{3}", expanded):
+        if cid not in ids:
+            ids.append(cid)
+    return ids
+
+
+def _git_commits_since(sha: str, path: str, cwd: Path) -> Optional[int]:
+    """Count commits touching ``path`` after ``sha`` in the repo at ``cwd``.
+
+    Returns None when git is unavailable or the query fails, so the caller
+    can record the drift as unverified rather than assert no drift.
+    """
+    try:
+        proc = subprocess.run(
+            ["git", "rev-list", "--count", f"{sha}..HEAD", "--", path],
+            cwd=str(cwd),
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+    except (OSError, ValueError):
+        return None
+    if proc.returncode != 0:
+        return None
+    try:
+        return int(proc.stdout.strip())
+    except ValueError:
+        return None
+
+
+def check_ledger(objects_dir: Optional[Path] = None) -> List[str]:
+    """Workspace-level check over the component ledger (ADR 0014).
+
+    Read-only and advisory (not in DEFAULT_CHECKS). Reports three defect
+    classes as error strings:
+
+    1. Reciprocity (Decision 1, Branch C): every ``depends-on: COMP-X`` in an
+       active/settled COMP-N is reported unless active/settled COMP-X's
+       ``depended-on-by`` names COMP-N. Retired components are exempt in both
+       directions — ``none (downstream deps also deferred)`` is a valid
+       terminal state.
+    2. Range shorthand (Decision 2): ``COMP-A through COMP-B`` is expanded
+       against the live component list, so a range that no longer covers all
+       dependents is reported rather than silently accepted.
+    3. Grill staleness: a component with a real ``last-grilled-SHA`` whose
+       declared ``location(s)`` have commits after that SHA is reported, per
+       the ledger's auto-reopen clause. ``not-yet-grilled`` is never reported
+       stale.
+
+    The ledger is the canonical artifact owned by ``track-components``; this
+    check only reads it and never repairs edges or updates the ledger.
+    """
+    if objects_dir is None or not objects_dir.is_dir():
+        return ["ledger check requires the objects/ directory path"]
+
+    ledger_path = objects_dir.parent / _LEDGER_FILENAME
+    if not ledger_path.is_file():
+        return [f"ledger check: {_LEDGER_FILENAME} not found at {ledger_path}"]
+
+    records = _parse_component_ledger(ledger_path.read_text())
+    live_ids = [r["id"] for r in records]
+    by_id = {r["id"]: r for r in records}
+
+    errors: List[str] = []
+
+    # Precompute each component's forward (depends-on) and reverse
+    # (depended-on-by) sets, keeping the raw reverse text for classification.
+    forward = {r["id"]: _expand_comp_list(r["depends-on"]) for r in records}
+    reverse = {r["id"]: _expand_comp_list(r["depended-on-by"]) for r in records}
+    reverse_raw = {r["id"]: r["depended-on-by"] for r in records}
+
+    # 1) Reciprocity + 2) range shorthand (Branch C: retired exempt both ways).
+    for src in live_ids:
+        src_status = by_id[src]["status"].strip().lower()
+        if src_status == "retired":
+            continue
+        for tgt in forward[src]:
+            if tgt not in by_id:
+                continue
+            tgt_status = by_id[tgt]["status"].strip().lower()
+            if tgt_status == "retired":
+                continue
+            if src in reverse[tgt]:
+                continue
+            if "through" in reverse_raw[tgt]:
+                errors.append(
+                    f"ledger range-shorthand: {src} depends-on {tgt} but "
+                    f"{tgt}'s depended-on-by range does not include {src}"
+                )
+            else:
+                errors.append(
+                    f"ledger plain omission: {src} depends-on {tgt} but "
+                    f"{tgt}'s depended-on-by does not include {src}"
+                )
+
+    # 3) Grill staleness: only components with a real SHA are eligible;
+    #    not-yet-grilled is never stale. Locations are backtick-quoted paths.
+    ws_root = objects_dir.parent.parent
+    for cid, rec in by_id.items():
+        sha = rec["last-grilled-SHA"].strip().strip("`")
+        if not sha or sha == _LEDGER_NOT_YET_GRILLED:
+            continue
+        locations = [
+            t.strip("`")
+            for t in re.findall(r"`[^`]+`", rec["location(s)"])
+            if "/" in t and "." in t.split("/")[-1]
+        ]
+        stale = False
+        for loc in locations:
+            count = _git_commits_since(sha, loc, ws_root)
+            if count is None:
+                errors.append(
+                    f"ledger staleness unverified: {cid} git query failed "
+                    f"for {loc} — do not assert no drift"
+                )
+            elif count > 0:
+                stale = True
+                break
+        if stale:
+            errors.append(
+                f"ledger grill staleness: {cid} last-grilled-SHA {sha} is "
+                f"behind HEAD on its declared location(s)"
+            )
+
+    return errors
+
+
+# ── Outcome-review coverage check ────────────────────────────────────────────
+
+
+# Markers that indicate an object at observe/close has an outcome review
+# recorded in its body. Matched case-insensitively.
+#
+# Precision rule (deviation accepted 2026-08-10, WO 2026-08-10-002): a routing
+# mention such as "Route to `alawas-review-outcome-and-adapt` for outcome
+# review" or "Transition ... for outcome review" is a plan to review, not
+# evidence a review happened. Only real review evidence counts. The corpus
+# records reviews in four formats, so classification is structural and
+# phrasing-based rather than a bare keyword scan:
+#
+#   1. an ``## Outcome``/``## Outcome review`` section heading;
+#   2. a History heading (``### timestamp — ...``) that records a review
+#      outcome (confirmed / complete / recorded / accepted / checkpoint /
+#      "Outcome review:"), not a routing transition;
+#   3. a History bullet (``- **timestamp** — ...``) that records a review
+#      outcome, not a routing/readiness mention; or
+#   4. an Evidence-ledger row whose source is ``review-outcome-and-adapt`` or
+#      an outcome review.
+_OUTCOME_REVIEW_MARKERS = (
+    "review-outcome-and-adapt",
+    "## outcome",
+    "outcome review",
+)
+# Phrases that record a performed review (as opposed to routing toward one).
+_REVIEW_PERFORMED_PATTERNS = (
+    r"outcome review\s*:",
+    r"outcome review\s+confirmed",
+    r"outcome review\s+complete",
+    r"outcome review\s+recorded",
+    r"outcome review\s+accepted",
+    r"outcome review\s+checkpoint",
+    r"outcome review\s+direction",
+)
+# Phrases that name the review as a future route rather than a performed act.
+_REVIEW_ROUTING_PATTERNS = (
+    r"for outcome review",
+    r"to\s+`?review-outcome-and-adapt",
+    r"rout(ing|ed)?\s+.*outcome review",
+    r"ready for outcome review",
+    r"transition.*for outcome review",
+)
+
+
+def _has_real_outcome_review(body: str) -> bool:
+    """True when ``body`` carries real review evidence, not a routing mention.
+
+    Routing instructions name the review as a *future* route ("Route to
+    ``alawas-review-outcome-and-adapt`` for outcome review", "Transition ...
+    for outcome review"); they are not evidence a review happened. Real
+    evidence is structural and phrasing-based (see the module comment above):
+    an ``## Outcome`` section, a History heading or bullet that records a
+    review outcome, or an Evidence-ledger row whose source is the review skill.
+    """
+    lower = body.lower()
+    if re.search(r"^## (outcome|outcome review)\s*$", lower, re.M):
+        return True
+    # History headings and bullets that record a review outcome.
+    for line in re.finditer(r"^(?:#{3,}|- \*\*).*$", lower, re.M):
+        text = line.group(0)
+        if "outcome review" not in text:
+            continue
+        if any(re.search(p, text) for p in _REVIEW_ROUTING_PATTERNS):
+            continue
+        if any(re.search(p, text) for p in _REVIEW_PERFORMED_PATTERNS):
+            return True
+    # Evidence-ledger row whose source is the review skill / an outcome review.
+    if re.search(
+        r"\| \[(decision|inference|system|testimony|memory)\] \| "
+        r"[^|]*?(review-outcome-and-adapt|outcome review)",
+        lower,
+    ):
+        return True
+    return False
+
+
+def check_outcome_review(objects_dir: Optional[Path] = None) -> List[str]:
+    """Workspace-level advisory check over outcome-review coverage (WO 2026-08-10-002).
+
+    Read-only and advisory (not in DEFAULT_CHECKS). Scans every Work Object at
+    ``state: observe`` or ``state: close`` and classifies each as reviewed or
+    unreviewed from real review evidence in the object body: an ``## Outcome``/
+    ``## Outcome review`` section heading, a History entry heading recording an
+    outcome review, or an Evidence-ledger row whose source is the review skill
+    (precision rule accepted 2026-08-10; routing mentions never count). Objects
+    without such evidence are reported, per cohort by ``YYYY-MM`` of
+    ``created_at``, with their IDs.
+
+    Mirrors the provenance linter's mechanism: the number moves when a machine
+    checks it. This check makes the flat outcome-review rate measurable.
+    """
+    if objects_dir is None or not objects_dir.is_dir():
+        return ["outcome-review check requires the objects/ directory path"]
+
+    # Collect per-cohort counts and the unreviewed IDs per cohort.
+    cohorts: Dict[str, List[str]] = {}
+    for year_dir in sorted(objects_dir.iterdir()):
+        if not year_dir.is_dir():
+            continue
+        for month_dir in sorted(year_dir.iterdir()):
+            if not month_dir.is_dir():
+                continue
+            for obj_file in sorted(month_dir.iterdir()):
+                if obj_file.suffix != ".md":
+                    continue
+                try:
+                    content = obj_file.read_text()
+                except Exception:
+                    continue
+                fm = parse_frontmatter(content)
+                state = str(fm.get("state", "")).strip()
+                if state not in ("observe", "close"):
+                    continue
+                created = str(fm.get("created_at", "")).strip()
+                cohort = created[:7] if created else "unknown"
+                body = _extract_body(content)
+                reviewed = _has_real_outcome_review(body)
+                if not reviewed:
+                    cohorts.setdefault(cohort, []).append(obj_file.stem)
+
+    errors: List[str] = []
+    for cohort in sorted(cohorts):
+        ids = cohorts[cohort]
+        errors.append(
+            f"outcome-review: cohort {cohort}: {len(ids)} of "
+            f"{_cohort_total(objects_dir, cohort)} object(s) at observe/close "
+            f"lack a recorded outcome review"
+        )
+        for obj_id in ids:
+            errors.append(f"outcome-review: {obj_id}: no outcome review recorded")
+
+    return errors
+
+
+def _cohort_total(objects_dir: Path, cohort: str) -> int:
+    """Count Work Objects at observe/close whose created_at falls in ``cohort``."""
+    total = 0
+    for year_dir in objects_dir.iterdir():
+        if not year_dir.is_dir():
+            continue
+        for month_dir in year_dir.iterdir():
+            if not month_dir.is_dir():
+                continue
+            for obj_file in month_dir.iterdir():
+                if obj_file.suffix != ".md":
+                    continue
+                try:
+                    content = obj_file.read_text()
+                except Exception:
+                    continue
+                fm = parse_frontmatter(content)
+                if str(fm.get("state", "")).strip() not in ("observe", "close"):
+                    continue
+                if str(fm.get("created_at", "")).strip()[:7] == cohort:
+                    total += 1
+    return total
+
+
 # ── Check registry ────────────────────────────────────────────────────────────
 
 CHECK_REGISTRY: Dict[str, callable] = {
@@ -1546,6 +1951,8 @@ CHECK_REGISTRY: Dict[str, callable] = {
     "append-only": check_append_only,
     "attention": None,  # Special: workspace-level check
     "attention-limits": None,  # Special: workspace-level check
+    "dashboard-signals": None,  # Special: workspace-level advisory check
+    "ledger": None,  # Special: workspace-level advisory check (not in defaults)
     "sensitivity": check_sensitivity,
     "sensitivity-policy": check_sensitivity_policy,
     "lifecycle": check_lifecycle,
@@ -1560,6 +1967,7 @@ CHECK_REGISTRY: Dict[str, callable] = {
     "unsupported-capabilities": check_unsupported_capabilities,
     "interrupted-mutations": check_interrupted_mutations,
     "structure": check_structure,
+    "outcome-review": None,  # Special: workspace-level advisory check (not in defaults)
 }
 
 DEFAULT_CHECKS = [
@@ -1567,6 +1975,7 @@ DEFAULT_CHECKS = [
     "sensitivity-policy", "lifecycle", "claims", "lanes",
     "authority", "protected-fields", "history-integrity",
     "file-integrity", "incident-routing", "prerequisites",
+    "dashboard-signals",
 ]
 
 DEFAULT_WARNING_CHECKS = [
@@ -1633,6 +2042,40 @@ def run_checks(
             else:
                 all_errors.append(
                     "Attention-limits check requires active.md path"
+                )
+            continue
+
+        if name == "dashboard-signals":
+            # Workspace-level advisory check: relay the gauge counts as
+            # warnings (non-blocking); fail closed only on malformed headings.
+            if objects_dir:
+                warnings, errs = check_dashboard_signals(objects_dir)
+                all_warnings.extend(warnings)
+                all_errors.extend(errs)
+            continue
+
+        if name == "ledger":
+            # Workspace-level advisory check over the component ledger.
+            # Excluded from DEFAULT_CHECKS; run explicitly via `ws validate
+            # ledger`. Read-only; reports edge and staleness defects.
+            if objects_dir:
+                all_errors.extend(check_ledger(objects_dir))
+            else:
+                all_errors.append(
+                    "Ledger check requires the objects/ directory path"
+                )
+            continue
+
+        if name == "outcome-review":
+            # Workspace-level advisory check over outcome-review coverage.
+            # Excluded from DEFAULT_CHECKS; run explicitly via `ws validate
+            # outcome-review`. Read-only; reports objects at observe/close
+            # without a recorded outcome review, per cohort.
+            if objects_dir:
+                all_errors.extend(check_outcome_review(objects_dir))
+            else:
+                all_errors.append(
+                    "Outcome-review check requires the objects/ directory path"
                 )
             continue
 

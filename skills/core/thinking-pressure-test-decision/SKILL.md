@@ -52,8 +52,9 @@ rationale with revisit triggers.
 ## Inputs and preconditions
 
 **Required inputs:**
-- An active Work Object in or entering the `decide` state (or a state where
-  an unresolved decision blocks progress)
+- An active Work Object in any state where an unresolved decision blocks
+  progress. Decisions are not a lifecycle phase — they occur at every state —
+  so no state is required or excluded.
 - The Work Object's current evidence ledger, hypothesis, and open questions
 
 **Preconditions:**

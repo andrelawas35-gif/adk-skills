@@ -328,6 +328,17 @@ unpersisted summary before continuing.
 
 ## Convergence and action authority
 
+Convergence is **proposed, never declared**. Present the Convergence Checklist
+as a proposal and stop. The director declares convergence.
+
+Absent an explicit declaration, the session stays open. A session may end
+because the director ends it. It may not end because the engine judges the
+frontier exhausted — that judgment is a proposal the director accepts or
+rejects.
+
+If no question satisfies the progress invariant, say so, present the branch
+inventory, and ask whether to close. Do not close.
+
 Converge only with a **Convergence Checklist** that is falsifiable — each
 condition can be tested. Present:
 
@@ -352,8 +363,20 @@ risks, deferred branches, and exact next action. Obtain separately scoped
 authority naming affected files or systems, external effects, and verification
 boundary. Any newly discovered expansion reopens the relevant frontier.
 
+## Director language
+
+Apply `references/DIRECTOR-LANGUAGE.md` to every turn. Lead with plain meaning;
+attach the technical term to the explanation rather than substituting it. Never
+phrase a question or a branch in terms the director must decode before choosing
+— describe what each option actually does, then name it. Record content is
+never translated: field names, state names, record IDs, and file paths stay
+exact.
+
 ## Anti-patterns
 
+- Leading with a technical term where the plain meaning has not been given.
+- Filling a stated part of the output shape with content the facts did not
+  supply, rather than marking it absent.
 - Producing a polished artifact instead of beginning the conversation.
 - Asking multiple questions in one turn or presenting an unranked menu.
 - Walking a fixed checklist regardless of evidence or project stage.
@@ -361,5 +384,7 @@ boundary. Any newly discovered expansion reopens the relevant frontier.
 - Importing opaque memory or personal context without provenance and consent.
 - Treating `do recommended` as blanket authority or session closure.
 - Continuing for a target question count after the frontier is exhausted.
+- Ending a session on the engine's own judgment that the frontier is
+  exhausted, rather than proposing convergence and waiting for the director.
 - Restarting context when routing to another skill.
 - Averaging contradictions into a vague low-confidence conclusion.

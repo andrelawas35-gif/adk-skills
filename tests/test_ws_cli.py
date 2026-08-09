@@ -68,6 +68,7 @@ from ws.validate import (
     check_interrupted_mutations,
     check_campaign_anchor,
     check_consequence_plausibility,
+    check_outcome_review,
     run_checks,
     CHECK_REGISTRY,
 )
@@ -2401,13 +2402,93 @@ class TestCheckRegistry(unittest.TestCase):
     def test_all_checks_registered(self):
         """Every check name has a handler."""
         expected = {"schema", "sections", "append-only", "attention",
-                     "attention-limits", "sensitivity", "sensitivity-policy",
+                     "attention-limits", "dashboard-signals", "ledger",
+                     "sensitivity", "sensitivity-policy",
                      "lifecycle", "claims", "lanes",
                      "authority", "protected-fields", "history-integrity",
                      "file-integrity", "incident-routing", "prerequisites",
                      "unsupported-capabilities", "interrupted-mutations",
-                     "structure"}
+                     "structure", "outcome-review"}
         self.assertEqual(set(CHECK_REGISTRY.keys()), expected)
+
+
+class TestOutcomeReviewCheck(unittest.TestCase):
+    """Workspace-level advisory outcome-review coverage check (WO 2026-08-10-002)."""
+
+    def _objects_dir(self, root: Path) -> Path:
+        """Create and return a .work-studio/objects structure with one object."""
+        obj_dir = root / ".work-studio" / "objects" / "2026" / "07"
+        obj_dir.mkdir(parents=True, exist_ok=True)
+        return root / ".work-studio" / "objects"
+
+    def _close_object(self, root: Path, body: str, filename: str = "2026-07-21-010-test.md"):
+        fm = SAMPLE_FRONTMATTER.replace(
+            "state: notice",
+            "state: close",
+        ).replace(
+            "status: active",
+            "status: closed",
+        )
+        obj_dir = root / ".work-studio" / "objects" / "2026" / "07"
+        obj_dir.mkdir(parents=True, exist_ok=True)
+        return make_object_file(obj_dir, filename, fm + "\n" + body)
+
+    def test_reports_object_without_outcome_review(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self._close_object(root, SAMPLE_BODY)
+            errors = check_outcome_review(self._objects_dir(root))
+            self.assertEqual(len(errors), 2)  # cohort line + object line
+            self.assertIn("2026-07-21-010-test", errors[1])
+
+    def test_reports_outcome_section_as_reviewed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            body = SAMPLE_BODY + "\n## Outcome\n\nConfirmed.\n"
+            self._close_object(root, body)
+            self.assertEqual(check_outcome_review(self._objects_dir(root)), [])
+
+    def test_reports_review_history_as_reviewed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            body = SAMPLE_BODY + (
+                "\n### 2026-07-21T01:00:00Z — Closed: Outcome review confirmed\n"
+            )
+            self._close_object(root, body)
+            self.assertEqual(check_outcome_review(self._objects_dir(root)), [])
+
+    def test_routing_mention_does_not_count_as_reviewed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            body = SAMPLE_BODY.replace(
+                "## Next move\n\nContinue.",
+                "## Next move\n\nRoute to `alawas-review-outcome-and-adapt` "
+                "for outcome review.",
+            )
+            self._close_object(root, body)
+            errors = check_outcome_review(self._objects_dir(root))
+            self.assertIn("2026-07-21-010-test", errors[1])
+
+    def test_transition_for_outcome_review_does_not_count(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            body = SAMPLE_BODY + (
+                "\n### 2026-07-21T01:00:00Z — Transition from verify to observe "
+                "for outcome review\n"
+            )
+            self._close_object(root, body)
+            errors = check_outcome_review(self._objects_dir(root))
+            self.assertIn("2026-07-21-010-test", errors[1])
+
+    def test_evidence_ledger_source_counts_as_reviewed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            body = SAMPLE_BODY.replace(
+                "| [system] | test | Initial evidence |",
+                "| [decision] | review-outcome-and-adapt | Outcome review done |",
+            )
+            self._close_object(root, body)
+            self.assertEqual(check_outcome_review(self._objects_dir(root)), [])
 
 
 class TestCampaignAndPlausibilityWarnings(unittest.TestCase):

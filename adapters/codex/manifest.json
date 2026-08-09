@@ -6,7 +6,7 @@
     {
       "name": "alawas-design-apply-design-direction",
       "path": "adapters/codex/skills/alawas-design-apply-design-direction/SKILL.md",
-      "sha256": "475f48a96be70cb6a862a0d013ed72c63c11127444a122f092bc883cb6ad9730"
+      "sha256": "c68a1239e15fea5a515155c9d9238af57e90aceba008139787003821ae28645d"
     },
     {
       "name": "alawas-design-apply-design-direction/references/CONSEQUENCE-AUTHORITY.md",
@@ -51,7 +51,7 @@
     {
       "name": "alawas-design-design-tracer-bullet",
       "path": "adapters/codex/skills/alawas-design-design-tracer-bullet/SKILL.md",
-      "sha256": "006b06da6fa5ddc650ebfefa2dfc05a0e5f5d1fb7bbee215ef4d66af17931dd5"
+      "sha256": "ef4a60b405d66d9454653538cfed1e78d00cc64712156ae2eba4ed6318a2d24e"
     },
     {
       "name": "alawas-design-design-tracer-bullet/references/CAPABILITY-DEGRADATION.md",
@@ -69,6 +69,11 @@
       "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
     },
     {
+      "name": "alawas-design-design-tracer-bullet/references/DIRECTOR-LANGUAGE.md",
+      "path": "adapters/codex/skills/alawas-design-design-tracer-bullet/references/DIRECTOR-LANGUAGE.md",
+      "sha256": "74753e8e90962526fe9f9cde49ce6efec82f51e281700266edfca3f554e6a856"
+    },
+    {
       "name": "alawas-design-design-tracer-bullet/references/epistemic/epistemic-rules-full.md",
       "path": "adapters/codex/skills/alawas-design-design-tracer-bullet/references/epistemic/epistemic-rules-full.md",
       "sha256": "4a98876f51e1899fdeb682336f8180d74c4b16a82e7e60c0da8ef9390309bfac"
@@ -76,7 +81,7 @@
     {
       "name": "alawas-design-track-components",
       "path": "adapters/codex/skills/alawas-design-track-components/SKILL.md",
-      "sha256": "28bac23515f83e18f19c0030d7b906dd9a38671c83e42ff2897a051ddae31d20"
+      "sha256": "fc16ce6f5a31df1cc677325cab969162de50738d3b341e75c3a05503a2d0a2b3"
     },
     {
       "name": "alawas-design-track-components/references/MISSING-ARTIFACT-GAP.md",
@@ -87,6 +92,11 @@
       "name": "alawas-design-track-components/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-design-track-components/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
+    },
+    {
+      "name": "alawas-design-track-components/references/DIRECTOR-LANGUAGE.md",
+      "path": "adapters/codex/skills/alawas-design-track-components/references/DIRECTOR-LANGUAGE.md",
+      "sha256": "74753e8e90962526fe9f9cde49ce6efec82f51e281700266edfca3f554e6a856"
     },
     {
       "name": "alawas-design-track-components/references/epistemic/epistemic-rules-essential.md",
@@ -111,7 +121,7 @@
     {
       "name": "alawas-engineering-implement-bounded-change",
       "path": "adapters/codex/skills/alawas-engineering-implement-bounded-change/SKILL.md",
-      "sha256": "f4e62d9794960b1ceb4c9dd39a2d0923c5830c8d7e439931f65818f65188918a"
+      "sha256": "44fd51c6759466c1df42f3f2c1e18846df15dc18c36243c165a81cf5540c3a00"
     },
     {
       "name": "alawas-engineering-implement-bounded-change/references/CAPABILITY-DEGRADATION.md",
@@ -129,6 +139,11 @@
       "sha256": "386324a5482d63a15ba58ecc3030d0336690a0fb85fc7ccad15e9ab014a511b9"
     },
     {
+      "name": "alawas-engineering-implement-bounded-change/references/DIRECTOR-LANGUAGE.md",
+      "path": "adapters/codex/skills/alawas-engineering-implement-bounded-change/references/DIRECTOR-LANGUAGE.md",
+      "sha256": "74753e8e90962526fe9f9cde49ce6efec82f51e281700266edfca3f554e6a856"
+    },
+    {
       "name": "alawas-engineering-implement-bounded-change/references/epistemic/epistemic-rules-essential.md",
       "path": "adapters/codex/skills/alawas-engineering-implement-bounded-change/references/epistemic/epistemic-rules-essential.md",
       "sha256": "7692ebf99ef04444dc7eed398c345c6a7df9e6f172f03f97de5453e10cff6a7f"
@@ -136,7 +151,7 @@
     {
       "name": "alawas-engineering-verify-release-evidence",
       "path": "adapters/codex/skills/alawas-engineering-verify-release-evidence/SKILL.md",
-      "sha256": "3faaee9034e26dd97c648499a1fb59c85277a66266633ae2f0e28a723693cde4"
+      "sha256": "4254f3e995daee65526d4693bf06a8fe68e23a21db0cb2e274f12a23a252a14c"
     },
     {
       "name": "alawas-engineering-verify-release-evidence/references/CAPABILITY-DEGRADATION.md",
@@ -149,6 +164,11 @@
       "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
     },
     {
+      "name": "alawas-engineering-verify-release-evidence/references/DIRECTOR-LANGUAGE.md",
+      "path": "adapters/codex/skills/alawas-engineering-verify-release-evidence/references/DIRECTOR-LANGUAGE.md",
+      "sha256": "74753e8e90962526fe9f9cde49ce6efec82f51e281700266edfca3f554e6a856"
+    },
+    {
       "name": "alawas-engineering-verify-release-evidence/references/epistemic/epistemic-rules-essential.md",
       "path": "adapters/codex/skills/alawas-engineering-verify-release-evidence/references/epistemic/epistemic-rules-essential.md",
       "sha256": "7692ebf99ef04444dc7eed398c345c6a7df9e6f172f03f97de5453e10cff6a7f"
@@ -156,7 +176,7 @@
     {
       "name": "alawas-governance-conduct-work-object",
       "path": "adapters/codex/skills/alawas-governance-conduct-work-object/SKILL.md",
-      "sha256": "19d059be6e7b1ebcccfdf2a1910636a40ce73ad6b68593e85cdbc5980f00a299"
+      "sha256": "48048151ad70deb7247293d4f8df75a2313bde4632758c386d9128931b0c1086"
     },
     {
       "name": "alawas-governance-conduct-work-object/references/MISSING-ARTIFACT-GAP.md",
@@ -174,6 +194,11 @@
       "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
     },
     {
+      "name": "alawas-governance-conduct-work-object/references/DIRECTOR-LANGUAGE.md",
+      "path": "adapters/codex/skills/alawas-governance-conduct-work-object/references/DIRECTOR-LANGUAGE.md",
+      "sha256": "74753e8e90962526fe9f9cde49ce6efec82f51e281700266edfca3f554e6a856"
+    },
+    {
       "name": "alawas-governance-conduct-work-object/references/epistemic/epistemic-rules-essential.md",
       "path": "adapters/codex/skills/alawas-governance-conduct-work-object/references/epistemic/epistemic-rules-essential.md",
       "sha256": "7692ebf99ef04444dc7eed398c345c6a7df9e6f172f03f97de5453e10cff6a7f"
@@ -181,7 +206,7 @@
     {
       "name": "alawas-governance-govern-scorecards",
       "path": "adapters/codex/skills/alawas-governance-govern-scorecards/SKILL.md",
-      "sha256": "84ba9f390bfa8f7aab98d4571b0ee3e97ed6ca2a8829f9ae14fbf4bab0763a89"
+      "sha256": "21d399cc2afcde374fff6307760612c6286026369bf08f4d85330e1911dc2fa4"
     },
     {
       "name": "alawas-governance-govern-scorecards/references/CAPABILITY-DEGRADATION.md",
@@ -199,6 +224,11 @@
       "sha256": "386324a5482d63a15ba58ecc3030d0336690a0fb85fc7ccad15e9ab014a511b9"
     },
     {
+      "name": "alawas-governance-govern-scorecards/references/DIRECTOR-LANGUAGE.md",
+      "path": "adapters/codex/skills/alawas-governance-govern-scorecards/references/DIRECTOR-LANGUAGE.md",
+      "sha256": "74753e8e90962526fe9f9cde49ce6efec82f51e281700266edfca3f554e6a856"
+    },
+    {
       "name": "alawas-governance-govern-scorecards/references/epistemic/epistemic-rules-full.md",
       "path": "adapters/codex/skills/alawas-governance-govern-scorecards/references/epistemic/epistemic-rules-full.md",
       "sha256": "4a98876f51e1899fdeb682336f8180d74c4b16a82e7e60c0da8ef9390309bfac"
@@ -206,7 +236,7 @@
     {
       "name": "alawas-governance-maintain-working-method",
       "path": "adapters/codex/skills/alawas-governance-maintain-working-method/SKILL.md",
-      "sha256": "5bb9f8cfa7e99b3c94238cb217d63971914d13add7b6077bfbeb683885e95909"
+      "sha256": "05e0d59159e7cccf1e550869919d0f88b25575c2b5c0b1bd1d2e8299939debdc"
     },
     {
       "name": "alawas-governance-maintain-working-method/references/CAPABILITY-DEGRADATION.md",
@@ -224,6 +254,11 @@
       "sha256": "386324a5482d63a15ba58ecc3030d0336690a0fb85fc7ccad15e9ab014a511b9"
     },
     {
+      "name": "alawas-governance-maintain-working-method/references/DIRECTOR-LANGUAGE.md",
+      "path": "adapters/codex/skills/alawas-governance-maintain-working-method/references/DIRECTOR-LANGUAGE.md",
+      "sha256": "74753e8e90962526fe9f9cde49ce6efec82f51e281700266edfca3f554e6a856"
+    },
+    {
       "name": "alawas-governance-maintain-working-method/references/epistemic/epistemic-rules-full.md",
       "path": "adapters/codex/skills/alawas-governance-maintain-working-method/references/epistemic/epistemic-rules-full.md",
       "sha256": "4a98876f51e1899fdeb682336f8180d74c4b16a82e7e60c0da8ef9390309bfac"
@@ -231,7 +266,7 @@
     {
       "name": "alawas-governance-review-outcome-and-adapt",
       "path": "adapters/codex/skills/alawas-governance-review-outcome-and-adapt/SKILL.md",
-      "sha256": "6ea7285a0199230c6bd7797926dcbc81e71517e4f02630b6c29ae8eb0fceb54c"
+      "sha256": "98521715bebc8075c133c9bb9a5fe562587cff967e7486376ca9f11cb8cb52e3"
     },
     {
       "name": "alawas-governance-review-outcome-and-adapt/references/CAPABILITY-DEGRADATION.md",
@@ -249,6 +284,11 @@
       "sha256": "386324a5482d63a15ba58ecc3030d0336690a0fb85fc7ccad15e9ab014a511b9"
     },
     {
+      "name": "alawas-governance-review-outcome-and-adapt/references/DIRECTOR-LANGUAGE.md",
+      "path": "adapters/codex/skills/alawas-governance-review-outcome-and-adapt/references/DIRECTOR-LANGUAGE.md",
+      "sha256": "74753e8e90962526fe9f9cde49ce6efec82f51e281700266edfca3f554e6a856"
+    },
+    {
       "name": "alawas-governance-review-outcome-and-adapt/references/epistemic/epistemic-rules-full.md",
       "path": "adapters/codex/skills/alawas-governance-review-outcome-and-adapt/references/epistemic/epistemic-rules-full.md",
       "sha256": "4a98876f51e1899fdeb682336f8180d74c4b16a82e7e60c0da8ef9390309bfac"
@@ -256,7 +296,7 @@
     {
       "name": "alawas-operations-deploy-with-recovery",
       "path": "adapters/codex/skills/alawas-operations-deploy-with-recovery/SKILL.md",
-      "sha256": "b708010df9d4efe8952b10285011532f4d7977436f13b2e1cd7b258a34da2314"
+      "sha256": "d229534bebf86685c55741332795a9eeaf750b51ae5d138d22ada00cd674ee7d"
     },
     {
       "name": "alawas-operations-deploy-with-recovery/references/CAPABILITY-DEGRADATION.md",
@@ -269,6 +309,11 @@
       "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
     },
     {
+      "name": "alawas-operations-deploy-with-recovery/references/DIRECTOR-LANGUAGE.md",
+      "path": "adapters/codex/skills/alawas-operations-deploy-with-recovery/references/DIRECTOR-LANGUAGE.md",
+      "sha256": "74753e8e90962526fe9f9cde49ce6efec82f51e281700266edfca3f554e6a856"
+    },
+    {
       "name": "alawas-operations-deploy-with-recovery/references/epistemic/epistemic-rules-essential.md",
       "path": "adapters/codex/skills/alawas-operations-deploy-with-recovery/references/epistemic/epistemic-rules-essential.md",
       "sha256": "7692ebf99ef04444dc7eed398c345c6a7df9e6f172f03f97de5453e10cff6a7f"
@@ -276,7 +321,7 @@
     {
       "name": "alawas-operations-diagnose-production-incident",
       "path": "adapters/codex/skills/alawas-operations-diagnose-production-incident/SKILL.md",
-      "sha256": "4c5483b8846915d4239fd10d21d019c440c27be75edc0e3dcd37e64b657e4b70"
+      "sha256": "30de3e7c69c191122a1ced39d9555dc0f851e0446d815905685acb02563aed5a"
     },
     {
       "name": "alawas-operations-diagnose-production-incident/references/CAPABILITY-DEGRADATION.md",
@@ -294,6 +339,11 @@
       "sha256": "386324a5482d63a15ba58ecc3030d0336690a0fb85fc7ccad15e9ab014a511b9"
     },
     {
+      "name": "alawas-operations-diagnose-production-incident/references/DIRECTOR-LANGUAGE.md",
+      "path": "adapters/codex/skills/alawas-operations-diagnose-production-incident/references/DIRECTOR-LANGUAGE.md",
+      "sha256": "74753e8e90962526fe9f9cde49ce6efec82f51e281700266edfca3f554e6a856"
+    },
+    {
       "name": "alawas-operations-diagnose-production-incident/references/epistemic/epistemic-rules-full.md",
       "path": "adapters/codex/skills/alawas-operations-diagnose-production-incident/references/epistemic/epistemic-rules-full.md",
       "sha256": "4a98876f51e1899fdeb682336f8180d74c4b16a82e7e60c0da8ef9390309bfac"
@@ -301,7 +351,7 @@
     {
       "name": "alawas-research-investigate-live-question",
       "path": "adapters/codex/skills/alawas-research-investigate-live-question/SKILL.md",
-      "sha256": "a132c25555e9308eaf3a0b2961bd33f051de6b4ba03253f85c5ffd22600494ab"
+      "sha256": "32f6baf1bad98981e2d24c0ad125b36d62444bfc72bd9b41c273fa62f6a205c1"
     },
     {
       "name": "alawas-research-investigate-live-question/references/CAPABILITY-DEGRADATION.md",
@@ -319,6 +369,11 @@
       "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
     },
     {
+      "name": "alawas-research-investigate-live-question/references/DIRECTOR-LANGUAGE.md",
+      "path": "adapters/codex/skills/alawas-research-investigate-live-question/references/DIRECTOR-LANGUAGE.md",
+      "sha256": "74753e8e90962526fe9f9cde49ce6efec82f51e281700266edfca3f554e6a856"
+    },
+    {
       "name": "alawas-research-investigate-live-question/references/epistemic/epistemic-rules-essential.md",
       "path": "adapters/codex/skills/alawas-research-investigate-live-question/references/epistemic/epistemic-rules-essential.md",
       "sha256": "7692ebf99ef04444dc7eed398c345c6a7df9e6f172f03f97de5453e10cff6a7f"
@@ -326,7 +381,7 @@
     {
       "name": "alawas-thinking-develop-idea",
       "path": "adapters/codex/skills/alawas-thinking-develop-idea/SKILL.md",
-      "sha256": "a4617df2173b0a6059e0573c690b136b5ec086e9cf4b28252da9656184504c94"
+      "sha256": "eab3c1fb231804a150a318ca03dcee65a05354479335d9893f05fb0cf76c5d07"
     },
     {
       "name": "alawas-thinking-develop-idea/references/CAPABILITY-DEGRADATION.md",
@@ -337,6 +392,11 @@
       "name": "alawas-thinking-develop-idea/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-thinking-develop-idea/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
+    },
+    {
+      "name": "alawas-thinking-develop-idea/references/DIRECTOR-LANGUAGE.md",
+      "path": "adapters/codex/skills/alawas-thinking-develop-idea/references/DIRECTOR-LANGUAGE.md",
+      "sha256": "74753e8e90962526fe9f9cde49ce6efec82f51e281700266edfca3f554e6a856"
     },
     {
       "name": "alawas-thinking-develop-idea/references/epistemic/epistemic-rules-full.md",
@@ -371,7 +431,7 @@
     {
       "name": "alawas-thinking-grilling-session/references/AGREEMENT-LOOP.md",
       "path": "adapters/codex/skills/alawas-thinking-grilling-session/references/AGREEMENT-LOOP.md",
-      "sha256": "163371caea80db39918b6b8e6664f316e38999aa02ebaea1353169090294dc29"
+      "sha256": "35b0a081267e5c4d3db150d7acc62161cf19a6566c5a5ff3c1b3d7377f4e7210"
     },
     {
       "name": "alawas-thinking-grilling-session/references/SKILL-AWARE-GRILLING.md",
@@ -384,9 +444,34 @@
       "sha256": "4a98876f51e1899fdeb682336f8180d74c4b16a82e7e60c0da8ef9390309bfac"
     },
     {
+      "name": "alawas-thinking-inquire-system",
+      "path": "adapters/codex/skills/alawas-thinking-inquire-system/SKILL.md",
+      "sha256": "86372588e2346e5dc7390aa55d9a9c2acd157944bd4e2616f47a517cd5182f38"
+    },
+    {
+      "name": "alawas-thinking-inquire-system/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/codex/skills/alawas-thinking-inquire-system/references/CAPABILITY-DEGRADATION.md",
+      "sha256": "ae7e228cf66bbb1b00ba6b67edc6cfe0fbc2eb26cca2717123923dddba3e3be7"
+    },
+    {
+      "name": "alawas-thinking-inquire-system/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/codex/skills/alawas-thinking-inquire-system/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
+    },
+    {
+      "name": "alawas-thinking-inquire-system/references/DIRECTOR-LANGUAGE.md",
+      "path": "adapters/codex/skills/alawas-thinking-inquire-system/references/DIRECTOR-LANGUAGE.md",
+      "sha256": "74753e8e90962526fe9f9cde49ce6efec82f51e281700266edfca3f554e6a856"
+    },
+    {
+      "name": "alawas-thinking-inquire-system/references/epistemic/epistemic-rules-full.md",
+      "path": "adapters/codex/skills/alawas-thinking-inquire-system/references/epistemic/epistemic-rules-full.md",
+      "sha256": "4a98876f51e1899fdeb682336f8180d74c4b16a82e7e60c0da8ef9390309bfac"
+    },
+    {
       "name": "alawas-thinking-pressure-test-decision",
       "path": "adapters/codex/skills/alawas-thinking-pressure-test-decision/SKILL.md",
-      "sha256": "a99ef8af7473658699ab4fb41489d688c94a7f3297aa6c556b9689181f14cf60"
+      "sha256": "2b3606a42c4207c09e459fbb42ca0f1c044253bfc944d7f313d30ffb5dab999e"
     },
     {
       "name": "alawas-thinking-pressure-test-decision/references/CAPABILITY-DEGRADATION.md",
@@ -399,14 +484,44 @@
       "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
     },
     {
+      "name": "alawas-thinking-pressure-test-decision/references/DIRECTOR-LANGUAGE.md",
+      "path": "adapters/codex/skills/alawas-thinking-pressure-test-decision/references/DIRECTOR-LANGUAGE.md",
+      "sha256": "74753e8e90962526fe9f9cde49ce6efec82f51e281700266edfca3f554e6a856"
+    },
+    {
       "name": "alawas-thinking-pressure-test-decision/references/epistemic/epistemic-rules-full.md",
       "path": "adapters/codex/skills/alawas-thinking-pressure-test-decision/references/epistemic/epistemic-rules-full.md",
       "sha256": "4a98876f51e1899fdeb682336f8180d74c4b16a82e7e60c0da8ef9390309bfac"
     },
     {
+      "name": "alawas-thinking-resume-work",
+      "path": "adapters/codex/skills/alawas-thinking-resume-work/SKILL.md",
+      "sha256": "2324210dacd8d7879960b88f8b2b5705173dcf742919f74a0661bfb70b236e63"
+    },
+    {
+      "name": "alawas-thinking-resume-work/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/codex/skills/alawas-thinking-resume-work/references/CAPABILITY-DEGRADATION.md",
+      "sha256": "ae7e228cf66bbb1b00ba6b67edc6cfe0fbc2eb26cca2717123923dddba3e3be7"
+    },
+    {
+      "name": "alawas-thinking-resume-work/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/codex/skills/alawas-thinking-resume-work/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
+    },
+    {
+      "name": "alawas-thinking-resume-work/references/DIRECTOR-LANGUAGE.md",
+      "path": "adapters/codex/skills/alawas-thinking-resume-work/references/DIRECTOR-LANGUAGE.md",
+      "sha256": "74753e8e90962526fe9f9cde49ce6efec82f51e281700266edfca3f554e6a856"
+    },
+    {
+      "name": "alawas-thinking-resume-work/references/epistemic/epistemic-rules-essential.md",
+      "path": "adapters/codex/skills/alawas-thinking-resume-work/references/epistemic/epistemic-rules-essential.md",
+      "sha256": "7692ebf99ef04444dc7eed398c345c6a7df9e6f172f03f97de5453e10cff6a7f"
+    },
+    {
       "name": "alawas-thinking-turn-signal-into-work",
       "path": "adapters/codex/skills/alawas-thinking-turn-signal-into-work/SKILL.md",
-      "sha256": "095fee3ac7b9927a4ad04b6dbaa62a9ecee05b4473fd5c90edcc55a68c605364"
+      "sha256": "780c679148a1559cd4563d21da4fa59093e522957887428d0bd4a0f7730a47e0"
     },
     {
       "name": "alawas-thinking-turn-signal-into-work/references/CAPABILITY-DEGRADATION.md",
@@ -422,6 +537,11 @@
       "name": "alawas-thinking-turn-signal-into-work/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-thinking-turn-signal-into-work/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
+    },
+    {
+      "name": "alawas-thinking-turn-signal-into-work/references/DIRECTOR-LANGUAGE.md",
+      "path": "adapters/codex/skills/alawas-thinking-turn-signal-into-work/references/DIRECTOR-LANGUAGE.md",
+      "sha256": "74753e8e90962526fe9f9cde49ce6efec82f51e281700266edfca3f554e6a856"
     },
     {
       "name": "alawas-thinking-turn-signal-into-work/references/epistemic/epistemic-rules-essential.md",

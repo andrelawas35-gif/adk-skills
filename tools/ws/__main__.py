@@ -39,6 +39,7 @@ from .sections import (
 )
 from .template import generate_body_template
 from .validate import DEFAULT_CHECKS, CHECK_REGISTRY, run_checks
+from .authority_check import cmd_authority_check
 from .baseline import cmd_baseline_capture, cmd_baseline_check
 from .claim import cmd_claim_inspect, cmd_claim_register
 from .conflict import cmd_conflict_register
@@ -915,8 +916,27 @@ def build_parser() -> argparse.ArgumentParser:
         help="Claim kind: observation, inference, decision",
     )
     claim_register_parser.add_argument(
-        "--scope", required=True,
-        help="Scope or path the claim applies to",
+        "--scope", default=None,
+        help="Scope or path the claim applies to (legacy scalar form). "
+             "Mutually exclusive with --paths.",
+    )
+    claim_register_parser.add_argument(
+        "--paths", action="append", default=None,
+        help="Defeater-surface path (repeatable). Using this switches scope to "
+             "the structured form with paths plus optional git-commit, "
+             "dirty-fingerprint, and revisit-on.",
+    )
+    claim_register_parser.add_argument(
+        "--git-commit", default=None,
+        help="Git commit SHA for the structured scope",
+    )
+    claim_register_parser.add_argument(
+        "--dirty-fingerprint", default=None,
+        help="Dirty-tree fingerprint for the structured scope",
+    )
+    claim_register_parser.add_argument(
+        "--revisit-on", action="append", default=None,
+        help="Trigger event for revisit.on (repeatable, structured form)",
     )
     claim_register_parser.add_argument(
         "--expect-updated", required=True,
@@ -956,6 +976,22 @@ def build_parser() -> argparse.ArgumentParser:
         help="Path to allowlist YAML file (relative to workspace root). "
              "Use 'none' to disable allowlist. Default: "
              "references/epistemic/lint-allowlist.yaml",
+    )
+
+    # ── ws authority check ────────────────────────────────────────────────
+    authority_check_parser = subparsers.add_parser(
+        "authority", help="Authority grant check against History entries"
+    )
+    authority_check_sub = authority_check_parser.add_subparsers(
+        dest="authority_command"
+    )
+    authority_check_cmd = authority_check_sub.add_parser(
+        "check",
+        help="Check whether an active, unexpired grant covers a given action",
+    )
+    authority_check_cmd.add_argument("id", help="Work Object ID or file path")
+    authority_check_cmd.add_argument(
+        "--action", required=True, help="Action to check against grants",
     )
 
     # ── ws baseline ───────────────────────────────────────────────────────
@@ -1062,6 +1098,13 @@ def main() -> int:
         if args.epistemic_command == "lint":
             return cmd_epistemic_lint(args)
         print("Error: Unknown epistemic command. Use 'ws epistemic lint'.",
+              file=sys.stderr)
+        return 1
+
+    if args.command == "authority":
+        if args.authority_command == "check":
+            return cmd_authority_check(args)
+        print("Error: Unknown authority command. Use 'ws authority check'.",
               file=sys.stderr)
         return 1
 

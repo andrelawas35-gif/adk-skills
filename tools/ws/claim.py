@@ -29,7 +29,7 @@ import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from .concurrency import check_concurrency
 from .schema import parse_frontmatter
@@ -55,6 +55,18 @@ def _find_work_studio_root() -> Path:
         ".work-studio/ not found in current directory or any parent. "
         "Run 'ws init' first to bootstrap the workspace."
     )
+
+
+def _get_workspace_name(ws_root: Path) -> str:
+    """Read the workspace name from .work-studio/config.md, with fallback."""
+    config = ws_root / ".work-studio" / "config.md"
+    if config.exists():
+        for line in config.read_text().splitlines():
+            if "- **Name**" in line:
+                name = line.split("**", 2)[-1].split(":", 1)[-1].strip()
+                if name:
+                    return name
+    return "andrelawas-work-studio"
 
 
 def _resolve_object_file(objects_dir: Path, obj_id: str) -> Path:
@@ -94,35 +106,95 @@ def _allocate_claim_id(body: str, wo_id: str) -> str:
     return f"CLM-{safe_id}-{max_num + 1:03d}"
 
 
-def _generate_claim_block(claim_id: str, text: str, kind: str, scope: str) -> str:
-    """Generate an indented YAML-like claim block for the Claims section."""
+def _escape(value: str) -> str:
+    """Escape double quotes and newlines for an inline claim value."""
+    return value.replace('"', '\\"').replace("\n", "\\n")
+
+
+def _format_inline_list(values: List[str]) -> str:
+    """Format a list as an inline flow list: [\"a\", \"b\"]."""
+    parts = [f'"{_escape(v)}"' for v in values]
+    return "[" + ", ".join(parts) + "]"
+
+
+def _generate_claim_block(
+    claim_id: str,
+    text: str,
+    kind: str,
+    scope: Optional[Dict[str, Any]] = None,
+    scalar_scope: Optional[str] = None,
+    revisit_on: Optional[List[str]] = None,
+) -> str:
+    """Generate an indented YAML-like claim block for the Claims section.
+
+    Emits the structured nested ``scope:`` mapping (with ``paths`` and optional
+    ``repository``/``git_commit``/``dirty_tree_fingerprint``) when ``scope`` is
+    a dict; otherwise emits the legacy scalar ``scope: "<str>"`` form from
+    ``scalar_scope``. ``revisit_on`` adds a sibling ``revisit.on`` list.
+    """
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    # Double-quote text and scope to handle special characters in Markdown
-    escaped_text = text.replace('"', '\\"').replace("\n", "\\n")
-    escaped_scope = scope.replace('"', '\\"').replace("\n", "\\n")
     lines = [
         f"  {claim_id}:",
-        f'    text: "{escaped_text}"',
+        f'    text: "{_escape(text)}"',
         f"    kind: {kind}",
         f"    state: captured",
-        f'    scope: "{escaped_scope}"',
-        f"    created_at: {now}",
     ]
+    if scope is not None:
+        lines.append("    scope:")
+        for key in ("repository", "git_commit", "dirty_tree_fingerprint"):
+            val = scope.get(key)
+            if val:
+                lines.append(f'      {key}: "{_escape(str(val))}"')
+        paths = scope.get("paths") or []
+        if paths:
+            lines.append(f"      paths: {_format_inline_list(paths)}")
+    else:
+        lines.append(f'    scope: "{_escape(scalar_scope or "")}"')
+    lines.append(f"    created_at: {now}")
+    if revisit_on:
+        lines.append("    revisit:")
+        lines.append(f"      on: {_format_inline_list(revisit_on)}")
     return "\n".join(lines)
 
 
-def parse_claims(body: str) -> List[Dict[str, str]]:
+def _unquote(value: str) -> str:
+    """Strip surrounding double quotes from a value, if present."""
+    value = value.strip()
+    if len(value) >= 2 and value[0] == '"' and value[-1] == '"':
+        return value[1:-1]
+    return value
+
+
+def _parse_inline_list(value: str) -> List[str]:
+    """Parse a bracketed flow list like [\"a\", \"b\"] into a Python list."""
+    value = value.strip()
+    if value.startswith("[") and value.endswith("]"):
+        inner = value[1:-1]
+    else:
+        inner = value
+    return [_unquote(p) for p in inner.split(",") if p.strip()]
+
+
+def parse_claims(body: str) -> List[Dict[str, Any]]:
     """Parse all claim blocks from the ``## Claims`` section.
 
-    Returns a list of dicts, one per claim, each with keys:
-    id, text, kind, state, scope, created_at.
+    Returns a list of dicts, one per claim. Each claim has keys:
+    id, text, kind, state, created_at, and either:
+      - ``scope`` as a plain string (legacy scalar form), or
+      - ``scope`` as a dict (structured form) with any of repository,
+        git_commit, dirty_tree_fingerprint, paths (a list),
+        plus ``revisit`` as a dict with an ``on`` list when present.
+    A ``scope:`` (or ``revisit:``) line with an empty value starts a nested
+    mapping; a non-empty value is the legacy scalar form.
     """
     section = get_section(body, CLAIM_SECTION_NAME)
     if not section:
         return []
 
-    claims: List[Dict[str, str]] = []
-    current: Optional[Dict[str, str]] = None
+    claims: List[Dict[str, Any]] = []
+    current: Optional[Dict[str, Any]] = None
+    key_indent: Optional[int] = None  # indentation of the claim's key lines
+    nested: Optional[str] = None      # "scope" or "revisit" when in a mapping
 
     for line in section.split("\n"):
         # Claim ID line: whitespace, then CLM-<id>:
@@ -131,18 +203,54 @@ def parse_claims(body: str) -> List[Dict[str, str]]:
             if current:
                 claims.append(current)
             current = {"id": claim_match.group(1)}
+            key_indent = None
+            nested = None
             continue
 
-        # Key: value line within a claim block (indented further)
-        if current is not None:
-            kv_match = re.match(r"^\s+(text|kind|state|scope|created_at):\s*(.+)", line)
-            if kv_match:
-                key = kv_match.group(1)
-                value = kv_match.group(2).strip()
-                # Strip surrounding quotes from text/scope values
-                if len(value) >= 2 and value[0] == '"' and value[-1] == '"':
-                    value = value[1:-1]
-                current[key] = value
+        if current is None:
+            continue
+
+        stripped = line.strip()
+        if not stripped:
+            continue
+        indent = len(line) - len(line.lstrip(" "))
+
+        # Claim key line at the claim's key indentation
+        kv_match = re.match(
+            r"^(text|kind|state|scope|created_at|revisit):\s*(.*)$", stripped
+        )
+        if kv_match and (key_indent is None or indent == key_indent):
+            if key_indent is None:
+                key_indent = indent
+            key = kv_match.group(1)
+            value = kv_match.group(2).strip()
+            if key in ("scope", "revisit"):
+                if value == "":
+                    nested = key
+                    current[key] = {}
+                else:
+                    nested = None
+                    current[key] = _unquote(value)
+            else:
+                nested = None
+                current[key] = _unquote(value)
+            continue
+
+        # Nested child line (indented deeper than the claim's key lines)
+        if nested is not None and (key_indent is None or indent > key_indent):
+            child_match = re.match(
+                r"^(repository|git_commit|dirty_tree_fingerprint|paths|on):\s*(.*)$",
+                stripped,
+            )
+            if child_match:
+                child_key = child_match.group(1)
+                child_value = child_match.group(2).strip()
+                mapping = current[nested]
+                if child_key in ("paths", "on"):
+                    mapping[child_key] = _parse_inline_list(child_value)
+                else:
+                    mapping[child_key] = _unquote(child_value)
+            continue
 
     if current:
         claims.append(current)
@@ -207,8 +315,43 @@ def cmd_claim_register(args: argparse.Namespace) -> int:
     # Allocate claim ID
     claim_id = _allocate_claim_id(body, args.id)
 
+    # Scope form: scalar (--scope) or structured (--paths), mutually exclusive
+    scalar_scope = args.scope
+    structured_scope = None
+    if args.paths:
+        structured_scope = {"paths": list(args.paths)}
+        if getattr(args, "git_commit", None):
+            structured_scope["git_commit"] = args.git_commit
+        if getattr(args, "dirty_fingerprint", None):
+            structured_scope["dirty_tree_fingerprint"] = args.dirty_fingerprint
+        repository = _get_workspace_name(ws_root)
+        if repository:
+            structured_scope["repository"] = repository
+        scalar_scope = None
+    if args.scope and args.paths:
+        print(
+            "Error: Use either --scope (scalar) or --paths (structured), not both.",
+            file=sys.stderr,
+        )
+        return 1
+    if not args.scope and not args.paths:
+        print(
+            "Error: Provide --scope (scalar) or --paths (structured).",
+            file=sys.stderr,
+        )
+        return 1
+
+    revisit_on = list(args.revisit_on) if args.revisit_on else None
+
     # Generate claim block
-    claim_block = _generate_claim_block(claim_id, args.text, args.kind, args.scope)
+    claim_block = _generate_claim_block(
+        claim_id,
+        args.text,
+        args.kind,
+        scope=structured_scope,
+        scalar_scope=scalar_scope,
+        revisit_on=revisit_on,
+    )
 
     # Append to Claims section
     new_body = append_to_section(body, CLAIM_SECTION_NAME, claim_block)
@@ -271,7 +414,19 @@ def cmd_claim_inspect(args: argparse.Namespace) -> int:
         print(f"  {cid}")
         print(f"    kind:   {kind}")
         print(f"    state:  {state}")
-        print(f"    scope:  {scope}")
+        if isinstance(scope, dict):
+            print("    scope:")
+            for key, val in scope.items():
+                if isinstance(val, list):
+                    print(f"      {key}: {_format_inline_list(val)}")
+                else:
+                    print(f"      {key}: {val}")
+        else:
+            print(f"    scope:  {scope}")
+        revisit = c.get("revisit")
+        if isinstance(revisit, dict) and revisit.get("on"):
+            print("    revisit:")
+            print(f"      on: {_format_inline_list(revisit['on'])}")
         print(f"    text:   {display_text}")
         print()
 

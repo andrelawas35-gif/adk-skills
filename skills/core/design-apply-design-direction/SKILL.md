@@ -39,9 +39,9 @@ This skill does not:
 
 ## Inputs and preconditions
 
-**Required input:** a readable Work Object in the `decide` or `build` state
-with natural-language direction from the user and at least a `[system:discovery]`
-entry or `[system:token-inventory]` entry.
+**Required input:** a readable Work Object in any state, where design direction
+has been given and not yet executed, with at least a `[system:discovery]` entry
+or `[system:token-inventory]` entry. No lifecycle state is required or excluded.
 
 **Preconditions:** `audit-product-interface` or `build-design-foundation` has
 run at least once. The user has provided design direction.

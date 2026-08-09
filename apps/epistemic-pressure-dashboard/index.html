@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Unresolved material conflicts</title>
+    <link rel="stylesheet" href="/tokens.css">
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: var(--space-3);
+        color: var(--color-text);
+        background: var(--color-canvas);
+        font-family: var(--font-sans);
+      }
+      .signal {
+        width: min(100%, 28rem);
+        padding: var(--space-3);
+        border: 1px solid var(--color-border);
+        border-top: 0.25rem solid var(--color-attention);
+        border-radius: var(--radius-card);
+        background: var(--color-surface);
+      }
+      .kind, .note { color: var(--color-muted); }
+      .kind {
+        margin: 0 0 var(--space-1);
+        font-size: 0.75rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      h1 { margin: 0; font-size: 1.25rem; }
+      .count {
+        display: flex;
+        align-items: baseline;
+        gap: var(--space-1);
+        margin: var(--space-3) 0 var(--space-2);
+      }
+      output {
+        color: var(--color-attention);
+        font-size: 3rem;
+        font-weight: 650;
+        line-height: 1;
+      }
+      .note { margin: 0; line-height: 1.5; }
+    </style>
+  </head>
+  <body>
+    <main class="signal" aria-labelledby="signal-title">
+      <p class="kind">Attention cue</p>
+      <h1 id="signal-title">Unresolved material conflicts</h1>
+      <div class="count">
+        <output data-signal="unresolved-material-conflicts" aria-live="polite">—</output>
+        <span data-count-label>items to inspect</span>
+      </div>
+      <p class="note" data-status>Loading current workspace count…</p>
+    </main>
+    <main class="signal" aria-labelledby="signal-title-2">
+      <p class="kind">Attention cue</p>
+      <h1 id="signal-title-2">Claims below support adequacy</h1>
+      <div class="count">
+        <output data-signal="claims-below-support-adequacy" aria-live="polite">—</output>
+        <span data-count-label>claims to inspect</span>
+      </div>
+      <p class="note" data-status>Loading current workspace count…</p>
+    </main>
+    <script>
+      const output = document.querySelector("[data-signal]");
+      const label = document.querySelector("[data-count-label]");
+      const status = document.querySelector("[data-status]");
+
+      fetch("/api/signals/unresolved-material-conflicts")
+        .then((response) => {
+          if (!response.ok) throw new Error("signal unavailable");
+          return response.json();
+        })
+        .then(({ count }) => {
+          if (!Number.isInteger(count) || count < 0) {
+            throw new Error("invalid signal response");
+          }
+          output.textContent = String(count);
+          label.textContent = count === 1 ? "item to inspect" : "items to inspect";
+          status.textContent = "Current workspace count.";
+        })
+        .catch(() => {
+          output.textContent = "—";
+          label.textContent = "";
+          status.textContent = "Count unavailable—inspect the server output.";
+        });
+    </script>
+    <script>
+      const output2 = document.querySelector("[data-signal='claims-below-support-adequacy']");
+      const label2 = document.querySelector("[data-signal='claims-below-support-adequacy']").parentElement.querySelector("[data-count-label]");
+      const status2 = document.querySelector("[data-signal='claims-below-support-adequacy']").parentElement.parentElement.querySelector("[data-status]");
+
+      fetch("/api/signals/claims-below-support-adequacy")
+        .then((response) => {
+          if (!response.ok) throw new Error("signal unavailable");
+          return response.json();
+        })
+        .then(({ count }) => {
+          if (!Number.isInteger(count) || count < 0) {
+            throw new Error("invalid signal response");
+          }
+          output2.textContent = String(count);
+          label2.textContent = count === 1 ? "claim to inspect" : "claims to inspect";
+          status2.textContent = "Current workspace count.";
+        })
+        .catch(() => {
+          output2.textContent = "—";
+          label2.textContent = "";
+          status2.textContent = "Count unavailable—inspect the server output.";
+        });
+    </script>
+  </body>
+</html>

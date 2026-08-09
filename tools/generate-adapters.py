@@ -41,6 +41,7 @@ SHARED_REFERENCES = [
     "CAPABILITY-DEGRADATION.md",
     "CONSEQUENCE-AUTHORITY.md",
     "EVIDENCE-MODEL.md",
+    "DIRECTOR-LANGUAGE.md",
 ]
 
 # Kernel/overlay split: AGREEMENT-LOOP.md and SKILL-AWARE-GRILLING.md form the
@@ -68,6 +69,8 @@ SHARED_PREAMBLE_SECTIONS = {
         ROOT / "references" / "shared" / "grilling-entry-preamble.md",
     "## Work Object updates":
         ROOT / "references" / "shared" / "work-object-updates-preamble.md",
+    "## Output template":
+        ROOT / "references" / "shared" / "director-language-preamble.md",
 }
 
 TIER_ORDER = {"high": 3, "medium": 2, "low": 1}
@@ -591,10 +594,14 @@ def namespace_skill_references(body):
 
 # Core skills whose sections are intentionally different and
 # should NOT receive the shared preamble injection (WO 2026-07-27-009).
+#
+# design-track-components and governance-maintain-working-method were moved off
+# this whole-skill list to the per-section lists below (WO 2026-08-09-006). Both
+# differ only in specific sections; the whole-skill skip also excluded their
+# ordinary `## Output template`, which silently withheld the director-language
+# preamble from two skills that had no conflicting content there.
 SHARED_PREAMBLE_SKIP_SKILLS = {
     "thinking-grilling-session",
-    "design-track-components",
-    "governance-maintain-working-method",
 }
 
 # Per-section skip lists for sections whose shared preamble only applies
@@ -610,6 +617,15 @@ SHARED_PREAMBLE_PER_SECTION_SKIP = {
         "thinking-develop-idea",
         "thinking-pressure-test-decision",
         "thinking-turn-signal-into-work",
+        "governance-maintain-working-method",
+    },
+    "## Consequence and authority rules": {
+        "design-track-components",
+        "governance-maintain-working-method",
+    },
+    "## Grilling entry and stage lens": {
+        "design-track-components",
+        "governance-maintain-working-method",
     },
 }
 

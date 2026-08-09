@@ -392,6 +392,8 @@ claim:
     on: ["validator-changed", "evidence-taxonomy-changed", "clean-baseline-tested"]
 ```
 
+> **Legacy-scalar transition note:** `CLM-2026_07_27_016-001/002/003` and `CLM-2026_07_27_019-001` shipped with a scalar `scope` string and stay frozen as legacy records (append-only, ADR 0017/0022); new claims adopt the structured scope above.
+
 ### Relationships
 
 ```text
