@@ -60,10 +60,25 @@ handoff would create or update a high-consequence Work Object, the confirmation
 must name that mutation. Do not stage, annotate, change status, append History,
 or make any other mutation before receiving that scoped confirmation.
 
-## Boundaries
+## Boundaries and non-goals
 
-- In a Work Studio-pinned project, explicit `grill me` and `grill this` use
-  this skill rather than the generic `grilling` skill.
-- Outside that project context, leave generic grilling to the generic skill.
-- Do not implement, deploy, write artifacts, or claim convergence without the
+**This skill does:**
+- Run continuous grilling sessions in a Work Studio-pinned project on explicit
+  `grill me` / `grill this` requests, following `references/AGREEMENT-LOOP.md`.
+- Maintain one decision frontier and ask exactly one decision-bearing question
+  per turn.
+- Inspect enough local evidence to choose and state a correctable initial
+  profile from `references/SKILL-AWARE-GRILLING.md`.
+- Run ephemerally unless an active Work Object is relevant.
+- Let stage skills nominate a Grilling Candidate under the Agreement Loop's
+  three-part threshold, with its Candidate Card shown before explicit entry.
+
+**This skill does NOT:**
+- Create, resume, or mutate a Work Object merely to begin grilling.
+- Route to `conduct-work-object` except to retain the session or record an
+  accepted decision that needs durable continuity.
+- Let a profile replace the engine or restart the conversation.
+- Implement, deploy, write artifacts, or claim convergence without the
   authority and confirmation required by the Agreement Loop.
+- Operate outside a Work Studio-pinned project — leave generic grilling to the
+  generic `grilling` skill.

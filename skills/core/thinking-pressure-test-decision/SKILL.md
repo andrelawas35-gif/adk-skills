@@ -241,7 +241,7 @@ obvious, or easily reversible choices.
 
 #### Update frontmatter
 
-If this decision completes the Decide state:
+If this decision was blocking the Work Object's progress:
 - Set `state` to `design` (or the next appropriate state)
 - Update `updated_at`
 - Update `next_action` to reflect the next concrete move
@@ -327,7 +327,7 @@ After every confirmed decision:
 
 **Route back to `conduct-work-object` when:**
 - The decision is confirmed and recorded
-- The Work Object state has advanced (e.g., decide → design)
+- The Work Object state has advanced (e.g., explore → design)
 - No further decisions are needed at the current stage
 
 **Route to `design-tracer-bullet` when:**

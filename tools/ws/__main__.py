@@ -45,6 +45,7 @@ from .claim import cmd_claim_inspect, cmd_claim_register
 from .conflict import cmd_conflict_register
 from .epistemic import cmd_epistemic_lint
 from .epistemic_controls import audit_epistemic_state
+from .skill_map import cmd_skill_map_build
 
 
 def _find_work_studio_root() -> Path:
@@ -1046,6 +1047,17 @@ def build_parser() -> argparse.ArgumentParser:
         help="Bypass optimistic concurrency check",
     )
 
+    # ── ws skill-map ──────────────────────────────────────────────────────
+    skill_map_parser = subparsers.add_parser(
+        "skill-map", help="Generate the skill map index from core skill contracts"
+    )
+    skill_map_sub = skill_map_parser.add_subparsers(dest="skill_map_command")
+
+    skill_map_build_parser = skill_map_sub.add_parser(
+        "build",
+        help="Generate work-studio/skill-map.yaml from skills/core/*/SKILL.md",
+    )
+
     # ── ws validate ───────────────────────────────────────────────────────
     validate_parser = subparsers.add_parser("validate", help="Run validation checks")
     validate_parser.add_argument(
@@ -1121,6 +1133,13 @@ def main() -> int:
         if args.conflict_command == "register":
             return cmd_conflict_register(args)
         print("Error: Unknown conflict command. Use 'ws conflict register'.",
+              file=sys.stderr)
+        return 1
+
+    if args.command == "skill-map":
+        if args.skill_map_command == "build":
+            return cmd_skill_map_build(args)
+        print("Error: Unknown skill-map command. Use 'ws skill-map build'.",
               file=sys.stderr)
         return 1
 

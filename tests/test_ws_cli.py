@@ -72,6 +72,7 @@ from ws.validate import (
     run_checks,
     CHECK_REGISTRY,
 )
+from ws.skill_map import extract_non_goals
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -2609,6 +2610,120 @@ class TestCampaignAndPlausibilityWarnings(unittest.TestCase):
             self.assertEqual(result, 1)
             self.assertIn("Warning:", stderr.getvalue())
             self.assertIn("Invalid status", stderr.getvalue())
+
+
+class TestSkillMapExtraction(unittest.TestCase):
+    """Strict non_goals extraction from core skill contracts (WO 2026-08-10-004)."""
+
+    def _skill_dir(self, root: Path, name: str, body: str) -> Path:
+        skill_dir = root / "skills" / "core" / name
+        skill_dir.mkdir(parents=True, exist_ok=True)
+        fm = (
+            "---\n"
+            "name: " + name + "\n"
+            "default_tier: medium\n"
+            'description: "A test skill."\n'
+            "---\n"
+        )
+        (skill_dir / "SKILL.md").write_text(fm + body)
+        return skill_dir
+
+    def test_does_not_bullets_extracted(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            skill = self._skill_dir(
+                root,
+                "test-skill",
+                "\n## Boundaries and non-goals\n\n"
+                "This skill does:\n- Do things.\n\n"
+                "This skill does not:\n- Refuse thing one.\n- Refuse thing two.\n",
+            )
+            self.assertEqual(
+                extract_non_goals(skill), ["Refuse thing one.", "Refuse thing two."]
+            )
+
+    def test_bold_uppercase_marker_and_wrapped_bullets_folded(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            skill = self._skill_dir(
+                root,
+                "test-skill",
+                "\n## Boundaries and non-goals\n\n"
+                "**This skill does:**\n- Do things.\n\n"
+                "**This skill does NOT:**\n"
+                "- Refuse a thing with a long\n"
+                "  wrapped continuation.\n"
+                "- Refuse another.\n",
+            )
+            self.assertEqual(
+                extract_non_goals(skill),
+                [
+                    "Refuse a thing with a long wrapped continuation.",
+                    "Refuse another.",
+                ],
+            )
+
+    def test_missing_boundaries_section_raises(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            skill = self._skill_dir(
+                root, "test-skill", "\n## Required capabilities\n- `file_read`\n"
+            )
+            with self.assertRaises(ValueError) as ctx:
+                extract_non_goals(skill)
+            self.assertIn("Missing Boundaries and non-goals", str(ctx.exception))
+
+    def test_missing_does_not_region_raises(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            skill = self._skill_dir(
+                root,
+                "test-skill",
+                "\n## Boundaries and non-goals\n\nThis skill does:\n- Do things.\n",
+            )
+            with self.assertRaises(ValueError) as ctx:
+                extract_non_goals(skill)
+            self.assertIn("No 'does not' region", str(ctx.exception))
+
+
+class TestSkillMapCommand(unittest.TestCase):
+    """End-to-end `ws skill-map build` against the real corpus."""
+
+    REPO_ROOT = TOOLS_DIR.parent
+
+    def _run_ws(self, root: Path, *args: str):
+        env = os.environ.copy()
+        existing = env.get("PYTHONPATH", "")
+        env["PYTHONPATH"] = str(self.REPO_ROOT) + (
+            f":{existing}" if existing else ""
+        )
+        return subprocess.run(
+            [sys.executable, "-m", "tools.ws", *args],
+            capture_output=True, text=True,
+            cwd=str(root),
+            env=env,
+        )
+
+    def test_build_generates_all_22_with_three_fields(self):
+        result = self._run_ws(self.REPO_ROOT, "skill-map", "build")
+        self.assertEqual(result.returncode, 0)
+        self.assertIn("22 skills", result.stdout)
+        out = self.REPO_ROOT / "work-studio" / "skill-map.yaml"
+        self.assertTrue(out.exists())
+        text = out.read_text()
+        for field in ("responsibility:", "non_goals:", "requires_capabilities:"):
+            self.assertIn(field, text)
+        # Both formerly non-conforming skills are repaired and present.
+        self.assertIn("thinking-grilling-session", text)
+        self.assertIn("thinking-diagnose-homogenization", text)
+        self.assertEqual(text.count("  - name:"), 22)
+
+    def test_regeneration_is_byte_identical(self):
+        out = self.REPO_ROOT / "work-studio" / "skill-map.yaml"
+        self._run_ws(self.REPO_ROOT, "skill-map", "build")
+        first = out.read_bytes()
+        self._run_ws(self.REPO_ROOT, "skill-map", "build")
+        self.assertEqual(first, out.read_bytes())
 
 
 class TestMembersCommand(unittest.TestCase):

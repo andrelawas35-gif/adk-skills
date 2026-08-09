@@ -406,7 +406,7 @@
     {
       "name": "alawas-thinking-diagnose-homogenization",
       "path": "adapters/codex/skills/alawas-thinking-diagnose-homogenization/SKILL.md",
-      "sha256": "d559a70d192347f73f5e41dac6ea5b136b75f6f56fe2ad8c105a8c2fdd1b60f2"
+      "sha256": "c17bb13a12cb33d974644bd0e88b9743b5aef2664d6bbc0a2e2640878b96ab89"
     },
     {
       "name": "alawas-thinking-diagnose-homogenization/references/CAPABILITY-DEGRADATION.md",
@@ -426,7 +426,7 @@
     {
       "name": "alawas-thinking-grilling-session",
       "path": "adapters/codex/skills/alawas-thinking-grilling-session/SKILL.md",
-      "sha256": "73a7eb23371b7569af7dc0dea75d5dd0a818fc47f4d27bc75d0df91048b9bba4"
+      "sha256": "54bafb00faa121cbca645a8067ee8cc0f64ed8d0c07e9904eb1a435c17346961"
     },
     {
       "name": "alawas-thinking-grilling-session/references/AGREEMENT-LOOP.md",
@@ -471,7 +471,7 @@
     {
       "name": "alawas-thinking-pressure-test-decision",
       "path": "adapters/codex/skills/alawas-thinking-pressure-test-decision/SKILL.md",
-      "sha256": "2b3606a42c4207c09e459fbb42ca0f1c044253bfc944d7f313d30ffb5dab999e"
+      "sha256": "b3b1798de4b69c7cac2d608cdd58034b3151b8c96282187cebd81d2dd317eee5"
     },
     {
       "name": "alawas-thinking-pressure-test-decision/references/CAPABILITY-DEGRADATION.md",

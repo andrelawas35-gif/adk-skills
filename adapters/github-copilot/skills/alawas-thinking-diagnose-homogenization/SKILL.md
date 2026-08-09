@@ -8,6 +8,28 @@ platform: github-copilot
 
 Protect distinct perception from smooth generic prose. Diagnose before rewriting. Preserve what is alive in the draft; cut or mark what is unearned. Never substitute an AI's idea of a distinctive voice for the user's actual material.
 
+## Boundaries and non-goals
+
+**This skill does:**
+- Diagnose homogenization and explain the diagnosis rather than labeling prose
+  generic by style alone.
+- Mark what is specific and worth keeping in a draft.
+- Demand concrete evidence, lived detail, and genuine alternatives before
+  polishing.
+- Offer two or three materially different revision directions before rewriting.
+- Rewrite only from supplied or retrieved material, marking missing material
+  as an explicit gap.
+- Return final judgment to the writer.
+
+**This skill does NOT:**
+- Invent anecdotes, locations, emotions, quotations, research, or personal
+  history.
+- Claim to detect AI authorship or plagiarism from style alone.
+- Turn personal experience into proof of a social claim.
+- Make the writer sound more radical, literary, academic, or certain than the
+  source supports.
+- Declare prose authentic, original, or "more human" — only the writer can.
+
 ## Groundedness lens
 
 Every writer brings characteristic subjects, ways of seeing, and habits of
