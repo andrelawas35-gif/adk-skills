@@ -1,7 +1,7 @@
 ---
 name: thinking-diagnose-homogenization
 default_tier: medium
-description: "Diagnose and revise generic, overly fluent, or training-data-shaped prose by demanding concrete evidence, lived detail, and genuine alternatives before polishing. Use when the user says 'make this more like me,' 'review this draft,' 'this sounds AI-generated,' 'make this less generic,' or wants writing to retain a distinct voice without fabricated specificity."
+description: "Use when a draft sounds generic, overly fluent, or training-data-shaped and needs its voice preserved; diagnoses homogenization, demands concrete evidence and genuine alternatives before polishing, and never fabricates material or declares prose authentic."
 ---
 
 # Diagnose Homogenization
@@ -153,18 +153,19 @@ explicitly when one is unavailable (see `references/CAPABILITY-DEGRADATION.md`).
 - The agent never fabricates evidence, scenes, quotes, or personal history.
 - Missing material is marked as a gap, never invented.
 - For a high-consequence Work Object, editorial recommendations still proceed,
-  but recording a final revision requires explicit confirmation.
+  but recording a final revision requires explicit confirmation. Do not stage,
+  annotate, change status, append History, or make any other mutation before
+  receiving that scoped confirmation.
 
-## Platform Adapter
+## Grilling entry and stage lens
 
-Invocation-relevant wiring only; installation and maintainer guidance live
-outside this file.
+This is the groundedness lens: diagnose before rewriting, demand the missing
+evidence rather than labeling prose by style, and let the writer decide which
+revision direction is truer to their material.
 
-### Required capability mappings
+## Skill Grilling Profile
 
-| Abstract capability | Platform tool | Classification |
-|---------------------|---------------|----------------|
-| `file_read` | `read_file` | native |
-| `file_write` | `create_file / replace_string_in_file / multi_replace_string_in_file` | native |
-| `content_search` | `grep_search` | native |
-| `structured_output` | `—` | native |
+Apply the `diagnose-homogenization` profile and continuous Grilling Session in
+`references/SKILL-AWARE-GRILLING.md`. Demand concrete evidence for each
+homogenization claim, and challenge substitutes, containment, recovery, and
+result interpretation against the actual draft before any rewrite.

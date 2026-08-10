@@ -95,7 +95,9 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
 - The agent never reframes the user's intent without explicitly checking.
 - For a high-consequence Work Object, direction generation still proceeds
   (it is exploration, not commitment), but recording a selection requires
-  explicit human confirmation.
+  explicit human confirmation. Do not stage, annotate, change status, append
+  History, or make any other mutation until that scoped confirmation is
+  received.
 - `just execute` accepts the current recommendation but never bypasses
   creative authority boundaries, safety gates, or the user's right to
   select among directions.
@@ -394,23 +396,6 @@ Before reporting completion:
 - [ ] The Work Object is sufficient to resume without chat context
 
 ---
-
-## Platform Adapter
-
-Invocation-relevant wiring only; installation and maintainer guidance live
-outside this file.
-
-### Required capability mappings
-
-| Abstract capability | Platform tool | Classification |
-|---------------------|---------------|----------------|
-| `file_read` | `read_file` | native |
-| `file_write` | `create_file / replace_string_in_file` | native |
-| `content_search` | `grep_search` | native |
-| `directory_list` | `list_dir` | native |
-| `terminal_run` | `run_in_terminal` | native |
-| `web_fetch` | `fetch_webpage` | native |
-| `structured_output` | `—` | native |
 ---
 
 ## Platform Adapter

@@ -37,6 +37,6 @@ class MemoryCandidateGateContract(unittest.TestCase):
 
         for platform in PLATFORMS:
             with self.subTest(platform=platform):
-                adapter = ROOT / "adapters" / platform / "skills" / "alawas-turn-signal-into-work" / "SKILL.md"
+                adapter = ROOT / "adapters" / platform / "skills" / f"alawas-{CORE.parent.name}" / "SKILL.md"
                 self.assertIn("Memory Candidate gate", adapter.read_text())
 

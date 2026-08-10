@@ -8,6 +8,7 @@ Dependency-free — standard-library unittest only, matching the generator's
 """
 
 import hashlib
+import importlib.util
 import json
 import re
 import subprocess
@@ -23,6 +24,16 @@ PLATFORMS = ["codex", "claude-code", "github-copilot"]
 SKILL_NAMESPACE = "alawas"
 
 
+def _generator():
+    """Load tools/generate-adapters.py once via importlib (hyphenated name)."""
+    spec = importlib.util.spec_from_file_location(
+        "generate_adapters", GENERATOR
+    )
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 def run_generator(*args):
     return subprocess.run(
         [sys.executable, str(GENERATOR), *args],
@@ -31,12 +42,18 @@ def run_generator(*args):
 
 
 def core_body(skill_name):
-    """The Markdown body of a core skill (everything after the frontmatter)."""
-    text = (CORE_DIR / skill_name / "SKILL.md").read_text()
-    body = text.split("---", 2)[2].lstrip("\n").rstrip("\n")
-    for name in sorted(core_skill_names(), key=len, reverse=True):
-        body = body.replace(f"`{name}`", f"`{adapter_skill_name(name)}`")
-    return body
+    """The core body exactly as the generator emits it in an adapter.
+
+    Delegates to the generator's own pipeline (namespace_skill_references +
+    inject_shared_preamble) so the expectation can never drift from the
+    generated artifact.
+    """
+    ga = _generator()
+    body = ga.namespace_skill_references(
+        ga.extract_body(CORE_DIR / skill_name / "SKILL.md")
+    )
+    body = ga.inject_shared_preamble(body, skill_name)
+    return body.rstrip("\n")
 
 
 def core_skill_names():
@@ -166,7 +183,7 @@ class GeneratorContract(unittest.TestCase):
         """
         # Verify the conductor references ws create (the new write path)
         for platform in PLATFORMS:
-            adapter = adapter_file(platform, "conduct-work-object").read_text()
+            adapter = adapter_file(platform, "governance-conduct-work-object").read_text()
             self.assertTrue(
                 "ws create" in adapter or "tools.ws" in adapter,
                 f"{platform}: conductor should reference ws CLI for creation"
@@ -206,7 +223,7 @@ class GeneratorContract(unittest.TestCase):
             "`do recommended` accepts"
         )
         for platform in PLATFORMS:
-            adapter = adapter_file(platform, "pressure-test-decision").read_text()
+            adapter = adapter_file(platform, "thinking-pressure-test-decision").read_text()
             self.assertIn(local_flow, " ".join(adapter.split()))
 
     def test_gated_skills_have_inline_authority_blocks(self):
@@ -216,14 +233,14 @@ class GeneratorContract(unittest.TestCase):
         The test checks both the core source and all generated adapters.
         """
         gated_skills = {
-            "conduct-work-object",
-            "deploy-with-recovery",
-            "implement-bounded-change",
-            "verify-release-evidence",
-            "review-outcome-and-adapt",
-            "diagnose-production-incident",
-            "maintain-working-method",
-            "govern-scorecards",
+            "governance-conduct-work-object",
+            "operations-deploy-with-recovery",
+            "engineering-implement-bounded-change",
+            "engineering-verify-release-evidence",
+            "governance-review-outcome-and-adapt",
+            "operations-diagnose-production-incident",
+            "governance-maintain-working-method",
+            "governance-govern-scorecards",
         }
         authority_marker = "**Authority gate:**"
         reference_marker = "CONSEQUENCE-AUTHORITY.md"
@@ -264,30 +281,51 @@ class GeneratorContract(unittest.TestCase):
             )
 
     def test_installed_skills_include_their_declared_references(self):
-        """Each generated skill receives only the reference files its core body
-        mentions (Decision 88). Skills that mention none get no references dir."""
-        references = [
-            "MISSING-ARTIFACT-GAP.md",
-            "AGREEMENT-LOOP.md",
-            "SKILL-AWARE-GRILLING.md",
-            "CAPABILITY-DEGRADATION.md",
-            "CONSEQUENCE-AUTHORITY.md",
-            "EVIDENCE-MODEL.md",
-        ]
+        """Each generated skill receives exactly the reference files the
+        generator computes (Decision 88 + preamble-injected refs + kernel/
+        overlay split). Delegates the expected set to the generator's own
+        build_reference_entries so the test can never drift from generation."""
+        ga = _generator()
         for platform in PLATFORMS:
             for skill in core_skill_names():
-                core_text = (CORE_DIR / skill / "SKILL.md").read_text()
-                body = core_text.split("---", 2)[2]
-                mentioned = [r for r in references if r in body]
+                skill_dir = CORE_DIR / skill
+                # Expected reference names the generator would install.
+                expected = ga.build_reference_entries(
+                    adapter_skill_name(skill),
+                    ADAPTERS_DIR / platform / "skills" / adapter_skill_name(skill),
+                    core_skill_dir=skill_dir,
+                    write=False,
+                )
+                # Expected files: top-level references plus epistemic variants
+                # (installed under references/epistemic/).
+                expected_files = {
+                    Path(e["name"]).name for e in expected
+                    if "/references/epistemic/" not in e["name"]
+                    and "/references/" in e["name"]
+                }
+                expected_epistemic = {
+                    Path(e["name"]).name for e in expected
+                    if "/references/epistemic/" in e["name"]
+                }
                 refs_dir = (ADAPTERS_DIR / platform / "skills"
                             / adapter_skill_name(skill) / "references")
-                if mentioned:
+                if expected_files or expected_epistemic:
                     self.assertTrue(refs_dir.is_dir(),
                                     f"{platform}/{skill}: expected references dir")
-                    for reference in mentioned:
-                        path = refs_dir / reference
-                        self.assertTrue(path.is_file(),
-                                        f"missing installed reference: {path}")
+                    installed = {p.name for p in refs_dir.iterdir()
+                                 if p.is_file()}
+                    self.assertEqual(
+                        installed, expected_files,
+                        f"{platform}/{skill}: installed references mismatch")
+                    if expected_epistemic:
+                        epi_dir = refs_dir / "epistemic"
+                        self.assertTrue(epi_dir.is_dir(),
+                                        f"{platform}/{skill}: expected epistemic dir")
+                        installed_epi = {p.name for p in epi_dir.iterdir()
+                                         if p.is_file()}
+                        self.assertEqual(
+                            installed_epi, expected_epistemic,
+                            f"{platform}/{skill}: installed epistemic mismatch")
                 else:
                     self.assertFalse(refs_dir.exists(),
                                      f"{platform}/{skill}: unexpected references dir")
@@ -297,7 +335,7 @@ class GeneratorContract(unittest.TestCase):
             for skill in core_skill_names():
                 adapter = adapter_file(platform, skill).read_text()
                 normalized = " ".join(adapter.split())
-                if skill == "grilling-session":
+                if skill == "thinking-grilling-session":
                     self.assertIn("## Entry and delegation", adapter)
                     self.assertIn("Run ephemerally", normalized)
                 else:
@@ -349,8 +387,8 @@ class GeneratorContract(unittest.TestCase):
                     self.assertNotIn(text, appendix, f"{platform}/{skill}: {text}")
 
     def test_degradation_details_are_emitted_only_when_required(self):
-        codex_inquiry = adapter_file("codex", "investigate-live-question").read_text()
-        codex_build = adapter_file("codex", "implement-bounded-change").read_text()
+        codex_inquiry = adapter_file("codex", "research-investigate-live-question").read_text()
+        codex_build = adapter_file("codex", "engineering-implement-bounded-change").read_text()
         self.assertIn("#### `web_search` (manual-fallback)", codex_inquiry)
         self.assertNotIn("`browser_automation`", codex_inquiry)
         self.assertNotIn("### Capability Degradation", codex_build)
@@ -358,18 +396,18 @@ class GeneratorContract(unittest.TestCase):
         # deployment: manual-fallback on all platforms — degradation present in deploy-with-recovery
         for platform in PLATFORMS:
             with self.subTest(platform=platform):
-                adapter = adapter_file(platform, "deploy-with-recovery").read_text()
+                adapter = adapter_file(platform, "operations-deploy-with-recovery").read_text()
                 self.assertIn("#### `deployment` (manual-fallback)", adapter)
                 self.assertIn("#### `secret_access` (manual-fallback)", adapter)
                 self.assertIn("#### `file_uploads` (manual-fallback)", adapter)
 
         # artifact_rendering: native on Claude Code — no degradation section there
-        cc_gov = adapter_file("claude-code", "govern-scorecards").read_text()
+        cc_gov = adapter_file("claude-code", "governance-govern-scorecards").read_text()
         self.assertNotIn("#### `artifact_rendering`", cc_gov)
         # artifact_rendering: manual-fallback on Codex and Copilot — degradation present
-        codex_gov = adapter_file("codex", "govern-scorecards").read_text()
+        codex_gov = adapter_file("codex", "governance-govern-scorecards").read_text()
         self.assertIn("#### `artifact_rendering` (manual-fallback)", codex_gov)
-        copilot_gov = adapter_file("github-copilot", "govern-scorecards").read_text()
+        copilot_gov = adapter_file("github-copilot", "governance-govern-scorecards").read_text()
         self.assertIn("#### `artifact_rendering` (manual-fallback)", copilot_gov)
 
     def test_new_capabilities_classified_across_platforms(self):
@@ -439,7 +477,7 @@ class GeneratorContract(unittest.TestCase):
 
     def test_platform_constraints_are_disclosed(self):
         """A required manual-fallback capability remains explicit."""
-        adapter = adapter_file("claude-code", "investigate-live-question").read_text()
+        adapter = adapter_file("claude-code", "research-investigate-live-question").read_text()
         self.assertIn("manual-fallback", adapter)
         self.assertIn("#### `web_search` (manual-fallback)", adapter)
 
@@ -462,7 +500,7 @@ class GeneratorContract(unittest.TestCase):
 
     def test_drift_is_detected(self):
         """--check must fail (and then recover) when an artifact is edited."""
-        target = adapter_file("claude-code", "conduct-work-object")
+        target = adapter_file("claude-code", "governance-conduct-work-object")
         original = target.read_bytes()
         try:
             target.write_text(target.read_text() + "\ndrifted\n")

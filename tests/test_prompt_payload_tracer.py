@@ -56,7 +56,7 @@ class PromptPayloadTracerContract(unittest.TestCase):
         result = baseline(ROOT)
         self.assertGreater(result["total_bytes"], 0)
         self.assertGreater(result["total_words"], 0)
-        self.assertTrue(result["source"].endswith("alawas-turn-signal-into-work"))
+        self.assertTrue(result["source"].endswith("alawas-thinking-turn-signal-into-work"))
 
     def test_unknown_dependency_and_scenario_fail_closed(self):
         broken = json.loads(json.dumps(self.manifest))

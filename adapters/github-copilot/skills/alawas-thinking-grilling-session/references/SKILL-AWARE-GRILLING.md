@@ -8,7 +8,7 @@ checklist and never replaces the one-question conversational turn contract.
 
 ## Skill Grilling Profiles
 
-### `turn-signal-into-work`
+### `alawas-thinking-turn-signal-into-work`
 
 **Gates** — (1) Provenance and sensitivity: confirm the signal's source and
 whether using it crosses a privacy or data boundary before acting on it. (2)
@@ -18,16 +18,16 @@ requires.
 
 **Escalation** — Default: confirm the interpretation, check `active.md` and
 existing Work Objects for overlap, classify as activation, incubation,
-retention, or discard, and route classification to `conduct-work-object`.
+retention, or discard, and route classification to `alawas-governance-conduct-work-object`.
 Information value overrides the default when evidence strongly indicates
 duplicate work or an unresolved evidence gap — escalate directly to
-`investigate-live-question` before classifying.
+`alawas-research-investigate-live-question` before classifying.
 
 **Pressure scenario** — The signal is ambiguous between two established Work
 Objects: would classifying it as new silently fork tracked work, and which
 existing object's evidence would that duplicate?
 
-### `conduct-work-object`
+### `alawas-governance-conduct-work-object`
 
 **Gates** — (1) Consequence and authority: confirm whether the requested
 mutation is attention, ownership, external consequence, or lifecycle
@@ -47,7 +47,7 @@ duplication or naming an owner before continuing.
 different titles: does completing one silently obsolete evidence in the
 other, and who owns reconciling them?
 
-### `pressure-test-decision`
+### `alawas-thinking-pressure-test-decision`
 
 **Gates** — (1) Decision authority: confirm who owns the decision and that
 recording it does not exceed the Work Object's consequence-based authority.
@@ -60,14 +60,14 @@ risk, seek the strongest disconfirming evidence, recommend one branch, test
 it against a counterexample, and record it with rationale and a revisit
 trigger. Information value overrides the default when a cheap reversible
 experiment would discriminate better than continued discussion — escalate to
-`design-tracer-bullet` before recording a provisional decision.
+`alawas-design-design-tracer-bullet` before recording a provisional decision.
 
 **Pressure scenario** — The leading branch reverses easily today but becomes
 irreversible after the next deploy: does that change which branch should be
 recommended, and does the decision need to be made before or after that
 deploy?
 
-### `develop-idea`
+### `alawas-thinking-develop-idea`
 
 **Gates** — (1) Explore-state validity: confirm the Work Object is in
 `explore` state with `type: inquiry` before generating directions; generating
@@ -81,7 +81,7 @@ materially distinct directions with five-field structure (title, core idea,
 distinctness claim, key assumption, smallest test), surface information
 gaps, and present neutrally for user selection. Information value overrides
 the default when the existing evidence ledger already discriminates between
-potential directions — escalate to `investigate-live-question` for targeted
+potential directions — escalate to `alawas-research-investigate-live-question` for targeted
 gap resolution rather than generating full directions that the evidence has
 already narrowed.
 
@@ -90,7 +90,59 @@ evidence ledger already contains a clearly superior path: does the skill
 still generate divergent directions, or does it route to convergence,
 and what tells the agent which is appropriate?
 
-### `design-tracer-bullet`
+### `alawas-thinking-diagnose-homogenization`
+
+**Gates** — (1) Diagnosis-before-rewrite: confirm the homogenization claim is
+grounded in the actual draft's missing evidence or flattening, not in style
+labels. (2) Writer authority: confirm the writer decides which revision
+direction is truer; the skill never declares prose authentic or "more human."
+
+**Escalation** — Default: diagnose the specific missing material, demand
+concrete evidence and lived detail, mark gaps rather than inventing them, and
+present revision directions for the writer's choice. Information value
+overrides the default when a homogenization claim is asserted without
+draft-level evidence — escalate to grounding the claim in the exact passage
+before proposing any rewrite.
+
+**Pressure scenario** — The draft reads fluently and generically, but the
+writer insists it is already their voice: does the skill still demand concrete
+evidence of flattening before touching it, or defer to the writer's
+self-assessment?
+
+### `alawas-thinking-inquire-system`
+
+**Gates** — (1) Studio grounding: confirm the answer is grounded in the
+repository and active Work Objects, using the web only for background. (2)
+Decision boundary: confirm the answer stops at the first decision, claim, or
+judgment another skill owns.
+
+**Escalation** — Default: read the repository and active Work Objects, ground
+the answer in what exists, and stop at the first judgment another skill owns.
+Information value overrides the default when the question points to a decision
+or claim outside this skill's authority — escalate to routing to the owning
+skill rather than answering.
+
+**Pressure scenario** — An open question about how the studio works appears
+answerable from memory, but the repository and active Work Objects disagree:
+does the skill ground the answer in the repository, or answer from habit?
+
+### `alawas-thinking-resume-work`
+
+**Gates** — (1) Read-only: confirm the skill reads Work Objects only and never
+writes anything. (2) Single-candidate handoff: confirm exactly one candidate
+with state and next_action is handed back, and only the director routes it.
+
+**Escalation** — Default: read Work Objects read-only, rank forward-motion work
+by recency, and hand back exactly one candidate with its state and next_action.
+Information value overrides the default when the most recent work is not the
+most forward-moving — escalate to ranking by forward-motion evidence rather
+than recency alone.
+
+**Pressure scenario** — The most recent Work Object is stalled while an older
+one has clear next-action momentum: does the skill hand back the older
+forward-moving candidate, or default to recency?
+
+### `alawas-design-design-tracer-bullet`
 
 **Gates** — (1) External-effect and data boundary: confirm the design's
 containment and access boundary before treating any exit evidence as safe to
@@ -109,7 +161,7 @@ bullet.
 also touches sensitive data: is there a substitute that preserves
 informativeness without the exposure, and what realism does it lose?
 
-### `implement-bounded-change`
+### `alawas-engineering-implement-bounded-change`
 
 **Gates** — (1) Scope boundary: confirm the smallest viable change does not
 cross an unapproved schema, public interface, dependency, deployment
@@ -129,7 +181,7 @@ tree also contains unrelated uncommitted work touching the same files: is the
 diff actually separable for its own commit, or does isolating it require
 hunk-level surgery?
 
-### `verify-release-evidence`
+### `alawas-engineering-verify-release-evidence`
 
 **Gates** — (1) Recovery credibility: confirm a credible, reproducible
 recovery path exists before treating a consequential change as ready; missing
@@ -150,7 +202,7 @@ environment's data shape has never been exercised: does "ready" still hold,
 or does this drop to "ready with accepted risk" pending an owner's explicit
 sign-off?
 
-### `deploy-with-recovery`
+### `alawas-operations-deploy-with-recovery`
 
 **Gates** — (1) Rollback viability: confirm a rehearsed or directly evidenced
 rollback mechanism and an available rollback owner exist before any increment
@@ -169,7 +221,7 @@ no instrumentation covering the affected path: is "no alert" actually
 evidence of success here, or a false-negative gap that should hold the
 rollout?
 
-### `review-outcome-and-adapt`
+### `alawas-governance-review-outcome-and-adapt`
 
 **Gates** — (1) Subgroup and unintended-effect harm: confirm aggregate
 success does not hide subgroup harm or an unintended effect on an affected
@@ -186,7 +238,7 @@ escalate to naming that subgroup explicitly before closing as achieved.
 affected subgroup's data is thin: is "achieved" actually supported, or does
 the object need to close with documented uncertainty for that subgroup?
 
-### `investigate-live-question`
+### `alawas-research-investigate-live-question`
 
 **Gates** — (1) Evidence-source authority: confirm narrow, scoped authority
 exists before collecting people, production, or sensitive-source evidence,
@@ -206,7 +258,7 @@ production query against data the requester isn't scoped to see: does the
 investigation stop here, or is there a narrower authorized query that still
 discriminates?
 
-### `diagnose-production-incident`
+### `alawas-operations-diagnose-production-incident`
 
 **Gates** — (1) Ongoing-harm containment: confirm the safest reversible
 containment is applied before anything else when harm is actively growing.
@@ -224,7 +276,7 @@ to confirming mechanism before treating it as the cause.
 traffic for unaffected users: does the harm trajectory justify that trade, or
 is there a narrower containment that protects the same boundary?
 
-### `maintain-working-method`
+### `alawas-governance-maintain-working-method`
 
 **Gates** — (1) Exception authority: confirm `use when`, `do not use when`,
 and exception authority are explicit before a rule can override normal
@@ -242,7 +294,7 @@ noncompliance.
 this month: is the rule still correct as stated, or does the boundary itself
 need revising before a fourth exception happens?
 
-### `govern-scorecards`
+### `alawas-governance-govern-scorecards`
 
 **Gates** — (1) Personal/privacy default: confirm personal evidence stays
 private by default and that aggregation, sharing, or system-wide rule
@@ -261,7 +313,7 @@ track it.
 but is flat for every subgroup except one: does the aggregate trend justify
 action, or does this need subgroup-level inspection before any rule changes?
 
-### `track-components`
+### `alawas-design-track-components`
 
 **Gates** — (1) Registry and mutation authority: confirm that registration,
 retirement, cascade, or a schema change has the Work Object or owner authority
@@ -279,7 +331,7 @@ evidence-gathering or owner decision before re-stamping the entry.
 cooldown, but a dependent declares a contract change: does the cascade reopen
 it before any ordinary debt ranking, and is the declared edge sufficient?
 
-### `apply-design-direction`
+### `alawas-design-apply-design-direction`
 
 **Gates** — (1) Direction specificity: confirm the natural-language direction
 can be translated into observable specification changes before producing a
@@ -298,7 +350,7 @@ the current specification has two layout regions serving different user goals:
 does the revision manifest preserve both and simplify within each, or does it
 merge them and risk losing a goal the user didn't intend to drop?
 
-### `audit-product-interface`
+### `alawas-design-audit-product-interface`
 
 **Gates** — (1) Discovery scope: confirm the discovery covers the routes,
 components, and layouts actually present in the codebase, not an assumed or
@@ -316,12 +368,12 @@ has no corresponding source file (dynamically generated or aliased): does the
 discovery record it as present with a gap, or omit it and risk an incomplete
 inventory downstream?
 
-### `build-design-foundation`
+### `alawas-design-build-design-foundation`
 
 **Gates** — (1) Token source authority: confirm tokens are discovered from
 code, not invented or assumed from a design tool. (2) Independence from
 structural discovery: confirm the token audit does not depend on or wait for
-`audit-product-interface` results (DEC-6).
+`alawas-design-audit-product-interface` results (DEC-6).
 
 **Escalation** — Default: scan the codebase for design tokens (colors,
 typography, spacing, breakpoints), audit their usage and consistency, and
@@ -335,7 +387,6 @@ and a JS theme object with overlapping but not identical token values: does the
 inventory record both sources and flag the divergence, or does it pick one as
 canonical and risk the other's consumers being silently wrong?
 
-### `define-interface-architecture`
 
 **Gates** — (1) Architecture grounding: confirm the screen hierarchy and
 navigation structure are grounded in discovery evidence and user flows, not
@@ -355,7 +406,6 @@ with independent back-stack): does the architecture document this as a
 constraint and route to implementation investigation, or assume the framework
 can handle it?
 
-### `model-user-flow`
 
 **Gates** — (1) Goal grounding: confirm each user flow starts from a real user
 goal, not a system capability or feature name. (2) State completeness: confirm
@@ -373,7 +423,7 @@ at the second step: does the flow model them as one flow with a branch or two
 separate flows, and does the choice affect how the architecture will handle
 navigation state?
 
-### `verify-design-implementation`
+### `alawas-design-verify-design-implementation`
 
 **Gates** — (1) Dimension honesty: confirm that deferred dimensions
 (behavioral, full-stack, accessibility) are explicitly reported with reasons,
@@ -396,4 +446,4 @@ reporting it as a simple implementation error.
 browser matches at all three viewports, but the diff also touches a file
 outside the confirmed scope: does the report pass on the confirmed changes
 alone, or does the unintended change make this a fail that routes back to
-`apply-design-direction`?
+`alawas-design-apply-design-direction`?

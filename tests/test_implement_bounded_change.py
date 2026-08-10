@@ -59,7 +59,7 @@ class ImplementBoundedChangeContract(unittest.TestCase):
         core_body = namespaced_core_body(CORE)
         for platform in PLATFORMS:
             with self.subTest(platform=platform):
-                adapter_dir = ROOT / "adapters" / platform / "skills" / "alawas-implement-bounded-change"
+                adapter_dir = ROOT / "adapters" / platform / "skills" / f"alawas-{CORE.parent.name}"
                 self.assertIn(core_body, (adapter_dir / "SKILL.md").read_text())
                 self.assertTrue((adapter_dir / "references" / "CAPABILITY-DEGRADATION.md").is_file())
 

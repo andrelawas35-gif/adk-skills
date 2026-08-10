@@ -7,6 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 CORE = ROOT / "skills" / "core"
+ADAPTERS = ROOT / "adapters" / "github-copilot" / "skills"
 ENGINE = CORE / "thinking-grilling-session" / "SKILL.md"
 AGREEMENT = ROOT / "references" / "AGREEMENT-LOOP.md"
 PROFILES = ROOT / "references" / "SKILL-AWARE-GRILLING.md"
@@ -21,7 +22,7 @@ class SkillAwareGrillingContract(unittest.TestCase):
             "continuous **Grilling Session**",
             "Opening context card",
             "State what changed",
-            "Ask exactly one decision-bearing question and wait",
+            "Ask exactly one decision-bearing question on the current active branch and wait",
             "Never emit a completed plan",
             "There is no numerical question cap",
             "Repetition without progress is a failure",
@@ -61,14 +62,18 @@ class SkillAwareGrillingContract(unittest.TestCase):
         self.assertIn("never closes the session", text)
 
     def test_every_stage_skill_uses_a_minimal_engine_entry(self):
+        # The generated adapter is the real contract: core holds only the
+        # per-skill lens, and the shared preamble is injected at generation
+        # (WO 2026-07-27-009). Assert against the adapter, not the core source.
         for path in sorted(CORE.glob("*/SKILL.md")):
             skill = path.parent.name
             if path == ENGINE:
                 continue
-            text = " ".join(path.read_text().split())
+            adapter = ADAPTERS / f"alawas-{skill}" / "SKILL.md"
+            text = " ".join(adapter.read_text().split())
             with self.subTest(skill=skill):
                 self.assertIn("## Grilling entry and stage lens", text)
-                self.assertIn(f"`{skill}` profile", text)
+                self.assertIn(f"`alawas-{skill}` profile", text)
                 self.assertIn("Follow `references/AGREEMENT-LOOP.md` in full", text)
                 self.assertIn("references/SKILL-AWARE-GRILLING.md", text)
                 self.assertIn("nominate a Grilling Candidate", text)
@@ -91,7 +96,7 @@ class SkillAwareGrillingContract(unittest.TestCase):
         for path in sorted(CORE.glob("*/SKILL.md")):
             if path == ENGINE:
                 continue
-            self.assertIn(f"### `{path.parent.name}`", text)
+            self.assertIn(f"### `alawas-{path.parent.name}`", text)
         sections = re.split(r"^### `[^`]+`$", text, flags=re.MULTILINE)[1:]
         stage_skills = [path for path in sorted(CORE.glob("*/SKILL.md"))
                         if path != ENGINE]
@@ -152,7 +157,7 @@ class SkillAwareGrillingContract(unittest.TestCase):
             self.assertIn(f"## Scenario {scenario} ", text)
         for path in sorted(CORE.glob("*/SKILL.md")):
             if path != ENGINE:
-                self.assertIn(f"`{path.parent.name}`", text)
+                self.assertIn(f"`alawas-{path.parent.name}`", text)
         for phrase in (
             "asks exactly one question and waits",
             "Routine work does not trigger ceremony",

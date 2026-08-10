@@ -1,6 +1,6 @@
 ---
 name: alawas-thinking-inquire-system
-description: "Use for open questions about how the studio itself works, is organized, or should change; grounds the answer in the repository and active Work Objects, uses the web only for background, and stops at the first decision, claim, or judgment another skill owns."
+description: "Use when an open question asks how the studio works, is organized, or should change; grounds the answer in the repository and active Work Objects, uses the web only for background, and never decides or claims what another skill owns."
 default_tier: high
 platform: claude-code
 ---
@@ -80,6 +80,25 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
 This skill has no mutation authority of any kind and never acquires it. There
 is no confirmation that promotes it into writing. If the answer should become
 durable, route to `alawas-governance-conduct-work-object` and let the director enter that skill.
+Do not stage, annotate, change status, append History, or make any other
+mutation.
+
+## Grilling entry and stage lens
+
+Follow `references/AGREEMENT-LOOP.md` in full; this skill contributes only its stage-specific lens below.
+
+Outside an explicit grilling request, nominate a Grilling Candidate only under the Agreement Loop's three-part threshold. Show its Candidate Card and wait for explicit entry; do not silently start a continuous session.
+
+This is the grounding lens: answer how the studio works from the repository and
+active Work Objects, use the web only for background, and stop at the first
+decision, claim, or judgment another skill owns.
+
+## Skill Grilling Profile
+
+Apply the `alawas-thinking-inquire-system` profile and continuous Grilling Session in
+`references/SKILL-AWARE-GRILLING.md`. Ground the answer in repository evidence,
+expose the decision boundary where another skill owns the question, and stop
+before deciding, claiming, or judging.
 
 ## Grounding order
 

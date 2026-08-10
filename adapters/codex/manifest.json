@@ -381,7 +381,7 @@
     {
       "name": "alawas-thinking-develop-idea",
       "path": "adapters/codex/skills/alawas-thinking-develop-idea/SKILL.md",
-      "sha256": "eab3c1fb231804a150a318ca03dcee65a05354479335d9893f05fb0cf76c5d07"
+      "sha256": "5407b419ce08b8ee733f6b9aba558b126e66211a7b82786bd0c98856bea03991"
     },
     {
       "name": "alawas-thinking-develop-idea/references/CAPABILITY-DEGRADATION.md",
@@ -406,7 +406,7 @@
     {
       "name": "alawas-thinking-diagnose-homogenization",
       "path": "adapters/codex/skills/alawas-thinking-diagnose-homogenization/SKILL.md",
-      "sha256": "c17bb13a12cb33d974644bd0e88b9743b5aef2664d6bbc0a2e2640878b96ab89"
+      "sha256": "e39308fd44d1872e7477eec59e1c107ebc2025add86b1357f49b891968ad49fd"
     },
     {
       "name": "alawas-thinking-diagnose-homogenization/references/CAPABILITY-DEGRADATION.md",
@@ -436,7 +436,7 @@
     {
       "name": "alawas-thinking-grilling-session/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/codex/skills/alawas-thinking-grilling-session/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "10ba7b5f0d389ab7df0a5b14c9c390cf5619a785773f6b91ae5d56830033a655"
+      "sha256": "d6b6b832844a9eb45fa41af6e8e24adb69b1bc7ff47ec26b7f3df0d3ee9296c8"
     },
     {
       "name": "alawas-thinking-grilling-session/references/epistemic/epistemic-rules-full.md",
@@ -446,7 +446,7 @@
     {
       "name": "alawas-thinking-inquire-system",
       "path": "adapters/codex/skills/alawas-thinking-inquire-system/SKILL.md",
-      "sha256": "86372588e2346e5dc7390aa55d9a9c2acd157944bd4e2616f47a517cd5182f38"
+      "sha256": "2c6380cad168a721095a2cc089c6111afb804e3516c22ee51f3d9083ede781a9"
     },
     {
       "name": "alawas-thinking-inquire-system/references/CAPABILITY-DEGRADATION.md",
@@ -496,7 +496,7 @@
     {
       "name": "alawas-thinking-resume-work",
       "path": "adapters/codex/skills/alawas-thinking-resume-work/SKILL.md",
-      "sha256": "2324210dacd8d7879960b88f8b2b5705173dcf742919f74a0661bfb70b236e63"
+      "sha256": "d272196a3c62c4fb76498188083474cabc8945d1049447b584d966eae96ed4bc"
     },
     {
       "name": "alawas-thinking-resume-work/references/CAPABILITY-DEGRADATION.md",

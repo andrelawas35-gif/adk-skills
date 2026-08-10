@@ -261,7 +261,7 @@ skills:
       - structured_output
 
   - name: thinking-diagnose-homogenization
-    responsibility: "Diagnose and revise generic, overly fluent, or training-data-shaped prose by demanding concrete evidence, lived detail, and genuine alternatives before polishing. Use when the user says 'make this more like me,' 'review this draft,' 'this sounds AI-generated,' 'make this less generic,' or wants writing to retain a distinct voice without fabricated specificity."
+    responsibility: "Use when a draft sounds generic, overly fluent, or training-data-shaped and needs its voice preserved; diagnoses homogenization, demands concrete evidence and genuine alternatives before polishing, and never fabricates material or declares prose authentic."
     non_goals:
       - "Invent anecdotes, locations, emotions, quotations, research, or personal history."
       - "Claim to detect AI authorship or plagiarism from style alone."
@@ -290,7 +290,7 @@ skills:
       - user_confirmation
 
   - name: thinking-inquire-system
-    responsibility: "Use for open questions about how the studio itself works, is organized, or should change; grounds the answer in the repository and active Work Objects, uses the web only for background, and stops at the first decision, claim, or judgment another skill owns."
+    responsibility: "Use when an open question asks how the studio works, is organized, or should change; grounds the answer in the repository and active Work Objects, uses the web only for background, and never decides or claims what another skill owns."
     non_goals:
       - "Write, edit, or delete any file, including anything under `.work-studio/`"
       - "Create, resume, transition, or annotate a Work Object"
@@ -329,7 +329,7 @@ skills:
       - subagent_spawn
 
   - name: thinking-resume-work
-    responsibility: "Use after a break to see where the studio stands and pick up one thread; reads Work Objects read-only, ranks forward-motion work by recency, hands back exactly one candidate with its state and next_action, and routes to conduct-work-object; writes nothing."
+    responsibility: "Use when returning after a break to see where the studio stands and resume one thread; reads Work Objects read-only, ranks forward-motion work by recency, hands back one candidate with its state and next_action, and never writes anything."
     non_goals:
       - "Write, edit, or delete any file, including anything under `.work-studio/`"
       - "Create, resume, transition, or annotate a Work Object"

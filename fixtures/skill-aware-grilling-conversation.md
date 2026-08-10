@@ -65,32 +65,34 @@ re-evaluated. Sensitive or mistaken memory is removed rather than preserved.
 **Given** the design profile discovers that verification owns the current
 Decision Frontier.
 
-**Then** routing to `verify-release-evidence` preserves the Context Card,
+**Then** routing to `alawas-engineering-verify-release-evidence` preserves the Context Card,
 Evidence Ledger, confirmed decisions, branch map, and current recommendation.
 The receiving skill states what it inherited and asks its own exactly one next
 question. It does not cold-start or replay the transcript.
 
 Apply the same continuity contract to all profiles:
 
-- `turn-signal-into-work`
-- `conduct-work-object`
-- `pressure-test-decision`
-- `design-tracer-bullet`
-- `implement-bounded-change`
-- `verify-release-evidence`
-- `deploy-with-recovery`
-- `review-outcome-and-adapt`
-- `investigate-live-question`
-- `diagnose-production-incident`
-- `maintain-working-method`
-- `govern-scorecards`
-- `track-components`
-- `audit-product-interface`
-- `build-design-foundation`
-- `model-user-flow`
-- `define-interface-architecture`
-- `apply-design-direction`
-- `verify-design-implementation`
+- `alawas-thinking-turn-signal-into-work`
+- `alawas-governance-conduct-work-object`
+- `alawas-thinking-pressure-test-decision`
+- `alawas-thinking-develop-idea`
+- `alawas-thinking-diagnose-homogenization`
+- `alawas-thinking-inquire-system`
+- `alawas-thinking-resume-work`
+- `alawas-design-design-tracer-bullet`
+- `alawas-engineering-implement-bounded-change`
+- `alawas-engineering-verify-release-evidence`
+- `alawas-operations-deploy-with-recovery`
+- `alawas-governance-review-outcome-and-adapt`
+- `alawas-research-investigate-live-question`
+- `alawas-operations-diagnose-production-incident`
+- `alawas-governance-maintain-working-method`
+- `alawas-governance-govern-scorecards`
+- `alawas-design-track-components`
+- `alawas-design-audit-product-interface`
+- `alawas-design-build-design-foundation`
+- `alawas-design-apply-design-direction`
+- `alawas-design-verify-design-implementation`
 
 ## Scenario 7 — Stage-specific challenge follows project reality
 
@@ -164,7 +166,7 @@ systems, external effects, and verification boundary.
 
 **Given** an accepted decision, material evidence change, or specialist route.
 
-**Then** `conduct-work-object` checkpoints compact Grilling Session state in
+**Then** `alawas-governance-conduct-work-object` checkpoints compact Grilling Session state in
 the Work Object without transcripts. On failure, it compares the last persisted
 checkpoint with the recoverable summary. On a concurrent revision, it pauses
 consequential action and presents conflicting decisions and Decision Frontiers
@@ -183,7 +185,7 @@ session closure until the user explicitly confirms the model is shared.
 **Given** the user says “grill me” in a Work Studio-pinned project without an
 active Work Object.
 
-**Then** `grilling-session` starts an ephemeral, codebase-grounded session,
+**Then** `alawas-thinking-grilling-session` starts an ephemeral, codebase-grounded session,
 infers and states a correctable initial lens, asks one question, and creates no
 Work Object. It offers conductor persistence only when the user explicitly
 asks to retain the session or an accepted decision needs durable continuity.

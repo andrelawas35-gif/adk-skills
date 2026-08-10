@@ -1,6 +1,6 @@
 ---
 name: alawas-thinking-resume-work
-description: "Use after a break to see where the studio stands and pick up one thread; reads Work Objects read-only, ranks forward-motion work by recency, hands back exactly one candidate with its state and next_action, and routes to conduct-work-object; writes nothing."
+description: "Use when returning after a break to see where the studio stands and resume one thread; reads Work Objects read-only, ranks forward-motion work by recency, hands back one candidate with its state and next_action, and never writes anything."
 default_tier: medium
 platform: claude-code
 ---
@@ -79,7 +79,25 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
 This skill has no mutation authority of any kind and never acquires it. There
 is no confirmation that promotes it into writing. Handing a candidate to the
 conductor does not authorize the conductor to close, repair, or act on it —
-the director decides what the candidate means.
+the director decides what the candidate means. Do not stage, annotate, change
+status, append History, or make any other mutation.
+
+## Grilling entry and stage lens
+
+Follow `references/AGREEMENT-LOOP.md` in full; this skill contributes only its stage-specific lens below.
+
+Outside an explicit grilling request, nominate a Grilling Candidate only under the Agreement Loop's three-part threshold. Show its Candidate Card and wait for explicit entry; do not silently start a continuous session.
+
+This is the resume lens: read Work Objects read-only, rank forward-motion work
+by recency, and hand back exactly one candidate with its state and next_action,
+never writing anything itself.
+
+## Skill Grilling Profile
+
+Apply the `alawas-thinking-resume-work` profile and continuous Grilling Session in
+`references/SKILL-AWARE-GRILLING.md`. Rank live work by recency and
+forward-motion evidence, and hand back exactly one candidate with its state and
+next_action before routing.
 
 ## Ranking procedure
 
@@ -169,42 +187,6 @@ Sections appear only when they carry something.
 - Repairing `active.md`, transitioning an object, or writing anything.
 - Treating the candidate as an instruction to act rather than a proposal the
   director picks up.
-
-## Platform Adapter
-
-Invocation-relevant wiring only; installation and maintainer guidance live outside this file.
-
-### Model tier
-
-This skill declares `default_tier: medium`.
-The platform overlay resolves this to `claude-sonnet-4-20250514`.
-The prompt budget for this tier is approximately 40000 tokens (advisory).
-
-**Consequence-based escalation:** When a Work Object has `consequence: meaningful`,
-the effective tier is upgraded to at least `medium`. When `consequence: high`,
-the effective tier is upgraded to the strongest available model.
-`actual_tier = max(skill.default_tier, consequence_escalation(wo.consequence))`.
-
-### Required capability mappings
-
-| Abstract capability | Platform tool | Classification |
-|---------------------|---------------|----------------|
-| `file_read` | `read_file` | native |
-| `directory_list` | `list_dir` | native |
-| `content_search` | `grep_search` | native |
-| `structured_output` | `—` | native |
-| `user_confirmation` | `conversation turn` | native |
-
-### Capability Degradation
-
-Apply `references/CAPABILITY-DEGRADATION.md`. Per-capability
-classifications and notes below.
-
-#### `user_confirmation` (native)
-
-- **Behavior**: The handoff to `alawas-governance-conduct-work-object` names the
-  candidate and destination. The conductor is the only skill permitted to write;
-  this skill never writes itself.
 ---
 
 ## Platform Adapter

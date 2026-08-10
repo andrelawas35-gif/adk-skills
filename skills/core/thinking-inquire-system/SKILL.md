@@ -1,7 +1,7 @@
 ---
 name: inquire-system
 default_tier: high
-description: "Use for open questions about how the studio itself works, is organized, or should change; grounds the answer in the repository and active Work Objects, uses the web only for background, and stops at the first decision, claim, or judgment another skill owns."
+description: "Use when an open question asks how the studio works, is organized, or should change; grounds the answer in the repository and active Work Objects, uses the web only for background, and never decides or claims what another skill owns."
 ---
 
 # Inquire System
@@ -78,6 +78,21 @@ unsupported and follows `references/CAPABILITY-DEGRADATION.md` when needed.
 This skill has no mutation authority of any kind and never acquires it. There
 is no confirmation that promotes it into writing. If the answer should become
 durable, route to `conduct-work-object` and let the director enter that skill.
+Do not stage, annotate, change status, append History, or make any other
+mutation.
+
+## Grilling entry and stage lens
+
+This is the grounding lens: answer how the studio works from the repository and
+active Work Objects, use the web only for background, and stop at the first
+decision, claim, or judgment another skill owns.
+
+## Skill Grilling Profile
+
+Apply the `inquire-system` profile and continuous Grilling Session in
+`references/SKILL-AWARE-GRILLING.md`. Ground the answer in repository evidence,
+expose the decision boundary where another skill owns the question, and stop
+before deciding, claiming, or judging.
 
 ## Grounding order
 

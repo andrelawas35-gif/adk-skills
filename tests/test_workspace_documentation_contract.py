@@ -15,7 +15,7 @@ class WorkspaceDocumentationContract(unittest.TestCase):
         text = CONTRACT.read_text()
         self.assertIn("schema_version: 1", text)
         entries = re.split(r"^  - type: ", text, flags=re.MULTILINE)[1:]
-        self.assertEqual(11, len(entries))
+        self.assertEqual(12, len(entries))
         for entry in entries:
             for field in (
                 "path:", "purpose:", "owner:", "stage_trigger:",
