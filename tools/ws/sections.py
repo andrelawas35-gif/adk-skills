@@ -271,6 +271,20 @@ def generate_evidence_entry(
     return f"| {tag} | {source} | {text} |"
 
 
+# ── Object text composition ───────────────────────────────────────────────────
+
+
+def compose_object_text(frontmatter: str, body: str) -> str:
+    """Compose a Work Object file's frontmatter and body text.
+
+    Guarantees exactly one trailing newline so the file passes
+    file-integrity (2026-08-10-005). The mutation commands append entries
+    that carry no trailing newline; without normalization every write would
+    leave the file without a final newline and trip the truncation check.
+    """
+    return frontmatter.rstrip("\n") + "\n" + body.rstrip("\n") + "\n"
+
+
 # ── Append-only detection ─────────────────────────────────────────────────────
 
 def check_append_only(

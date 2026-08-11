@@ -29,10 +29,11 @@ from typing import Dict, List, Optional
 
 from .concurrency import check_concurrency
 from .schema import parse_frontmatter
-from .sections import append_to_section, get_section
+from .sections import append_to_section, compose_object_text, get_section
 
 
 CONFLICT_SECTION_NAME = "Claims"
+CONFLICT_RESOLUTION_DISPOSITIONS = {"superseded"}
 
 
 def _find_work_studio_root() -> Path:
@@ -77,6 +78,22 @@ def _allocate_conflict_id(body: str, wo_id: str) -> str:
     return f"CONF-{safe_id}-{max_num + 1:03d}"
 
 
+def _allocate_conflict_resolution_id(body: str, wo_id: str) -> str:
+    """Allocate the next CONFRES-<wo-id>-NNN ID by scanning Claims."""
+    safe_id = wo_id.replace("-", "_")
+    claims_section = get_section(body, CONFLICT_SECTION_NAME)
+    if not claims_section:
+        return f"CONFRES-{safe_id}-001"
+
+    pattern = re.compile(rf"CONFRES-{re.escape(safe_id)}-(\d+)")
+    existing = pattern.findall(claims_section)
+    if not existing:
+        return f"CONFRES-{safe_id}-001"
+
+    max_num = max(int(n) for n in existing)
+    return f"CONFRES-{safe_id}-{max_num + 1:03d}"
+
+
 def _generate_conflict_block(
     conflict_id: str,
     claim_id: str,
@@ -96,6 +113,61 @@ def _generate_conflict_block(
         lines.append(f"        dirty_hash: {v.get('dirty_hash', '?')}")
     lines.append(f"    created_at: {now}")
     return "\n".join(lines)
+
+
+def _generate_conflict_resolution_block(
+    resolution_id: str,
+    conflict_id: str,
+    resolver: str,
+    disposition: str,
+    rationale: str,
+    source_object_id: Optional[str] = None,
+) -> str:
+    """Generate an appended conflict-resolution block for the Claims section."""
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    escaped_rationale = rationale.replace('"', '\\"')
+    lines = [
+        f"  {resolution_id}:",
+        f"    conflict_id: {conflict_id}",
+    ]
+    if source_object_id:
+        lines.append(f"    source_object_id: {source_object_id}")
+    lines.extend([
+        f"    resolver: {resolver}",
+        f"    disposition: {disposition}",
+        f'    rationale: "{escaped_rationale}"',
+        f"    timestamp: {now}",
+    ])
+    return "\n".join(lines)
+
+
+def _claims_contains_conflict(claims_section: str, conflict_id: str) -> bool:
+    """Return whether Claims contains the named conflict heading."""
+    return re.search(rf"^  {re.escape(conflict_id)}:$", claims_section, re.MULTILINE) is not None
+
+
+def _claims_contains_resolution_for(claims_section: str, conflict_id: str) -> bool:
+    """Return whether Claims already contains a CONFRES- for conflict_id."""
+    pattern = re.compile(
+        rf"^  CONFRES-[\w]+-\d+:\n(?:    .+\n)*?    conflict_id: {re.escape(conflict_id)}(?:\n|$)",
+        re.MULTILINE,
+    )
+    return pattern.search(claims_section) is not None
+
+
+def _any_claims_contains_resolution_for(objects_dir: Path, conflict_id: str) -> bool:
+    """Return whether any Work Object has a CONFRES- for conflict_id."""
+    for obj_file in objects_dir.rglob("*.md"):
+        content = obj_file.read_text()
+        body = (
+            content[content.find("---", 3) + 3:].strip()
+            if content.startswith("---")
+            else content
+        )
+        claims_section = get_section(body, CONFLICT_SECTION_NAME)
+        if claims_section and _claims_contains_resolution_for(claims_section, conflict_id):
+            return True
+    return False
 
 
 def _update_frontmatter_fields(content: str, updates: dict) -> str:
@@ -196,9 +268,104 @@ def cmd_conflict_register(args: argparse.Namespace) -> int:
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     new_fm = _update_frontmatter_fields(content, {"updated_at": now})
 
-    obj_file.write_text(new_fm + "\n" + new_body)
+    obj_file.write_text(compose_object_text(new_fm, new_body))
 
     print(f"Conflict {conflict_id} registered in {args.id}")
     print(f"  claim_id: {args.claim_id}")
     print(f"  versions: {len(versions)}")
+    return 0
+
+
+def cmd_conflict_resolve(args: argparse.Namespace) -> int:
+    """Append a CONFRES- record resolving a conflict without editing CONF-."""
+    if args.disposition not in CONFLICT_RESOLUTION_DISPOSITIONS:
+        allowed = ", ".join(sorted(CONFLICT_RESOLUTION_DISPOSITIONS))
+        print(
+            f"Error: Unsupported disposition '{args.disposition}'. Allowed: {allowed}.",
+            file=sys.stderr,
+        )
+        return 1
+
+    try:
+        ws_root = _find_work_studio_root()
+    except FileNotFoundError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+
+    objects_dir = ws_root / ".work-studio" / "objects"
+    try:
+        source_file = _resolve_object_file(objects_dir, args.id)
+        target_id = getattr(args, "record_in", None) or args.id
+        target_file = _resolve_object_file(objects_dir, target_id)
+    except FileNotFoundError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+
+    err = check_concurrency(target_file, args.expect_updated, force=args.force)
+    if err:
+        print(f"Error: {err}", file=sys.stderr)
+        return 1
+
+    target_fm = parse_frontmatter(target_file.read_text())
+    if str(target_fm.get("status", "")) == "closed":
+        print(
+            f"Error: Cannot record conflict resolution in closed object {target_id}.",
+            file=sys.stderr,
+        )
+        return 1
+
+    source_content = source_file.read_text()
+    source_body = (
+        source_content[source_content.find("---", 3) + 3:].strip()
+        if source_content.startswith("---")
+        else source_content
+    )
+    source_claims_section = get_section(source_body, CONFLICT_SECTION_NAME)
+    if not source_claims_section:
+        print(f"Error: Work Object {args.id} has no ## Claims section.", file=sys.stderr)
+        return 1
+
+    if not _claims_contains_conflict(source_claims_section, args.conflict_id):
+        print(
+            f"Error: Conflict {args.conflict_id} not found in {args.id}.",
+            file=sys.stderr,
+        )
+        return 1
+
+    if _any_claims_contains_resolution_for(objects_dir, args.conflict_id):
+        print(
+            f"Error: Conflict {args.conflict_id} already has a CONFRES- record.",
+            file=sys.stderr,
+        )
+        return 1
+
+    target_content = target_file.read_text()
+    target_body = (
+        target_content[target_content.find("---", 3) + 3:].strip()
+        if target_content.startswith("---")
+        else target_content
+    )
+
+    resolution_id = _allocate_conflict_resolution_id(target_body, target_id)
+    resolution_block = _generate_conflict_resolution_block(
+        resolution_id=resolution_id,
+        conflict_id=args.conflict_id,
+        resolver=args.resolver,
+        disposition=args.disposition,
+        rationale=args.rationale,
+        source_object_id=args.id if target_id != args.id else None,
+    )
+
+    new_body = append_to_section(target_body, CONFLICT_SECTION_NAME, resolution_block)
+
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    new_fm = _update_frontmatter_fields(target_content, {"updated_at": now})
+
+    target_file.write_text(compose_object_text(new_fm, new_body))
+
+    print(f"Conflict resolution {resolution_id} registered in {target_id}")
+    print(f"  conflict_id: {args.conflict_id}")
+    if target_id != args.id:
+        print(f"  source_object_id: {args.id}")
+    print(f"  disposition: {args.disposition}")
     return 0

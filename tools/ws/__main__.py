@@ -33,6 +33,7 @@ from .schema import (
 from .sections import (
     append_to_section,
     check_append_only,
+    compose_object_text,
     generate_evidence_entry,
     generate_history_entry,
     get_section,
@@ -42,7 +43,7 @@ from .validate import DEFAULT_CHECKS, CHECK_REGISTRY, run_checks
 from .authority_check import cmd_authority_check
 from .baseline import cmd_baseline_capture, cmd_baseline_check
 from .claim import cmd_claim_inspect, cmd_claim_register
-from .conflict import cmd_conflict_register
+from .conflict import cmd_conflict_register, cmd_conflict_resolve
 from .epistemic import cmd_epistemic_lint
 from .epistemic_controls import audit_epistemic_state
 from .skill_map import cmd_skill_map_build
@@ -322,7 +323,7 @@ def cmd_transition(args: argparse.Namespace) -> int:
     )
     new_body = append_to_section(body, "history", history_entry)
 
-    obj_file.write_text(new_fm + "\n" + new_body)
+    obj_file.write_text(compose_object_text(new_fm, new_body))
 
     print(f"Transitioned {args.id}: {from_state}/{from_status} → {args.state}/{args.status}")
 
@@ -340,7 +341,10 @@ def cmd_transition(args: argparse.Namespace) -> int:
 
         if current_body != updated_body:
             obj_file.write_text(
-                current_content[:current_fm_end + 3] + "\n" + updated_body
+                compose_object_text(
+                    current_content[:current_fm_end + 3],
+                    updated_body,
+                )
             )
             print(f"  {audit_msg}")
         else:
@@ -425,7 +429,7 @@ def cmd_close(args: argparse.Namespace) -> int:
     )
     new_body = append_to_section(body, "history", history_entry)
 
-    obj_file.write_text(new_fm + "\n" + new_body)
+    obj_file.write_text(compose_object_text(new_fm, new_body))
 
     # Remove from active.md
     active_md = ws_root / ".work-studio" / "active.md"
@@ -540,7 +544,7 @@ def cmd_append_evidence(args: argparse.Namespace) -> int:
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     new_fm = _update_frontmatter_fields(content, {"updated_at": now})
 
-    obj_file.write_text(new_fm + "\n" + new_body)
+    obj_file.write_text(compose_object_text(new_fm, new_body))
 
     print(f"Evidence appended to {args.id}")
     return 0
@@ -593,7 +597,7 @@ def cmd_append_history(args: argparse.Namespace) -> int:
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     new_fm = _update_frontmatter_fields(content, {"updated_at": now})
 
-    obj_file.write_text(new_fm + "\n" + new_body)
+    obj_file.write_text(compose_object_text(new_fm, new_body))
 
     print(f"History appended to {args.id}")
     return 0
@@ -1047,6 +1051,41 @@ def build_parser() -> argparse.ArgumentParser:
         help="Bypass optimistic concurrency check",
     )
 
+    conflict_resolve_parser = conflict_sub.add_parser(
+        "resolve",
+        help="Append a CONFRES- record resolving a conflict",
+    )
+    conflict_resolve_parser.add_argument("id", help="Work Object ID")
+    conflict_resolve_parser.add_argument(
+        "--conflict-id", required=True,
+        help="Conflict ID this resolution applies to",
+    )
+    conflict_resolve_parser.add_argument(
+        "--resolver", required=True,
+        help="Accountable resolver name or identifier",
+    )
+    conflict_resolve_parser.add_argument(
+        "--disposition", default="superseded",
+        choices=["superseded"],
+        help="Resolution disposition",
+    )
+    conflict_resolve_parser.add_argument(
+        "--rationale", required=True,
+        help="Why this disposition was chosen",
+    )
+    conflict_resolve_parser.add_argument(
+        "--record-in",
+        help="Work Object ID where the CONFRES- record should be appended",
+    )
+    conflict_resolve_parser.add_argument(
+        "--expect-updated", required=True,
+        help="Expected updated_at timestamp",
+    )
+    conflict_resolve_parser.add_argument(
+        "--force", action="store_true",
+        help="Bypass optimistic concurrency check",
+    )
+
     # ── ws skill-map ──────────────────────────────────────────────────────
     skill_map_parser = subparsers.add_parser(
         "skill-map", help="Generate the skill map index from core skill contracts"
@@ -1132,7 +1171,9 @@ def main() -> int:
     if args.command == "conflict":
         if args.conflict_command == "register":
             return cmd_conflict_register(args)
-        print("Error: Unknown conflict command. Use 'ws conflict register'.",
+        if args.conflict_command == "resolve":
+            return cmd_conflict_resolve(args)
+        print("Error: Unknown conflict command. Use 'ws conflict register' or 'ws conflict resolve'.",
               file=sys.stderr)
         return 1
 

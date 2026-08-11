@@ -12,6 +12,20 @@ _CONFLICT_HEADING = re.compile(
     r"^  CONF-\d{4}_\d{2}_\d{2}_\d{3}-\d{3}:$", re.MULTILINE
 )
 
+_CONFLICT_ID = re.compile(
+    r"^  (CONF-\d{4}_\d{2}_\d{2}_\d{3}-\d{3}):$", re.MULTILINE
+)
+
+_CONFLICT_RESOLUTION_BLOCK = re.compile(
+    r"^  CONFRES-\d{4}_\d{2}_\d{2}_\d{3}-\d{3}:\n(?P<body>(?:    .+(?:\n|$))*)",
+    re.MULTILINE,
+)
+
+_RESOLVED_CONFLICT_ID = re.compile(
+    r"^    conflict_id: (CONF-\d{4}_\d{2}_\d{2}_\d{3}-\d{3})$",
+    re.MULTILINE,
+)
+
 _CLAIM_HEADING = re.compile(r"^  CLM-[\w]+-\d+:$", re.MULTILINE)
 
 # Common words that never signal content-level provenance for a claim. Used to
@@ -63,15 +77,26 @@ def _objects_dir() -> Path:
     raise FileNotFoundError(".work-studio/objects not found")
 
 
+def _resolved_conflict_ids(claims: str) -> set:
+    """Conflict IDs named by appended CONFRES- records."""
+    resolved = set()
+    for resolution in _CONFLICT_RESOLUTION_BLOCK.finditer(claims):
+        match = _RESOLVED_CONFLICT_ID.search(resolution.group("body"))
+        if match:
+            resolved.add(match.group(1))
+    return resolved
+
+
 def count_unresolved_conflicts(objects_dir: Optional[Path] = None) -> int:
-    """Count registered conflicts; the current schema has no resolution field.
+    """Count CONF- records that have no matching CONFRES- record.
 
     ``objects_dir`` overrides the resolved workspace objects directory (used by
     the ``ws validate`` dashboard-signals check, which already holds the path);
     when omitted it resolves from the current directory.
     """
     root = _objects_dir() if objects_dir is None else objects_dir
-    count = 0
+    conflicts = set()
+    resolved_conflicts = set()
     for path in root.rglob("*.md"):
         content = path.read_text()
         body = content[content.find("---", 3) + 3:] if content.startswith("---") else content
@@ -86,8 +111,9 @@ def count_unresolved_conflicts(objects_dir: Optional[Path] = None) -> int:
                     raise ValueError(
                         f"{path}: malformed conflict heading: {heading}"
                     )
-            count += len(_CONFLICT_HEADING.findall(claims))
-    return count
+            conflicts.update(_CONFLICT_ID.findall(claims))
+            resolved_conflicts.update(_resolved_conflict_ids(claims))
+    return len(conflicts - resolved_conflicts)
 
 
 def _evidence_ledger_rows(body: str) -> list:

@@ -76,7 +76,7 @@
     {
       "name": "alawas-design-design-tracer-bullet/references/epistemic/epistemic-rules-full.md",
       "path": "adapters/github-copilot/skills/alawas-design-design-tracer-bullet/references/epistemic/epistemic-rules-full.md",
-      "sha256": "4a98876f51e1899fdeb682336f8180d74c4b16a82e7e60c0da8ef9390309bfac"
+      "sha256": "de7aa794a00ab05df3267bfdf0d51e23d77853c7e66628715de237be31fe6d60"
     },
     {
       "name": "alawas-design-track-components",
@@ -231,7 +231,7 @@
     {
       "name": "alawas-governance-govern-scorecards/references/epistemic/epistemic-rules-full.md",
       "path": "adapters/github-copilot/skills/alawas-governance-govern-scorecards/references/epistemic/epistemic-rules-full.md",
-      "sha256": "4a98876f51e1899fdeb682336f8180d74c4b16a82e7e60c0da8ef9390309bfac"
+      "sha256": "de7aa794a00ab05df3267bfdf0d51e23d77853c7e66628715de237be31fe6d60"
     },
     {
       "name": "alawas-governance-maintain-working-method",
@@ -261,7 +261,7 @@
     {
       "name": "alawas-governance-maintain-working-method/references/epistemic/epistemic-rules-full.md",
       "path": "adapters/github-copilot/skills/alawas-governance-maintain-working-method/references/epistemic/epistemic-rules-full.md",
-      "sha256": "4a98876f51e1899fdeb682336f8180d74c4b16a82e7e60c0da8ef9390309bfac"
+      "sha256": "de7aa794a00ab05df3267bfdf0d51e23d77853c7e66628715de237be31fe6d60"
     },
     {
       "name": "alawas-governance-review-outcome-and-adapt",
@@ -291,7 +291,7 @@
     {
       "name": "alawas-governance-review-outcome-and-adapt/references/epistemic/epistemic-rules-full.md",
       "path": "adapters/github-copilot/skills/alawas-governance-review-outcome-and-adapt/references/epistemic/epistemic-rules-full.md",
-      "sha256": "4a98876f51e1899fdeb682336f8180d74c4b16a82e7e60c0da8ef9390309bfac"
+      "sha256": "de7aa794a00ab05df3267bfdf0d51e23d77853c7e66628715de237be31fe6d60"
     },
     {
       "name": "alawas-operations-deploy-with-recovery",
@@ -346,7 +346,7 @@
     {
       "name": "alawas-operations-diagnose-production-incident/references/epistemic/epistemic-rules-full.md",
       "path": "adapters/github-copilot/skills/alawas-operations-diagnose-production-incident/references/epistemic/epistemic-rules-full.md",
-      "sha256": "4a98876f51e1899fdeb682336f8180d74c4b16a82e7e60c0da8ef9390309bfac"
+      "sha256": "de7aa794a00ab05df3267bfdf0d51e23d77853c7e66628715de237be31fe6d60"
     },
     {
       "name": "alawas-research-investigate-live-question",
@@ -401,7 +401,7 @@
     {
       "name": "alawas-thinking-develop-idea/references/epistemic/epistemic-rules-full.md",
       "path": "adapters/github-copilot/skills/alawas-thinking-develop-idea/references/epistemic/epistemic-rules-full.md",
-      "sha256": "4a98876f51e1899fdeb682336f8180d74c4b16a82e7e60c0da8ef9390309bfac"
+      "sha256": "de7aa794a00ab05df3267bfdf0d51e23d77853c7e66628715de237be31fe6d60"
     },
     {
       "name": "alawas-thinking-diagnose-homogenization",
@@ -441,7 +441,7 @@
     {
       "name": "alawas-thinking-grilling-session/references/epistemic/epistemic-rules-full.md",
       "path": "adapters/github-copilot/skills/alawas-thinking-grilling-session/references/epistemic/epistemic-rules-full.md",
-      "sha256": "4a98876f51e1899fdeb682336f8180d74c4b16a82e7e60c0da8ef9390309bfac"
+      "sha256": "de7aa794a00ab05df3267bfdf0d51e23d77853c7e66628715de237be31fe6d60"
     },
     {
       "name": "alawas-thinking-inquire-system",
@@ -466,7 +466,7 @@
     {
       "name": "alawas-thinking-inquire-system/references/epistemic/epistemic-rules-full.md",
       "path": "adapters/github-copilot/skills/alawas-thinking-inquire-system/references/epistemic/epistemic-rules-full.md",
-      "sha256": "4a98876f51e1899fdeb682336f8180d74c4b16a82e7e60c0da8ef9390309bfac"
+      "sha256": "de7aa794a00ab05df3267bfdf0d51e23d77853c7e66628715de237be31fe6d60"
     },
     {
       "name": "alawas-thinking-pressure-test-decision",
@@ -491,7 +491,7 @@
     {
       "name": "alawas-thinking-pressure-test-decision/references/epistemic/epistemic-rules-full.md",
       "path": "adapters/github-copilot/skills/alawas-thinking-pressure-test-decision/references/epistemic/epistemic-rules-full.md",
-      "sha256": "4a98876f51e1899fdeb682336f8180d74c4b16a82e7e60c0da8ef9390309bfac"
+      "sha256": "de7aa794a00ab05df3267bfdf0d51e23d77853c7e66628715de237be31fe6d60"
     },
     {
       "name": "alawas-thinking-resume-work",

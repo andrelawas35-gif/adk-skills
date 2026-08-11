@@ -121,14 +121,6 @@ python3 tools/verify-conformance.py --all
 python3 -m unittest discover -s tests -v
 ```
 
-## Planned Work Studio Skills
-
-- `investigate-live-question`
-- `implement-bounded-change`
-- `diagnose-production-incident`
-- `review-outcome-and-adapt`
-- `maintain-working-method`
-
 ## Shared References
 
 | Reference | Description |

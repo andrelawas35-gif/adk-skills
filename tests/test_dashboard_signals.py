@@ -31,6 +31,34 @@ class DashboardSignalsTest(unittest.TestCase):
         with workspace_with_claims("  CONF-2026_07_28_999-001:"):
             self.assertEqual(count_unresolved_conflicts(), 1)
 
+    def test_matching_confres_record_removes_conflict_from_unresolved_count(self):
+        claims = (
+            "  CONF-2026_07_28_999-001:\n"
+            "    claim_id: CLM-2026_07_28_999-001\n"
+            "  CONFRES-2026_07_28_999-001:\n"
+            "    conflict_id: CONF-2026_07_28_999-001\n"
+            "    disposition: superseded\n"
+        )
+        with workspace_with_claims(claims):
+            self.assertEqual(count_unresolved_conflicts(), 0)
+
+    def test_confres_heading_does_not_trigger_malformed_conflict_guard(self):
+        claims = (
+            "  CONF-2026_07_28_999-001:\n"
+            "  CONFRES-2026_07_28_999-001:\n"
+            "    conflict_id: CONF-2026_07_28_999-001\n"
+        )
+        with workspace_with_claims(claims):
+            self.assertEqual(count_unresolved_conflicts(), 0)
+
+    def test_conflict_id_field_without_confres_does_not_resolve_conflict(self):
+        claims = (
+            "  CONF-2026_07_28_999-001:\n"
+            "    conflict_id: CONF-2026_07_28_999-001\n"
+        )
+        with workspace_with_claims(claims):
+            self.assertEqual(count_unresolved_conflicts(), 1)
+
     def test_malformed_conflict_heading_fails_visibly(self):
         for heading in ("  CONF-BROKEN:", "  CONF-BROKEN"):
             with self.subTest(heading=heading):

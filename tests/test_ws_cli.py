@@ -68,9 +68,11 @@ from ws.validate import (
     check_interrupted_mutations,
     check_campaign_anchor,
     check_consequence_plausibility,
+    check_evidence_freshness,
     check_outcome_review,
     run_checks,
     CHECK_REGISTRY,
+    DEFAULT_CHECKS,
 )
 from ws.skill_map import extract_non_goals
 
@@ -1453,6 +1455,30 @@ class TestCheckProtectedFields(unittest.TestCase):
             self.assertTrue(len(errors) > 0)
             self.assertTrue(any("is after" in e for e in errors))
 
+    def test_mixed_timezone_lexically_inverted_passes(self):
+        """Chronological timestamps with mixed offsets are not rejected.
+
+        Regression test for the check-defect false positive: created
+        2026-07-15T20:43:15+08:00 is 12:43:15Z, which is chronologically
+        before updated 12:49:10Z, but the raw strings compare inverted
+        lexically. The check must compare instants, not strings.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            fm = SAMPLE_FRONTMATTER.replace(
+                "created_at: 2026-07-21T00:00:00Z",
+                "created_at: 2026-07-15T20:43:15+08:00",
+            ).replace(
+                "updated_at: 2026-07-21T00:00:00Z",
+                "updated_at: 2026-07-15T12:49:10Z",
+            )
+            obj_file = make_object_file(
+                tmpdir, "2026-07-21-010-test.md",
+                fm + "\n" + SAMPLE_BODY,
+            )
+            errors = check_protected_fields(obj_file)
+            self.assertEqual(len(errors), 0)
+
     def test_rfc3339_with_timezone_offset_passes(self):
         """RFC-3339 with +HH:MM offset is valid."""
         with tempfile.TemporaryDirectory() as tmp:
@@ -1704,7 +1730,7 @@ class TestCheckHistoryIntegrity(unittest.TestCase):
             )
             obj_file = make_object_file(
                 tmpdir, "2026-07-21-010-test.md",
-                SAMPLE_FRONTMATTER + "\n" + body,
+                POST_CUTOFF_FRONTMATTER + "\n" + body,
             )
             errors = check_history_integrity(obj_file)
             self.assertEqual(len(errors), 0)
@@ -1719,7 +1745,7 @@ class TestCheckHistoryIntegrity(unittest.TestCase):
             )
             obj_file = make_object_file(
                 tmpdir, "2026-07-21-010-test.md",
-                SAMPLE_FRONTMATTER + "\n" + body,
+                POST_CUTOFF_FRONTMATTER + "\n" + body,
             )
             errors = check_history_integrity(obj_file)
             self.assertTrue(len(errors) > 0)
@@ -1735,7 +1761,7 @@ class TestCheckHistoryIntegrity(unittest.TestCase):
             )
             obj_file = make_object_file(
                 tmpdir, "2026-07-21-010-test.md",
-                SAMPLE_FRONTMATTER + "\n" + body,
+                POST_CUTOFF_FRONTMATTER + "\n" + body,
             )
             errors = check_history_integrity(obj_file)
             self.assertTrue(len(errors) > 0)
@@ -1751,7 +1777,7 @@ class TestCheckHistoryIntegrity(unittest.TestCase):
             )
             obj_file = make_object_file(
                 tmpdir, "2026-07-21-010-test.md",
-                SAMPLE_FRONTMATTER + "\n" + body,
+                POST_CUTOFF_FRONTMATTER + "\n" + body,
             )
             errors = check_history_integrity(obj_file)
             self.assertTrue(len(errors) > 0)
@@ -1762,7 +1788,7 @@ class TestCheckHistoryIntegrity(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             tmpdir = Path(tmp)
             body = "## History\n\n"
-            fm = SAMPLE_FRONTMATTER  # state: notice
+            fm = POST_CUTOFF_FRONTMATTER  # state: notice
             obj_file = make_object_file(
                 tmpdir, "2026-07-21-010-test.md",
                 fm + "\n" + body,
@@ -1775,7 +1801,7 @@ class TestCheckHistoryIntegrity(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             tmpdir = Path(tmp)
             body = "## History\n\n"
-            fm = SAMPLE_FRONTMATTER.replace("state: notice", "state: build")
+            fm = POST_CUTOFF_FRONTMATTER.replace("state: notice", "state: build")
             obj_file = make_object_file(
                 tmpdir, "2026-07-21-010-test.md",
                 fm + "\n" + body,
@@ -1791,7 +1817,7 @@ class TestCheckHistoryIntegrity(unittest.TestCase):
             body = "## Intent\n\nNo history.\n"
             obj_file = make_object_file(
                 tmpdir, "2026-07-21-010-test.md",
-                SAMPLE_FRONTMATTER + "\n" + body,
+                POST_CUTOFF_FRONTMATTER + "\n" + body,
             )
             errors = check_history_integrity(obj_file)
             self.assertEqual(len(errors), 0)
@@ -1809,7 +1835,7 @@ class TestCheckHistoryIntegrity(unittest.TestCase):
             )
             obj_file = make_object_file(
                 tmpdir, "2026-07-21-010-test.md",
-                SAMPLE_FRONTMATTER + "\n" + body,
+                POST_CUTOFF_FRONTMATTER + "\n" + body,
             )
             errors = check_history_integrity(obj_file)
             self.assertEqual(len(errors), 0)
@@ -2042,6 +2068,20 @@ HIGH_CONSEQUENCE_FM = SAMPLE_FRONTMATTER.replace(
     "consequence: meaningful", "consequence: high"
 )
 
+# Post-cutoff fixture variants used by the check-logic test classes so the
+# retrospective checks (sections, history-integrity, prerequisites) are
+# actually exercised. Objects with created_at before RETROACTIVE_CUTOFF
+# (2026-07-22) are excluded by the guard in tools/ws/validate.py
+# (2026-08-10-005, Decision 4, accepted deviation).
+POST_CUTOFF_FRONTMATTER = SAMPLE_FRONTMATTER.replace(
+    "created_at: 2026-07-21T00:00:00Z",
+    "created_at: 2026-07-23T00:00:00Z",
+)
+
+POST_CUTOFF_HIGH_CONSEQUENCE_FM = POST_CUTOFF_FRONTMATTER.replace(
+    "consequence: meaningful", "consequence: high"
+)
+
 
 class TestCheckPrerequisites(unittest.TestCase):
     """test_prerequisites_validates_state_reaches_via_gates."""
@@ -2052,7 +2092,7 @@ class TestCheckPrerequisites(unittest.TestCase):
             tmpdir = Path(tmp)
             obj_file = make_object_file(
                 tmpdir, "2026-07-21-010-test.md",
-                SAMPLE_FRONTMATTER + "\n" + BODY_WITHOUT_DECISIONS,
+                POST_CUTOFF_FRONTMATTER + "\n" + BODY_WITHOUT_DECISIONS,
             )
             errors = check_prerequisites(obj_file)
             self.assertEqual(len(errors), 0)
@@ -2061,7 +2101,7 @@ class TestCheckPrerequisites(unittest.TestCase):
         """Close state has no prerequisites."""
         with tempfile.TemporaryDirectory() as tmp:
             tmpdir = Path(tmp)
-            fm = SAMPLE_FRONTMATTER.replace("state: notice", "state: close")
+            fm = POST_CUTOFF_FRONTMATTER.replace("state: notice", "state: close")
             fm = fm.replace("status: active", "status: closed")
             obj_file = make_object_file(
                 tmpdir, "2026-07-21-010-test.md",
@@ -2074,7 +2114,7 @@ class TestCheckPrerequisites(unittest.TestCase):
         """Build state + high consequence with decision_type: decision passes."""
         with tempfile.TemporaryDirectory() as tmp:
             tmpdir = Path(tmp)
-            fm = HIGH_CONSEQUENCE_FM.replace("state: notice", "state: build")
+            fm = POST_CUTOFF_HIGH_CONSEQUENCE_FM.replace("state: notice", "state: build")
             obj_file = make_object_file(
                 tmpdir, "2026-07-21-010-test.md",
                 fm + "\n" + SAMPLE_BODY,
@@ -2086,7 +2126,7 @@ class TestCheckPrerequisites(unittest.TestCase):
         """Build state + high consequence without decision record fails."""
         with tempfile.TemporaryDirectory() as tmp:
             tmpdir = Path(tmp)
-            fm = HIGH_CONSEQUENCE_FM.replace("state: notice", "state: build")
+            fm = POST_CUTOFF_HIGH_CONSEQUENCE_FM.replace("state: notice", "state: build")
             obj_file = make_object_file(
                 tmpdir, "2026-07-21-010-test.md",
                 fm + "\n" + BODY_WITHOUT_DECISIONS,
@@ -2099,7 +2139,7 @@ class TestCheckPrerequisites(unittest.TestCase):
         """Build state with low/meaningful consequence is exempt from build gate."""
         with tempfile.TemporaryDirectory() as tmp:
             tmpdir = Path(tmp)
-            fm = SAMPLE_FRONTMATTER.replace("state: notice", "state: build")
+            fm = POST_CUTOFF_FRONTMATTER.replace("state: notice", "state: build")
             obj_file = make_object_file(
                 tmpdir, "2026-07-21-010-test.md",
                 fm + "\n" + BODY_WITHOUT_DECISIONS,
@@ -2111,7 +2151,7 @@ class TestCheckPrerequisites(unittest.TestCase):
         """Release state with result: pass and scope passes."""
         with tempfile.TemporaryDirectory() as tmp:
             tmpdir = Path(tmp)
-            fm = SAMPLE_FRONTMATTER.replace("state: notice", "state: release")
+            fm = POST_CUTOFF_FRONTMATTER.replace("state: notice", "state: release")
             obj_file = make_object_file(
                 tmpdir, "2026-07-21-010-test.md",
                 fm + "\n" + SAMPLE_BODY,
@@ -2123,7 +2163,7 @@ class TestCheckPrerequisites(unittest.TestCase):
         """Release state without scope fails prerequisite check."""
         with tempfile.TemporaryDirectory() as tmp:
             tmpdir = Path(tmp)
-            fm = SAMPLE_FRONTMATTER.replace("state: notice", "state: release")
+            fm = POST_CUTOFF_FRONTMATTER.replace("state: notice", "state: release")
             obj_file = make_object_file(
                 tmpdir, "2026-07-21-010-test.md",
                 fm + "\n" + BODY_WITHOUT_SCOPE,
@@ -2136,7 +2176,7 @@ class TestCheckPrerequisites(unittest.TestCase):
         """Release state with result: fail fails prerequisite check."""
         with tempfile.TemporaryDirectory() as tmp:
             tmpdir = Path(tmp)
-            fm = SAMPLE_FRONTMATTER.replace("state: notice", "state: release")
+            fm = POST_CUTOFF_FRONTMATTER.replace("state: notice", "state: release")
             obj_file = make_object_file(
                 tmpdir, "2026-07-21-010-test.md",
                 fm + "\n" + BODY_WITH_FAIL_DECISION,
@@ -2150,7 +2190,7 @@ class TestCheckPrerequisites(unittest.TestCase):
         """Verify state with result: pass and scope passes."""
         with tempfile.TemporaryDirectory() as tmp:
             tmpdir = Path(tmp)
-            fm = SAMPLE_FRONTMATTER.replace("state: notice", "state: verify")
+            fm = POST_CUTOFF_FRONTMATTER.replace("state: notice", "state: verify")
             obj_file = make_object_file(
                 tmpdir, "2026-07-21-010-test.md",
                 fm + "\n" + SAMPLE_BODY,
@@ -2162,7 +2202,7 @@ class TestCheckPrerequisites(unittest.TestCase):
         """Observe state without result: pass fails prerequisite check."""
         with tempfile.TemporaryDirectory() as tmp:
             tmpdir = Path(tmp)
-            fm = SAMPLE_FRONTMATTER.replace("state: notice", "state: observe")
+            fm = POST_CUTOFF_FRONTMATTER.replace("state: notice", "state: observe")
             obj_file = make_object_file(
                 tmpdir, "2026-07-21-010-test.md",
                 fm + "\n" + BODY_WITH_FAIL_DECISION,
@@ -2175,7 +2215,7 @@ class TestCheckPrerequisites(unittest.TestCase):
         """Observe state with result: pass passes."""
         with tempfile.TemporaryDirectory() as tmp:
             tmpdir = Path(tmp)
-            fm = SAMPLE_FRONTMATTER.replace("state: notice", "state: observe")
+            fm = POST_CUTOFF_FRONTMATTER.replace("state: notice", "state: observe")
             obj_file = make_object_file(
                 tmpdir, "2026-07-21-010-test.md",
                 fm + "\n" + SAMPLE_BODY,
@@ -2409,8 +2449,161 @@ class TestCheckRegistry(unittest.TestCase):
                      "authority", "protected-fields", "history-integrity",
                      "file-integrity", "incident-routing", "prerequisites",
                      "unsupported-capabilities", "interrupted-mutations",
-                     "structure", "outcome-review"}
+                     "structure", "outcome-review", "evidence-freshness"}
         self.assertEqual(set(CHECK_REGISTRY.keys()), expected)
+
+    def test_evidence_freshness_is_not_default(self):
+        """Evidence freshness is explicit-only advisory validation."""
+        self.assertIn("evidence-freshness", CHECK_REGISTRY)
+        self.assertNotIn("evidence-freshness", DEFAULT_CHECKS)
+
+
+class TestEvidenceFreshnessCheck(unittest.TestCase):
+    """Advisory source-locator freshness check (WO 2026-08-10-010)."""
+
+    def _objects_dir(self, root: Path) -> Path:
+        obj_dir = root / ".work-studio" / "objects" / "2026" / "08"
+        obj_dir.mkdir(parents=True, exist_ok=True)
+        return root / ".work-studio" / "objects"
+
+    def _object_with_evidence(self, root: Path, rows: str) -> Path:
+        body = SAMPLE_BODY.replace(
+            "| [system] | test | Initial evidence |",
+            rows,
+        )
+        obj_dir = root / ".work-studio" / "objects" / "2026" / "08"
+        obj_dir.mkdir(parents=True, exist_ok=True)
+        return make_object_file(
+            obj_dir,
+            "2026-08-10-010-evidence-freshness.md",
+            SAMPLE_FRONTMATTER + "\n" + body,
+        )
+
+    def test_reports_missing_and_out_of_range_system_locators(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source_dir = root / "tools"
+            source_dir.mkdir()
+            (source_dir / "example.py").write_text("line 1\n")
+            obj_file = self._object_with_evidence(
+                root,
+                "\n".join([
+                    "| [system] | tools/example.py:1 | resolves |",
+                    "| [system] | tools/missing.py:1 | missing |",
+                    "| [system] | tools/example.py:2 | out of range |",
+                    "| [system] | tools/example.py:1-2 | range out of range |",
+                ]),
+            )
+            warnings = check_evidence_freshness(
+                [obj_file],
+                self._objects_dir(root),
+            )
+            self.assertEqual(len(warnings), 4)
+            self.assertTrue(any("file not found" in w for w in warnings))
+            self.assertEqual(
+                sum("line out of range" in w for w in warnings),
+                2,
+            )
+            self.assertIn(
+                "reaches only exact-citation matches", warnings[-1]
+            )
+
+    def test_ignores_non_locators_and_non_system_rows(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            obj_file = self._object_with_evidence(
+                root,
+                "\n".join([
+                    "| [system] | implement-bounded-change, 2026-08-10 | run |",
+                    "| [decision] | tools/missing.py:1 | not a system row |",
+                    "| [system] | research doc :370-392 | ambiguous prose |",
+                ]),
+            )
+            self.assertEqual(
+                check_evidence_freshness([obj_file], self._objects_dir(root)),
+                [],
+            )
+
+    def test_fans_out_moved_citation_to_exact_co_citer(self):
+        """WO 2026-08-10-011 Direction 4: shared path:line citation is surfaced."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            obj_dir = root / ".work-studio" / "objects" / "2026" / "08"
+            obj_dir.mkdir(parents=True, exist_ok=True)
+            source_dir = root / "tools"
+            source_dir.mkdir()
+            (source_dir / "other.py").write_text("\n".join(f"line {n}" for n in range(1, 10)) + "\n")
+
+            moved_body = SAMPLE_BODY.replace(
+                "| [system] | test | Initial evidence |",
+                "| [system] | tools/missing.py:1 | moved citation |",
+            )
+            moved_file = make_object_file(
+                obj_dir,
+                "2026-08-10-011-moved.md",
+                SAMPLE_FRONTMATTER + "\n" + moved_body,
+            )
+
+            co_citer_body = SAMPLE_BODY.replace(
+                "| [system] | test | Initial evidence |",
+                "| [system] | tools/missing.py:1 | same premise |",
+            )
+            co_citer_file = make_object_file(
+                obj_dir,
+                "2026-08-10-012-co-citer.md",
+                SAMPLE_FRONTMATTER + "\n" + co_citer_body,
+            )
+
+            unrelated_body = SAMPLE_BODY.replace(
+                "| [system] | test | Initial evidence |",
+                "| [system] | tools/other.py:5 | unrelated premise |",
+            )
+            unrelated_file = make_object_file(
+                obj_dir,
+                "2026-08-10-013-unrelated.md",
+                SAMPLE_FRONTMATTER + "\n" + unrelated_body,
+            )
+
+            warnings = check_evidence_freshness(
+                [moved_file, co_citer_file, unrelated_file],
+                self._objects_dir(root),
+            )
+
+            # Both objects independently cite the same missing locator, so
+            # each is flagged moved on its own account and each fans out to
+            # the other — one "possibly affected" line per direction.
+            fan_out = [w for w in warnings if "possibly affected" in w]
+            self.assertEqual(len(fan_out), 2)
+            self.assertTrue(
+                any(str(moved_file) in w and str(co_citer_file) in w for w in fan_out)
+            )
+            self.assertTrue(
+                any(str(co_citer_file) in w and str(moved_file) in w for w in fan_out)
+            )
+            self.assertNotIn(str(unrelated_file), " ".join(warnings))
+            self.assertIn(
+                "reaches only exact-citation matches", warnings[-1]
+            )
+
+    def test_run_checks_reports_warnings_without_failing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            obj_file = self._object_with_evidence(
+                root,
+                "| [system] | tools/missing.py:1 | missing |",
+            )
+            stderr = io.StringIO()
+            stdout = io.StringIO()
+            with contextlib.redirect_stderr(stderr):
+                with contextlib.redirect_stdout(stdout):
+                    exit_code = run_checks(
+                        ["evidence-freshness"],
+                        [obj_file],
+                        objects_dir=self._objects_dir(root),
+                    )
+            self.assertEqual(exit_code, 0)
+            self.assertIn("Warning: evidence-freshness:", stderr.getvalue())
+            self.assertIn("All validation checks passed.", stdout.getvalue())
 
 
 class TestOutcomeReviewCheck(unittest.TestCase):

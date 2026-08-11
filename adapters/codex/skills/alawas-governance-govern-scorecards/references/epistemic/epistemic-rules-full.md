@@ -10,7 +10,7 @@ entry MUST use exactly one of the following tags:
 | `[inference]` | Reasoned conclusion from available evidence |
 | `[gap]` | Known unknown — information that is missing or unresolved |
 | `[testimony]` | Reported information from a person or source |
-| `[memory]` | Prior observation from an earlier interaction |
+| `[memory]` | Relevant, user-approved reusable preferences admitted through the Memory Candidate gate. |
 
 Entries use the inline convention: `- [tag] <free text>`.
 

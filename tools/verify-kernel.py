@@ -63,11 +63,20 @@ def parse_simple_yaml(path: Path) -> dict | None:
 
     result = {}
     current_section = result
-    stack: list[tuple[str, dict, int]] = []
+    # Each frame restores the context active before a nested mapping or a
+    # dict-shaped list item was entered: (key, parent section, its indent,
+    # the list that was active in the parent, if any). The parent list must
+    # be restored on pop — not just the parent section — because parsing a
+    # dict-shaped list item's own fields (e.g. `purpose: "..."` inside a
+    # `- path: VERSION` entry) reassigns current_list to None or to a nested
+    # sub-list, and popping back out must undo that so the next sibling
+    # list item still appends to the right list.
+    stack: list[tuple[str, dict, int, list | None]] = []
     current_key: str | None = None
     current_list: list | None = None
     block_scalar_key: str | None = None
     block_scalar_lines: list[str] = []
+    block_scalar_indent: int = 0
 
     for line in lines:
         raw = line.rstrip("\n")
@@ -79,9 +88,13 @@ def parse_simple_yaml(path: Path) -> dict | None:
         indent = len(line) - len(line.lstrip(" "))
         stripped = raw.strip()
 
-        # Block scalar continuation
+        # Block scalar continuation: compare against the block scalar's own
+        # key indent, not the enclosing mapping's stacked indent — the two
+        # differ whenever the block scalar is nested (e.g. `description: >`
+        # under `kernel:`), and using the wrong one swallows every following
+        # line as continuation text.
         if block_scalar_key is not None:
-            if indent > stack[-1][2] if stack else True:
+            if indent > block_scalar_indent:
                 block_scalar_lines.append(stripped)
                 continue
             else:
@@ -91,23 +104,51 @@ def parse_simple_yaml(path: Path) -> dict | None:
 
         # Pop stack for dedent
         while stack and indent <= stack[-1][2]:
-            _, parent, _ = stack.pop()
+            _, parent, _, parent_list = stack.pop()
             current_section = parent
+            current_list = parent_list
 
         # Block scalar indicator (>)
         if stripped.endswith(": >") or ": >" in stripped:
             key = stripped.split(": >")[0].strip()
             block_scalar_key = key
             block_scalar_lines = []
+            block_scalar_indent = indent
             continue
 
         # Key-value with colon
         if ": " in stripped or ":" == stripped[-1]:
             # List item (starts with -)
             if stripped.startswith("- "):
-                value = stripped[2:]
-                if current_list is not None:
-                    current_list.append(value)
+                item_body = stripped[2:]
+                if ": " in item_body:
+                    # Dict-shaped list item ("- path: VERSION"): starts a new
+                    # mapping, appended to the enclosing list. Its own
+                    # further fields (purpose:, required_for_bootstrap:, ...)
+                    # arrive as ordinary deeper-indented key-value lines and
+                    # attach to it because current_section now points at it.
+                    item_key, item_value = item_body.split(": ", 1)
+                    item_key = item_key.strip()
+                    item_value = item_value.strip()
+                    new_item: dict = {}
+                    if current_list is not None:
+                        current_list.append(new_item)
+                    stack.append((item_key, current_section, indent, current_list))
+                    current_section = new_item
+                    if item_value == "":
+                        new_sub_list: list = []
+                        current_section[item_key] = new_sub_list
+                        current_list = new_sub_list
+                        current_key = item_key
+                    else:
+                        current_section[item_key] = _coerce_value(
+                            item_value.strip('"').strip("'")
+                        )
+                        current_list = None
+                else:
+                    value = item_body
+                    if current_list is not None:
+                        current_list.append(value)
                 continue
 
             parts = stripped.split(": ", 1)
@@ -118,7 +159,7 @@ def parse_simple_yaml(path: Path) -> dict | None:
                 # Nested mapping
                 new_section: dict = {}
                 current_section[key] = new_section
-                stack.append((key, current_section, indent))
+                stack.append((key, current_section, indent, current_list))
                 current_section = new_section
                 current_list = None
             elif value == "":
@@ -184,6 +225,22 @@ def check_paths(manifest: dict) -> tuple[bool, list[str]]:
             skill_path = full_path / skill_name / "SKILL.md"
             if not skill_path.exists():
                 errors.append(f"MISSING: {path_str}{skill_name}/SKILL.md")
+
+        # Reverse check: flag a canonical skill directory that exists on disk
+        # but is not declared in the manifest's skills list. A passing forward
+        # check only certifies declared-completeness, not inventory-completeness.
+        if "skills" in entry and full_path.is_dir():
+            declared = set(entry.get("skills", []))
+            actual = {
+                child.name
+                for child in full_path.iterdir()
+                if child.is_dir() and (child / "SKILL.md").exists()
+            }
+            for undeclared in sorted(actual - declared):
+                errors.append(
+                    f"UNDECLARED: {path_str}{undeclared}/SKILL.md exists but is not "
+                    f"listed in the manifest's skills: entry for {path_str}"
+                )
 
     return len(errors) == 0, errors
 

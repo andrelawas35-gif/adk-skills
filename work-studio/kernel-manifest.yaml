@@ -68,8 +68,11 @@ kernel:
         - operations-diagnose-production-incident
         - research-investigate-live-question
         - thinking-develop-idea
+        - thinking-diagnose-homogenization
         - thinking-grilling-session
+        - thinking-inquire-system
         - thinking-pressure-test-decision
+        - thinking-resume-work
         - thinking-turn-signal-into-work
 
     - path: tools/

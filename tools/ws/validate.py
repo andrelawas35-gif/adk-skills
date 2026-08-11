@@ -7,7 +7,7 @@ all checks against all objects.
 Checks:
   schema                   — YAML frontmatter field validation
   sections                 — Required section presence and ordering
-  append-only              — History/Evidence/Decisions are append-only
+  append-only              — Snapshot-diff enforcement of History/Decisions/Evidence/Claims append-only
   attention                — active.md consistency cross-check
   attention-limits         — active.md quantitative cap enforcement
   sensitivity              — Restricted content keyword scanning
@@ -25,11 +25,13 @@ Checks:
   interrupted-mutations    — Orphaned temp/lock file detection
   structure                — Composite: schema + sections
   outcome-review           — Advisory observe/close outcome-review coverage
+  evidence-freshness       — Advisory [system] source locator resolution
 """
 
 import re
 import subprocess
 import sys
+from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
@@ -204,11 +206,40 @@ def check_consequence_plausibility(file_path: Path) -> List[str]:
     ]
 
 
+# ── Retroactive cutoff ────────────────────────────────────────────────────────
+
+# Objects created before the retrospective checks' requirements were
+# introduced are excluded from those checks without being rewritten.
+# Both check_prerequisites and check_history_integrity entered validate.py
+# in commit 936b4af (2026-07-22); the Decisions template entered the same day
+# in aa92aa6 (2026-08-10-005, Decisions 3-4).
+RETROACTIVE_CUTOFF = "2026-07-22T00:00:00Z"
+
+
+def _predates_cutoff(file_path: Path) -> bool:
+    """Return True if the object's created_at predates RETROACTIVE_CUTOFF.
+
+    Pre-cutoff objects are excluded from the retrospective checks (sections,
+    history-integrity, prerequisites) without being rewritten. The comparison
+    is a strict created_at < cutoff, so objects created exactly at the
+    boundary remain evaluated on their own history.
+    """
+    try:
+        content = file_path.read_text()
+    except Exception:
+        return False
+    fm = parse_frontmatter(content)
+    created = str(fm.get("created_at", ""))
+    return bool(created) and created < RETROACTIVE_CUTOFF
+
+
 # ── Sections check ────────────────────────────────────────────────────────────
 
 
 def check_sections(file_path: Path) -> List[str]:
     """Validate required section presence and ordering."""
+    if _predates_cutoff(file_path):
+        return []
     try:
         content = file_path.read_text()
     except Exception as e:
@@ -229,17 +260,91 @@ def check_sections(file_path: Path) -> List[str]:
 
 # ── Append-only check ─────────────────────────────────────────────────────────
 
+# Sections protected by the append-only rule (ADR 0017, 0022, 0024).
+_APPEND_ONLY_SECTIONS = (
+    "history",
+    "decisions and revisit triggers",
+    "evidence ledger",
+    "claims",
+)
+
+# RFC-3339 whole-second timestamp base (uniqueness per section, ADR 0022).
+_TIMESTAMP_RE = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}")
+
+# History entry heading: ### <whole-second ts> — <action>.
+_ENTRY_HEADING_RE = re.compile(r"^###\s+(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})")
+
+
+def _find_snapshot(file_path: Path) -> Optional[Path]:
+    """Return the most recent local snapshot (.bak-<ts>) sibling for an object.
+
+    Work Objects live under .work-studio/objects/, which is Git-excluded by
+    policy. The established baseline is a sibling ``.bak-<ts>`` snapshot taken
+    before mutations (the same file used for rollback). Returns the most
+    recent such snapshot, or None if the object has none.
+    """
+    siblings = sorted(file_path.parent.glob(file_path.name + ".bak-*"))
+    return siblings[-1] if siblings else None
+
+
+def _entry_timestamps(text: str, section: str) -> List[str]:
+    """Return whole-second timestamps that identify entries in a section.
+
+    Only timestamps that identify entries count for collision detection
+    (ADR 0022 citation-uniqueness); timestamps appearing elsewhere in prose
+    do not (per Decision 9):
+      - History: the ``### <ts> —`` heading timestamp.
+      - Decisions: entries are identified by ``### Decision N —`` headings,
+        which carry no timestamp — no structural entry timestamps.
+      - Evidence ledger / Claims: the first timestamp of an entry line
+        (a table row or bullet), not timestamps deeper in prose.
+    """
+    lines = text.split("\n")
+    if section == "history":
+        out: List[str] = []
+        for ln in lines:
+            m = _ENTRY_HEADING_RE.match(ln)
+            if m:
+                out.append(m.group(1))
+        return out
+    if section == "decisions and revisit triggers":
+        return []
+    if section == "evidence ledger":
+        # Entry rows are "| [tag] | source | entry |"; the entry-identifier
+        # timestamp is at the start of the entry cell, not mid-prose.
+        out = []
+        for ln in lines:
+            s = ln.strip()
+            if s.startswith("|"):
+                cells = s.strip("|").split("|")
+                if len(cells) >= 3:
+                    m = _TIMESTAMP_RE.match(cells[2].strip())
+                    if m:
+                        out.append(m.group(0))
+        return out
+    # Claims: bullets; the entry-identifier timestamp is at the start of the
+    # bullet text.
+    out = []
+    for ln in lines:
+        s = ln.strip()
+        if s.startswith("- ") or s.startswith("* "):
+            m = _TIMESTAMP_RE.match(s[2:].strip())
+            if m:
+                out.append(m.group(0))
+    return out
+
 
 def check_append_only(file_path: Path) -> List[str]:
     """Check that append-only sections haven't lost content.
 
-    Uses a structural heuristic: the file's History section (if present)
-    should not be empty for objects beyond the notice state. Also checks
-    that Evidence ledger entries follow the table format.
+    Diffs each protected section (History, Decisions and revisit triggers,
+    Evidence ledger, Claims) against the object's most recent local snapshot
+    (a .bak-<ts> sibling) and fails if any existing entry's text changed or
+    was removed. New appended entries pass. Also fails on duplicate
+    whole-second timestamps within a section.
 
-    Note: Full append-only verification requires git history comparison
-    (as verify-append-only.py does). This check provides structural
-    validation only.
+    A file with no snapshot baseline is surfaced by ``check_append_only_baseline``
+    as an explicit, non-blocking warning; it is never a silent pass.
     """
     errors = []
 
@@ -296,7 +401,60 @@ def check_append_only(file_path: Path) -> List[str]:
                     f"{file_path}: Evidence ledger line {i+1} does not follow table format"
                 )
 
+    # ── Snapshot diff: existing entries must be a prefix (append-only) ─────
+    snapshot = _find_snapshot(file_path)
+    if snapshot is not None:
+        try:
+            snap_sections = parse_sections(_extract_body(snapshot.read_text()))
+        except Exception as e:
+            errors.append(f"{file_path}: Cannot parse snapshot {snapshot.name}: {e}")
+            snap_sections = {}
+        for sec in _APPEND_ONLY_SECTIONS:
+            if sec not in snap_sections:
+                continue
+            snap_lines = [l.rstrip() for l in snap_sections[sec].split("\n")]
+            cur_lines = [l.rstrip() for l in sections.get(sec, "").split("\n")]
+            if len(cur_lines) < len(snap_lines) or cur_lines[:len(snap_lines)] != snap_lines:
+                errors.append(
+                    f"{file_path}: append-only violation in section "
+                    f"'{sec}': an existing entry was edited or removed "
+                    f"(diff vs snapshot {snapshot.name})"
+                )
+    # No snapshot: append-only cannot be diffed; check_append_only_baseline
+    # surfaces that as an explicit, non-blocking warning.
+
+    # ── Whole-second entry-timestamp uniqueness per section (ADR 0022) ─────
+    # Only timestamps that identify entries collide (Decision 9); prose
+    # date-time strings are not entry timestamps.
+    for sec in _APPEND_ONLY_SECTIONS:
+        if sec not in sections:
+            continue
+        seen: Dict[str, bool] = {}
+        for base in _entry_timestamps(sections[sec], sec):
+            if base in seen:
+                errors.append(
+                    f"{file_path}: duplicate whole-second timestamp "
+                    f"'{base}' in section '{sec}'"
+                )
+                break  # one report per section is enough
+            seen[base] = True
+
     return errors
+
+
+def check_append_only_baseline(file_path: Path) -> List[str]:
+    """Advisory warning: object has no snapshot baseline for append-only diffing.
+
+    Append-only cannot be verified for an object without a .bak-<ts> snapshot.
+    Surfaced explicitly (never a silent pass) but non-blocking, per the
+    accepted wiring; making it blocking is a later decision (open question 2).
+    """
+    if _find_snapshot(file_path) is None:
+        return [
+            f"{file_path}: no baseline snapshot (.bak-*) found; "
+            "append-only is not verifiable for this object"
+        ]
+    return []
 
 
 # ── Canonical evidence tags (from AGREEMENT-LOOP.md) ──────────────────────────
@@ -409,6 +567,157 @@ def check_evidence_lanes(file_path: Path) -> List[str]:
             )
 
     return errors
+
+
+# ── Evidence freshness check ─────────────────────────────────────────────────
+
+_LOCAL_LOCATOR_RE = re.compile(
+    r"^`?(?P<path>[^`\s|:][^`\s|]*):(?P<start>\d+)"
+    r"(?:[-–](?P<end>\d+))?`?$"
+)
+
+
+def _parse_evidence_table_cells(raw: str) -> Optional[List[str]]:
+    """Return table cells for a simple evidence row, or None if not a row."""
+    stripped = raw.strip()
+    if not stripped.startswith("|") or _is_table_header(stripped):
+        return None
+    cells = [cell.strip() for cell in stripped.strip("|").split("|")]
+    return cells if len(cells) >= 3 else None
+
+
+def _parse_local_locator(source: str) -> Optional[Tuple[Path, int, int]]:
+    """Parse an exact local ``path:line`` or ``path:start-end`` source."""
+    match = _LOCAL_LOCATOR_RE.match(source.strip())
+    if not match:
+        return None
+    start = int(match.group("start"))
+    end = int(match.group("end") or start)
+    if start < 1 or end < start:
+        return None
+    return Path(match.group("path")), start, end
+
+
+# One fixed disclosure appended whenever this check has findings to report.
+# It names the check's reach boundary (Direction 3 fallback, WO 2026-08-10-011
+# Decision 2): fan-out below only ever matches an exact path:line citation, so
+# dependencies expressed as prose conditions are never covered by any
+# mechanism here — they stay a human re-read.
+_FRESHNESS_COVERAGE_NOTE = (
+    "evidence-freshness: reaches only exact-citation matches; prose-condition "
+    "dependencies are not covered — re-read them by hand when a related "
+    "correction lands."
+)
+
+
+def _system_locators(
+    file_paths: List[Path],
+) -> List[Tuple[Path, int, str, Tuple[Path, int, int]]]:
+    """Collect every [system] row with a parseable local locator.
+
+    Returns one tuple per row: (object file, evidence-line number within its
+    ledger, raw source text, parsed (rel_path, start, end) locator). Used both
+    to test resolution and, for a moved citation, to fan out to co-citers.
+    """
+    rows: List[Tuple[Path, int, str, Tuple[Path, int, int]]] = []
+    for obj_file in sorted(file_paths):
+        try:
+            content = obj_file.read_text()
+        except Exception:
+            continue
+
+        body = _extract_body(content)
+        sections = parse_sections(body)
+        evidence = sections.get("evidence ledger", "")
+        if not evidence:
+            continue
+
+        for line_num, line in enumerate(evidence.split("\n"), start=1):
+            cells = _parse_evidence_table_cells(line)
+            if cells is None:
+                continue
+
+            tag = cells[0].strip("`")
+            if tag != "[system]":
+                continue
+
+            source = cells[1].strip()
+            locator = _parse_local_locator(source)
+            if locator is None:
+                continue
+
+            rows.append((obj_file, line_num, source, locator))
+
+    return rows
+
+
+def check_evidence_freshness(
+    file_paths: List[Path],
+    objects_dir: Optional[Path] = None,
+) -> List[str]:
+    """Advisory read-time check for stale local [system] source locators.
+
+    This check is intentionally mechanical. It only evaluates exact local
+    ``path:line`` and ``path:start-end`` sources on ``[system]`` evidence rows.
+    Non-locator and ambiguous sources are skipped; other evidence tags are out
+    of scope. A finding means "citation moved — re-read", not "claim false".
+
+    When a citation is flagged moved, this also fans the flag out to every
+    other object citing the identical pre-move locator (WO 2026-08-10-011,
+    Direction 4): a shared exact path:line citation predicts genuine
+    dependency, so a co-citer is surfaced as "possibly affected" whether or
+    not it named the dependency itself. The join is exact-match only — no
+    bare-filename matching, no fuzzy matching — matching the flood risk
+    already ruled out for this mechanism.
+    """
+    if objects_dir is None:
+        return ["evidence-freshness check requires the objects/ directory path"]
+
+    ws_root = objects_dir.parent.parent
+    rows = _system_locators(file_paths)
+    warnings: List[str] = []
+
+    for obj_file, line_num, source, (rel_path, start, end) in rows:
+        target = rel_path if rel_path.is_absolute() else ws_root / rel_path
+
+        if not target.exists() or not target.is_file():
+            reason = "file not found"
+        else:
+            try:
+                line_count = len(target.read_text().splitlines())
+            except Exception as exc:
+                reason = f"cannot read source: {exc}"
+            else:
+                reason = (
+                    f"line out of range; file has {line_count} line(s)"
+                    if end > line_count
+                    else None
+                )
+
+        if reason is None:
+            continue
+
+        warnings.append(
+            f"evidence-freshness: {obj_file}: Evidence ledger line "
+            f"{line_num}: citation moved — re-read: {source} ({reason})"
+        )
+
+        for other_file, other_line, other_source, other_locator in rows:
+            if (other_file, other_line) == (obj_file, line_num):
+                continue
+            if other_locator != (rel_path, start, end):
+                continue
+            warnings.append(
+                f"evidence-freshness: {obj_file}: Evidence ledger line "
+                f"{line_num}: citation moved — re-read: {source} "
+                f"— possibly affected: {other_file} (shares this citation "
+                f"at Evidence ledger line {other_line})"
+            )
+
+    if warnings:
+        warnings.append(_FRESHNESS_COVERAGE_NOTE)
+
+    return warnings
 
 
 # ── Sensitivity check ─────────────────────────────────────────────────────────
@@ -842,6 +1151,20 @@ _TS_PATTERN = re.compile(
 )
 
 
+def _ts_instant(value: str) -> Optional[datetime]:
+    """Parse an RFC-3339 timestamp into a timezone-aware instant.
+
+    Returns None if the value is not parseable. ``datetime.fromisoformat``
+    in Python 3.8 does not accept the ``Z`` suffix, so it is normalized to
+    ``+00:00`` before parsing.
+    """
+    try:
+        normalized = value.replace("Z", "+00:00") if value.endswith("Z") else value
+        return datetime.fromisoformat(normalized)
+    except ValueError:
+        return None
+
+
 def check_protected_fields(file_path: Path) -> List[str]:
     """Validate protected (immutable) fields in Work Object frontmatter.
 
@@ -898,7 +1221,13 @@ def check_protected_fields(file_path: Path) -> List[str]:
             "RFC-3339 timestamp"
         )
 
-    if created and updated and created > updated:
+    # Compare as instants, not strings: mixed timezone offsets such as
+    # created 2026-07-15T20:43:15+08:00 (=12:43:15Z) vs updated 12:49:10Z are
+    # chronological but lexically inverted. String comparison would be a
+    # false positive; instant comparison is the true chronological check.
+    created_ts = _ts_instant(created) if created else None
+    updated_ts = _ts_instant(updated) if updated else None
+    if created_ts is not None and updated_ts is not None and created_ts > updated_ts:
         errors.append(
             f"{file_path}: created_at ({created}) is after "
             f"updated_at ({updated}). Timestamps must be chronological."
@@ -1008,10 +1337,12 @@ def check_history_integrity(file_path: Path) -> List[str]:
       4. The History section is not empty for objects past the notice state.
       5. History entries contain the standard fields (State, Status, Actor).
 
-    True append-only enforcement (no edits to past entries) requires git
-    history comparison via verify-append-only.py. This check provides
-    structural validation that catches common violations.
+    True append-only enforcement (no edits to past entries) is handled by the
+    append-only check's local-snapshot diff (ws validate append-only). This
+    check provides structural validation of History format and order.
     """
+    if _predates_cutoff(file_path):
+        return []
     errors = []
 
     try:
@@ -1307,6 +1638,8 @@ def check_prerequisites(file_path: Path) -> List[str]:
 
     Terminal and notice states have no prerequisites to check.
     """
+    if _predates_cutoff(file_path):
+        return []
     errors = []
 
     try:
@@ -1968,6 +2301,13 @@ CHECK_REGISTRY: Dict[str, callable] = {
     "interrupted-mutations": check_interrupted_mutations,
     "structure": check_structure,
     "outcome-review": None,  # Special: workspace-level advisory check (not in defaults)
+    "evidence-freshness": None,  # Special: workspace-level advisory check (not in defaults)
+}
+
+# Per-check advisory warnings: surfaced explicitly but non-blocking. Run for
+# both default and explicit invocations of the named check.
+CHECK_WARNING_REGISTRY: Dict[str, callable] = {
+    "append-only": check_append_only_baseline,
 }
 
 DEFAULT_CHECKS = [
@@ -2079,10 +2419,30 @@ def run_checks(
                 )
             continue
 
+        if name == "evidence-freshness":
+            # Workspace-level advisory check over [system] evidence source
+            # locators. Excluded from DEFAULT_CHECKS; run explicitly via
+            # `ws validate evidence-freshness`. Read-only and warning-only:
+            # stale citations mean "re-read", not "validation failed".
+            if objects_dir:
+                all_warnings.extend(
+                    check_evidence_freshness(file_paths, objects_dir)
+                )
+            else:
+                all_errors.append(
+                    "Evidence-freshness check requires the objects/ directory path"
+                )
+            continue
+
         check_fn = CHECK_REGISTRY[name]
         for fp in file_paths:
             errs = check_fn(fp)
             all_errors.extend(errs)
+
+        warn_fn = CHECK_WARNING_REGISTRY.get(name)
+        if warn_fn is not None:
+            for fp in file_paths:
+                all_warnings.extend(warn_fn(fp))
 
     for warning in all_warnings:
         print(f"Warning: {warning}", file=sys.stderr)
