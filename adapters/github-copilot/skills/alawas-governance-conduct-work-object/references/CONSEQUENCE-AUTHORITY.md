@@ -120,8 +120,12 @@ assessment entry.
 
 ## Auditable-but-not-preventable actions
 
-Five action categories cannot be mechanically prevented until a
-platform-agnostic CLI exists:
+Five action categories cannot be mechanically prevented until execution
+mediation exists — a runtime wrapper that intercepts and can block the
+action itself, not merely record that it happened. The `ws` CLI provides
+audit and check support today (structured authority History parsing,
+GRANTED/DENIED/AMBIGUOUS lookups); it does not wrap or gate any of these
+five categories at the moment of action:
 
 1. Export
 2. Destructive actions
@@ -130,7 +134,7 @@ platform-agnostic CLI exists:
 5. Deployment
 
 These are auditable through structured authority History entries but are not
-preventable at runtime. The CLI becomes the highest-priority enforcement
-deliverable. Until then, the pre-commit hook, inlined skill authority checks,
-and structured authority records provide defense-in-depth through prompt-level,
-commit-level, and audit-level enforcement.
+preventable at runtime. Execution mediation becomes the highest-priority
+enforcement deliverable. Until then, the pre-commit hook, inlined skill
+authority checks, and structured authority records provide defense-in-depth
+through prompt-level, commit-level, and audit-level enforcement.

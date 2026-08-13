@@ -1079,8 +1079,9 @@ def check_attention_limits(
 ) -> List[str]:
     """Enforce attention register quantitative limits.
 
-    Per the conducting skill: at most one Primary Work Object and at most
-    two Supporting Work Objects. Total active cannot exceed 3.
+    Per ADR 0018: at most one Primary Work Object. Supporting and total
+    active entries have no numeric cap -- active.md is an advisory
+    attention view, not a concurrency constraint.
 
     This is a workspace-level check (takes active_md_path, not a Work
     Object path). The runner passes file_paths as a second argument for
@@ -1118,19 +1119,6 @@ def check_attention_limits(
             f"Attention register has {primary_count} Primary entries "
             "(maximum 1). Move excess Primary objects to Supporting "
             "or close them."
-        )
-
-    if supporting_count > 2:
-        errors.append(
-            f"Attention register has {supporting_count} Supporting "
-            "entries (maximum 2). Close or pause excess objects."
-        )
-
-    total = primary_count + supporting_count
-    if total > 3:
-        errors.append(
-            f"Attention register has {total} total active entries "
-            "(maximum 3: 1 Primary + 2 Supporting)."
         )
 
     return errors
@@ -2276,6 +2264,54 @@ def _cohort_total(objects_dir: Path, cohort: str) -> int:
     return total
 
 
+# ── next_action / revisit_trigger presence ────────────────────────────────────
+
+FORWARD_MOTION_STATES = ("notice", "explore", "design", "build")
+
+
+def check_next_action_presence(file_path: Path) -> List[str]:
+    """Hard error: forward-motion objects must carry a frontmatter next_action.
+
+    Per WORK-OBJECT.md:20. Promoted to a hard error after the corpus backfill
+    (WO 2026-08-10-014, follow-on 2). Objects predating the field were
+    backfilled; new objects get it from ws create.
+    """
+    errors = []
+    try:
+        content = file_path.read_text()
+    except Exception:
+        return errors
+    fm = parse_frontmatter(content)
+    state = str(fm.get("state", "")).strip()
+    if state in FORWARD_MOTION_STATES and not str(fm.get("next_action", "") or "").strip():
+        errors.append(
+            f"{file_path}: forward-motion object (state '{state}') has no "
+            "frontmatter next_action"
+        )
+    return errors
+
+
+def check_revisit_trigger_presence(file_path: Path) -> List[str]:
+    """Advisory warning: waiting/paused objects should carry revisit_trigger.
+
+    Per WORK-OBJECT.md:43. Kept advisory (non-blocking) because 4 waiting/paused
+    objects still lack the field; promotion is a smaller follow-on (WO
+    2026-08-10-014).
+    """
+    warnings = []
+    try:
+        content = file_path.read_text()
+    except Exception:
+        return warnings
+    fm = parse_frontmatter(content)
+    status = str(fm.get("status", "")).strip()
+    if status in ("waiting", "paused") and not str(fm.get("revisit_trigger", "") or "").strip():
+        warnings.append(
+            f"{file_path}: status '{status}' but no frontmatter revisit_trigger"
+        )
+    return warnings
+
+
 # ── Check registry ────────────────────────────────────────────────────────────
 
 CHECK_REGISTRY: Dict[str, callable] = {
@@ -2302,16 +2338,18 @@ CHECK_REGISTRY: Dict[str, callable] = {
     "structure": check_structure,
     "outcome-review": None,  # Special: workspace-level advisory check (not in defaults)
     "evidence-freshness": None,  # Special: workspace-level advisory check (not in defaults)
+    "next-action": check_next_action_presence,  # Hard: forward-motion objects need next_action
 }
 
 # Per-check advisory warnings: surfaced explicitly but non-blocking. Run for
 # both default and explicit invocations of the named check.
 CHECK_WARNING_REGISTRY: Dict[str, callable] = {
     "append-only": check_append_only_baseline,
+    "next-action": check_revisit_trigger_presence,  # Advisory: waiting/paused need revisit_trigger
 }
 
 DEFAULT_CHECKS = [
-    "schema", "sections", "append-only", "sensitivity",
+    "schema", "sections", "append-only", "next-action", "sensitivity",
     "sensitivity-policy", "lifecycle", "claims", "lanes",
     "authority", "protected-fields", "history-integrity",
     "file-integrity", "incident-routing", "prerequisites",
@@ -2454,5 +2492,8 @@ def run_checks(
         print(f"\n{len(all_errors)} validation error(s) found.", file=sys.stderr)
         return 1
 
-    print("All validation checks passed.")
+    if run_default_checks:
+        print("All default validation checks passed.")
+    else:
+        print("All named validation checks passed.")
     return 0

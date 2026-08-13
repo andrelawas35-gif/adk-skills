@@ -7,8 +7,15 @@ missing evidence.
 
 Consequence scaling (extended per 2026-07-27-015):
     - low: audit at verify transition only
-    - meaningful: audit at build, decision, verify, release
-    - high: audit at every transition (build, decision, verify, release, observe)
+    - meaningful: audit at build, verify, release
+    - high: audit at every transition (build, verify, release, observe)
+
+The 2026-07-27-015 model also introduced a "decision" audit branch, keyed to
+a "decision" transition target. No such lifecycle state exists — `ws
+transition --state` only ever accepts the eight real states — so that branch
+was unreachable from its only call site. 2026-08-11-001 removed it and folded
+its rationale check into the build-transition audit below, the one point in
+the lifecycle where a decision is actually expected to already exist.
 """
 
 import re
@@ -27,8 +34,8 @@ from .sections import (
 
 _CONSEQUENCE_AUDIT_MAP: Dict[str, Tuple[str, ...]] = {
     "low": ("verify",),
-    "meaningful": ("build", "decision", "verify", "release"),
-    "high": ("build", "decision", "verify", "release", "observe"),
+    "meaningful": ("build", "verify", "release"),
+    "high": ("build", "verify", "release", "observe"),
 }
 
 
@@ -98,47 +105,31 @@ def _commit_gaps(body: str, entries: List[Tuple[str, str]]) -> Tuple[str, Option
 
 
 def _audit_build(body: str) -> Tuple[str, Optional[str]]:
-    """Build-state audit: requires at least one decision with result: pass."""
+    """Build-state audit: requires a decision with result: pass and a
+    populated rationale (folded in from the former, unreachable
+    "decision"-state audit — see 2026-08-11-001)."""
     decisions = parse_decisions_table(body)
     has_pass = any(d.get("result", "").strip() == "pass" for d in decisions)
 
-    if has_pass:
-        return (body, None)
-
-    return _commit_gaps(body, [
-        ("build", (
-            "No decision record with result: pass found at build transition. "
-            "An accepted decision record is expected before entering build state."
-        )),
-    ])
-
-
-def _audit_decision(body: str) -> Tuple[str, Optional[str]]:
-    """Decision-state audit: requires at least one structured decision record
-    (claim sidecar) with a populated rationale (contradiction/freshness exposure)."""
-    decisions = parse_decisions_table(body)
-
-    if not decisions:
+    if not has_pass:
         return _commit_gaps(body, [
-            ("decision", (
-                "No structured decision records found at decision transition. "
-                "A claim sidecar with contradiction and freshness exposure "
-                "is expected in the Decisions section."
+            ("build", (
+                "No decision record with result: pass found at build transition. "
+                "An accepted decision record is expected before entering build state."
             )),
         ])
 
-    # Check for at least one decision with a substantive rationale
     has_substantive = any(
-        _is_populated(d.get("rationale", ""))
+        d.get("result", "").strip() == "pass" and _is_populated(d.get("rationale", ""))
         for d in decisions
     )
 
     if not has_substantive:
         return _commit_gaps(body, [
-            ("decision", (
-                "Decision records found but none have a populated rationale. "
-                "Claim sidecar expected to document contradiction and "
-                "freshness exposure in the rationale field."
+            ("build", (
+                "A decision record with result: pass exists but none has a "
+                "populated rationale. Claim sidecar expected to document "
+                "contradiction and freshness exposure in the rationale field."
             )),
         ])
 
@@ -239,7 +230,6 @@ def _is_populated(value: str) -> bool:
 
 _AUDIT_DISPATCH = {
     "build": _audit_build,
-    "decision": _audit_decision,
     "verify": _audit_verify,
     "release": _audit_release,
     "observe": _audit_observe,

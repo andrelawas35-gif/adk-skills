@@ -61,6 +61,19 @@ def parse_simple_yaml(path: Path) -> dict | None:
     with open(path) as f:
         lines = f.readlines()
 
+    def _next_content_line(after_index: int) -> str | None:
+        """Return the next non-blank, non-comment line's stripped text.
+
+        Used only to disambiguate a bare `key:` line (no trailing value):
+        such a line is syntactically identical whether it starts a nested
+        mapping or a list, and the only way to tell is what follows it.
+        """
+        for later in lines[after_index + 1:]:
+            later_stripped = later.strip()
+            if later_stripped and not later_stripped.startswith("#"):
+                return later_stripped
+        return None
+
     result = {}
     current_section = result
     # Each frame restores the context active before a nested mapping or a
@@ -78,7 +91,7 @@ def parse_simple_yaml(path: Path) -> dict | None:
     block_scalar_lines: list[str] = []
     block_scalar_indent: int = 0
 
-    for line in lines:
+    for line_index, line in enumerate(lines):
         raw = line.rstrip("\n")
         if not raw or raw.strip().startswith("#"):
             if block_scalar_key is not None and raw.strip():
@@ -156,12 +169,23 @@ def parse_simple_yaml(path: Path) -> dict | None:
             value = parts[1].strip() if len(parts) > 1 else None
 
             if value is None:
-                # Nested mapping
-                new_section: dict = {}
-                current_section[key] = new_section
-                stack.append((key, current_section, indent, current_list))
-                current_section = new_section
-                current_list = None
+                # Bare `key:` with nothing after it — ambiguous on its own:
+                # a list-start (`entries:` followed by `- path: ...`) is
+                # syntactically identical to a mapping-start (`kernel:`
+                # followed by nested `key: value` lines). Disambiguate by
+                # peeking at what actually follows.
+                next_line = _next_content_line(line_index)
+                if next_line is not None and next_line.startswith("- "):
+                    new_list: list = []
+                    current_section[key] = new_list
+                    current_list = new_list
+                    current_key = key
+                else:
+                    new_section: dict = {}
+                    current_section[key] = new_section
+                    stack.append((key, current_section, indent, current_list))
+                    current_section = new_section
+                    current_list = None
             elif value == "":
                 # Start of a list
                 new_list: list = []

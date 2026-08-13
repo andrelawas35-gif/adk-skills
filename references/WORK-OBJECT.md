@@ -76,10 +76,14 @@ The CLI enforces:
 - Section structure validation (`ws validate sections`)
 - Append-only invariants (`ws validate append-only`)
 - Sensitivity rules (`ws validate sensitivity`)
-- Attention register consistency (`ws validate attention`)
 
 Every write command except `ws create` and `ws init` requires
 `--expect-updated`. Use `--force` only for recovery with a stderr warning.
+
+`ws validate attention` checks attention-register consistency, but it is
+explicit-only: not part of the default `ws validate` check set, and not run
+by the write path above. Invoke it by name to check `active.md` against the
+Work Object corpus.
 
 ## Concurrency
 

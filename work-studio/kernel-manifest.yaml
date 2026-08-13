@@ -44,7 +44,6 @@ kernel:
         - CONSEQUENCE-AUTHORITY.md
         - EVIDENCE-MODEL.md
         - MISSING-ARTIFACT-GAP.md
-        - SHARED-PROTOCOL.md
         - SKILL-AWARE-GRILLING.md
         - WORK-OBJECT.md
 
@@ -223,11 +222,13 @@ integrity:
 gaps:
   - id: sensitivity-enum-mismatch
     description: >
-      references/WORK-OBJECT.md declares sensitivity as "ordinary | private |
-      restricted" but tools/ws/schema.py validates only "ordinary |
-      restricted". The "private" value is specified but not enforced.
+      tools/ws/schema.py and tools/ws/validate.py already validate all three
+      sensitivity classes from references/WORK-OBJECT.md ("ordinary | private
+      | restricted"). The gap was narrower than first documented: the
+      `ws create` CLI parser rejected "private" at argparse before schema
+      validation ever ran. Fixed in tools/ws/__main__.py's --sensitivity
+      choices (Work Object 2026-08-11-003).
     affected_files:
-      - references/WORK-OBJECT.md
-      - tools/ws/schema.py
-    status: documented
-    resolution: "Resolve in a separate bounded change — not part of this kernel manifest scope"
+      - tools/ws/__main__.py
+    status: resolved
+    resolution: "Resolved: ws create now accepts private; see Work Object 2026-08-11-003"

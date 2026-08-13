@@ -1264,15 +1264,18 @@ class TestCheckAttentionLimits(unittest.TestCase):
             errors = check_attention_limits(active_md)
             self.assertEqual(len(errors), 0)
 
-    def test_one_primary_two_supporting_passes(self):
-        """1 Primary + 2 Supporting = 3 total, at the boundary."""
+    def test_many_supporting_passes(self):
+        """Per ADR 0018, Supporting has no numeric cap -- many entries pass."""
         with tempfile.TemporaryDirectory() as tmp:
             tmpdir = Path(tmp)
             active_md = tmpdir / "active.md"
+            supporting_lines = "".join(
+                f"- `{i:03d}` — Object {i}\n" for i in range(10)
+            )
             active_md.write_text(
                 "# Active\n\n"
                 "## Primary\n\n- `001` — Main\n\n"
-                "## Supporting\n\n- `002` — A\n- `003` — B\n\n"
+                f"## Supporting\n\n{supporting_lines}\n"
             )
             errors = check_attention_limits(active_md)
             self.assertEqual(len(errors), 0)
@@ -1290,39 +1293,6 @@ class TestCheckAttentionLimits(unittest.TestCase):
             errors = check_attention_limits(active_md)
             self.assertTrue(len(errors) > 0)
             self.assertTrue(any("Primary" in e for e in errors))
-
-    def test_three_supporting_rejected(self):
-        """More than 2 Supporting is rejected."""
-        with tempfile.TemporaryDirectory() as tmp:
-            tmpdir = Path(tmp)
-            active_md = tmpdir / "active.md"
-            active_md.write_text(
-                "# Active\n\n"
-                "## Primary\n\n- `001` — Main\n\n"
-                "## Supporting\n\n"
-                "- `002` — A\n- `003` — B\n- `004` — C\n\n"
-            )
-            errors = check_attention_limits(active_md)
-            self.assertTrue(len(errors) > 0)
-            self.assertTrue(any("Supporting" in e for e in errors))
-
-    def test_four_total_rejected(self):
-        """Total > 3 (1 Primary + 3 Supporting) triggers total cap error."""
-        with tempfile.TemporaryDirectory() as tmp:
-            tmpdir = Path(tmp)
-            active_md = tmpdir / "active.md"
-            active_md.write_text(
-                "# Active\n\n"
-                "## Primary\n\n- `001` — Main\n\n"
-                "## Supporting\n\n"
-                "- `002` — A\n- `003` — B\n- `004` — C\n\n"
-            )
-            errors = check_attention_limits(active_md)
-        # Should get both "Supporting" error and "total" error
-        self.assertTrue(len(errors) >= 2)
-        self.assertTrue(any("Supporting" in e for e in errors))
-        self.assertTrue(any("total" in e.lower() and "active" in e.lower()
-                           for e in errors))
 
     def test_missing_file_returns_empty(self):
         """Nonexistent active.md returns no errors (no register to enforce)."""
@@ -2442,7 +2412,7 @@ class TestCheckRegistry(unittest.TestCase):
 
     def test_all_checks_registered(self):
         """Every check name has a handler."""
-        expected = {"schema", "sections", "append-only", "attention",
+        expected = {"schema", "sections", "append-only", "next-action", "attention",
                      "attention-limits", "dashboard-signals", "ledger",
                      "sensitivity", "sensitivity-policy",
                      "lifecycle", "claims", "lanes",
@@ -2603,7 +2573,7 @@ class TestEvidenceFreshnessCheck(unittest.TestCase):
                     )
             self.assertEqual(exit_code, 0)
             self.assertIn("Warning: evidence-freshness:", stderr.getvalue())
-            self.assertIn("All validation checks passed.", stdout.getvalue())
+            self.assertIn("All named validation checks passed.", stdout.getvalue())
 
 
 class TestOutcomeReviewCheck(unittest.TestCase):
@@ -2769,6 +2739,9 @@ class TestCampaignAndPlausibilityWarnings(unittest.TestCase):
             root = Path(tmp)
             objects_dir = root / ".work-studio" / "objects"
             fm = SAMPLE_FRONTMATTER.replace(
+                "state: notice",
+                "state: notice\nnext_action: Test next action",
+            ).replace(
                 "sensitivity: ordinary",
                 "sensitivity: ordinary\ncampaign: docs/design/missing.md",
             )
@@ -2781,7 +2754,7 @@ class TestCampaignAndPlausibilityWarnings(unittest.TestCase):
 
             self.assertEqual(result, 0)
             self.assertIn("Warning:", stderr.getvalue())
-            self.assertIn("All validation checks passed.", stdout.getvalue())
+            self.assertIn("All default validation checks passed.", stdout.getvalue())
 
     def test_warning_does_not_suppress_validation_error(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -3078,6 +3051,150 @@ class TestMembersCommand(unittest.TestCase):
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("Invalid campaign", result.stderr)
             self.assertEqual(obj_file.read_text(), before)
+
+
+class TestBuildAuditRationaleCheck(unittest.TestCase):
+    """End-to-end `ws transition` coverage for 2026-08-11-001.
+
+    The former "decision" audit branch was unreachable: ws transition's
+    --state only ever accepts the eight real lifecycle states, so
+    audit_epistemic_state() could never be called with target_state=
+    "decision". Its rationale check was folded into the build-transition
+    audit instead. These tests exercise the real CLI path (subprocess,
+    real file I/O, real argparse), not just the audit function directly.
+    """
+
+    REPO_ROOT = TOOLS_DIR.parent
+
+    def _run_ws(self, root: Path, *args: str):
+        env = os.environ.copy()
+        existing = env.get("PYTHONPATH", "")
+        env["PYTHONPATH"] = str(self.REPO_ROOT) + (
+            f":{existing}" if existing else ""
+        )
+        return subprocess.run(
+            [sys.executable, "-m", "tools.ws", *args],
+            capture_output=True, text=True,
+            cwd=str(root),
+            env=env,
+        )
+
+    def _make_object(self, root: Path, body: str) -> Path:
+        obj_dir = root / ".work-studio" / "objects" / "2026" / "07"
+        obj_dir.mkdir(parents=True, exist_ok=True)
+        return make_object_file(
+            obj_dir, "2026-07-21-010-test-object.md",
+            SAMPLE_FRONTMATTER + "\n" + body,
+        )
+
+    def test_decision_is_not_an_accepted_transition_state(self):
+        """The removed audit branch's namesake was never a real target state."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self._make_object(root, SAMPLE_BODY)
+            result = self._run_ws(
+                root, "transition", "2026-07-21-010",
+                "--state", "decision", "--status", "active",
+                "--expect-updated", "2026-07-21T00:00:00Z",
+                "--action", "test", "--rationale", "test",
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("invalid choice", result.stderr)
+
+    def test_build_transition_flags_pass_result_with_empty_rationale(self):
+        """The gap _audit_decision used to catch now surfaces at build."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            body = SAMPLE_BODY.replace(
+                "| **Rationale** | testing |",
+                "| **Rationale** | <!-- why this decision was made --> |",
+            )
+            self._make_object(root, body)
+            result = self._run_ws(
+                root, "transition", "2026-07-21-010",
+                "--state", "build", "--status", "active",
+                "--expect-updated", "2026-07-21T00:00:00Z",
+                "--action", "test", "--rationale", "test",
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("populated rationale", result.stdout)
+            obj_file = root / ".work-studio" / "objects" / "2026" / "07" / "2026-07-21-010-test-object.md"
+            self.assertIn("[gap]", obj_file.read_text())
+
+    def test_build_transition_passes_with_populated_rationale(self):
+        """A decision with result: pass and a real rationale produces no gap."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self._make_object(root, SAMPLE_BODY)
+            result = self._run_ws(
+                root, "transition", "2026-07-21-010",
+                "--state", "build", "--status", "active",
+                "--expect-updated", "2026-07-21T00:00:00Z",
+                "--action", "test", "--rationale", "test",
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertNotIn("Audit:", result.stdout)
+            obj_file = root / ".work-studio" / "objects" / "2026" / "07" / "2026-07-21-010-test-object.md"
+            self.assertNotIn("[gap]", obj_file.read_text())
+
+    def test_verify_transition_unaffected_by_the_removed_branch(self):
+        """Removing the decision branch doesn't disturb the verify audit."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            body = SAMPLE_BODY.replace(
+                'state: notice',
+                'state: build',
+            )
+            self._make_object(root, body)
+            result = self._run_ws(
+                root, "transition", "2026-07-21-010",
+                "--state", "verify", "--status", "active",
+                "--expect-updated", "2026-07-21T00:00:00Z",
+                "--action", "test", "--rationale", "test",
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+
+
+class TestCreatePrivateSensitivity(unittest.TestCase):
+    """End-to-end `ws create --sensitivity private` coverage for 2026-08-11-003.
+
+    tools/ws/__main__.py's create parser previously accepted only "ordinary"
+    and "restricted" for --sensitivity, rejecting "private" at argparse
+    before schema validation ever ran, even though schema.py and validate.py
+    both already treated sensitivity as the three-way ADR 0019 enum.
+    """
+
+    REPO_ROOT = TOOLS_DIR.parent
+
+    def _run_ws(self, root: Path, *args: str):
+        env = os.environ.copy()
+        existing = env.get("PYTHONPATH", "")
+        env["PYTHONPATH"] = str(self.REPO_ROOT) + (
+            f":{existing}" if existing else ""
+        )
+        return subprocess.run(
+            [sys.executable, "-m", "tools.ws", *args],
+            capture_output=True, text=True,
+            cwd=str(root),
+            env=env,
+        )
+
+    def test_create_accepts_private_sensitivity(self):
+        """ws create --sensitivity private succeeds and writes private to frontmatter."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / ".work-studio" / "objects").mkdir(parents=True)
+            result = self._run_ws(
+                root, "create",
+                "--title", "Private sensitivity smoke test",
+                "--type", "change",
+                "--consequence", "low",
+                "--sensitivity", "private",
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            created = list((root / ".work-studio" / "objects").glob("**/*.md"))
+            self.assertEqual(len(created), 1)
+            self.assertIn("sensitivity: private", created[0].read_text())
 
 
 if __name__ == "__main__":

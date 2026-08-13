@@ -59,7 +59,7 @@ class DashboardSignalsCheckTest(unittest.TestCase):
 
             self.assertEqual(result, 0)
             self.assertIn("unresolved conflict", stderr.getvalue())
-            self.assertIn("All validation checks passed.", stdout.getvalue())
+            self.assertIn("All default validation checks passed.", stdout.getvalue())
 
     def test_silent_when_counts_zero(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -122,6 +122,7 @@ def generate_frontmatter(
     lines.extend([
         f"created_at: {now}",
         f"updated_at: {now}",
+        'next_action: "Awaiting activation/classification (notice state)"',
         "---",
         "",
     ])

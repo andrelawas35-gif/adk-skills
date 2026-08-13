@@ -11,7 +11,7 @@
     {
       "name": "alawas-design-apply-design-direction/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-design-apply-design-direction/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
+      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
     },
     {
       "name": "alawas-design-apply-design-direction/references/epistemic/epistemic-rules-essential.md",
@@ -26,7 +26,7 @@
     {
       "name": "alawas-design-audit-product-interface/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-design-audit-product-interface/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
+      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
     },
     {
       "name": "alawas-design-audit-product-interface/references/epistemic/epistemic-rules-essential.md",
@@ -41,7 +41,7 @@
     {
       "name": "alawas-design-build-design-foundation/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-design-build-design-foundation/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
+      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
     },
     {
       "name": "alawas-design-build-design-foundation/references/epistemic/epistemic-rules-essential.md",
@@ -66,7 +66,7 @@
     {
       "name": "alawas-design-design-tracer-bullet/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-design-design-tracer-bullet/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
+      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
     },
     {
       "name": "alawas-design-design-tracer-bullet/references/DIRECTOR-LANGUAGE.md",
@@ -91,7 +91,7 @@
     {
       "name": "alawas-design-track-components/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-design-track-components/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
+      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
     },
     {
       "name": "alawas-design-track-components/references/DIRECTOR-LANGUAGE.md",
@@ -111,7 +111,7 @@
     {
       "name": "alawas-design-verify-design-implementation/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-design-verify-design-implementation/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
+      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
     },
     {
       "name": "alawas-design-verify-design-implementation/references/epistemic/epistemic-rules-essential.md",
@@ -131,7 +131,7 @@
     {
       "name": "alawas-engineering-implement-bounded-change/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-engineering-implement-bounded-change/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
+      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
     },
     {
       "name": "alawas-engineering-implement-bounded-change/references/EVIDENCE-MODEL.md",
@@ -161,7 +161,7 @@
     {
       "name": "alawas-engineering-verify-release-evidence/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-engineering-verify-release-evidence/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
+      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
     },
     {
       "name": "alawas-engineering-verify-release-evidence/references/DIRECTOR-LANGUAGE.md",
@@ -191,7 +191,7 @@
     {
       "name": "alawas-governance-conduct-work-object/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-governance-conduct-work-object/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
+      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
     },
     {
       "name": "alawas-governance-conduct-work-object/references/DIRECTOR-LANGUAGE.md",
@@ -216,7 +216,7 @@
     {
       "name": "alawas-governance-govern-scorecards/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-governance-govern-scorecards/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
+      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
     },
     {
       "name": "alawas-governance-govern-scorecards/references/EVIDENCE-MODEL.md",
@@ -246,7 +246,7 @@
     {
       "name": "alawas-governance-maintain-working-method/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-governance-maintain-working-method/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
+      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
     },
     {
       "name": "alawas-governance-maintain-working-method/references/EVIDENCE-MODEL.md",
@@ -276,7 +276,7 @@
     {
       "name": "alawas-governance-review-outcome-and-adapt/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-governance-review-outcome-and-adapt/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
+      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
     },
     {
       "name": "alawas-governance-review-outcome-and-adapt/references/EVIDENCE-MODEL.md",
@@ -306,7 +306,7 @@
     {
       "name": "alawas-operations-deploy-with-recovery/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-operations-deploy-with-recovery/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
+      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
     },
     {
       "name": "alawas-operations-deploy-with-recovery/references/DIRECTOR-LANGUAGE.md",
@@ -331,7 +331,7 @@
     {
       "name": "alawas-operations-diagnose-production-incident/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-operations-diagnose-production-incident/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
+      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
     },
     {
       "name": "alawas-operations-diagnose-production-incident/references/EVIDENCE-MODEL.md",
@@ -366,7 +366,7 @@
     {
       "name": "alawas-research-investigate-live-question/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-research-investigate-live-question/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
+      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
     },
     {
       "name": "alawas-research-investigate-live-question/references/DIRECTOR-LANGUAGE.md",
@@ -391,7 +391,7 @@
     {
       "name": "alawas-thinking-develop-idea/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-thinking-develop-idea/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
+      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
     },
     {
       "name": "alawas-thinking-develop-idea/references/DIRECTOR-LANGUAGE.md",
@@ -416,7 +416,7 @@
     {
       "name": "alawas-thinking-diagnose-homogenization/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-thinking-diagnose-homogenization/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
+      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
     },
     {
       "name": "alawas-thinking-diagnose-homogenization/references/epistemic/epistemic-rules-essential.md",
@@ -456,7 +456,7 @@
     {
       "name": "alawas-thinking-inquire-system/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-thinking-inquire-system/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
+      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
     },
     {
       "name": "alawas-thinking-inquire-system/references/DIRECTOR-LANGUAGE.md",
@@ -481,7 +481,7 @@
     {
       "name": "alawas-thinking-pressure-test-decision/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-thinking-pressure-test-decision/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
+      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
     },
     {
       "name": "alawas-thinking-pressure-test-decision/references/DIRECTOR-LANGUAGE.md",
@@ -506,7 +506,7 @@
     {
       "name": "alawas-thinking-resume-work/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-thinking-resume-work/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
+      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
     },
     {
       "name": "alawas-thinking-resume-work/references/DIRECTOR-LANGUAGE.md",
@@ -536,7 +536,7 @@
     {
       "name": "alawas-thinking-turn-signal-into-work/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/codex/skills/alawas-thinking-turn-signal-into-work/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "1481ed8d208d0882ade554fbb37f198722718025f0225c4f4492649aae3bf22a"
+      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
     },
     {
       "name": "alawas-thinking-turn-signal-into-work/references/DIRECTOR-LANGUAGE.md",

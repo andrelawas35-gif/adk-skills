@@ -307,11 +307,14 @@ def cmd_transition(args: argparse.Namespace) -> int:
 
     # Update frontmatter
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    new_fm = _update_frontmatter_fields(content, {
+    fm_updates = {
         "state": args.state,
         "status": args.status,
         "updated_at": now,
-    })
+    }
+    if getattr(args, "next_action", None):
+        fm_updates["next_action"] = args.next_action
+    new_fm = _update_frontmatter_fields(content, fm_updates)
 
     # Append history entry
     history_entry = generate_history_entry(
@@ -768,7 +771,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     create_parser.add_argument(
         "--sensitivity", required=True,
-        choices=["ordinary", "restricted"],
+        choices=["ordinary", "private", "restricted"],
         help="Sensitivity classification",
     )
 
@@ -829,6 +832,10 @@ def build_parser() -> argparse.ArgumentParser:
     trans_parser.add_argument("--action", required=True, help="Action description")
     trans_parser.add_argument("--actor", default="system", help="Actor identifier")
     trans_parser.add_argument("--rationale", required=True, help="Transition rationale")
+    trans_parser.add_argument(
+        "--next-action", default=None,
+        help="Set the frontmatter next_action field to this value",
+    )
     trans_parser.add_argument(
         "--force", action="store_true",
         help="Bypass optimistic concurrency check (with warning)",
