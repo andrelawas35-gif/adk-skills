@@ -26,6 +26,7 @@ Checks:
   structure                — Composite: schema + sections
   outcome-review           — Advisory observe/close outcome-review coverage
   evidence-freshness       — Advisory [system] source locator resolution
+  evidence-relations       — Advisory candidate supports/counters relations
 """
 
 import re
@@ -716,6 +717,76 @@ def check_evidence_freshness(
 
     if warnings:
         warnings.append(_FRESHNESS_COVERAGE_NOTE)
+
+    return warnings
+
+
+# One fixed disclosure appended whenever this check has findings to report.
+# Names the check's reach boundary (WO 2026-08-11-008 Decision 2, narrowed
+# from the tracer-bullet test, then broadened from exact-range to file-level
+# per director confirmation 2026-08-14): same-file citation overlap only, not
+# exact line-range overlap. Keyword matching was tested (802 candidates
+# against 34) and found to be almost entirely noise, so it is deliberately
+# not part of this mechanism. File-level matching itself is known to include
+# some false positives from generically-cited files (e.g. README.md,
+# AGREEMENT-LOOP.md) — the tracer-bullet test measured ~70% precision (24/34
+# hand-checked candidates genuinely related), not 100%.
+_RELATIONS_COVERAGE_NOTE = (
+    "evidence-relations: surfaces candidates only, from same-file citation "
+    "overlap between [system] rows in different objects — confirm each by "
+    "hand; a shared citation is not itself proof of support or contradiction, "
+    "and citing the same file is not always a real relationship."
+)
+
+
+def check_evidence_relations(
+    file_paths: List[Path],
+    objects_dir: Optional[Path] = None,
+) -> List[str]:
+    """Advisory read-time candidate supports/counters relation surfacing.
+
+    Groups [system] evidence rows across different objects that cite the
+    same local file (any line), and surfaces each cross-object pair as a
+    candidate relation for human confirmation. No new field is written and
+    no relation is stored — WO 2026-08-11-008 Decision 2 narrowed the
+    mechanism to citation overlap only, after a tracer-bullet test found
+    keyword matching (e.g. "contradicts", "confirms" anywhere in entry text)
+    surfaced almost entirely noise. Matching is file-level, not exact-range:
+    the tracer-bullet test that set Decision 2's ~70% precision expectation
+    measured file-level overlap, not the stricter exact path:line/range
+    matching `check_evidence_freshness` uses to avoid bare-filename flood
+    risk. This reuses the same locator extraction as `check_evidence_freshness`
+    but groups by file only.
+    """
+    if objects_dir is None:
+        return ["evidence-relations check requires the objects/ directory path"]
+
+    rows = _system_locators(file_paths)
+    by_file: Dict[Path, List[Tuple[Path, int, str]]] = {}
+    for obj_file, line_num, source, locator in rows:
+        rel_path, _start, _end = locator
+        by_file.setdefault(rel_path, []).append((obj_file, line_num, source))
+
+    warnings: List[str] = []
+    for rel_path, citers in by_file.items():
+        distinct_objects = {obj_file for obj_file, _, _ in citers}
+        if len(distinct_objects) < 2:
+            continue
+
+        for i in range(len(citers)):
+            for j in range(i + 1, len(citers)):
+                obj_i, line_i, _ = citers[i]
+                obj_j, line_j, _ = citers[j]
+                if obj_i == obj_j:
+                    continue
+                warnings.append(
+                    f"evidence-relations: candidate relation — {obj_i} "
+                    f"(Evidence ledger line {line_i}) and {obj_j} (Evidence "
+                    f"ledger line {line_j}) both cite {rel_path}"
+                )
+
+    if warnings:
+        warnings.append(_RELATIONS_COVERAGE_NOTE)
 
     return warnings
 
@@ -2338,6 +2409,7 @@ CHECK_REGISTRY: Dict[str, callable] = {
     "structure": check_structure,
     "outcome-review": None,  # Special: workspace-level advisory check (not in defaults)
     "evidence-freshness": None,  # Special: workspace-level advisory check (not in defaults)
+    "evidence-relations": None,  # Special: workspace-level advisory check (not in defaults)
     "next-action": check_next_action_presence,  # Hard: forward-motion objects need next_action
 }
 
@@ -2469,6 +2541,22 @@ def run_checks(
             else:
                 all_errors.append(
                     "Evidence-freshness check requires the objects/ directory path"
+                )
+            continue
+
+        if name == "evidence-relations":
+            # Workspace-level advisory check surfacing candidate supports/
+            # counters relations from exact-citation overlap. Excluded from
+            # DEFAULT_CHECKS; run explicitly via `ws validate
+            # evidence-relations`. Read-only and warning-only: a shared
+            # citation is a candidate for human confirmation, not a claim.
+            if objects_dir:
+                all_warnings.extend(
+                    check_evidence_relations(file_paths, objects_dir)
+                )
+            else:
+                all_errors.append(
+                    "Evidence-relations check requires the objects/ directory path"
                 )
             continue
 
