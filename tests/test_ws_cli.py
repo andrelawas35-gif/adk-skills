@@ -69,6 +69,7 @@ from ws.validate import (
     check_campaign_anchor,
     check_consequence_plausibility,
     check_evidence_freshness,
+    check_evidence_relations,
     check_outcome_review,
     run_checks,
     CHECK_REGISTRY,
@@ -2419,13 +2420,19 @@ class TestCheckRegistry(unittest.TestCase):
                      "authority", "protected-fields", "history-integrity",
                      "file-integrity", "incident-routing", "prerequisites",
                      "unsupported-capabilities", "interrupted-mutations",
-                     "structure", "outcome-review", "evidence-freshness"}
+                     "structure", "outcome-review", "evidence-freshness",
+                     "evidence-relations"}
         self.assertEqual(set(CHECK_REGISTRY.keys()), expected)
 
     def test_evidence_freshness_is_not_default(self):
         """Evidence freshness is explicit-only advisory validation."""
         self.assertIn("evidence-freshness", CHECK_REGISTRY)
         self.assertNotIn("evidence-freshness", DEFAULT_CHECKS)
+
+    def test_evidence_relations_is_not_default(self):
+        """Evidence relations is explicit-only advisory validation."""
+        self.assertIn("evidence-relations", CHECK_REGISTRY)
+        self.assertNotIn("evidence-relations", DEFAULT_CHECKS)
 
 
 class TestEvidenceFreshnessCheck(unittest.TestCase):
@@ -2573,6 +2580,135 @@ class TestEvidenceFreshnessCheck(unittest.TestCase):
                     )
             self.assertEqual(exit_code, 0)
             self.assertIn("Warning: evidence-freshness:", stderr.getvalue())
+            self.assertIn("All named validation checks passed.", stdout.getvalue())
+
+
+class TestEvidenceRelationsCheck(unittest.TestCase):
+    """Advisory candidate supports/counters relation check (WO 2026-08-11-008)."""
+
+    def _objects_dir(self, root: Path) -> Path:
+        obj_dir = root / ".work-studio" / "objects" / "2026" / "08"
+        obj_dir.mkdir(parents=True, exist_ok=True)
+        return root / ".work-studio" / "objects"
+
+    def test_surfaces_same_file_cross_object_citation_as_candidate(self):
+        """Decision 2 (narrowed, file-level): two objects citing the same
+        file, at different lines, are surfaced as a candidate relation."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            obj_dir = root / ".work-studio" / "objects" / "2026" / "08"
+            obj_dir.mkdir(parents=True, exist_ok=True)
+
+            body_a = SAMPLE_BODY.replace(
+                "| [system] | test | Initial evidence |",
+                "| [system] | tools/ws/validate.py:601-720 | freshness check |",
+            )
+            file_a = make_object_file(
+                obj_dir, "2026-08-10-010-a.md", SAMPLE_FRONTMATTER + "\n" + body_a
+            )
+
+            body_b = SAMPLE_BODY.replace(
+                "| [system] | test | Initial evidence |",
+                "| [system] | tools/ws/validate.py:1897 | related check |",
+            )
+            file_b = make_object_file(
+                obj_dir, "2026-08-10-011-b.md", SAMPLE_FRONTMATTER + "\n" + body_b
+            )
+
+            warnings = check_evidence_relations(
+                [file_a, file_b], self._objects_dir(root)
+            )
+            candidates = [w for w in warnings if "candidate relation" in w]
+            self.assertEqual(len(candidates), 1)
+            self.assertIn("tools/ws/validate.py", candidates[0])
+            self.assertIn(
+                "same-file citation overlap", warnings[-1]
+            )
+
+    def test_no_candidate_within_same_object(self):
+        """Two rows in the same object citing the same file are not a
+        cross-object candidate."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            obj_dir = root / ".work-studio" / "objects" / "2026" / "08"
+            obj_dir.mkdir(parents=True, exist_ok=True)
+
+            body = SAMPLE_BODY.replace(
+                "| [system] | test | Initial evidence |",
+                "\n".join([
+                    "| [system] | tools/ws/validate.py:1 | first |",
+                    "| [system] | tools/ws/validate.py:2 | second |",
+                ]),
+            )
+            obj_file = make_object_file(
+                obj_dir, "2026-08-10-010-same.md", SAMPLE_FRONTMATTER + "\n" + body
+            )
+
+            self.assertEqual(
+                check_evidence_relations([obj_file], self._objects_dir(root)),
+                [],
+            )
+
+    def test_different_files_produce_no_candidates(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            obj_dir = root / ".work-studio" / "objects" / "2026" / "08"
+            obj_dir.mkdir(parents=True, exist_ok=True)
+
+            body_a = SAMPLE_BODY.replace(
+                "| [system] | test | Initial evidence |",
+                "| [system] | tools/ws/validate.py:1 | a |",
+            )
+            file_a = make_object_file(
+                obj_dir, "2026-08-10-010-a.md", SAMPLE_FRONTMATTER + "\n" + body_a
+            )
+
+            body_b = SAMPLE_BODY.replace(
+                "| [system] | test | Initial evidence |",
+                "| [system] | tools/ws/other.py:1 | b |",
+            )
+            file_b = make_object_file(
+                obj_dir, "2026-08-10-011-b.md", SAMPLE_FRONTMATTER + "\n" + body_b
+            )
+
+            self.assertEqual(
+                check_evidence_relations([file_a, file_b], self._objects_dir(root)),
+                [],
+            )
+
+    def test_run_checks_reports_warnings_without_failing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            obj_dir = root / ".work-studio" / "objects" / "2026" / "08"
+            obj_dir.mkdir(parents=True, exist_ok=True)
+
+            body_a = SAMPLE_BODY.replace(
+                "| [system] | test | Initial evidence |",
+                "| [system] | tools/ws/validate.py:1 | a |",
+            )
+            file_a = make_object_file(
+                obj_dir, "2026-08-10-010-a.md", SAMPLE_FRONTMATTER + "\n" + body_a
+            )
+
+            body_b = SAMPLE_BODY.replace(
+                "| [system] | test | Initial evidence |",
+                "| [system] | tools/ws/validate.py:2 | b |",
+            )
+            file_b = make_object_file(
+                obj_dir, "2026-08-10-011-b.md", SAMPLE_FRONTMATTER + "\n" + body_b
+            )
+
+            stderr = io.StringIO()
+            stdout = io.StringIO()
+            with contextlib.redirect_stderr(stderr):
+                with contextlib.redirect_stdout(stdout):
+                    exit_code = run_checks(
+                        ["evidence-relations"],
+                        [file_a, file_b],
+                        objects_dir=self._objects_dir(root),
+                    )
+            self.assertEqual(exit_code, 0)
+            self.assertIn("Warning: evidence-relations:", stderr.getvalue())
             self.assertIn("All named validation checks passed.", stdout.getvalue())
 
 
