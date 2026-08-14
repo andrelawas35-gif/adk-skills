@@ -24,9 +24,11 @@ Checks:
   unsupported-capabilities — Adapter degradation declarations
   interrupted-mutations    — Orphaned temp/lock file detection
   structure                — Composite: schema + sections
+  contract-drift           — schema.py VALID_* enums vs __main__.py CLI choices
   outcome-review           — Advisory observe/close outcome-review coverage
   evidence-freshness       — Advisory [system] source locator resolution
   evidence-relations       — Advisory candidate supports/counters relations
+  verification-freshness   — Advisory re-run of re-runnable verification commands
 """
 
 import re
@@ -44,6 +46,11 @@ from .schema import (
     validate_state,
     validate_status,
     validate_type,
+    VALID_TYPES,
+    VALID_CONSEQUENCES,
+    VALID_STATES,
+    VALID_STATUSES,
+    VALID_SENSITIVITIES,
 )
 from .sections import (
     REQUIRED_SECTION_ORDER,
@@ -663,6 +670,14 @@ def check_evidence_freshness(
     Non-locator and ambiguous sources are skipped; other evidence tags are out
     of scope. A finding means "citation moved — re-read", not "claim false".
 
+    Canonical root (WO 2026-08-14-006 Decision 1): every relative locator is
+    resolved against the repository root — the parent of ``.work-studio/``,
+    computed below as ``objects_dir.parent.parent`` — never against
+    ``.work-studio/`` itself or the citing object's own directory. A citation
+    missing a leading path segment (e.g. ``inbox.md`` instead of
+    ``.work-studio/inbox.md``) is an incomplete citation, not evidence that a
+    different root is intended.
+
     When a citation is flagged moved, this also fans the flag out to every
     other object citing the identical pre-move locator (WO 2026-08-10-011,
     Direction 4): a shared exact path:line citation predicts genuine
@@ -787,6 +802,112 @@ def check_evidence_relations(
 
     if warnings:
         warnings.append(_RELATIONS_COVERAGE_NOTE)
+
+    return warnings
+
+
+# One fixed disclosure appended whenever this check has findings to report.
+# Names the check's reach boundary (WO 2026-08-11-012 Decision 1, refined by
+# Decision 2): only bullets containing a single backtick-delimited command
+# starting with a known executable prefix are re-run. Real-corpus sampling
+# found this covers ~26% of real Verification and release evidence bullets;
+# judgment-based, narrative, and decision/constraint-boundary claims are not
+# covered and are not claimed to be. No stable ID, no version binding -- the
+# check re-runs the claim itself rather than binding to what version it
+# originally verified.
+_VERIFICATION_COVERAGE_NOTE = (
+    "verification-freshness: only re-runs bullets with a single "
+    "backtick-delimited command starting with a known executable prefix "
+    "-- narrative and judgment-based verification claims are not covered."
+)
+
+# Extensible allow-list of recognized command prefixes (WO 2026-08-11-012
+# Decision 2): a bare backtick span is not enough -- the real corpus produced
+# a false positive (a skill name in backticks, not a command) under a rule
+# that accepted any backtick content.
+_VERIFICATION_CMD_PREFIXES = ("python3", "python", "sh", "bash", "git", "pytest")
+
+_BACKTICK_RE = re.compile(r"`([^`]+)`")
+
+
+def _extract_verifiable_commands(body: str) -> List[Tuple[int, str]]:
+    """Extract (bullet index, command) pairs from Verification bullets.
+
+    Only a bullet whose backtick-delimited span starts with a recognized
+    executable prefix is treated as a command; other backtick spans (e.g. a
+    skill name mentioned in prose) are ignored.
+    """
+    sections = parse_sections(body)
+    section = sections.get("verification and release evidence", "")
+    if not section:
+        return []
+
+    bullets = re.split(r"\n(?=- )", section)
+    commands = []
+    for idx, bullet in enumerate(bullets):
+        joined = re.sub(r"\s+", " ", bullet).strip()
+        if not joined:
+            continue
+        for m in _BACKTICK_RE.finditer(joined):
+            candidate = m.group(1).strip()
+            first_token = candidate.split(" ", 1)[0] if candidate else ""
+            if first_token in _VERIFICATION_CMD_PREFIXES:
+                commands.append((idx, candidate))
+
+    return commands
+
+
+def check_verification_freshness(
+    file_paths: List[Path],
+    objects_dir: Optional[Path] = None,
+) -> List[str]:
+    """Advisory read-time re-check of re-runnable verification commands.
+
+    For each `## Verification and release evidence` bullet containing a
+    single backtick-delimited command with a recognized executable prefix,
+    re-runs the command from the workspace root and reports whether it still
+    passes. Does not bind to a version of anything -- WO 2026-08-11-012
+    Decision 1 chose this over a stable-ID scheme because real Verification
+    bullets overwhelmingly don't cite a resolvable locator (0/19 in the
+    corpus sample), while a meaningful minority (5/19, refined to require an
+    executable prefix per Decision 2) are directly re-runnable commands.
+    """
+    if objects_dir is None:
+        return ["verification-freshness check requires the objects/ directory path"]
+
+    ws_root = objects_dir.parent.parent
+    warnings: List[str] = []
+
+    for obj_file in sorted(file_paths):
+        try:
+            content = obj_file.read_text()
+        except Exception:
+            continue
+
+        body = _extract_body(content)
+        commands = _extract_verifiable_commands(body)
+
+        for idx, command in commands:
+            try:
+                result = subprocess.run(
+                    command, shell=True, cwd=ws_root,
+                    capture_output=True, text=True, timeout=120,
+                )
+            except (subprocess.SubprocessError, OSError) as exc:
+                warnings.append(
+                    f"verification-freshness: {obj_file}: bullet {idx}: "
+                    f"could not execute `{command}`: {exc}"
+                )
+                continue
+
+            if result.returncode != 0:
+                warnings.append(
+                    f"verification-freshness: {obj_file}: bullet {idx}: "
+                    f"`{command}` no longer passes (exit {result.returncode})"
+                )
+
+    if warnings:
+        warnings.append(_VERIFICATION_COVERAGE_NOTE)
 
     return warnings
 
@@ -1139,6 +1260,58 @@ def check_authority(file_path: Path) -> List[str]:
                 )
 
     return errors
+
+
+# One fixed comment on the mechanism's reach (WO 2026-08-11-009 Decision 1):
+# reuse only fires on an exact (Decision N, object-id) citation already
+# present in the new entry's action text. An Authority entry without that
+# citation always mints a new AUTH-* id -- no reuse, no failure, and no
+# agent-composed judgment call. The false-collapse risk (two distinct grants
+# citing the same Decision-N/object-id pair) is untested against real data
+# and is not mitigated by this mechanism.
+_AUTH_DECISION_REF_RE = re.compile(r"\(Decision\s+(\d+),\s*([\w-]+)\)")
+_AUTH_ID_RE = re.compile(r"\bAUTH-(\d+)\b")
+
+
+def _extract_decision_reference(text: str) -> Optional[Tuple[str, str]]:
+    """Extract a `(Decision N, object-id)` citation from entry text, if present."""
+    m = _AUTH_DECISION_REF_RE.search(text)
+    if m is None:
+        return None
+    return (m.group(1), m.group(2))
+
+
+def mint_or_reuse_auth_id(action: str, objects_dir: Path) -> str:
+    """Compute the AUTH-* id for a new Authority History entry.
+
+    Reuses an existing AUTH-* id when the new entry's action text carries a
+    `(Decision N, object-id)` citation that matches an existing Authority
+    entry elsewhere in the corpus (WO 2026-08-11-009 Decision 1, refined
+    from exact-heading-text matching after that mechanism was tested and
+    found to split one real 11-object grant into 3 groups). Otherwise mints
+    the next sequential AUTH-<n> id.
+    """
+    new_ref = _extract_decision_reference(action)
+
+    max_seq = 0
+    for obj_file in sorted(objects_dir.rglob("*.md")):
+        try:
+            content = obj_file.read_text()
+        except Exception:
+            continue
+        body = _extract_body(content)
+        for entry in _parse_history_entries(body):
+            if not _is_authority_entry(entry):
+                continue
+            heading = entry.get("_heading", "")
+            id_match = _AUTH_ID_RE.search(heading)
+            if id_match:
+                max_seq = max(max_seq, int(id_match.group(1)))
+            if new_ref is not None and new_ref == _extract_decision_reference(heading):
+                if id_match:
+                    return f"AUTH-{id_match.group(1)}"
+
+    return f"AUTH-{max_seq + 1:03d}"
 
 
 # ── Attention-register limits check ────────────────────────────────────────────
@@ -2335,6 +2508,93 @@ def _cohort_total(objects_dir: Path, cohort: str) -> int:
     return total
 
 
+_OUTCOME_VERDICT_PATTERN = re.compile(
+    r"\b(disconfirmed|refuted|not confirmed|inconclusive|confirmed)\b", re.I
+)
+
+
+def _extract_outcome_verdict(body: str) -> Optional[str]:
+    """Best-effort verdict word from a Work Object's outcome-review lines.
+
+    Scoped to lines mentioning "outcome review" or "outcome assessment" (or the
+    ``## Outcome`` / ``## Outcome review`` heading), then searched for a single
+    verdict keyword (WO 2026-08-11-013 Decision 1). Returns ``None`` when no
+    keyword is found in that scope -- callers must report this as "reviewed,
+    verdict not mechanically determined," never as "not reviewed." This is a
+    read-only projection with no semantic judgment: it reports a keyword match,
+    not a determination of whether the review's conclusion actually held.
+    """
+    lines = []
+    for line in body.splitlines():
+        lower = line.lower()
+        if (
+            "outcome review" in lower
+            or "outcome assessment" in lower
+            or re.match(r"^## outcome", lower)
+        ):
+            lines.append(line)
+    if not lines:
+        return None
+    scoped = "\n".join(lines).lower()
+    found = {m.lower().strip() for m in _OUTCOME_VERDICT_PATTERN.findall(scoped)}
+    if not found:
+        return None
+    if found & {"disconfirmed", "refuted", "not confirmed"}:
+        return "disconfirmed"
+    if "inconclusive" in found:
+        return "inconclusive"
+    if "confirmed" in found:
+        return "confirmed"
+    return None
+
+
+def list_outcomes(objects_dir: Path) -> List[str]:
+    """Workspace-level advisory report of outcome-review coverage and verdicts
+    (WO 2026-08-11-013).
+
+    Read-only projection over existing data, computed fresh at read time --
+    no new storage, no stable ``OUT-*`` identifier. Reuses
+    ``_has_real_outcome_review`` for presence/absence (reliable: 44/44 on the
+    real corpus tested for WO 2026-08-11-013) and ``_extract_outcome_verdict``
+    for a best-effort verdict (reliable on 32/44 real cases; the remaining 12
+    report "reviewed -- see body" rather than a guessed verdict).
+    """
+    lines: List[str] = []
+    reviewed: List[Tuple[str, Optional[str]]] = []
+    unreviewed: List[str] = []
+    for year_dir in sorted(objects_dir.iterdir()):
+        if not year_dir.is_dir():
+            continue
+        for month_dir in sorted(year_dir.iterdir()):
+            if not month_dir.is_dir():
+                continue
+            for obj_file in sorted(month_dir.iterdir()):
+                if obj_file.suffix != ".md":
+                    continue
+                try:
+                    content = obj_file.read_text()
+                except Exception:
+                    continue
+                fm = parse_frontmatter(content)
+                state = str(fm.get("state", "")).strip()
+                if state not in ("observe", "close"):
+                    continue
+                body = _extract_body(content)
+                if not _has_real_outcome_review(body):
+                    unreviewed.append(obj_file.stem)
+                    continue
+                verdict = _extract_outcome_verdict(body)
+                reviewed.append((obj_file.stem, verdict))
+
+    lines.append(f"outcomes: {len(reviewed)} reviewed, {len(unreviewed)} unreviewed")
+    for obj_id, verdict in reviewed:
+        label = verdict if verdict else "reviewed — see body"
+        lines.append(f"outcomes: {obj_id}: {label}")
+    for obj_id in unreviewed:
+        lines.append(f"outcomes: {obj_id}: not yet reviewed")
+    return lines
+
+
 # ── next_action / revisit_trigger presence ────────────────────────────────────
 
 FORWARD_MOTION_STATES = ("notice", "explore", "design", "build")
@@ -2383,6 +2643,76 @@ def check_revisit_trigger_presence(file_path: Path) -> List[str]:
     return warnings
 
 
+# ── Contract drift (WO 2026-08-11-019 Decision 1/2, Layer 1) ──────────────────
+
+_CONTRACT_DRIFT_FIELDS: List[Tuple[str, str, frozenset]] = [
+    ("type", "VALID_TYPES", VALID_TYPES),
+    ("consequence", "VALID_CONSEQUENCES", VALID_CONSEQUENCES),
+    ("sensitivity", "VALID_SENSITIVITIES", VALID_SENSITIVITIES),
+    ("state", "VALID_STATES", VALID_STATES),
+    ("status", "VALID_STATUSES", VALID_STATUSES),
+]
+
+
+def _extract_cli_choices(main_source: str, field: str) -> List[Tuple[int, set]]:
+    """Find every ``choices=[...]`` list attached to a ``--<field>`` argument
+    in ``__main__.py``'s source text, with its 1-indexed line number.
+
+    Deliberately structural: matches only where an actual ``choices=[...]``
+    list follows the argument name -- a same-named argument with no choices
+    (e.g. claim inspect's free-text ``--state`` filter) is not matched, no
+    semantic judgment involved.
+    """
+    results = []
+    pattern = re.compile(
+        r'"--' + re.escape(field) + r'"[^)]*?choices=\[([^\]]*)\]', re.DOTALL
+    )
+    for m in pattern.finditer(main_source):
+        line_no = main_source.count("\n", 0, m.start()) + 1
+        raw_items = re.findall(r'"([^"]*)"', m.group(1))
+        results.append((line_no, set(raw_items)))
+    return results
+
+
+def check_contract_drift(main_py_path: Optional[Path] = None) -> List[str]:
+    """Workspace-level advisory check: do schema.py's VALID_* enums agree
+    with __main__.py's argparse choices=[...] lists? (WO 2026-08-11-019
+    Decision 1 Layer 1, Decision 2.)
+
+    Direct set-equality per field -- no path resolution, no semantic
+    judgment. Structural presence of a ``choices=[...]`` list is the only
+    signal; a same-named argument without one (e.g. claim inspect's
+    free-text state filter) is not compared.
+    """
+    if main_py_path is None:
+        main_py_path = Path(__file__).parent / "__main__.py"
+    if not main_py_path.is_file():
+        return ["contract-drift check requires the __main__.py path"]
+
+    try:
+        main_source = main_py_path.read_text()
+    except Exception as e:
+        return [f"contract-drift: cannot read {main_py_path}: {e}"]
+
+    errors: List[str] = []
+    for field, const_name, valid_set in _CONTRACT_DRIFT_FIELDS:
+        for line_no, cli_set in _extract_cli_choices(main_source, field):
+            if cli_set != valid_set:
+                missing = valid_set - cli_set
+                extra = cli_set - valid_set
+                detail = []
+                if missing:
+                    detail.append(f"missing from CLI: {sorted(missing)}")
+                if extra:
+                    detail.append(f"not in schema: {sorted(extra)}")
+                errors.append(
+                    f"contract-drift: {main_py_path}:{line_no}: --{field} "
+                    f"choices disagree with schema.py {const_name} "
+                    f"({'; '.join(detail)})"
+                )
+    return errors
+
+
 # ── Check registry ────────────────────────────────────────────────────────────
 
 CHECK_REGISTRY: Dict[str, callable] = {
@@ -2410,7 +2740,9 @@ CHECK_REGISTRY: Dict[str, callable] = {
     "outcome-review": None,  # Special: workspace-level advisory check (not in defaults)
     "evidence-freshness": None,  # Special: workspace-level advisory check (not in defaults)
     "evidence-relations": None,  # Special: workspace-level advisory check (not in defaults)
+    "verification-freshness": None,  # Special: workspace-level advisory check (not in defaults)
     "next-action": check_next_action_presence,  # Hard: forward-motion objects need next_action
+    "contract-drift": None,  # Special: workspace-level check, no per-object path
 }
 
 # Per-check advisory warnings: surfaced explicitly but non-blocking. Run for
@@ -2425,7 +2757,7 @@ DEFAULT_CHECKS = [
     "sensitivity-policy", "lifecycle", "claims", "lanes",
     "authority", "protected-fields", "history-integrity",
     "file-integrity", "incident-routing", "prerequisites",
-    "dashboard-signals",
+    "dashboard-signals", "contract-drift",
 ]
 
 DEFAULT_WARNING_CHECKS = [
@@ -2516,6 +2848,15 @@ def run_checks(
                 )
             continue
 
+        if name == "contract-drift":
+            # Workspace-level check: schema.py VALID_* enums vs __main__.py
+            # argparse choices=[...] lists, direct set-equality. WO
+            # 2026-08-11-019 Layer 1/Decision 2. In DEFAULT_CHECKS: verified
+            # clean on the real repo and catches a seeded mismatch with no
+            # other noise before promotion to blocking.
+            all_errors.extend(check_contract_drift())
+            continue
+
         if name == "outcome-review":
             # Workspace-level advisory check over outcome-review coverage.
             # Excluded from DEFAULT_CHECKS; run explicitly via `ws validate
@@ -2557,6 +2898,23 @@ def run_checks(
             else:
                 all_errors.append(
                     "Evidence-relations check requires the objects/ directory path"
+                )
+            continue
+
+        if name == "verification-freshness":
+            # Workspace-level advisory check re-running re-runnable commands
+            # cited in Verification and release evidence bullets. Excluded
+            # from DEFAULT_CHECKS; run explicitly via `ws validate
+            # verification-freshness`. Read-only intent, but executes the
+            # cited command -- only ever a command with a recognized
+            # executable prefix (WO 2026-08-11-012 Decision 2).
+            if objects_dir:
+                all_warnings.extend(
+                    check_verification_freshness(file_paths, objects_dir)
+                )
+            else:
+                all_errors.append(
+                    "Verification-freshness check requires the objects/ directory path"
                 )
             continue
 

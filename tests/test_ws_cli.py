@@ -7,6 +7,7 @@ that weren't already covered by test_ws_create.py.
 import os
 import contextlib
 import io
+import re
 import subprocess
 import sys
 import tempfile
@@ -70,7 +71,12 @@ from ws.validate import (
     check_consequence_plausibility,
     check_evidence_freshness,
     check_evidence_relations,
+    check_verification_freshness,
     check_outcome_review,
+    list_outcomes,
+    _extract_outcome_verdict,
+    check_contract_drift,
+    mint_or_reuse_auth_id,
     run_checks,
     CHECK_REGISTRY,
     DEFAULT_CHECKS,
@@ -1235,6 +1241,87 @@ class TestCheckAuthority(unittest.TestCase):
             errors = check_authority(obj_file)
             self.assertTrue(len(errors) > 0)
             self.assertTrue(any("no Authority History entry" in e for e in errors))
+
+
+class TestMintOrReuseAuthId(unittest.TestCase):
+    """AUTH-* mint/reuse mechanism (WO 2026-08-11-009 Decision 1)."""
+
+    def _objects_dir(self, root: Path) -> Path:
+        obj_dir = root / ".work-studio" / "objects" / "2026" / "08"
+        obj_dir.mkdir(parents=True, exist_ok=True)
+        return root / ".work-studio" / "objects"
+
+    def _object_with_authority_entry(self, root: Path, filename: str, action: str) -> Path:
+        body = SAMPLE_BODY.replace(
+            "### 2026-07-21T00:00:00Z — Created",
+            f"### 2026-07-21T00:00:00Z — {action}\n\n"
+            "- **State:** notice\n"
+            "- **Status:** active\n"
+            "- **Actor:** test\n"
+            "- **Scope:** s\n"
+            "- **Evidence reviewed:** e\n"
+            "- **Constraints:** c\n"
+            "- **Authority mode:** independent-authorization\n"
+            "- **Granted by:** director\n\n"
+            "### 2026-07-21T00:00:00Z — Created",
+        )
+        obj_dir = root / ".work-studio" / "objects" / "2026" / "08"
+        obj_dir.mkdir(parents=True, exist_ok=True)
+        return make_object_file(
+            obj_dir, filename, SAMPLE_FRONTMATTER + "\n" + body
+        )
+
+    def test_first_grant_mints_auth_001(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / ".work-studio" / "objects" / "2026" / "08").mkdir(parents=True)
+            auth_id = mint_or_reuse_auth_id(
+                "Authority: brand new grant (Decision 1, obj-a)",
+                self._objects_dir(root),
+            )
+            self.assertEqual(auth_id, "AUTH-001")
+
+    def test_matching_citation_reuses_id_despite_different_wording(self):
+        """WO 2026-08-11-009's real 11-object case: wording drifted, citation didn't."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self._object_with_authority_entry(
+                root, "2026-08-10-005-a.md",
+                "Authority: AUTH-001 wording one (Decision 5, batch-005)",
+            )
+            auth_id = mint_or_reuse_auth_id(
+                "Authority: totally different wording (Decision 5, batch-005)",
+                self._objects_dir(root),
+            )
+            self.assertEqual(auth_id, "AUTH-001")
+
+    def test_different_citation_mints_new_id(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self._object_with_authority_entry(
+                root, "2026-08-10-005-a.md",
+                "Authority: AUTH-001 grant one (Decision 1, grant-a)",
+            )
+            auth_id = mint_or_reuse_auth_id(
+                "Authority: a distinct grant (Decision 1, grant-b)",
+                self._objects_dir(root),
+            )
+            self.assertEqual(auth_id, "AUTH-002")
+
+    def test_no_citation_never_reuses(self):
+        """An Authority entry without a (Decision N, object-id) citation
+        always mints fresh -- no agent judgment, no false reuse."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self._object_with_authority_entry(
+                root, "2026-08-10-005-a.md",
+                "Authority: AUTH-001 no citation here",
+            )
+            auth_id = mint_or_reuse_auth_id(
+                "Authority: also no citation here",
+                self._objects_dir(root),
+            )
+            self.assertEqual(auth_id, "AUTH-002")
 
 
 # ── Attention-register limits tests ────────────────────────────────────────────
@@ -2421,13 +2508,25 @@ class TestCheckRegistry(unittest.TestCase):
                      "file-integrity", "incident-routing", "prerequisites",
                      "unsupported-capabilities", "interrupted-mutations",
                      "structure", "outcome-review", "evidence-freshness",
-                     "evidence-relations"}
+                     "evidence-relations", "verification-freshness",
+                     "contract-drift"}
         self.assertEqual(set(CHECK_REGISTRY.keys()), expected)
+
+    def test_contract_drift_is_default(self):
+        """Contract drift is deterministic enough to be blocking (WO
+        2026-08-11-019 Decision 2)."""
+        self.assertIn("contract-drift", CHECK_REGISTRY)
+        self.assertIn("contract-drift", DEFAULT_CHECKS)
 
     def test_evidence_freshness_is_not_default(self):
         """Evidence freshness is explicit-only advisory validation."""
         self.assertIn("evidence-freshness", CHECK_REGISTRY)
         self.assertNotIn("evidence-freshness", DEFAULT_CHECKS)
+
+    def test_verification_freshness_is_not_default(self):
+        """Verification freshness is explicit-only advisory validation."""
+        self.assertIn("verification-freshness", CHECK_REGISTRY)
+        self.assertNotIn("verification-freshness", DEFAULT_CHECKS)
 
     def test_evidence_relations_is_not_default(self):
         """Evidence relations is explicit-only advisory validation."""
@@ -2558,6 +2657,38 @@ class TestEvidenceFreshnessCheck(unittest.TestCase):
                 any(str(co_citer_file) in w and str(moved_file) in w for w in fan_out)
             )
             self.assertNotIn(str(unrelated_file), " ".join(warnings))
+            self.assertIn(
+                "reaches only exact-citation matches", warnings[-1]
+            )
+
+    def test_canonical_root_is_repository_root_not_dot_work_studio(self):
+        """WO 2026-08-14-006 Decision 1: locators resolve only against the
+        repository root (objects_dir.parent.parent). A citation missing its
+        leading path segment (e.g. bare `inbox.md` instead of
+        `.work-studio/inbox.md`) is a "file not found" incomplete citation,
+        not a resolve under some other implicit root — there is no fallback
+        search across candidate roots."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            work_studio_dir = root / ".work-studio"
+            work_studio_dir.mkdir(parents=True, exist_ok=True)
+            (work_studio_dir / "inbox.md").write_text("line 1\nline 2\n")
+
+            obj_file = self._object_with_evidence(
+                root,
+                "\n".join([
+                    "| [system] | inbox.md:1 | bare filename, missing .work-studio/ prefix |",
+                    "| [system] | .work-studio/inbox.md:1 | correctly repo-root-relative |",
+                ]),
+            )
+            warnings = check_evidence_freshness(
+                [obj_file],
+                self._objects_dir(root),
+            )
+            self.assertEqual(len(warnings), 2)
+            self.assertIn("inbox.md:1", warnings[0])
+            self.assertIn("file not found", warnings[0])
+            self.assertNotIn(".work-studio/inbox.md:1", warnings[0])
             self.assertIn(
                 "reaches only exact-citation matches", warnings[-1]
             )
@@ -2712,6 +2843,101 @@ class TestEvidenceRelationsCheck(unittest.TestCase):
             self.assertIn("All named validation checks passed.", stdout.getvalue())
 
 
+class TestVerificationFreshnessCheck(unittest.TestCase):
+    """Advisory re-run of re-runnable verification commands (WO 2026-08-11-012)."""
+
+    def _objects_dir(self, root: Path) -> Path:
+        obj_dir = root / ".work-studio" / "objects" / "2026" / "08"
+        obj_dir.mkdir(parents=True, exist_ok=True)
+        return root / ".work-studio" / "objects"
+
+    def _object_with_verification(self, root: Path, filename: str, section: str) -> Path:
+        body = SAMPLE_BODY.replace(
+            "## Open questions",
+            f"## Verification and release evidence\n\n{section}\n\n## Open questions",
+        )
+        obj_dir = root / ".work-studio" / "objects" / "2026" / "08"
+        obj_dir.mkdir(parents=True, exist_ok=True)
+        return make_object_file(
+            obj_dir, filename, SAMPLE_FRONTMATTER + "\n" + body
+        )
+
+    def test_passing_command_produces_no_warning(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            obj_file = self._object_with_verification(
+                root, "2026-08-10-010-pass.md",
+                "- [system] Sanity check: `python3 -c \"print(1)\"` — verified.",
+            )
+            warnings = check_verification_freshness(
+                [obj_file], self._objects_dir(root)
+            )
+            self.assertEqual(warnings, [])
+
+    def test_failing_command_is_flagged(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            obj_file = self._object_with_verification(
+                root, "2026-08-10-010-fail.md",
+                "- [system] Sanity check: `python3 -c \"import sys; sys.exit(1)\"` — verified.",
+            )
+            warnings = check_verification_freshness(
+                [obj_file], self._objects_dir(root)
+            )
+            self.assertTrue(any("no longer passes" in w for w in warnings))
+            self.assertIn(
+                "only re-runs bullets with a single backtick-delimited command",
+                warnings[-1],
+            )
+
+    def test_non_command_backtick_span_is_ignored(self):
+        """A skill name in backticks (no recognized executable prefix) is not
+        treated as a command -- the false positive found in real-corpus
+        testing during the tracer-bullet test."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            obj_file = self._object_with_verification(
+                root, "2026-08-10-010-notacommand.md",
+                "- [system] Routes exercised: `turn-signal-into-work` classified the signal.",
+            )
+            warnings = check_verification_freshness(
+                [obj_file], self._objects_dir(root)
+            )
+            self.assertEqual(warnings, [])
+
+    def test_narrative_bullet_without_command_ignored(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            obj_file = self._object_with_verification(
+                root, "2026-08-10-010-narrative.md",
+                "- [system] Privacy boundary: no personal archive was accessed.",
+            )
+            warnings = check_verification_freshness(
+                [obj_file], self._objects_dir(root)
+            )
+            self.assertEqual(warnings, [])
+
+    def test_run_checks_reports_warnings_without_failing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            obj_file = self._object_with_verification(
+                root, "2026-08-10-010-fail.md",
+                "- [system] Sanity check: `python3 -c \"import sys; sys.exit(1)\"` — verified.",
+            )
+            stderr = io.StringIO()
+            stdout = io.StringIO()
+            with contextlib.redirect_stderr(stderr):
+                with contextlib.redirect_stdout(stdout):
+                    exit_code = run_checks(
+                        ["verification-freshness"],
+                        [obj_file],
+                        objects_dir=self._objects_dir(root),
+                    )
+            self.assertEqual(exit_code, 0)
+            self.assertIn("Warning: verification-freshness:", stderr.getvalue())
+            self.assertIn("All named validation checks passed.", stdout.getvalue())
+
+
 class TestOutcomeReviewCheck(unittest.TestCase):
     """Workspace-level advisory outcome-review coverage check (WO 2026-08-10-002)."""
 
@@ -2789,6 +3015,129 @@ class TestOutcomeReviewCheck(unittest.TestCase):
             )
             self._close_object(root, body)
             self.assertEqual(check_outcome_review(self._objects_dir(root)), [])
+
+
+class TestOutcomesReport(unittest.TestCase):
+    """Advisory outcome-review coverage and best-effort verdict report
+    (WO 2026-08-11-013)."""
+
+    def _objects_dir(self, root: Path) -> Path:
+        obj_dir = root / ".work-studio" / "objects" / "2026" / "07"
+        obj_dir.mkdir(parents=True, exist_ok=True)
+        return root / ".work-studio" / "objects"
+
+    def _close_object(self, root: Path, body: str, filename: str = "2026-07-21-010-test.md"):
+        fm = SAMPLE_FRONTMATTER.replace(
+            "state: notice", "state: close"
+        ).replace("status: active", "status: closed")
+        obj_dir = root / ".work-studio" / "objects" / "2026" / "07"
+        obj_dir.mkdir(parents=True, exist_ok=True)
+        return make_object_file(obj_dir, filename, fm + "\n" + body)
+
+    def test_unreviewed_object_reported_as_not_yet_reviewed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self._close_object(root, SAMPLE_BODY)
+            lines = list_outcomes(self._objects_dir(root))
+            self.assertEqual(lines[0], "outcomes: 0 reviewed, 1 unreviewed")
+            self.assertIn("2026-07-21-010-test: not yet reviewed", lines[1])
+
+    def test_reviewed_object_with_clean_verdict_keyword(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            body = SAMPLE_BODY + (
+                "\n## Outcome review\n\nOutcome assessment: confirmed.\n"
+            )
+            self._close_object(root, body)
+            lines = list_outcomes(self._objects_dir(root))
+            self.assertEqual(lines[0], "outcomes: 1 reviewed, 0 unreviewed")
+            self.assertIn("outcomes: 2026-07-21-010-test: confirmed", lines)
+
+    def test_reviewed_object_without_verdict_keyword_falls_back(self):
+        """A real, meaningful conclusion with no matching keyword (the 12/44
+        case found in real-corpus testing) reports the fallback label, not a
+        guessed verdict and not 'not yet reviewed'."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            body = SAMPLE_BODY + (
+                "\n## Outcome review\n\n"
+                "Stop broader expansion and retain this increment as evidence-only.\n"
+            )
+            self._close_object(root, body)
+            lines = list_outcomes(self._objects_dir(root))
+            self.assertEqual(lines[0], "outcomes: 1 reviewed, 0 unreviewed")
+            self.assertIn("outcomes: 2026-07-21-010-test: reviewed — see body", lines)
+
+    def test_disconfirmed_verdict_detected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            body = SAMPLE_BODY + (
+                "\n## Outcome review\n\nOutcome assessment: disconfirmed.\n"
+            )
+            self._close_object(root, body)
+            lines = list_outcomes(self._objects_dir(root))
+            self.assertIn("outcomes: 2026-07-21-010-test: disconfirmed", lines)
+
+    def test_extract_outcome_verdict_returns_none_without_scoped_lines(self):
+        self.assertIsNone(_extract_outcome_verdict(SAMPLE_BODY))
+
+
+class TestContractDriftCheck(unittest.TestCase):
+    """schema.py VALID_* enums vs __main__.py CLI choices (WO 2026-08-11-019
+    Decision 1 Layer 1, Decision 2)."""
+
+    def _write_main(self, tmp: Path, choices_line: str) -> Path:
+        content = (
+            'create_parser.add_argument(\n'
+            '    "--sensitivity", required=True,\n'
+            f'    {choices_line}\n'
+            '    help="Sensitivity classification",\n'
+            ')\n'
+        )
+        p = Path(tmp) / "__main__.py"
+        p.write_text(content)
+        return p
+
+    def test_real_repo_is_clean(self):
+        """The real tools/ws/__main__.py agrees with schema.py today."""
+        self.assertEqual(check_contract_drift(), [])
+
+    def test_seeded_mismatch_is_caught(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            main_py = self._write_main(
+                tmp, 'choices=["ordinary", "private"],'
+            )
+            errors = check_contract_drift(main_py)
+            self.assertEqual(len(errors), 1)
+            self.assertIn("--sensitivity", errors[0])
+            self.assertIn("restricted", errors[0])
+            self.assertIn("VALID_SENSITIVITIES", errors[0])
+
+    def test_matching_choices_produce_no_warning(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            main_py = self._write_main(
+                tmp, 'choices=["ordinary", "private", "restricted"],'
+            )
+            self.assertEqual(check_contract_drift(main_py), [])
+
+    def test_missing_file_reports_gap_not_crash(self):
+        errors = check_contract_drift(Path("/nonexistent/__main__.py"))
+        self.assertEqual(len(errors), 1)
+        self.assertIn("requires the __main__.py path", errors[0])
+
+    def test_same_named_argument_without_choices_is_not_compared(self):
+        """A field name reused without a choices=[...] list (e.g. claim
+        inspect's free-text --state filter) must not be flagged."""
+        with tempfile.TemporaryDirectory() as tmp:
+            content = (
+                'claim_inspect_parser.add_argument(\n'
+                '    "--state", default=None,\n'
+                '    help="Filter by claim state: captured, supported",\n'
+                ')\n'
+            )
+            p = Path(tmp) / "__main__.py"
+            p.write_text(content)
+            self.assertEqual(check_contract_drift(p), [])
 
 
 class TestCampaignAndPlausibilityWarnings(unittest.TestCase):
@@ -2986,6 +3335,210 @@ class TestSkillMapExtraction(unittest.TestCase):
             with self.assertRaises(ValueError) as ctx:
                 extract_non_goals(skill)
             self.assertIn("No 'does not' region", str(ctx.exception))
+
+
+class TestAppendArtifactCommand(unittest.TestCase):
+    """End-to-end `ws append-artifact` (WO 2026-08-11-011 Decision 2)."""
+
+    REPO_ROOT = TOOLS_DIR.parent
+
+    def _run_ws(self, root: Path, *args: str):
+        env = os.environ.copy()
+        existing = env.get("PYTHONPATH", "")
+        env["PYTHONPATH"] = str(self.REPO_ROOT) + (
+            f":{existing}" if existing else ""
+        )
+        return subprocess.run(
+            [sys.executable, "-m", "tools.ws", *args],
+            capture_output=True, text=True,
+            cwd=str(root),
+            env=env,
+        )
+
+    def _create_object(self, root: Path):
+        result = self._run_ws(
+            root, "create", "--title", "Object A", "--type", "change",
+            "--consequence", "meaningful", "--sensitivity", "ordinary",
+        )
+        obj_id = re.search(r"ID: (\S+)", result.stdout).group(1)
+        return obj_id
+
+    def _get_updated(self, root: Path, obj_id: str) -> str:
+        f = list((root / ".work-studio" / "objects").rglob(f"{obj_id}-*.md"))[0]
+        return re.search(r"updated_at:\s*(\S+)", f.read_text()).group(1)
+
+    def test_committed_file_gets_fingerprint_and_commit(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / ".work-studio").mkdir(parents=True)
+            (root / ".work-studio" / "config.md").write_text("# config")
+            subprocess.run(["git", "init", "-q"], cwd=root)
+            subprocess.run(["git", "config", "user.email", "t@t.com"], cwd=root)
+            subprocess.run(["git", "config", "user.name", "t"], cwd=root)
+
+            obj_id = self._create_object(root)
+
+            (root / "committed.txt").write_text("hello world\n")
+            subprocess.run(["git", "add", "committed.txt"], cwd=root)
+            subprocess.run(["git", "commit", "-q", "-m", "add"], cwd=root)
+
+            updated = self._get_updated(root, obj_id)
+            result = self._run_ws(
+                root, "append-artifact", obj_id, "--path", "committed.txt",
+                "--description", "a committed artifact", "--expect-updated", updated,
+            )
+            self.assertEqual(result.returncode, 0)
+
+            f = list((root / ".work-studio" / "objects").rglob(f"{obj_id}-*.md"))[0]
+            text = f.read_text()
+            self.assertIn("committed.txt", text)
+            self.assertIn("fingerprint:", text)
+            self.assertNotIn("uncommitted at record time", text)
+
+    def test_dirty_file_gets_fingerprint_only(self):
+        """The tracer-bullet test found commit-SHA-only stamping wrong in
+        3/3 real cases where the artifact was still uncommitted at record
+        time -- this confirms the fingerprint-primary fallback."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / ".work-studio").mkdir(parents=True)
+            (root / ".work-studio" / "config.md").write_text("# config")
+            subprocess.run(["git", "init", "-q"], cwd=root)
+            subprocess.run(["git", "config", "user.email", "t@t.com"], cwd=root)
+            subprocess.run(["git", "config", "user.name", "t"], cwd=root)
+
+            obj_id = self._create_object(root)
+
+            (root / "dirty.txt").write_text("work in progress\n")
+
+            updated = self._get_updated(root, obj_id)
+            result = self._run_ws(
+                root, "append-artifact", obj_id, "--path", "dirty.txt",
+                "--description", "a dirty artifact", "--expect-updated", updated,
+            )
+            self.assertEqual(result.returncode, 0)
+
+            f = list((root / ".work-studio" / "objects").rglob(f"{obj_id}-*.md"))[0]
+            text = f.read_text()
+            self.assertIn("fingerprint:", text)
+            self.assertIn("uncommitted at record time", text)
+
+    def test_no_git_repo_degrades_gracefully(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / ".work-studio").mkdir(parents=True)
+            (root / ".work-studio" / "config.md").write_text("# config")
+            # No git init at all.
+
+            obj_id = self._create_object(root)
+            (root / "nogit.txt").write_text("no git here\n")
+
+            updated = self._get_updated(root, obj_id)
+            result = self._run_ws(
+                root, "append-artifact", obj_id, "--path", "nogit.txt",
+                "--description", "no git repo", "--expect-updated", updated,
+            )
+            self.assertEqual(result.returncode, 0)
+
+            f = list((root / ".work-studio" / "objects").rglob(f"{obj_id}-*.md"))[0]
+            text = f.read_text()
+            self.assertIn("fingerprint:", text)
+            self.assertIn("uncommitted at record time", text)
+
+    def test_missing_path_fails_closed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / ".work-studio").mkdir(parents=True)
+            (root / ".work-studio" / "config.md").write_text("# config")
+
+            obj_id = self._create_object(root)
+            updated = self._get_updated(root, obj_id)
+            result = self._run_ws(
+                root, "append-artifact", obj_id, "--path", "does-not-exist.txt",
+                "--description", "missing", "--expect-updated", updated,
+            )
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("not found", result.stderr)
+
+
+class TestAppendHistoryNextAction(unittest.TestCase):
+    """`ws append-history --next-action` (WO 2026-08-14-003 Decision 1):
+    mirrors `ws transition`'s existing --next-action flag so a no-state-change
+    History append can also update next_action without a direct edit."""
+
+    REPO_ROOT = TOOLS_DIR.parent
+
+    def _run_ws(self, root: Path, *args: str):
+        env = os.environ.copy()
+        existing = env.get("PYTHONPATH", "")
+        env["PYTHONPATH"] = str(self.REPO_ROOT) + (
+            f":{existing}" if existing else ""
+        )
+        return subprocess.run(
+            [sys.executable, "-m", "tools.ws", *args],
+            capture_output=True, text=True,
+            cwd=str(root),
+            env=env,
+        )
+
+    def _create_object(self, root: Path):
+        result = self._run_ws(
+            root, "create", "--title", "Object A", "--type", "change",
+            "--consequence", "meaningful", "--sensitivity", "ordinary",
+        )
+        obj_id = re.search(r"ID: (\S+)", result.stdout).group(1)
+        return obj_id
+
+    def _read(self, root: Path, obj_id: str) -> str:
+        f = list((root / ".work-studio" / "objects").rglob(f"{obj_id}-*.md"))[0]
+        return f.read_text()
+
+    def test_next_action_updated_alongside_history(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / ".work-studio").mkdir(parents=True)
+            (root / ".work-studio" / "config.md").write_text("# config")
+
+            obj_id = self._create_object(root)
+            content = self._read(root, obj_id)
+            updated = re.search(r"updated_at:\s*(\S+)", content).group(1)
+
+            result = self._run_ws(
+                root, "append-history", obj_id,
+                "--action", "Progress note", "--state", "notice",
+                "--status", "active", "--rationale", "testing",
+                "--next-action", "Do the next concrete thing",
+                "--expect-updated", updated,
+            )
+            self.assertEqual(result.returncode, 0)
+
+            content = self._read(root, obj_id)
+            self.assertIn("next_action: Do the next concrete thing", content)
+            self.assertIn("Progress note", content)
+
+    def test_omitting_next_action_leaves_it_unchanged(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / ".work-studio").mkdir(parents=True)
+            (root / ".work-studio" / "config.md").write_text("# config")
+
+            obj_id = self._create_object(root)
+            content = self._read(root, obj_id)
+            updated = re.search(r"updated_at:\s*(\S+)", content).group(1)
+            original_next_action = re.search(
+                r'next_action:\s*(".*")', content
+            ).group(1)
+
+            result = self._run_ws(
+                root, "append-history", obj_id,
+                "--action", "Progress note", "--state", "notice",
+                "--status", "active", "--rationale", "testing",
+                "--expect-updated", updated,
+            )
+            self.assertEqual(result.returncode, 0)
+
+            content = self._read(root, obj_id)
+            self.assertIn(f"next_action: {original_next_action}", content)
 
 
 class TestSkillMapCommand(unittest.TestCase):

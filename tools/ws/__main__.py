@@ -5,6 +5,9 @@ Entry point for python3 -m tools.ws <command>.
 """
 
 import argparse
+import hashlib
+import re
+import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -37,9 +40,10 @@ from .sections import (
     generate_evidence_entry,
     generate_history_entry,
     get_section,
+    parse_sections,
 )
 from .template import generate_body_template
-from .validate import DEFAULT_CHECKS, CHECK_REGISTRY, run_checks
+from .validate import DEFAULT_CHECKS, CHECK_REGISTRY, run_checks, mint_or_reuse_auth_id, list_outcomes
 from .authority_check import cmd_authority_check
 from .baseline import cmd_baseline_capture, cmd_baseline_check
 from .claim import cmd_claim_inspect, cmd_claim_register
@@ -151,6 +155,129 @@ def cmd_create(args: argparse.Namespace) -> int:
     relative_path = target_path.relative_to(ws_root)
     print(f"Created: {relative_path}")
     print(f"ID: {obj_id}")
+
+    return 0
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ws start
+# ═══════════════════════════════════════════════════════════════════════════════
+
+
+def cmd_start(args: argparse.Namespace) -> int:
+    """Composite: create a Work Object and start it in one command.
+
+    Bundles create + first evidence entry + creation History entry +
+    transition to explore + Supporting activation (WO 2026-08-14-002
+    Decision 1/2). `ws create` is untouched. High-consequence objects
+    are rejected with a pointer (authority entry is not bundled).
+    """
+    errors = []
+    for validator, value, name in [
+        (validate_type, args.type, "type"),
+        (validate_consequence, args.consequence, "consequence"),
+        (validate_sensitivity, args.sensitivity, "sensitivity"),
+    ]:
+        err = validator(value)
+        if err:
+            errors.append(err)
+
+    if errors:
+        for e in errors:
+            print(f"Error: {e}", file=sys.stderr)
+        return 1
+
+    # High-consequence: requires an Authority History entry, which this
+    # composite does not bundle — reject cleanly with a pointer to the
+    # manual sequence rather than producing an invalid object.
+    if args.consequence == "high":
+        print(
+            "Error: ws start does not support high-consequence objects. "
+            "High-consequence creation requires an Authority History entry "
+            "(CONSEQUENCE-AUTHORITY.md), which the composite does not bundle. "
+            "Use: ws create ...; ws append-history <id> --action 'authority: ...' "
+            "--state notice --status active ...; ws transition <id> --state explore "
+            "--status active ...; ws activate <id> --role primary.",
+            file=sys.stderr,
+        )
+        return 1
+
+    try:
+        ws_root = _find_work_studio_root()
+    except FileNotFoundError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+
+    objects_dir = ws_root / ".work-studio" / "objects"
+
+    try:
+        obj_id = allocate_id(objects_dir)
+    except RuntimeError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+
+    target_path = build_path(objects_dir, obj_id, args.title)
+
+    if target_path.exists():
+        print(f"Error: Target file already exists: {target_path}", file=sys.stderr)
+        return 1
+
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    # 1. Create the object (same frontmatter/body generation as ws create)
+    frontmatter = generate_frontmatter(
+        obj_id=obj_id,
+        title=args.title,
+        obj_type=args.type,
+        consequence=args.consequence,
+        sensitivity=args.sensitivity,
+    )
+    body = generate_body_template(
+        title=args.title,
+        obj_type=args.type,
+        consequence=args.consequence,
+    )
+
+    # 2. Append the first Evidence Ledger entry (satisfies the evidence gate
+    #    for states beyond notice, validate.py:1060). Tag [decision] reflects
+    #    the director's activation; --evidence supplies the entry text.
+    evidence = generate_evidence_entry(
+        tag="[decision]",
+        source=args.evidence_source,
+        text=args.evidence,
+    )
+    body = append_to_section(body, "evidence ledger", evidence)
+
+    # 3. Append the creation History entry (required for transitions).
+    history_entry = generate_history_entry(
+        action=f"Started via ws start (created + evidence + explore + activate {args.role})",
+        state="explore",
+        status="active",
+        actor=args.actor,
+        rationale=args.rationale,
+    )
+    body = append_to_section(body, "history", history_entry)
+
+    # 4. Advance frontmatter notice -> explore, set next_action, bump updated_at.
+    content = frontmatter + "\n" + body
+    new_fm = _update_frontmatter_fields(content, {
+        "state": "explore",
+        "updated_at": now,
+        "next_action": args.next_action,
+    })
+
+    obj_file_text = compose_object_text(new_fm, body)
+    target_path.write_text(obj_file_text)
+
+    # 5. Register in active.md (default Supporting).
+    active_md = ws_root / ".work-studio" / "active.md"
+    updated_active = update_active_entry(active_md, obj_id, args.title, args.role)
+    active_md.write_text(updated_active)
+
+    relative_path = target_path.relative_to(ws_root)
+    print(f"Started: {relative_path}")
+    print(f"ID: {obj_id}")
+    print(f"State: explore/{args.status}")
 
     return 0
 
@@ -583,9 +710,16 @@ def cmd_append_history(args: argparse.Namespace) -> int:
     content = obj_file.read_text()
     body = content[content.find("---", 3) + 3:].strip() if content.startswith("---") else content
 
+    action = args.action
+    if "authority:" in action.lower():
+        auth_id = mint_or_reuse_auth_id(action, objects_dir)
+        action = re.sub(
+            r"(?i)^(authority:)\s*", rf"\1 {auth_id} ", action, count=1
+        )
+
     # Generate history entry
     entry = generate_history_entry(
-        action=args.action,
+        action=action,
         state=args.state,
         status=args.status,
         actor=args.actor,
@@ -598,11 +732,204 @@ def cmd_append_history(args: argparse.Namespace) -> int:
 
     # Update frontmatter
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    new_fm = _update_frontmatter_fields(content, {"updated_at": now})
+    fm_updates = {"updated_at": now}
+    if getattr(args, "next_action", None):
+        fm_updates["next_action"] = args.next_action
+    new_fm = _update_frontmatter_fields(content, fm_updates)
 
     obj_file.write_text(compose_object_text(new_fm, new_body))
 
     print(f"History appended to {args.id}")
+    return 0
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ws append-artifact
+# ═══════════════════════════════════════════════════════════════════════════════
+
+
+def _compute_artifact_stamp(ws_root: Path, rel_path: str) -> dict:
+    """Compute a mechanical identity stamp for an artifact file.
+
+    Per WO 2026-08-11-011 Decision 2: a content fingerprint (sha256 of the
+    file's actual working-tree bytes) is the primary identity, always
+    computed. A git commit SHA is recorded only when the path is clean in
+    `git status` at stamp time -- never relied on alone, since the tracer-
+    bullet test found commit-SHA-only stamping wrong in 3/3 real cases where
+    the artifact was still uncommitted at record time (the common case
+    during an active implementation pass).
+    """
+    target = ws_root / rel_path
+    content = target.read_bytes()
+    fingerprint = hashlib.sha256(content).hexdigest()[:12]
+
+    stamp = {"path": rel_path, "fingerprint": fingerprint, "commit": None}
+
+    try:
+        status = subprocess.run(
+            ["git", "status", "--porcelain", "--", rel_path],
+            cwd=ws_root, capture_output=True, text=True, timeout=10,
+        )
+        if status.returncode == 0 and status.stdout.strip() == "":
+            log = subprocess.run(
+                ["git", "log", "-1", "--format=%H", "--", rel_path],
+                cwd=ws_root, capture_output=True, text=True, timeout=10,
+            )
+            if log.returncode == 0 and log.stdout.strip():
+                stamp["commit"] = log.stdout.strip()
+    except (subprocess.SubprocessError, OSError):
+        pass  # No git access -- degrade gracefully, fingerprint-only stamp.
+
+    return stamp
+
+
+def cmd_append_artifact(args: argparse.Namespace) -> int:
+    """Append an Artifacts entry with a mechanically-computed stamp (Tier B)."""
+    try:
+        ws_root = _find_work_studio_root()
+    except FileNotFoundError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+
+    objects_dir = ws_root / ".work-studio" / "objects"
+
+    try:
+        obj_file = _resolve_object_file(objects_dir, args.id)
+    except FileNotFoundError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+
+    err = check_concurrency(obj_file, args.expect_updated, force=args.force)
+    if err:
+        print(f"Error: {err}", file=sys.stderr)
+        return 1
+
+    target = ws_root / args.path
+    if not target.is_file():
+        print(f"Error: Artifact path not found: {args.path}", file=sys.stderr)
+        return 1
+
+    stamp = _compute_artifact_stamp(ws_root, args.path)
+
+    if stamp["commit"]:
+        entry = (
+            f"- `{stamp['path']}` (fingerprint: `{stamp['fingerprint']}`, "
+            f"commit: `{stamp['commit']}`) — {args.description}"
+        )
+    else:
+        entry = (
+            f"- `{stamp['path']}` (fingerprint: `{stamp['fingerprint']}`, "
+            f"commit: uncommitted at record time) — {args.description}"
+        )
+
+    content = obj_file.read_text()
+    body = content[content.find("---", 3) + 3:].strip() if content.startswith("---") else content
+    new_body = append_to_section(body, "artifacts", entry)
+
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    new_fm = _update_frontmatter_fields(content, {"updated_at": now})
+
+    obj_file.write_text(compose_object_text(new_fm, new_body))
+
+    print(f"Artifact appended to {args.id}")
+    return 0
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ws inputs
+# ═══════════════════════════════════════════════════════════════════════════════
+
+
+_OBJECT_ID_RE = re.compile(r"\b20\d{2}-\d{2}-\d{2}-\d{3}\b")
+# Matches both "ADR 0022" (space) and "ADR-0022" (hyphen) — real objects
+# spell ADR references with a space; found by verify-release-evidence.
+_ADR_ID_RE = re.compile(r"\bADR[\s-]?\d+\b", re.IGNORECASE)
+_FILE_REF_RE = re.compile(
+    r"[\w./-]+\.(?:py|md|yaml|yml|json|txt|toml|cfg)(?::\d+(?:-\d+)?)?"
+)
+
+
+_REPORT_ORDER = ("objects", "files", "adrs")
+_REPORT_LABELS = {
+    "objects": "Work Objects",
+    "files": "Files",
+    "adrs": "ADRs",
+}
+
+
+def _extract_citations(text):
+    """Extract citation tokens from a text chunk.
+
+    Returns a dict mapping type ("objects" | "files" | "adrs") to a
+    deduplicated, insertion-ordered list of raw tokens.
+    """
+    found = {"objects": [], "files": [], "adrs": []}
+    for m in _OBJECT_ID_RE.finditer(text):
+        token = m.group(0)
+        if token not in found["objects"]:
+            found["objects"].append(token)
+    for m in _ADR_ID_RE.finditer(text):
+        token = m.group(0).upper()
+        if token not in found["adrs"]:
+            found["adrs"].append(token)
+    for m in _FILE_REF_RE.finditer(text):
+        token = m.group(0)
+        if token not in found["files"]:
+            found["files"].append(token)
+    return found
+
+
+def cmd_inputs(args: argparse.Namespace) -> int:
+    """Advisory: list the content inputs a Work Object's own text cites.
+
+    Derives, at read time, the entities (Work Object IDs, file paths with
+    optional line refs, ADR IDs) named in the object's Evidence ledger,
+    Decisions, and prose, tagged with the section each came from.
+    Read-only and advisory per WO 2026-08-11-010 Decision 5: it captures
+    content citations only — mechanical process reads are not cited and
+    are not reconstructed.
+    """
+    try:
+        ws_root = _find_work_studio_root()
+    except FileNotFoundError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+
+    objects_dir = ws_root / ".work-studio" / "objects"
+    try:
+        obj_file = _resolve_object_file(objects_dir, args.id)
+    except FileNotFoundError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+
+    content = obj_file.read_text()
+    body = content[content.find("---", 3) + 3:].strip() if content.startswith("---") else content
+    # Strip HTML comment blocks (template metadata, not object content).
+    body = re.sub(r"<!--.*?-->", "", body, flags=re.DOTALL)
+
+    sections = parse_sections(body)
+
+    summary = {k: [] for k in _REPORT_ORDER}
+    for section_name, section_text in sections.items():
+        cites = _extract_citations(section_text)
+        for kind in _REPORT_ORDER:
+            for token in cites[kind]:
+                if not any(t == token for t, _ in summary[kind]):
+                    summary[kind].append((token, section_name))
+
+    print(
+        f"Inputs derived from {args.id} "
+        "(advisory — content citations in this object's text):"
+    )
+    if not any(summary[k] for k in _REPORT_ORDER):
+        print("  (no content citations found)")
+        return 0
+    for kind in _REPORT_ORDER:
+        if not summary[kind]:
+            continue
+        print(f"  {_REPORT_LABELS[kind]}:")
+        for token, section_name in summary[kind]:
+            print(f"    - {token}   [{section_name}]")
     return 0
 
 
@@ -646,6 +973,34 @@ def cmd_validate(args: argparse.Namespace) -> int:
     check_names = args.checks if args.checks else None
 
     return run_checks(check_names, file_paths, active_md, objects_dir)
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ws outcomes
+# ═══════════════════════════════════════════════════════════════════════════════
+
+
+def cmd_outcomes(args: argparse.Namespace) -> int:
+    """Advisory: report outcome-review coverage and a best-effort verdict.
+
+    Read-only projection over existing Work Objects (WO 2026-08-11-013,
+    Decision 1/2). No new storage, no stable OUT-* identifier -- computed
+    fresh at read time from each object's own review evidence.
+    """
+    try:
+        ws_root = _find_work_studio_root()
+    except FileNotFoundError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+
+    objects_dir = ws_root / ".work-studio" / "objects"
+    if not objects_dir.is_dir():
+        print("Error: no objects/ directory found.", file=sys.stderr)
+        return 1
+
+    for line in list_outcomes(objects_dir):
+        print(line)
+    return 0
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -773,6 +1128,58 @@ def build_parser() -> argparse.ArgumentParser:
         "--sensitivity", required=True,
         choices=["ordinary", "private", "restricted"],
         help="Sensitivity classification",
+    )
+
+    # ── ws start ──────────────────────────────────────────────────────────
+    start_parser = subparsers.add_parser(
+        "start",
+        help="Create and start a Work Object in one command (composite)",
+    )
+    start_parser.add_argument("--title", required=True, help="Work Object title")
+    start_parser.add_argument(
+        "--type", required=True,
+        choices=["change", "inquiry", "project", "incident"],
+        help="Work Object type",
+    )
+    start_parser.add_argument(
+        "--consequence", required=True,
+        choices=["low", "meaningful", "high"],
+        help="Consequence level",
+    )
+    start_parser.add_argument(
+        "--sensitivity", required=True,
+        choices=["ordinary", "private", "restricted"],
+        help="Sensitivity classification",
+    )
+    start_parser.add_argument(
+        "--evidence", required=True,
+        help="First Evidence Ledger entry text (satisfies the evidence gate)",
+    )
+    start_parser.add_argument(
+        "--evidence-source", default="Director activation",
+        help="Evidence ledger source for the first entry (default: Director activation)",
+    )
+    start_parser.add_argument(
+        "--role", default="supporting",
+        choices=["primary", "supporting", "paused"],
+        help="active.md role (default: supporting)",
+    )
+    start_parser.add_argument(
+        "--status", default="active",
+        choices=["active", "waiting", "paused", "closed"],
+        help="Starting status (default: active)",
+    )
+    start_parser.add_argument(
+        "--actor", default="system",
+        help="History actor (default: system)",
+    )
+    start_parser.add_argument(
+        "--rationale", default="Started via ws start composite (created + evidence + explore + activate).",
+        help="History rationale",
+    )
+    start_parser.add_argument(
+        "--next-action", default="Started via ws start; route to the next specialist per current state.",
+        help="Frontmatter next_action value",
     )
 
     # ── ws members ────────────────────────────────────────────────────────
@@ -905,11 +1312,36 @@ def build_parser() -> argparse.ArgumentParser:
     append_history_parser.add_argument("--rationale", required=True, help="Entry rationale")
     append_history_parser.add_argument("--commit", default=None, help="Git commit SHA (optional, per ADR 0023)")
     append_history_parser.add_argument(
+        "--next-action", default=None,
+        help="Set the frontmatter next_action field to this value",
+    )
+    append_history_parser.add_argument(
         "--expect-updated", required=True,
         help="Expected updated_at timestamp",
     )
     append_history_parser.add_argument("--force", action="store_true",
                                        help="Bypass optimistic concurrency check")
+
+    # ── ws append-artifact ────────────────────────────────────────────────
+    append_artifact_parser = subparsers.add_parser(
+        "append-artifact",
+        help="Append an Artifacts entry with a mechanically-computed content "
+             "fingerprint (WO 2026-08-11-011 Decision 2)",
+    )
+    append_artifact_parser.add_argument("id", help="Work Object ID")
+    append_artifact_parser.add_argument(
+        "--path", required=True,
+        help="Path to the artifact file, relative to the workspace root",
+    )
+    append_artifact_parser.add_argument(
+        "--description", required=True, help="One-line description of the artifact",
+    )
+    append_artifact_parser.add_argument(
+        "--expect-updated", required=True,
+        help="Expected updated_at timestamp",
+    )
+    append_artifact_parser.add_argument("--force", action="store_true",
+                                        help="Bypass optimistic concurrency check")
 
     # ── ws claim ──────────────────────────────────────────────────────────
     claim_parser = subparsers.add_parser(
@@ -1104,6 +1536,13 @@ def build_parser() -> argparse.ArgumentParser:
         help="Generate work-studio/skill-map.yaml from skills/core/*/SKILL.md",
     )
 
+    # ── ws inputs ────────────────────────────────────────────────────────
+    inputs_parser = subparsers.add_parser(
+        "inputs",
+        help="List the content inputs a Work Object's text cites (advisory)",
+    )
+    inputs_parser.add_argument("id", help="Work Object ID to derive inputs for")
+
     # ── ws validate ───────────────────────────────────────────────────────
     validate_parser = subparsers.add_parser("validate", help="Run validation checks")
     validate_parser.add_argument(
@@ -1113,6 +1552,12 @@ def build_parser() -> argparse.ArgumentParser:
     validate_parser.add_argument(
         "--files", nargs="*",
         help="File paths to validate (default: all objects)",
+    )
+
+    # ── ws outcomes ───────────────────────────────────────────────────────
+    subparsers.add_parser(
+        "outcomes",
+        help="Advisory: outcome-review coverage and best-effort verdict per object",
     )
 
     return parser
@@ -1128,7 +1573,9 @@ def main() -> int:
 
     commands = {
         "init": cmd_init,
+        "inputs": cmd_inputs,
         "create": cmd_create,
+        "start": cmd_start,
         "members": cmd_members,
         "set-campaign": cmd_set_campaign,
         "transition": cmd_transition,
@@ -1136,7 +1583,9 @@ def main() -> int:
         "activate": cmd_activate,
         "append-evidence": cmd_append_evidence,
         "append-history": cmd_append_history,
+        "append-artifact": cmd_append_artifact,
         "validate": cmd_validate,
+        "outcomes": cmd_outcomes,
     }
 
     if args.command in commands:

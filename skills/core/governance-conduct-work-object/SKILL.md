@@ -303,9 +303,24 @@ On any meaningful transition:
      --expect-updated <current-updated_at>
    ```
 
-3. For `next_action` updates and body section edits not covered by append
-   commands, edit the file directly — but always use `--expect-updated` from
-   the CLI for any subsequent mutation.
+3. Direct edits are sanctioned, not a workaround, for the sections no append
+   command covers: `Intent`, `Success evidence` checkboxes, `Constraints and
+   non-goals`, `Decisions and revisit triggers` (including full `### Decision
+   N` blocks — there is no `append-decision` command), `Open questions`, and
+   `Next move` (WO `2026-08-14-003` Decision 1). `Evidence ledger` rows and
+   `History` entries stay CLI-only (`append-evidence`, `append-history`,
+   `transition`, `close`) — never edit those directly. `next_action` can be
+   set either by `ws transition --next-action` or `ws append-history
+   --next-action` without a state change; a direct edit remains available
+   when neither applies.
+
+   **Concurrency rule for direct edits:** a direct edit is not guarded by
+   `--expect-updated` at write time — it is caught retroactively. Always use
+   the correct `--expect-updated` from the CLI on the *next* mutation of that
+   object; a stale value there is what surfaces a conflict. This is
+   sufficient under the studio's single-session, single-conductor operating
+   model (`## Session-boundary rule`, above) but would need revisiting if the
+   studio ever supports genuinely concurrent editors on the same Work Object.
 
 4. The CLI handles `updated_at` updates, History appends, and concurrency
    checks automatically. If the CLI rejects with a concurrency error, re-read

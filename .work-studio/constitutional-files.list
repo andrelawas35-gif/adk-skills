@@ -24,4 +24,4 @@ tools/pre-commit
 tools/generate-adapters.py
 tools/verify-conformance.py
 tools/verify-append-only.py
-skills/core/conduct-work-object/SKILL.md
+skills/core/governance-conduct-work-object/SKILL.md

@@ -30,7 +30,8 @@ Implementation and its declared normative contract no longer match.
 
 | Field | Value |
 |-------|-------|
-| **Example** | `next_action` and `revisit_trigger` are absent from generator and validator. `private` is valid in `schema.py:15` but rejected by `ws create` (`__main__.py:771`). The CLI-only write rule conflicts with direct-edit instructions in skill contracts. |
+| **Example** | `next_action` and `revisit_trigger` are absent from generator and validator. `private` is valid in `schema.py:15` but rejected by `ws create` (`__main__.py:771`). |
+| **Resolved instance** | The CLI-only write rule vs. direct-edit instructions in skill contracts (previously listed here) was reconciled by WO `2026-08-14-003`: direct edits are sanctioned explicitly for sections with no append command, guarded by the next-CLI-mutation `--expect-updated` check rather than write-time locking. See `skills/core/governance-conduct-work-object/SKILL.md` §5 step 3. |
 | **Correct response** | Repair implementation or supersede prose through an explicit decision; add regression test. |
 
 ### 3. Generated drift

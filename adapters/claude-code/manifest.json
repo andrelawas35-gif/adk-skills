@@ -176,7 +176,7 @@
     {
       "name": "alawas-governance-conduct-work-object",
       "path": "adapters/claude-code/skills/alawas-governance-conduct-work-object/SKILL.md",
-      "sha256": "e96c708933551d2143fee8659ab3114ef5e82135db84289679ade889b8d5bc65"
+      "sha256": "e6a9eb400222f0530de43ec32e080afd367e69da7740805403bab5cd8dc1c1b2"
     },
     {
       "name": "alawas-governance-conduct-work-object/references/MISSING-ARTIFACT-GAP.md",
