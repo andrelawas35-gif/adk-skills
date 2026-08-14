@@ -218,14 +218,14 @@ When the user selects one or more directions:
 Do NOT implement the selected direction. Implementation is routed through
 `design-tracer-bullet` and `implement-bounded-change`.
 
-### 7. Concurrency check (mandatory)
+### 7. Persist through the conductor
 
-Before every write:
-1. Re-read the Work Object file.
-2. Compare `updated_at` with the value from the initial read.
-3. If changed → report the conflict with both timestamps. Do NOT overwrite.
-   Offer to re-read, merge, and retry.
-4. If unchanged → write, then update `updated_at`.
+This skill does not mutate a Work Object file directly. All Work Object
+writes route through `python3 -m tools.ws` (`--expect-updated` on every
+mutating command) per `governance-conduct-work-object`'s CLI-only write
+contract. The conductor owns schema validation, optimistic concurrency,
+state changes, and History; a concurrency conflict is reported with both
+timestamps rather than overwritten.
 
 ## Evidence rules
 

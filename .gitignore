@@ -12,6 +12,7 @@ Thumbs.db
 # Python
 __pycache__/
 *.pyc
+.venv/
 
 # Work Studio — private operational records
 .work-studio/active.md
@@ -28,3 +29,6 @@ __pycache__/
 
 # Legacy single-platform lock (superseded by per-platform locks)
 # Per-platform adapter locks use relative paths and are tracked
+
+# Runtime tracer output (WO 2026-08-14-008, Decision 3) -- operational, not canonical
+runtime/traces/

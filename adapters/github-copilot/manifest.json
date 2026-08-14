@@ -61,7 +61,7 @@
     {
       "name": "alawas-design-design-tracer-bullet/references/EVIDENCE-MODEL.md",
       "path": "adapters/github-copilot/skills/alawas-design-design-tracer-bullet/references/EVIDENCE-MODEL.md",
-      "sha256": "386324a5482d63a15ba58ecc3030d0336690a0fb85fc7ccad15e9ab014a511b9"
+      "sha256": "409f3ebe84208f2e440b475de7b9c7359ab641523e5d39e41f8ee2c81bd7c526"
     },
     {
       "name": "alawas-design-design-tracer-bullet/references/CONSEQUENCE-AUTHORITY.md",
@@ -136,7 +136,7 @@
     {
       "name": "alawas-engineering-implement-bounded-change/references/EVIDENCE-MODEL.md",
       "path": "adapters/github-copilot/skills/alawas-engineering-implement-bounded-change/references/EVIDENCE-MODEL.md",
-      "sha256": "386324a5482d63a15ba58ecc3030d0336690a0fb85fc7ccad15e9ab014a511b9"
+      "sha256": "409f3ebe84208f2e440b475de7b9c7359ab641523e5d39e41f8ee2c81bd7c526"
     },
     {
       "name": "alawas-engineering-implement-bounded-change/references/DIRECTOR-LANGUAGE.md",
@@ -176,7 +176,7 @@
     {
       "name": "alawas-governance-conduct-work-object",
       "path": "adapters/github-copilot/skills/alawas-governance-conduct-work-object/SKILL.md",
-      "sha256": "333617dddaab15d714cdc5bd04e17702100052cead227868cdbf89f0aff65314"
+      "sha256": "8a4b76c8bd1241547ddefb2c4c7edea6b1840ebef7cfe3c9b1be37835492d7e5"
     },
     {
       "name": "alawas-governance-conduct-work-object/references/MISSING-ARTIFACT-GAP.md",
@@ -192,6 +192,11 @@
       "name": "alawas-governance-conduct-work-object/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/github-copilot/skills/alawas-governance-conduct-work-object/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
+    },
+    {
+      "name": "alawas-governance-conduct-work-object/references/EVIDENCE-MODEL.md",
+      "path": "adapters/github-copilot/skills/alawas-governance-conduct-work-object/references/EVIDENCE-MODEL.md",
+      "sha256": "409f3ebe84208f2e440b475de7b9c7359ab641523e5d39e41f8ee2c81bd7c526"
     },
     {
       "name": "alawas-governance-conduct-work-object/references/DIRECTOR-LANGUAGE.md",
@@ -221,7 +226,7 @@
     {
       "name": "alawas-governance-govern-scorecards/references/EVIDENCE-MODEL.md",
       "path": "adapters/github-copilot/skills/alawas-governance-govern-scorecards/references/EVIDENCE-MODEL.md",
-      "sha256": "386324a5482d63a15ba58ecc3030d0336690a0fb85fc7ccad15e9ab014a511b9"
+      "sha256": "409f3ebe84208f2e440b475de7b9c7359ab641523e5d39e41f8ee2c81bd7c526"
     },
     {
       "name": "alawas-governance-govern-scorecards/references/DIRECTOR-LANGUAGE.md",
@@ -251,7 +256,7 @@
     {
       "name": "alawas-governance-maintain-working-method/references/EVIDENCE-MODEL.md",
       "path": "adapters/github-copilot/skills/alawas-governance-maintain-working-method/references/EVIDENCE-MODEL.md",
-      "sha256": "386324a5482d63a15ba58ecc3030d0336690a0fb85fc7ccad15e9ab014a511b9"
+      "sha256": "409f3ebe84208f2e440b475de7b9c7359ab641523e5d39e41f8ee2c81bd7c526"
     },
     {
       "name": "alawas-governance-maintain-working-method/references/DIRECTOR-LANGUAGE.md",
@@ -281,7 +286,7 @@
     {
       "name": "alawas-governance-review-outcome-and-adapt/references/EVIDENCE-MODEL.md",
       "path": "adapters/github-copilot/skills/alawas-governance-review-outcome-and-adapt/references/EVIDENCE-MODEL.md",
-      "sha256": "386324a5482d63a15ba58ecc3030d0336690a0fb85fc7ccad15e9ab014a511b9"
+      "sha256": "409f3ebe84208f2e440b475de7b9c7359ab641523e5d39e41f8ee2c81bd7c526"
     },
     {
       "name": "alawas-governance-review-outcome-and-adapt/references/DIRECTOR-LANGUAGE.md",
@@ -336,7 +341,7 @@
     {
       "name": "alawas-operations-diagnose-production-incident/references/EVIDENCE-MODEL.md",
       "path": "adapters/github-copilot/skills/alawas-operations-diagnose-production-incident/references/EVIDENCE-MODEL.md",
-      "sha256": "386324a5482d63a15ba58ecc3030d0336690a0fb85fc7ccad15e9ab014a511b9"
+      "sha256": "409f3ebe84208f2e440b475de7b9c7359ab641523e5d39e41f8ee2c81bd7c526"
     },
     {
       "name": "alawas-operations-diagnose-production-incident/references/DIRECTOR-LANGUAGE.md",
@@ -361,7 +366,7 @@
     {
       "name": "alawas-research-investigate-live-question/references/EVIDENCE-MODEL.md",
       "path": "adapters/github-copilot/skills/alawas-research-investigate-live-question/references/EVIDENCE-MODEL.md",
-      "sha256": "386324a5482d63a15ba58ecc3030d0336690a0fb85fc7ccad15e9ab014a511b9"
+      "sha256": "409f3ebe84208f2e440b475de7b9c7359ab641523e5d39e41f8ee2c81bd7c526"
     },
     {
       "name": "alawas-research-investigate-live-question/references/CONSEQUENCE-AUTHORITY.md",
@@ -381,7 +386,7 @@
     {
       "name": "alawas-thinking-develop-idea",
       "path": "adapters/github-copilot/skills/alawas-thinking-develop-idea/SKILL.md",
-      "sha256": "b0ec6157abb1a018e6e17f55f4306a8ee5ca54b8501a4700596f0196ff9a6f45"
+      "sha256": "b9d0ef92192d718bdbf3fa77da4ab521b7319bc07bb6fe188ee01db75952d827"
     },
     {
       "name": "alawas-thinking-develop-idea/references/CAPABILITY-DEGRADATION.md",
@@ -471,7 +476,7 @@
     {
       "name": "alawas-thinking-pressure-test-decision",
       "path": "adapters/github-copilot/skills/alawas-thinking-pressure-test-decision/SKILL.md",
-      "sha256": "cdcbc63baee80b647f50c6b2a72ab7e4073fa79382b2955079c120a4b85121ab"
+      "sha256": "c3c1565d2254600763c134feb33a8bd9cb39496d4e90bcc86d2043dfe4e1ad79"
     },
     {
       "name": "alawas-thinking-pressure-test-decision/references/CAPABILITY-DEGRADATION.md",
@@ -531,7 +536,7 @@
     {
       "name": "alawas-thinking-turn-signal-into-work/references/EVIDENCE-MODEL.md",
       "path": "adapters/github-copilot/skills/alawas-thinking-turn-signal-into-work/references/EVIDENCE-MODEL.md",
-      "sha256": "386324a5482d63a15ba58ecc3030d0336690a0fb85fc7ccad15e9ab014a511b9"
+      "sha256": "409f3ebe84208f2e440b475de7b9c7359ab641523e5d39e41f8ee2c81bd7c526"
     },
     {
       "name": "alawas-thinking-turn-signal-into-work/references/CONSEQUENCE-AUTHORITY.md",

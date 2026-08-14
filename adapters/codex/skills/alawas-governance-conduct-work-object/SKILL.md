@@ -253,6 +253,9 @@ contract in `references/CONSEQUENCE-AUTHORITY.md`.
 
 ### 5. Update Work Object
 
+Apply `references/EVIDENCE-MODEL.md` for evidence capture, provenance, and the
+separation between the Evidence ledger and History.
+
 **Authority gate:** Writing restricted-sensitivity content to a Work Object
 body requires explicit human confirmation at ALL consequence levels. Modifying
 frontmatter `status` or `state` at `high` consequence requires explicit human
@@ -401,14 +404,6 @@ python3 -m tools.ws activate <id> \
 
 The CLI cross-checks that the object exists and is not closed before
 updating `active.md`.
-
-## Evidence rules
-
-- Distinguish known, inferred, decided, and unresolved material.
-- Every factual claim carries a provenance marker.
-- Retrieve discoverable facts from the file system rather than asking.
-- Record evidence in the Evidence ledger section, not in History entries.
-- History entries contain rationale, not raw evidence.
 
 ## Adjacent Possibility behavior
 

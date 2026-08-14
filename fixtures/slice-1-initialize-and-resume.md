@@ -103,18 +103,22 @@ and exactly one decision-bearing question. No menu of equal options.
    - Adds a Current hypothesis section
    - Records the approach decision in Decisions and revisit triggers
    - Updates `next_action` to "Read Codex agent-customization skill docs"
-2. The agent updates frontmatter:
+2. The agent records factual support and unresolved material in the Evidence
+   ledger with provenance; it does not copy raw evidence into History
+3. The agent updates frontmatter:
    - `state` moves from `notice` to `explore`
    - `updated_at` is set to now
-3. The agent appends a History entry:
+4. The agent appends a History entry:
    - Timestamp, action "Framed inquiry approach", resulting state `explore`
    - `actor: human` (the decision was the user's)
-   - Rationale references the confirmed approach
-4. The file's original `id`, `type`, and `created_at` are unchanged
-5. The agent routes to `investigate-live-question` for the actual research
+   - Rationale references the confirmed approach and relevant evidence without
+     duplicating raw evidentiary material
+5. The file's original `id`, `type`, and `created_at` are unchanged
+6. The agent routes to `investigate-live-question` for the actual research
 
 **Verification**: Read the file. Frontmatter `state` is `explore`.
-History has two entries (creation + this decision). No fields were
+History has two entries (creation + this decision), raw evidence remains in the
+Evidence ledger, and History contains the transition rationale. No fields were
 mutated that should be immutable.
 
 ## Scenario 6 — Concurrency Conflict Detection

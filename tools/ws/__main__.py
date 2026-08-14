@@ -46,6 +46,7 @@ from .template import generate_body_template
 from .validate import DEFAULT_CHECKS, CHECK_REGISTRY, run_checks, mint_or_reuse_auth_id, list_outcomes
 from .authority_check import cmd_authority_check
 from .baseline import cmd_baseline_capture, cmd_baseline_check
+from .backup import cmd_backup, cmd_restore
 from .claim import cmd_claim_inspect, cmd_claim_register
 from .conflict import cmd_conflict_register, cmd_conflict_resolve
 from .epistemic import cmd_epistemic_lint
@@ -1560,6 +1561,22 @@ def build_parser() -> argparse.ArgumentParser:
         help="Advisory: outcome-review coverage and best-effort verdict per object",
     )
 
+    # ── ws backup / ws restore ──────────────────────────────────────────
+    subparsers.add_parser(
+        "backup",
+        help="Copy .work-studio/objects/ to a timestamped local backup "
+             "(no git, no network)",
+    )
+
+    restore_parser = subparsers.add_parser(
+        "restore",
+        help="Restore .work-studio/objects/ from a named backup timestamp",
+    )
+    restore_parser.add_argument(
+        "timestamp",
+        help="Backup timestamp to restore (as printed by 'ws backup')",
+    )
+
     return parser
 
 
@@ -1586,6 +1603,8 @@ def main() -> int:
         "append-artifact": cmd_append_artifact,
         "validate": cmd_validate,
         "outcomes": cmd_outcomes,
+        "backup": cmd_backup,
+        "restore": cmd_restore,
     }
 
     if args.command in commands:

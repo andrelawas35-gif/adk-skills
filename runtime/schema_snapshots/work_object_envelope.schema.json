@@ -1,0 +1,178 @@
+{
+  "additionalProperties": false,
+  "description": "Strict frontmatter envelope for a Work Object.\n\n`extra=\"forbid\"` rejects any field not declared here. Enum membership is\ngenerated from `tools/ws/schema.py`'s `VALID_*` frozensets.",
+  "properties": {
+    "schema_version": {
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "type": {
+      "enum": [
+        "change",
+        "incident",
+        "inquiry",
+        "project"
+      ],
+      "title": "Type",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "active",
+        "closed",
+        "paused",
+        "waiting"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "state": {
+      "enum": [
+        "build",
+        "close",
+        "design",
+        "explore",
+        "notice",
+        "observe",
+        "release",
+        "verify"
+      ],
+      "title": "State",
+      "type": "string"
+    },
+    "consequence": {
+      "enum": [
+        "high",
+        "low",
+        "meaningful"
+      ],
+      "title": "Consequence",
+      "type": "string"
+    },
+    "sensitivity": {
+      "enum": [
+        "ordinary",
+        "private",
+        "restricted"
+      ],
+      "title": "Sensitivity",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "updated_at": {
+      "format": "date-time",
+      "title": "Updated At",
+      "type": "string"
+    },
+    "next_action": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Next Action"
+    },
+    "campaign": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Campaign"
+    },
+    "revisit_trigger": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Revisit Trigger"
+    },
+    "responds_to": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Responds To"
+    },
+    "supersedes": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Supersedes"
+    },
+    "superseded_by": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Superseded By"
+    },
+    "unblocks": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Unblocks"
+    }
+  },
+  "required": [
+    "schema_version",
+    "id",
+    "title",
+    "type",
+    "status",
+    "state",
+    "consequence",
+    "sensitivity",
+    "created_at",
+    "updated_at"
+  ],
+  "title": "WorkObjectEnvelope",
+  "type": "object"
+}

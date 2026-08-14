@@ -330,6 +330,30 @@ class GeneratorContract(unittest.TestCase):
                     self.assertFalse(refs_dir.exists(),
                                      f"{platform}/{skill}: unexpected references dir")
 
+    def test_conductor_evidence_rules_are_owned_by_shipped_evidence_model(self):
+        conductor = (CORE_DIR / "governance-conduct-work-object" / "SKILL.md").read_text()
+        pointer = "Apply `references/EVIDENCE-MODEL.md` for evidence capture"
+        self.assertNotIn("\n## Evidence rules\n", conductor)
+        self.assertIn(pointer, conductor)
+
+        canonical_model = (ROOT / "references" / "EVIDENCE-MODEL.md").read_text()
+        for obligation in (
+            "Distinguish what is known, inferred, decided, and unresolved",
+            "Every factual claim carries attributable provenance",
+            "The Evidence ledger records what is known and where it came from",
+            "Raw evidence belongs in the Evidence ledger, not in History",
+        ):
+            self.assertIn(obligation, canonical_model)
+
+        for platform in PLATFORMS:
+            adapter_dir = (ADAPTERS_DIR / platform / "skills"
+                           / "alawas-governance-conduct-work-object")
+            self.assertIn(pointer, (adapter_dir / "SKILL.md").read_text())
+            installed_model = adapter_dir / "references" / "EVIDENCE-MODEL.md"
+            self.assertTrue(installed_model.is_file(),
+                            f"{platform}: conductor evidence model not shipped")
+            self.assertEqual(installed_model.read_text(), canonical_model)
+
     def test_generated_adapters_include_local_grilling_profile_summary(self):
         for platform in PLATFORMS:
             for skill in core_skill_names():

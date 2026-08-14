@@ -254,18 +254,18 @@ If this decision was blocking the Work Object's progress:
 - **State**: <resulting state>
 - **Status**: <unchanged unless the decision changes it>
 - **Actor**: human (the decider) | agent (if the user said "do recommended")
-- **Platform**: codex
+- **Platform**: <invoking platform>
 - **Rationale**: <one-line evidence-based reason for the state transition>
 ```
 
-### 9. Concurrency check (mandatory)
+### 9. Persist through the conductor
 
-Before every write:
-1. Re-read the Work Object file.
-2. Compare `updated_at` with the value from the initial read.
-3. If changed → report the conflict with both timestamps. Do NOT overwrite.
-   Offer to re-read, merge, and retry.
-4. If unchanged → write, then update `updated_at`.
+This skill does not mutate a Work Object file directly. All Work Object
+writes route through `python3 -m tools.ws` (`--expect-updated` on every
+mutating command) per `governance-conduct-work-object`'s CLI-only write
+contract. The conductor owns schema validation, optimistic concurrency,
+state changes, and History; a concurrency conflict is reported with both
+timestamps rather than overwritten.
 
 ## Evidence rules
 

@@ -6,6 +6,19 @@ and rules governing tag usage, see `references/AGREEMENT-LOOP.md` (lines
 96-111), which is the single authoritative source for tag definitions and
 the laundering guard.
 
+## Capture and record placement
+
+- Distinguish what is known, inferred, decided, and unresolved before
+  persistence, and retain the material's current provenance status.
+- Every factual claim carries attributable provenance. Retrieve facts that are
+  discoverable from permitted system or document sources rather than asking a
+  person to repeat them.
+- The Evidence ledger records what is known and where it came from. History
+  records what happened: actions, transitions, actors, and their rationale.
+- Raw evidence belongs in the Evidence ledger, not in History. A History entry
+  may cite the relevant evidence or decision but must not duplicate the raw
+  evidentiary material.
+
 ## In the Work Object
 
 Evidence ledger entries use an inline-tag convention:
