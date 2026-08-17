@@ -32,3 +32,6 @@ __pycache__/
 
 # Runtime tracer output (WO 2026-08-14-008, Decision 3) -- operational, not canonical
 runtime/traces/
+
+# Runtime checkpoint DBs (WO 2026-08-15-008, Decision 2) -- gitignored durability
+runtime/checkpoints/

@@ -6,6 +6,8 @@ description: "Use when a draft sounds generic, overly fluent, or training-data-s
 
 # Diagnose Homogenization
 
+## Governing principle
+
 Protect distinct perception from smooth generic prose. Diagnose before rewriting. Preserve what is alive in the draft; cut or mark what is unearned. Never substitute an AI's idea of a distinctive voice for the user's actual material.
 
 ## Boundaries and non-goals

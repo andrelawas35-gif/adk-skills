@@ -32,7 +32,7 @@ replace/extend this file when the session is explicitly ended.
   "verification evidence with `result: pass`" and a deployment authority
   record "with a `scope` field" — i.e., gates are specified to check
   structured field values on evidence entries.
-- `docs/design/shared-protocols-constitution.md:110-111` (Session 6 output,
+- `docs/design/shared-protocols-component-plan.md:110-111` (Session 6 output,
   accepted) — constitution invariant "never launder inference as source
   evidence" is pinned by line-checksum to `EVIDENCE-MODEL.md:22`, i.e. to a
   file ADR 0016 already flagged as containing dead/superseded lane

@@ -71,7 +71,7 @@ below, is preserved at
   Evidence ledger has three separate bullets stamped the identical
   timestamp (`2026-07-20T03:52:31+08:00`) — timestamp-as-identifier
   already fails empirically in production data.
-- `docs/design/shared-protocols-constitution.md:110-111` (Session 6,
+- `docs/design/shared-protocols-component-plan.md:110-111` (Session 6,
   accepted) pinned a constitution invariant to `EVIDENCE-MODEL.md:22` —
   now dropped by this session (Decision 1) and requires a follow-up edit
   to that accepted artifact (see §6, migration step 6).
@@ -174,7 +174,7 @@ below, is preserved at
   structural change to its own content required by this session's
   decisions, but it becomes the target of external references that used
   to point at Evidence Model.
-- **Changed**: `docs/design/shared-protocols-constitution.md` (Session 6,
+- **Changed**: `docs/design/shared-protocols-component-plan.md` (Session 6,
   already accepted) — the constitution entry pinned to
   `EVIDENCE-MODEL.md:22` must be removed. This is a real edit to a
   previously-accepted artifact, not just this session's own ledger.
@@ -234,7 +234,7 @@ sections:
    block; add an explicit pointer to `AGREEMENT-LOOP.md` for tag
    definitions.
 2. Remove the constitution entry in
-   `docs/design/shared-protocols-constitution.md` that pins
+   `docs/design/shared-protocols-component-plan.md` that pins
    `EVIDENCE-MODEL.md:22` (Decision 1); do not replace it with a new
    pinned sentence this session.
 3. Edit `docs/adr/0015-...md` to name `## Decisions and revisit triggers`

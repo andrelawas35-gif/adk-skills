@@ -170,6 +170,19 @@ artifacts:
     supersession: explicit successor link
     status: canonical
     validation: python3 tools/verify-kernel.py
+  - type: agents-operating-contract
+    path: AGENTS.md
+    purpose: Thin, pointer-only operating contract orienting any agent
+      working in this repository.
+    owner: conduct-work-object
+    stage_trigger: accepted design decision (2026-08-15-010 Decision 4)
+    required_evidence: user decision
+    creation_update_authority: scoped user authority
+    provenance_freshness: owner-approved; review if canonical locations it
+      points to move
+    supersession: explicit replacement link
+    status: canonical
+    validation: manual pointer-only check (no restated policy)
 ```
 
 Changing this registry's schema or taxonomy requires an ADR and explicit owner

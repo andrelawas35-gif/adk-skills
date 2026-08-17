@@ -25,6 +25,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
+from .atomic import atomic_write_text
+
 
 BASELINE_FILENAME = "baseline.json"
 
@@ -100,7 +102,7 @@ def cmd_baseline_capture(args: argparse.Namespace) -> int:
     }
 
     baseline_path = ws_root / ".work-studio" / BASELINE_FILENAME
-    baseline_path.write_text(json.dumps(baseline, indent=2) + "\n")
+    atomic_write_text(baseline_path, json.dumps(baseline, indent=2) + "\n")
 
     print(f"Baseline captured: .work-studio/{BASELINE_FILENAME}")
     print(f"  commit_sha:       {commit_sha}")

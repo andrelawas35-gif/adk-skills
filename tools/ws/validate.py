@@ -420,8 +420,18 @@ def check_append_only(file_path: Path) -> List[str]:
         for sec in _APPEND_ONLY_SECTIONS:
             if sec not in snap_sections:
                 continue
+            # Trailing blank lines are not append-only content: a legitimate
+            # append via append_to_section drops the blank line after a
+            # non-terminal section, so the post-append section lacks the
+            # trailing newline the snapshot's section retains. Strip trailing
+            # empty lines from both sides before comparing (WO 2026-08-17-004
+            # Decision 1; incident 2026-08-17-002).
             snap_lines = [l.rstrip() for l in snap_sections[sec].split("\n")]
             cur_lines = [l.rstrip() for l in sections.get(sec, "").split("\n")]
+            while snap_lines and snap_lines[-1] == "":
+                snap_lines.pop()
+            while cur_lines and cur_lines[-1] == "":
+                cur_lines.pop()
             if len(cur_lines) < len(snap_lines) or cur_lines[:len(snap_lines)] != snap_lines:
                 errors.append(
                     f"{file_path}: append-only violation in section "

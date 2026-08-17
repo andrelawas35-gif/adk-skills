@@ -31,30 +31,59 @@ SKILLS = sorted(path.name for path in CORE_DIR.iterdir() if path.is_dir())
 SKILL_NAMESPACE = "alawas"
 
 
-def _load_shared_references():
-    """Load SHARED_REFERENCES from generate-adapters.py without a package import."""
+def _load_generate_adapters_module():
+    """Load generate-adapters.py helpers without a package import.
+
+    Adapter generation is the source of truth for generated SKILL.md bodies and
+    reference payloads. The structure verifier keeps its independent structural
+    checks, but delegates expected generated text/reference identity to the
+    generator so the two tools cannot drift in parallel.
+    """
     spec = importlib.util.spec_from_file_location(
         "generate_adapters", ROOT / "tools" / "generate-adapters.py")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
-    return module.SHARED_REFERENCES
+    return module
 
 
-SHARED_REFERENCES = _load_shared_references()
+GENERATE_ADAPTERS = _load_generate_adapters_module()
 
 
 def adapter_skill_name(skill):
     return f"{SKILL_NAMESPACE}-{skill}"
 
 
-def namespaced_core_body(skill):
-    body = (CORE_DIR / skill / "SKILL.md").read_text().split("---", 2)[2].lstrip("\n").rstrip("\n")
-    for name in sorted(SKILLS, key=len, reverse=True):
-        body = body.replace(f"`{name}`", f"`{adapter_skill_name(name)}`")
-        _, separator, legacy_name = name.partition("-")
-        if separator:
-            body = body.replace(f"`{legacy_name}`", f"`{adapter_skill_name(name)}`")
-    return body
+def _load_overlay(platform):
+    overlay_path = ADAPTERS_DIR / platform / "overlay.yaml"
+    return GENERATE_ADAPTERS.parse_yaml(overlay_path.read_text())
+
+
+def _expected_adapter_output(skill, overlay):
+    return GENERATE_ADAPTERS.build_skill_output(CORE_DIR / skill, overlay)
+
+
+def _expected_reference_paths(skill, adapter_skill_dir):
+    entries = GENERATE_ADAPTERS.build_reference_entries(
+        adapter_skill_name(skill),
+        adapter_skill_dir,
+        core_skill_dir=CORE_DIR / skill,
+    )
+    return {
+        (ROOT / entry["path"]).relative_to(adapter_skill_dir).as_posix()
+        for entry in entries
+        if "/references/" in entry["path"]
+    }
+
+
+def _shipped_reference_paths(adapter_skill_dir):
+    refs_dir = adapter_skill_dir / "references"
+    if not refs_dir.is_dir():
+        return set()
+    return {
+        path.relative_to(adapter_skill_dir).as_posix()
+        for path in refs_dir.rglob("*")
+        if path.is_file()
+    }
 
 
 # ── Required structural elements ─────────────────────────────────────────────
@@ -233,8 +262,15 @@ def verify_structure():
     errors = []
 
     for platform in PLATFORMS:
+        overlay_path = ADAPTERS_DIR / platform / "overlay.yaml"
+        if not overlay_path.exists():
+            errors.append(f"MISSING: overlay for {platform}")
+            continue
+        overlay = _load_overlay(platform)
+
         for skill in SKILLS:
-            adapter_path = ADAPTERS_DIR / platform / "skills" / adapter_skill_name(skill) / "SKILL.md"
+            adapter_skill_dir = ADAPTERS_DIR / platform / "skills" / adapter_skill_name(skill)
+            adapter_path = adapter_skill_dir / "SKILL.md"
             if not adapter_path.exists():
                 errors.append(f"MISSING: {adapter_path.relative_to(ROOT)}")
                 continue
@@ -253,7 +289,12 @@ def verify_structure():
                     errors.append(
                         f"{platform}/{skill}: missing adapter subsection '{subsection}'")
 
-            appendix = content.split("\n---\n\n## Platform Adapter", 1)[1]
+            if "\n---\n\n## Platform Adapter" not in content:
+                errors.append(
+                    f"{platform}/{skill}: missing Platform Adapter separator")
+                appendix = ""
+            else:
+                appendix = content.split("\n---\n\n## Platform Adapter", 1)[1]
             for subsection in FORBIDDEN_COLD_PATH_SECTIONS:
                 if subsection in appendix:
                     errors.append(
@@ -272,16 +313,22 @@ def verify_structure():
                     f"{platform}/{skill}: frontmatter missing platform declaration")
 
             # Check exact required capability mappings and classifications.
-            if "| Abstract capability |" not in appendix:
+            if "### Required capability mappings" not in appendix:
+                errors.append(
+                    f"{platform}/{skill}: missing adapter subsection '### Required capability mappings'")
+                rows = []
+            elif "| Abstract capability |" not in appendix:
                 errors.append(
                     f"{platform}/{skill}: missing capability mappings table")
-            table = appendix.split("### Required capability mappings", 1)[1]
-            table = table.split("\n### ", 1)[0]
-            rows = re.findall(
-                r"^\| `([^`]+)` \| `([^`]*)` \| (native|manual-fallback|unsupported) \|$",
-                table,
-                re.MULTILINE,
-            )
+                rows = []
+            else:
+                table = appendix.split("### Required capability mappings", 1)[1]
+                table = table.split("\n### ", 1)[0]
+                rows = re.findall(
+                    r"^\| `([^`]+)` \| `([^`]*)` \| (native|manual-fallback|unsupported) \|$",
+                    table,
+                    re.MULTILINE,
+                )
             row_caps = [capability for capability, _, _ in rows]
             if row_caps != required_capabilities(skill):
                 errors.append(
@@ -304,30 +351,22 @@ def verify_structure():
                     errors.append(
                         f"{platform}/{skill}: missing degradation for '{capability}'")
 
-            # Check core body is preserved
-            core_body = namespaced_core_body(skill)
-            if core_body not in content:
+            # Check generated body against the generator's source of truth.
+            expected_content = _expected_adapter_output(skill, overlay)
+            if content != expected_content:
                 errors.append(
-                    f"{platform}/{skill}: core body not preserved verbatim")
+                    f"{platform}/{skill}: generated SKILL.md differs from generator output")
 
-            # Check per-skill reference citation matches shipped references
-            # (Decision 88): a skill's generated body must cite exactly the
-            # reference files present in its references/ dir, and vice versa.
-            core_text = (CORE_DIR / skill / "SKILL.md").read_text()
-            core_body_text = core_text.split("---", 2)[2]
-            cited = {Path(f).name for f in SHARED_REFERENCES
-                     if Path(f).name in core_body_text}
-            if skill != "thinking-grilling-session":
-                cited -= {"AGREEMENT-LOOP.md", "SKILL-AWARE-GRILLING.md"}
-            refs_dir = ADAPTERS_DIR / platform / "skills" / adapter_skill_name(skill) / "references"
-            shipped = ({p.name for p in refs_dir.iterdir() if p.is_file()}
-                       if refs_dir.is_dir() else set())
-            for missing in cited - shipped:
+            # Check shipped references against generator source of truth,
+            # including nested epistemic references and generated excerpts.
+            expected_refs = _expected_reference_paths(skill, adapter_skill_dir)
+            shipped_refs = _shipped_reference_paths(adapter_skill_dir)
+            for missing in expected_refs - shipped_refs:
                 errors.append(
-                    f"{platform}/{skill}: cites '{missing}' but it is not shipped")
-            for extra in shipped - cited:
+                    f"{platform}/{skill}: missing generated reference '{missing}'")
+            for extra in shipped_refs - expected_refs:
                 errors.append(
-                    f"{platform}/{skill}: ships '{extra}' but it is not cited")
+                    f"{platform}/{skill}: ships unexpected reference '{extra}'")
 
     # Verify core skills have Required capabilities
     for skill in SKILLS:
@@ -386,13 +425,6 @@ def verify_structure():
                         f"{platform}: SHA256SUMS mismatch for {rel}")
             except ValueError:
                 errors.append(f"{platform}: malformed SHA256SUMS line: {line}")
-
-    # Verify overlays exist
-    for platform in PLATFORMS:
-        overlay_path = ADAPTERS_DIR / platform / "overlay.yaml"
-        if not overlay_path.exists():
-            errors.append(f"MISSING: overlay for {platform}")
-            continue
 
     # Verify shared references exist
     for ref in ["WORK-OBJECT", "AGREEMENT-LOOP", "EVIDENCE-MODEL",

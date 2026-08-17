@@ -76,7 +76,12 @@
     {
       "name": "alawas-design-design-tracer-bullet/references/epistemic/epistemic-rules-full.md",
       "path": "adapters/codex/skills/alawas-design-design-tracer-bullet/references/epistemic/epistemic-rules-full.md",
-      "sha256": "de7aa794a00ab05df3267bfdf0d51e23d77853c7e66628715de237be31fe6d60"
+      "sha256": "8d6a8f7a863f86d4ad5540606d9ee20c203bcc204f3b7c508d73d90fb663b3ab"
+    },
+    {
+      "name": "alawas-design-design-tracer-bullet/references/epistemic/agreement-loop-tag-table-excerpt.md",
+      "path": "adapters/codex/skills/alawas-design-design-tracer-bullet/references/epistemic/agreement-loop-tag-table-excerpt.md",
+      "sha256": "15e0b0bfdc4638c94f5dde38b09fd4dfd4b346950afa241a35cbc419c4b6b8a8"
     },
     {
       "name": "alawas-design-track-components",
@@ -236,7 +241,12 @@
     {
       "name": "alawas-governance-govern-scorecards/references/epistemic/epistemic-rules-full.md",
       "path": "adapters/codex/skills/alawas-governance-govern-scorecards/references/epistemic/epistemic-rules-full.md",
-      "sha256": "de7aa794a00ab05df3267bfdf0d51e23d77853c7e66628715de237be31fe6d60"
+      "sha256": "8d6a8f7a863f86d4ad5540606d9ee20c203bcc204f3b7c508d73d90fb663b3ab"
+    },
+    {
+      "name": "alawas-governance-govern-scorecards/references/epistemic/agreement-loop-tag-table-excerpt.md",
+      "path": "adapters/codex/skills/alawas-governance-govern-scorecards/references/epistemic/agreement-loop-tag-table-excerpt.md",
+      "sha256": "15e0b0bfdc4638c94f5dde38b09fd4dfd4b346950afa241a35cbc419c4b6b8a8"
     },
     {
       "name": "alawas-governance-maintain-working-method",
@@ -266,7 +276,12 @@
     {
       "name": "alawas-governance-maintain-working-method/references/epistemic/epistemic-rules-full.md",
       "path": "adapters/codex/skills/alawas-governance-maintain-working-method/references/epistemic/epistemic-rules-full.md",
-      "sha256": "de7aa794a00ab05df3267bfdf0d51e23d77853c7e66628715de237be31fe6d60"
+      "sha256": "8d6a8f7a863f86d4ad5540606d9ee20c203bcc204f3b7c508d73d90fb663b3ab"
+    },
+    {
+      "name": "alawas-governance-maintain-working-method/references/epistemic/agreement-loop-tag-table-excerpt.md",
+      "path": "adapters/codex/skills/alawas-governance-maintain-working-method/references/epistemic/agreement-loop-tag-table-excerpt.md",
+      "sha256": "15e0b0bfdc4638c94f5dde38b09fd4dfd4b346950afa241a35cbc419c4b6b8a8"
     },
     {
       "name": "alawas-governance-review-outcome-and-adapt",
@@ -296,7 +311,12 @@
     {
       "name": "alawas-governance-review-outcome-and-adapt/references/epistemic/epistemic-rules-full.md",
       "path": "adapters/codex/skills/alawas-governance-review-outcome-and-adapt/references/epistemic/epistemic-rules-full.md",
-      "sha256": "de7aa794a00ab05df3267bfdf0d51e23d77853c7e66628715de237be31fe6d60"
+      "sha256": "8d6a8f7a863f86d4ad5540606d9ee20c203bcc204f3b7c508d73d90fb663b3ab"
+    },
+    {
+      "name": "alawas-governance-review-outcome-and-adapt/references/epistemic/agreement-loop-tag-table-excerpt.md",
+      "path": "adapters/codex/skills/alawas-governance-review-outcome-and-adapt/references/epistemic/agreement-loop-tag-table-excerpt.md",
+      "sha256": "15e0b0bfdc4638c94f5dde38b09fd4dfd4b346950afa241a35cbc419c4b6b8a8"
     },
     {
       "name": "alawas-operations-deploy-with-recovery",
@@ -351,7 +371,12 @@
     {
       "name": "alawas-operations-diagnose-production-incident/references/epistemic/epistemic-rules-full.md",
       "path": "adapters/codex/skills/alawas-operations-diagnose-production-incident/references/epistemic/epistemic-rules-full.md",
-      "sha256": "de7aa794a00ab05df3267bfdf0d51e23d77853c7e66628715de237be31fe6d60"
+      "sha256": "8d6a8f7a863f86d4ad5540606d9ee20c203bcc204f3b7c508d73d90fb663b3ab"
+    },
+    {
+      "name": "alawas-operations-diagnose-production-incident/references/epistemic/agreement-loop-tag-table-excerpt.md",
+      "path": "adapters/codex/skills/alawas-operations-diagnose-production-incident/references/epistemic/agreement-loop-tag-table-excerpt.md",
+      "sha256": "15e0b0bfdc4638c94f5dde38b09fd4dfd4b346950afa241a35cbc419c4b6b8a8"
     },
     {
       "name": "alawas-research-investigate-live-question",
@@ -406,12 +431,17 @@
     {
       "name": "alawas-thinking-develop-idea/references/epistemic/epistemic-rules-full.md",
       "path": "adapters/codex/skills/alawas-thinking-develop-idea/references/epistemic/epistemic-rules-full.md",
-      "sha256": "de7aa794a00ab05df3267bfdf0d51e23d77853c7e66628715de237be31fe6d60"
+      "sha256": "8d6a8f7a863f86d4ad5540606d9ee20c203bcc204f3b7c508d73d90fb663b3ab"
+    },
+    {
+      "name": "alawas-thinking-develop-idea/references/epistemic/agreement-loop-tag-table-excerpt.md",
+      "path": "adapters/codex/skills/alawas-thinking-develop-idea/references/epistemic/agreement-loop-tag-table-excerpt.md",
+      "sha256": "15e0b0bfdc4638c94f5dde38b09fd4dfd4b346950afa241a35cbc419c4b6b8a8"
     },
     {
       "name": "alawas-thinking-diagnose-homogenization",
       "path": "adapters/codex/skills/alawas-thinking-diagnose-homogenization/SKILL.md",
-      "sha256": "e39308fd44d1872e7477eec59e1c107ebc2025add86b1357f49b891968ad49fd"
+      "sha256": "472997ed699a01d4c1515db152e6236777ce0ff17389f38c7facb31c9c069c17"
     },
     {
       "name": "alawas-thinking-diagnose-homogenization/references/CAPABILITY-DEGRADATION.md",
@@ -446,7 +476,12 @@
     {
       "name": "alawas-thinking-grilling-session/references/epistemic/epistemic-rules-full.md",
       "path": "adapters/codex/skills/alawas-thinking-grilling-session/references/epistemic/epistemic-rules-full.md",
-      "sha256": "de7aa794a00ab05df3267bfdf0d51e23d77853c7e66628715de237be31fe6d60"
+      "sha256": "8d6a8f7a863f86d4ad5540606d9ee20c203bcc204f3b7c508d73d90fb663b3ab"
+    },
+    {
+      "name": "alawas-thinking-grilling-session/references/epistemic/agreement-loop-tag-table-excerpt.md",
+      "path": "adapters/codex/skills/alawas-thinking-grilling-session/references/epistemic/agreement-loop-tag-table-excerpt.md",
+      "sha256": "15e0b0bfdc4638c94f5dde38b09fd4dfd4b346950afa241a35cbc419c4b6b8a8"
     },
     {
       "name": "alawas-thinking-inquire-system",
@@ -471,7 +506,12 @@
     {
       "name": "alawas-thinking-inquire-system/references/epistemic/epistemic-rules-full.md",
       "path": "adapters/codex/skills/alawas-thinking-inquire-system/references/epistemic/epistemic-rules-full.md",
-      "sha256": "de7aa794a00ab05df3267bfdf0d51e23d77853c7e66628715de237be31fe6d60"
+      "sha256": "8d6a8f7a863f86d4ad5540606d9ee20c203bcc204f3b7c508d73d90fb663b3ab"
+    },
+    {
+      "name": "alawas-thinking-inquire-system/references/epistemic/agreement-loop-tag-table-excerpt.md",
+      "path": "adapters/codex/skills/alawas-thinking-inquire-system/references/epistemic/agreement-loop-tag-table-excerpt.md",
+      "sha256": "15e0b0bfdc4638c94f5dde38b09fd4dfd4b346950afa241a35cbc419c4b6b8a8"
     },
     {
       "name": "alawas-thinking-pressure-test-decision",
@@ -496,7 +536,12 @@
     {
       "name": "alawas-thinking-pressure-test-decision/references/epistemic/epistemic-rules-full.md",
       "path": "adapters/codex/skills/alawas-thinking-pressure-test-decision/references/epistemic/epistemic-rules-full.md",
-      "sha256": "de7aa794a00ab05df3267bfdf0d51e23d77853c7e66628715de237be31fe6d60"
+      "sha256": "8d6a8f7a863f86d4ad5540606d9ee20c203bcc204f3b7c508d73d90fb663b3ab"
+    },
+    {
+      "name": "alawas-thinking-pressure-test-decision/references/epistemic/agreement-loop-tag-table-excerpt.md",
+      "path": "adapters/codex/skills/alawas-thinking-pressure-test-decision/references/epistemic/agreement-loop-tag-table-excerpt.md",
+      "sha256": "15e0b0bfdc4638c94f5dde38b09fd4dfd4b346950afa241a35cbc419c4b6b8a8"
     },
     {
       "name": "alawas-thinking-resume-work",

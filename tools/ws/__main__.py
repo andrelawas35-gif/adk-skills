@@ -13,9 +13,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from . import VERSION
+from .atomic import atomic_write_text
 from .attention import (
     check_attention_consistency,
     remove_active_entry,
+    repair_missing_active_entries,
     update_active_entry,
 )
 from .concurrency import check_concurrency
@@ -86,7 +88,7 @@ def _resolve_object_file(objects_dir: Path, obj_id: str) -> Path:
 
 def _write_object(file_path: Path, frontmatter: str, body: str) -> None:
     """Write frontmatter + body to a Work Object file."""
-    file_path.write_text(frontmatter + "\n" + body)
+    atomic_write_text(file_path, frontmatter + "\n" + body)
 
 
 def _get_updated_at(file_path: Path) -> str:
@@ -151,7 +153,7 @@ def cmd_create(args: argparse.Namespace) -> int:
         consequence=args.consequence,
     )
 
-    target_path.write_text(frontmatter + body)
+    atomic_write_text(target_path, frontmatter + body)
 
     relative_path = target_path.relative_to(ws_root)
     print(f"Created: {relative_path}")
@@ -268,12 +270,12 @@ def cmd_start(args: argparse.Namespace) -> int:
     })
 
     obj_file_text = compose_object_text(new_fm, body)
-    target_path.write_text(obj_file_text)
+    atomic_write_text(target_path, obj_file_text)
 
     # 5. Register in active.md (default Supporting).
     active_md = ws_root / ".work-studio" / "active.md"
     updated_active = update_active_entry(active_md, obj_id, args.title, args.role)
-    active_md.write_text(updated_active)
+    atomic_write_text(active_md, updated_active)
 
     relative_path = target_path.relative_to(ws_root)
     print(f"Started: {relative_path}")
@@ -380,7 +382,7 @@ def cmd_set_campaign(args: argparse.Namespace) -> int:
         rationale=args.rationale,
     )
     new_body = append_to_section(body, "history", history_entry)
-    obj_file.write_text(new_fm + "\n" + new_body.rstrip("\n") + "\n")
+    atomic_write_text(obj_file, new_fm + "\n" + new_body.rstrip("\n") + "\n")
 
     print(f"Campaign set for {args.id}: {args.campaign}")
     return 0
@@ -454,7 +456,7 @@ def cmd_transition(args: argparse.Namespace) -> int:
     )
     new_body = append_to_section(body, "history", history_entry)
 
-    obj_file.write_text(compose_object_text(new_fm, new_body))
+    atomic_write_text(obj_file, compose_object_text(new_fm, new_body))
 
     print(f"Transitioned {args.id}: {from_state}/{from_status} → {args.state}/{args.status}")
 
@@ -471,11 +473,12 @@ def cmd_transition(args: argparse.Namespace) -> int:
         current_body = current_content[current_fm_end + 3:].strip()
 
         if current_body != updated_body:
-            obj_file.write_text(
+            atomic_write_text(
+                obj_file,
                 compose_object_text(
                     current_content[:current_fm_end + 3],
                     updated_body,
-                )
+                ),
             )
             print(f"  {audit_msg}")
         else:
@@ -543,9 +546,13 @@ def cmd_close(args: argparse.Namespace) -> int:
             print(f"Error: {gate_msg}", file=sys.stderr)
             return 1
 
-    # Close: set status to closed
+    # Close: set status to closed. Direct route also advances state to
+    # 'close' in the same update, so status:closed is never left paired with
+    # an active-work state (design/build/etc) — validate.py treats that
+    # combination as an error.
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     new_fm = _update_frontmatter_fields(content, {
+        "state": "close",
         "status": "closed",
         "updated_at": now,
     })
@@ -553,21 +560,21 @@ def cmd_close(args: argparse.Namespace) -> int:
     # Append history
     history_entry = generate_history_entry(
         action=f"Closed: {args.rationale}",
-        state=from_state,
+        state="close",
         status="closed",
         actor=args.actor if hasattr(args, "actor") else "system",
         rationale=args.rationale,
     )
     new_body = append_to_section(body, "history", history_entry)
 
-    obj_file.write_text(compose_object_text(new_fm, new_body))
+    atomic_write_text(obj_file, compose_object_text(new_fm, new_body))
 
     # Remove from active.md
     active_md = ws_root / ".work-studio" / "active.md"
     if active_md.exists():
         updated_active = remove_active_entry(active_md, args.id)
         if updated_active is not None:
-            active_md.write_text(updated_active)
+            atomic_write_text(active_md, updated_active)
 
     print(f"Closed {args.id}")
     return 0
@@ -616,9 +623,50 @@ def cmd_activate(args: argparse.Namespace) -> int:
     # Update active.md
     active_md = ws_root / ".work-studio" / "active.md"
     updated = update_active_entry(active_md, args.id, title, args.role)
-    active_md.write_text(updated)
+    atomic_write_text(active_md, updated)
 
     print(f"Activated {args.id} as {args.role}")
+    return 0
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ws attention
+# ═══════════════════════════════════════════════════════════════════════════════
+
+
+def cmd_attention(args: argparse.Namespace) -> int:
+    """Report (default) or repair (--repair) active.md consistency drift."""
+    try:
+        ws_root = _find_work_studio_root()
+    except FileNotFoundError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+
+    objects_dir = ws_root / ".work-studio" / "objects"
+    active_md = ws_root / ".work-studio" / "active.md"
+
+    if not args.repair:
+        errors = check_attention_consistency(active_md, objects_dir)
+        if not errors:
+            print("active.md is consistent.")
+            return 0
+        for e in errors:
+            print(e)
+        return 1
+
+    repaired = repair_missing_active_entries(active_md, objects_dir, default_role=args.default_role)
+    if not repaired:
+        print("Nothing to repair; active.md already consistent for missing entries.")
+    else:
+        for obj_id in repaired:
+            print(f"Repaired: {obj_id} (role: {args.default_role})")
+
+    # Stale entries (closed/missing objects) are a distinct problem this
+    # repair does not touch; surface them so nothing is silently hidden.
+    remaining = check_attention_consistency(active_md, objects_dir)
+    for e in remaining:
+        print(f"Unresolved: {e}")
+
     return 0
 
 
@@ -675,7 +723,7 @@ def cmd_append_evidence(args: argparse.Namespace) -> int:
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     new_fm = _update_frontmatter_fields(content, {"updated_at": now})
 
-    obj_file.write_text(compose_object_text(new_fm, new_body))
+    atomic_write_text(obj_file, compose_object_text(new_fm, new_body))
 
     print(f"Evidence appended to {args.id}")
     return 0
@@ -738,7 +786,7 @@ def cmd_append_history(args: argparse.Namespace) -> int:
         fm_updates["next_action"] = args.next_action
     new_fm = _update_frontmatter_fields(content, fm_updates)
 
-    obj_file.write_text(compose_object_text(new_fm, new_body))
+    atomic_write_text(obj_file, compose_object_text(new_fm, new_body))
 
     print(f"History appended to {args.id}")
     return 0
@@ -759,6 +807,11 @@ def _compute_artifact_stamp(ws_root: Path, rel_path: str) -> dict:
     bullet test found commit-SHA-only stamping wrong in 3/3 real cases where
     the artifact was still uncommitted at record time (the common case
     during an active implementation pass).
+
+    A git failure that prevents a commit SHA from being determined -- as
+    opposed to a file that is genuinely uncommitted/dirty or outside any git
+    repository -- is surfaced as a warning to stderr rather than silently
+    degrading the stamp (WO 2026-08-17-006; incident 2026-08-17-003).
     """
     target = ws_root / rel_path
     content = target.read_bytes()
@@ -766,20 +819,42 @@ def _compute_artifact_stamp(ws_root: Path, rel_path: str) -> dict:
 
     stamp = {"path": rel_path, "fingerprint": fingerprint, "commit": None}
 
+    def _warn(msg: str) -> None:
+        print(
+            f"Warning: {msg}; recording fingerprint-only stamp (commit unavailable).",
+            file=sys.stderr,
+        )
+
     try:
         status = subprocess.run(
             ["git", "status", "--porcelain", "--", rel_path],
             cwd=ws_root, capture_output=True, text=True, timeout=10,
         )
-        if status.returncode == 0 and status.stdout.strip() == "":
-            log = subprocess.run(
-                ["git", "log", "-1", "--format=%H", "--", rel_path],
-                cwd=ws_root, capture_output=True, text=True, timeout=10,
-            )
-            if log.returncode == 0 and log.stdout.strip():
-                stamp["commit"] = log.stdout.strip()
-    except (subprocess.SubprocessError, OSError):
-        pass  # No git access -- degrade gracefully, fingerprint-only stamp.
+        if status.returncode == 0:
+            if status.stdout.strip() == "":
+                # Clean in git status: the path is committed/unchanged; fetch the SHA.
+                log = subprocess.run(
+                    ["git", "log", "-1", "--format=%H", "--", rel_path],
+                    cwd=ws_root, capture_output=True, text=True, timeout=10,
+                )
+                if log.returncode == 0 and log.stdout.strip():
+                    stamp["commit"] = log.stdout.strip()
+                elif log.returncode != 0:
+                    # git log failed after a clean status -- the file is
+                    # committed, so a missing SHA is a git failure, not a
+                    # legitimate uncommitted state (WO 2026-08-17-006).
+                    _warn(f"git log failed (rc={log.returncode}) for '{rel_path}'")
+            # else: dirty/uncommitted -- commit=None is legitimate, silent.
+        elif status.returncode == 128 and "not a git repository" in status.stderr.lower():
+            # No git repository -- legitimate fingerprint-only degrade, silent.
+            pass
+        else:
+            _warn(f"git status failed (rc={status.returncode}) for '{rel_path}'")
+    except (subprocess.SubprocessError, OSError) as e:
+        # Git could not be run at all (e.g., timeout, binary missing): surface
+        # it rather than silently recording a possibly-wrong commit=None.
+        # (WO 2026-08-17-006; incident 2026-08-17-003.)
+        _warn(f"git subprocess error for '{rel_path}': {e}")
 
     return stamp
 
@@ -830,7 +905,7 @@ def cmd_append_artifact(args: argparse.Namespace) -> int:
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     new_fm = _update_frontmatter_fields(content, {"updated_at": now})
 
-    obj_file.write_text(compose_object_text(new_fm, new_body))
+    atomic_write_text(obj_file, compose_object_text(new_fm, new_body))
 
     print(f"Artifact appended to {args.id}")
     return 0
@@ -1030,13 +1105,13 @@ def cmd_init(args: argparse.Namespace) -> int:
         f"created_at: {datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')}\n"
         f"cli_version: {VERSION}\n"
     )
-    (ws_dir / "config.md").write_text(config)
+    atomic_write_text(ws_dir / "config.md", config)
 
     # Active register
-    (ws_dir / "active.md").write_text("# Active Work Objects\n\n")
+    atomic_write_text(ws_dir / "active.md", "# Active Work Objects\n\n")
 
     # Inbox
-    (ws_dir / "inbox.md").write_text("# Inbox\n\n")
+    atomic_write_text(ws_dir / "inbox.md", "# Inbox\n\n")
 
     print(f"Initialized workspace '{args.name}' at {ws_dir}")
     return 0
@@ -1275,6 +1350,21 @@ def build_parser() -> argparse.ArgumentParser:
     )
     activate_parser.add_argument("--force", action="store_true",
                                  help="Bypass optimistic concurrency check")
+
+    # ── ws attention ──────────────────────────────────────────────────────
+    attention_parser = subparsers.add_parser(
+        "attention", help="Report or repair active.md consistency drift"
+    )
+    attention_parser.add_argument(
+        "--repair", action="store_true",
+        help="Restore missing active.md entries (default: report only)",
+    )
+    attention_parser.add_argument(
+        "--default-role", default="supporting",
+        choices=["primary", "supporting", "paused"],
+        help="Role assigned to a repaired entry (default: supporting; the "
+             "original role is not recoverable from the object file)",
+    )
 
     # ── ws append-evidence ────────────────────────────────────────────────
     append_evidence_parser = subparsers.add_parser(
@@ -1598,6 +1688,7 @@ def main() -> int:
         "transition": cmd_transition,
         "close": cmd_close,
         "activate": cmd_activate,
+        "attention": cmd_attention,
         "append-evidence": cmd_append_evidence,
         "append-history": cmd_append_history,
         "append-artifact": cmd_append_artifact,

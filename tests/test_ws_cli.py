@@ -17,6 +17,7 @@ from pathlib import Path
 TOOLS_DIR = Path(__file__).resolve().parent.parent / "tools"
 sys.path.insert(0, str(TOOLS_DIR))
 
+from ws.atomic import atomic_write_text
 from ws.schema import generate_frontmatter, parse_frontmatter, validate_campaign
 from ws.template import generate_body_template
 from ws.concurrency import check_concurrency
@@ -45,6 +46,8 @@ from ws.attention import (
     get_active_ids,
     find_stale_entries,
     find_missing_entries,
+    repair_missing_active_entries,
+    check_attention_consistency,
     update_active_entry,
     remove_active_entry,
     _section_insertion_point,
@@ -335,6 +338,64 @@ class TestLifecycleGates(unittest.TestCase):
         self.assertEqual(get_close_route("high", "build"), "two-step")
         self.assertEqual(get_close_route("high", "close"), "direct")
 
+    def test_cmd_close_direct_route_advances_state_to_close(self):
+        """`ws close` on a direct-route (meaningful/low) object must leave
+        state: close alongside status: closed, not just bump status and
+        strand state at whatever active-work state it was in (e.g. design).
+        validate.py's check_state_status_consistency treats status:closed
+        paired with an active-work state as an error, so cmd_close's direct
+        route must set both fields atomically.
+        """
+        import argparse
+        from ws.__main__ import cmd_close
+        from ws.schema import generate_frontmatter
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / ".work-studio" / "objects" / "2026" / "08").mkdir(parents=True)
+            (root / ".work-studio" / "active.md").write_text("# Active\n")
+
+            obj_id = "2026-08-15-999"
+            frontmatter = generate_frontmatter(
+                obj_id, "Test close state advance", "change", "meaningful", "ordinary",
+            )
+            # Force state to 'design' (an active-work state) to reproduce the
+            # bug: cmd_close's direct route must not leave this stranded.
+            frontmatter = frontmatter.replace("state: notice", "state: design")
+            obj_file = (
+                root / ".work-studio" / "objects" / "2026" / "08"
+                / f"{obj_id}-test-close-state-advance.md"
+            )
+            obj_file.write_text(frontmatter + SAMPLE_BODY)
+
+            fm_before = parse_frontmatter(obj_file.read_text())
+
+            cwd = os.getcwd()
+            os.chdir(root)
+            try:
+                args = argparse.Namespace(
+                    id=obj_id,
+                    expect_updated=fm_before["updated_at"],
+                    rationale="test closure",
+                    actor="test",
+                    force=False,
+                )
+                buf = io.StringIO()
+                with contextlib.redirect_stdout(buf):
+                    exit_code = cmd_close(args)
+            finally:
+                os.chdir(cwd)
+
+            self.assertEqual(exit_code, 0)
+            fm_after = parse_frontmatter(obj_file.read_text())
+            self.assertEqual(fm_after["status"], "closed")
+            self.assertEqual(
+                fm_after["state"], "close",
+                "cmd_close direct route left state stranded at an "
+                f"active-work value ({fm_after['state']!r}) instead of "
+                "advancing it to 'close' alongside status:closed.",
+            )
+
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Sections tests
@@ -559,6 +620,740 @@ class TestAttention(unittest.TestCase):
 
             result = remove_active_entry(active_md, "999")
             self.assertIsNone(result)
+
+
+class TestAttentionRepair(unittest.TestCase):
+    """Exit criteria for WO 2026-08-16-002 Decision 2: ws attention --repair."""
+
+    def _make_active_object(self, root: Path, obj_id: str, title: str) -> Path:
+        """A valid, active object file simulating a killed `ws start` --
+        the object file itself is written whole, but active.md was never
+        updated (WO 2026-08-16-002 Decision 1: the object file is always
+        written in one shot, so this is the only inconsistent shape a killed
+        `ws start` can leave)."""
+        obj_dir = root / ".work-studio" / "objects" / "2026" / "08"
+        obj_dir.mkdir(parents=True, exist_ok=True)
+        frontmatter = generate_frontmatter(obj_id, title, "change", "meaningful", "ordinary")
+        frontmatter = frontmatter.replace("state: notice", "state: explore")
+        obj_file = obj_dir / f"{obj_id}-{title.lower().replace(' ', '-')}.md"
+        obj_file.write_text(frontmatter + SAMPLE_BODY)
+        return obj_file
+
+    def test_repair_restores_missing_entry_from_frontmatter(self):
+        """Exit criterion 1: a phantom active object gets a correct entry."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            active_md = root / ".work-studio" / "active.md"
+            active_md.parent.mkdir(parents=True, exist_ok=True)
+            active_md.write_text("# Active Work Objects\n\n## Primary\n\n\n## Supporting\n\n")
+
+            objects_dir = root / ".work-studio" / "objects"
+            self._make_active_object(root, "2026-08-16-901", "Phantom object")
+
+            repaired = repair_missing_active_entries(active_md, objects_dir)
+
+            self.assertEqual(["2026-08-16-901"], repaired)
+            content = active_md.read_text()
+            self.assertIn("`2026-08-16-901`", content)
+            self.assertIn("Phantom object", content)
+            self.assertIn("(supporting)", content)
+
+    def test_repair_is_idempotent(self):
+        """Exit criterion 2: a repeat run makes no further change."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            active_md = root / ".work-studio" / "active.md"
+            active_md.parent.mkdir(parents=True, exist_ok=True)
+            active_md.write_text("# Active Work Objects\n\n## Primary\n\n\n## Supporting\n\n")
+
+            objects_dir = root / ".work-studio" / "objects"
+            self._make_active_object(root, "2026-08-16-902", "Phantom two")
+
+            first = repair_missing_active_entries(active_md, objects_dir)
+            content_after_first = active_md.read_text()
+            second = repair_missing_active_entries(active_md, objects_dir)
+            content_after_second = active_md.read_text()
+
+            self.assertEqual(["2026-08-16-902"], first)
+            self.assertEqual([], second)
+            self.assertEqual(content_after_first, content_after_second)
+
+    def test_repair_on_consistent_active_md_makes_zero_changes(self):
+        """Exit criterion 3: nothing to repair leaves active.md untouched."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            active_md = root / ".work-studio" / "active.md"
+            active_md.parent.mkdir(parents=True, exist_ok=True)
+            objects_dir = root / ".work-studio" / "objects"
+            obj_file = self._make_active_object(root, "2026-08-16-903", "Consistent object")
+            fm = parse_frontmatter(obj_file.read_text())
+            active_md.write_text(
+                "# Active Work Objects\n\n## Primary\n\n\n## Supporting\n\n"
+                f"- `2026-08-16-903` — {fm['title']} (supporting)\n"
+            )
+            before = active_md.read_text()
+
+            repaired = repair_missing_active_entries(active_md, objects_dir)
+
+            self.assertEqual([], repaired)
+            self.assertEqual(before, active_md.read_text())
+
+    def test_repaired_role_is_a_default_not_a_recovered_original(self):
+        """Exit criterion 4: the role-default limitation is explicit, not hidden.
+
+        Role is not stored in the object's own frontmatter -- it only ever
+        lived in active.md. A repaired entry therefore always gets
+        `default_role`, which may not match whatever role the object
+        actually had before the crash. This test documents that limitation
+        rather than asserting (falsely) that the original role is recovered.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            active_md = root / ".work-studio" / "active.md"
+            active_md.parent.mkdir(parents=True, exist_ok=True)
+            active_md.write_text("# Active Work Objects\n\n## Primary\n\n\n## Supporting\n\n")
+            objects_dir = root / ".work-studio" / "objects"
+
+            obj_file = self._make_active_object(root, "2026-08-16-904", "Was meant to be primary")
+            self.assertNotIn("role", obj_file.read_text().split("---")[1])
+
+            repaired = repair_missing_active_entries(active_md, objects_dir, default_role="primary")
+            self.assertEqual(["2026-08-16-904"], repaired)
+            self.assertIn("(primary)", active_md.read_text())
+
+            repaired_default = repair_missing_active_entries(
+                active_md.parent / "active.md", objects_dir
+            )
+            self.assertEqual([], repaired_default)
+
+    def test_repair_skips_unparseable_object_without_crashing(self):
+        """An object file that fails to parse is skipped, not fatal."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            active_md = root / ".work-studio" / "active.md"
+            active_md.parent.mkdir(parents=True, exist_ok=True)
+            active_md.write_text("# Active Work Objects\n\n## Primary\n\n\n## Supporting\n\n")
+            objects_dir = root / ".work-studio" / "objects" / "2026" / "08"
+            objects_dir.mkdir(parents=True)
+            (objects_dir / "2026-08-16-905-broken.md").write_text("not valid frontmatter at all")
+
+            repaired = repair_missing_active_entries(active_md, root / ".work-studio" / "objects")
+
+            self.assertEqual([], repaired)
+
+
+class TestFindMissingEntriesSurfacesParseFailures(unittest.TestCase):
+    """WO 2026-08-16-003 Decision 2: find_missing_entries no longer silently
+    drops a file it can't parse -- it matches find_stale_entries's existing
+    behavior of flagging the failure instead of skipping it."""
+
+    def test_unparseable_file_is_returned_with_a_problem(self):
+        """Exit criterion 1: a corrupt file is returned, not dropped."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            active_md = root / ".work-studio" / "active.md"
+            objects_dir = root / ".work-studio" / "objects" / "2026" / "08"
+            objects_dir.mkdir(parents=True)
+            (objects_dir / "2026-08-16-910-broken.md").write_text("not valid frontmatter at all")
+
+            missing = find_missing_entries(active_md, root / ".work-studio" / "objects")
+
+            self.assertEqual([("2026-08-16-910-broken", "Cannot parse object frontmatter")], missing)
+
+    def test_ordinary_missing_entry_still_has_no_problem(self):
+        """Exit criterion 4: a well-formed missing entry is unaffected by the reshape."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            active_md = root / ".work-studio" / "active.md"
+            active_md.parent.mkdir(parents=True, exist_ok=True)
+            active_md.write_text("# Active Work Objects\n\n## Primary\n\n\n## Supporting\n\n")
+            objects_dir = root / ".work-studio" / "objects" / "2026" / "08"
+            objects_dir.mkdir(parents=True)
+            frontmatter = generate_frontmatter("2026-08-16-911", "Ordinary missing", "change", "meaningful", "ordinary")
+            frontmatter = frontmatter.replace("state: notice", "state: explore")
+            (objects_dir / "2026-08-16-911-ordinary-missing.md").write_text(frontmatter + SAMPLE_BODY)
+
+            missing = find_missing_entries(active_md, root / ".work-studio" / "objects")
+
+            self.assertEqual([("2026-08-16-911", None)], missing)
+
+    def test_check_attention_consistency_reports_the_parse_problem(self):
+        """Exit criterion 2: the consistency check surfaces the detail, not just the id."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            active_md = root / ".work-studio" / "active.md"
+            objects_dir = root / ".work-studio" / "objects" / "2026" / "08"
+            objects_dir.mkdir(parents=True)
+            (objects_dir / "2026-08-16-912-broken.md").write_text("garbage")
+
+            errors = check_attention_consistency(active_md, root / ".work-studio" / "objects")
+
+            self.assertEqual(
+                ["Active object not in active.md: 2026-08-16-912-broken — Cannot parse object frontmatter"],
+                errors,
+            )
+
+    def test_repair_does_not_fabricate_an_entry_for_a_broken_file(self):
+        """Exit criterion 3: repair doesn't crash and doesn't invent an entry."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            active_md = root / ".work-studio" / "active.md"
+            active_md.parent.mkdir(parents=True, exist_ok=True)
+            active_md.write_text("# Active Work Objects\n\n## Primary\n\n\n## Supporting\n\n")
+            objects_dir = root / ".work-studio" / "objects" / "2026" / "08"
+            objects_dir.mkdir(parents=True)
+            (objects_dir / "2026-08-16-913-broken.md").write_text("garbage")
+
+            repaired = repair_missing_active_entries(active_md, root / ".work-studio" / "objects")
+            remaining = check_attention_consistency(active_md, root / ".work-studio" / "objects")
+
+            self.assertEqual([], repaired)
+            self.assertEqual(
+                ["Active object not in active.md: 2026-08-16-913-broken — Cannot parse object frontmatter"],
+                remaining,
+            )
+
+
+class TestAtomicWrite(unittest.TestCase):
+    """WO 2026-08-16-004 Decision 2: atomic_write_text() exit criteria."""
+
+    def test_normal_write_leaves_correct_content_and_no_orphan(self):
+        """Exit criterion 1."""
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "active.md"
+            atomic_write_text(target, "# Active Work Objects\n\nhello\n")
+
+            self.assertEqual("# Active Work Objects\n\nhello\n", target.read_text())
+            leftovers = [p for p in Path(tmp).iterdir() if p.name != "active.md"]
+            self.assertEqual([], leftovers, f"unexpected leftover files: {leftovers}")
+
+    def test_killed_write_leaves_old_content_and_a_tmp_orphan(self):
+        """Exit criterion 2: simulate a kill between the temp write and the
+        os.replace swap -- the target must be untouched, and a .tmp orphan
+        must exist on disk."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            target = root / "active.md"
+            target.write_text("# Active Work Objects\n\noriginal\n")
+
+            # Reproduce exactly what atomic_write_text does up to (but not
+            # including) the os.replace swap -- the "kill" point.
+            import tempfile as _tempfile
+            import os as _os
+
+            fd, tmp_name = _tempfile.mkstemp(dir=root, prefix=f"{target.name}.", suffix=".tmp")
+            with _os.fdopen(fd, "w", encoding="utf-8") as fh:
+                fh.write("# Active Work Objects\n\nnew content that never lands\n")
+            # No os.replace -- this is the simulated kill.
+
+            self.assertEqual("# Active Work Objects\n\noriginal\n", target.read_text())
+            orphans = [p for p in root.iterdir() if p.name != "active.md"]
+            self.assertEqual(1, len(orphans))
+            self.assertTrue(orphans[0].name.endswith(".tmp"))
+
+    def test_orphaned_tmp_file_is_detected_by_check_interrupted_mutations(self):
+        """Exit criterion 3: the existing dormant detector fires on the
+        artifact a killed atomic write leaves behind."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            target = root / "active.md"
+            target.write_text("# Active Work Objects\n\noriginal\n")
+            (root / f"{target.name}.abc123.tmp").write_text("partial")
+
+            errors = check_interrupted_mutations(target)
+
+            self.assertTrue(
+                any("Orphaned temp file" in e for e in errors),
+                f"expected an orphaned-temp-file finding, got: {errors}",
+            )
+
+    def test_temp_naming_does_not_collide_with_bak_snapshots_or_watched_extensions(self):
+        """Exit criterion 4."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            target = root / "active.md"
+            atomic_write_text(target, "content\n")
+
+            # No leftover file should exist that could be mistaken for a
+            # .bak-<ts> append-only snapshot.
+            siblings = [p.name for p in root.iterdir() if p.name != "active.md"]
+            self.assertEqual([], siblings)
+            self.assertFalse(any(".bak-" in s for s in siblings))
+
+    def test_write_failure_removes_temp_file_and_leaves_target_untouched(self):
+        """A failure before the swap must not leave an orphan or touch the target."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            target = root / "active.md"
+            target.write_text("original\n")
+
+            class _Boom(Exception):
+                pass
+
+            def _raise(*args, **kwargs):
+                raise _Boom("simulated write failure")
+
+            import ws.atomic as atomic_module
+
+            original_replace = atomic_module.os.replace
+            atomic_module.os.replace = _raise
+            try:
+                with self.assertRaises(_Boom):
+                    atomic_write_text(target, "new\n")
+            finally:
+                atomic_module.os.replace = original_replace
+
+            self.assertEqual("original\n", target.read_text())
+            leftovers = [p for p in root.iterdir() if p.name != "active.md"]
+            self.assertEqual([], leftovers)
+
+
+class TestObjectFileAtomicWrite(unittest.TestCase):
+    """WO 2026-08-16-005 Decision 2 / Slice A exit criteria: the 13
+    object-file write sites rerouted to atomic_write_text, plus a
+    differential machinery test proving the object-write layers behave
+    identically under the atomic writer and the plain writer."""
+
+    @staticmethod
+    def _plain_write_text(path, content):
+        """The plain-writer equivalent of atomic_write_text (mkdir + write)."""
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(content)
+
+    @staticmethod
+    def _patch_plain(module):
+        import unittest.mock as _mock
+        return _mock.patch.object(
+            module, "atomic_write_text",
+            side_effect=TestObjectFileAtomicWrite._plain_write_text,
+        )
+
+    def _make_workspace(self, tmp):
+        root = Path(tmp)
+        (root / ".work-studio" / "objects" / "2026" / "08").mkdir(parents=True)
+        (root / ".work-studio" / "active.md").write_text("# Active\n")
+        return root
+
+    def _make_object(self, root, obj_id="2026-08-16-900", state="design",
+                     body=SAMPLE_BODY):
+        frontmatter = generate_frontmatter(
+            obj_id, "Slice A test", "change", "meaningful", "ordinary",
+        )
+        frontmatter = frontmatter.replace("state: notice", f"state: {state}")
+        obj_file = (
+            root / ".work-studio" / "objects" / "2026" / "08"
+            / f"{obj_id}-slice-a-test.md"
+        )
+        obj_file.write_text(frontmatter + body)
+        return obj_file
+
+    @staticmethod
+    def _run_in(root, fn):
+        cwd = os.getcwd()
+        os.chdir(root)
+        try:
+            return fn()
+        finally:
+            os.chdir(cwd)
+
+    @staticmethod
+    def _tmp_orphans(root):
+        obj_dir = root / ".work-studio" / "objects" / "2026" / "08"
+        return [p.name for p in obj_dir.iterdir() if p.name.endswith(".tmp")]
+
+    def test_killed_object_write_leaves_old_content_and_detectable_orphan(self):
+        """Object-file analog of TestAtomicWrite criteria 2+3: a kill before
+        the swap leaves the old content intact plus a .tmp orphan that the
+        existing interrupted-mutations detector flags."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            obj = root / "2026-08-16-900-slice-a-test.md"
+            original = "---\nid: 2026-08-16-900\ntitle: t\n---\noriginal\n"
+            obj.write_text(original)
+
+            import tempfile as _tempfile
+            import os as _os
+            fd, tmp_name = _tempfile.mkstemp(
+                dir=root, prefix=f"{obj.name}.", suffix=".tmp")
+            with _os.fdopen(fd, "w", encoding="utf-8") as fh:
+                fh.write("partial content that never lands\n")
+
+            self.assertEqual(original, obj.read_text())
+            errors = check_interrupted_mutations(obj)
+            self.assertTrue(
+                any("Orphaned temp file" in e for e in errors),
+                f"expected an orphaned-temp-file finding, got: {errors}",
+            )
+
+    def test_transition_two_write_sequence_parity(self):
+        """Differential: `ws transition` to `verify` on a meaningful object
+        with a seeded [gap] row triggers the post-transition epistemic audit's
+        second write (__main__.py cmd_transition, main + audit writes). Both
+        writers must leave byte-identical objects, and the atomic run must
+        leave no temp orphan."""
+        import argparse
+        import io as _io
+        import contextlib as _contextlib
+        import ws.__main__ as _main
+        from ws.__main__ import cmd_transition
+
+        def run_once(plain):
+            with tempfile.TemporaryDirectory() as tmp:
+                root = self._make_workspace(tmp)
+                from ws.sections import append_to_section as _ats
+                body = _ats(
+                    SAMPLE_BODY, "evidence ledger",
+                    "| [gap] | test | residual uncertainty |",
+                )
+                obj_file = self._make_object(root, body=body)
+                fm_before = parse_frontmatter(obj_file.read_text())
+
+                def do():
+                    buf = _io.StringIO()
+                    args = argparse.Namespace(
+                        id="2026-08-16-900",
+                        state="verify",
+                        status="active",
+                        expect_updated=str(fm_before["updated_at"]),
+                        action="Transition to verify for parity test",
+                        actor="test",
+                        rationale="parity",
+                        force=False,
+                    )
+                    with _contextlib.redirect_stdout(buf):
+                        code = cmd_transition(args)
+                    return code, obj_file.read_text(), self._tmp_orphans(root)
+
+                if plain:
+                    with _contextlib.ExitStack() as stack:
+                        stack.enter_context(self._patch_plain(_main))
+                        return self._run_in(root, do)
+                return self._run_in(root, do)
+
+        plain_code, plain_bytes, _ = run_once(plain=True)
+        atomic_code, atomic_bytes, atomic_orphans = run_once(plain=False)
+
+        self.assertEqual(plain_code, atomic_code)
+        self.assertEqual(0, atomic_code)
+        self.assertEqual(plain_bytes, atomic_bytes)
+        self.assertEqual([], atomic_orphans)
+        # The epistemic audit's second write must have fired in the atomic
+        # run: the verify-state audit appends a [gap] row to the ledger.
+        ledger = atomic_bytes.split("## Evidence ledger", 1)[1].split("## Open questions", 1)[0]
+        self.assertGreater(
+            ledger.count("| [gap] |"), 1,
+            "expected the transition audit's second write to append gap rows",
+        )
+
+    def test_concurrent_session_race_rejection_parity(self):
+        """Differential: a stale writer must be rejected with the same error
+        and leave the object unchanged under both writers (the
+        optimistic-concurrency read-compare-reject is upstream of the swap)."""
+        import argparse
+        import io as _io
+        import contextlib as _contextlib
+        import ws.__main__ as _main
+        from ws.__main__ import cmd_append_history
+
+        def run_once(plain):
+            with tempfile.TemporaryDirectory() as tmp:
+                root = self._make_workspace(tmp)
+                obj_file = self._make_object(root)
+                # Force a deterministically stale baseline timestamp so session
+                # B's rewrite can never land in the same whole second as the
+                # fixture (generate_frontmatter stamps whole-second UTC).
+                text = obj_file.read_text()
+                text = re.sub(
+                    r"(updated_at: )\S+", r"\g<1>2026-01-01T00:00:00Z",
+                    text, count=1,
+                )
+                obj_file.write_text(text)
+                t0 = str(parse_frontmatter(obj_file.read_text())["updated_at"])
+
+                def do():
+                    # Session B writes and bumps updated_at.
+                    buf_b = _io.StringIO()
+                    args_b = argparse.Namespace(
+                        id="2026-08-16-900", state="design", status="active",
+                        expect_updated=t0, action="session B", actor="b",
+                        rationale="b", next_action=None, commit=None,
+                        force=False,
+                    )
+                    with _contextlib.redirect_stdout(buf_b):
+                        cmd_append_history(args_b)
+
+                    # Session A retries with the now-stale timestamp.
+                    buf_a = _io.StringIO()
+                    err_a = _io.StringIO()
+                    args_a = argparse.Namespace(
+                        id="2026-08-16-900", state="design", status="active",
+                        expect_updated=t0, action="session A", actor="a",
+                        rationale="a", next_action=None, commit=None,
+                        force=False,
+                    )
+                    with _contextlib.redirect_stdout(buf_a), _contextlib.redirect_stderr(err_a):
+                        code_a = cmd_append_history(args_a)
+                    return code_a, err_a.getvalue(), obj_file.read_text()
+
+                if plain:
+                    with _contextlib.ExitStack() as stack:
+                        stack.enter_context(self._patch_plain(_main))
+                        return self._run_in(root, do)
+                return self._run_in(root, do)
+
+        plain_code, plain_err, plain_bytes = run_once(plain=True)
+        atomic_code, atomic_err, atomic_bytes = run_once(plain=False)
+
+        self.assertEqual(plain_code, atomic_code)
+        self.assertEqual(1, atomic_code)
+        self.assertIn("Concurrent write detected", atomic_err)
+        self.assertEqual(plain_bytes, atomic_bytes)
+
+    def test_append_only_diff_parity_after_atomic_evidence_append(self):
+        """Differential: seed a .bak-<ts> snapshot as the external
+        append-only baseline, append evidence via each writer, and assert the
+        append-only diff result is identical under both writers, the new row
+        lands, and the atomic run leaves no temp orphan."""
+        import argparse
+        import io as _io
+        import contextlib as _contextlib
+        import shutil
+        import ws.__main__ as _main
+        from ws.__main__ import cmd_append_evidence
+        from ws.validate import check_append_only
+
+        def run_once(plain):
+            with tempfile.TemporaryDirectory() as tmp:
+                root = self._make_workspace(tmp)
+                obj_file = self._make_object(root)
+                snapshot = obj_file.parent / f"{obj_file.name}.bak-20260816T160000Z"
+                shutil.copyfile(obj_file, snapshot)
+                fm_before = parse_frontmatter(obj_file.read_text())
+
+                def do():
+                    buf = _io.StringIO()
+                    args = argparse.Namespace(
+                        id="2026-08-16-900",
+                        expect_updated=str(fm_before["updated_at"]),
+                        tag="[system]", source="parity test",
+                        text="appended via atomic writer",
+                        sha=None, force=False,
+                    )
+                    with _contextlib.redirect_stdout(buf):
+                        code = cmd_append_evidence(args)
+                    return (code, obj_file.read_text(),
+                            check_append_only(obj_file), self._tmp_orphans(root))
+
+                if plain:
+                    with _contextlib.ExitStack() as stack:
+                        stack.enter_context(self._patch_plain(_main))
+                        return self._run_in(root, do)
+                return self._run_in(root, do)
+
+        plain_code, plain_bytes, plain_diff, _ = run_once(plain=True)
+        atomic_code, atomic_bytes, atomic_diff, atomic_orphans = run_once(plain=False)
+
+        self.assertEqual(plain_code, atomic_code)
+        self.assertEqual(0, atomic_code)
+        self.assertEqual(plain_bytes, atomic_bytes)
+        # Same diff verdict under both writers: the append-only layer is
+        # writer-blind. Any verdict here is a pre-existing property of the
+        # check's line comparison, not of atomicity (changing the check is
+        # out of Slice A scope). Diff strings embed the temp path, so
+        # normalize before comparing.
+        def _norm(diff):
+            return [e.split(": ", 1)[-1] for e in diff]
+        self.assertEqual(_norm(plain_diff), _norm(atomic_diff))
+        self.assertIn("appended via atomic writer", atomic_bytes)
+        self.assertEqual([], atomic_orphans)
+
+    def test_full_sequence_parity(self):
+        """Differential: create → append-history → append-evidence →
+        transition(verify) under both writers must leave byte-identical
+        objects, and the atomic run must leave no temp orphans."""
+        import argparse
+        import io as _io
+        import contextlib as _contextlib
+        import re as _re
+        import ws.__main__ as _main
+        from ws.__main__ import cmd_create, cmd_append_history, cmd_append_evidence, cmd_transition
+
+        def run_once(plain):
+            with tempfile.TemporaryDirectory() as tmp:
+                root = self._make_workspace(tmp)
+
+                def do():
+                    # create
+                    buf = _io.StringIO()
+                    args_create = argparse.Namespace(
+                        title="Sequence parity object", type="change",
+                        consequence="meaningful", sensitivity="ordinary",
+                    )
+                    with _contextlib.redirect_stdout(buf):
+                        code = cmd_create(args_create)
+                    self.assertEqual(0, code)
+                    created_rel = _re.search(
+                        r"Created: (\S+)", buf.getvalue()).group(1)
+                    obj_file = root / created_rel
+                    obj_id = str(parse_frontmatter(obj_file.read_text())["id"])
+
+                    def _ts():
+                        return str(parse_frontmatter(obj_file.read_text())["updated_at"])
+
+                    # append-history
+                    buf = _io.StringIO()
+                    args_h = argparse.Namespace(
+                        id=obj_id, state="design", status="active",
+                        expect_updated=_ts(), action="append history", actor="test",
+                        rationale="parity", next_action=None, commit=None,
+                        force=False,
+                    )
+                    with _contextlib.redirect_stdout(buf):
+                        code = cmd_append_history(args_h)
+                    self.assertEqual(0, code)
+
+                    # append-evidence
+                    buf = _io.StringIO()
+                    args_e = argparse.Namespace(
+                        id=obj_id, expect_updated=_ts(),
+                        tag="[system]", source="parity test",
+                        text="sequence evidence", sha=None, force=False,
+                    )
+                    with _contextlib.redirect_stdout(buf):
+                        code = cmd_append_evidence(args_e)
+                    self.assertEqual(0, code)
+
+                    # transition to verify
+                    buf = _io.StringIO()
+                    args_t = argparse.Namespace(
+                        id=obj_id, state="verify", status="active",
+                        expect_updated=_ts(), action="transition", actor="test",
+                        rationale="parity", force=False,
+                    )
+                    with _contextlib.redirect_stdout(buf):
+                        code = cmd_transition(args_t)
+                    self.assertEqual(0, code)
+
+                    return obj_file.read_text(), self._tmp_orphans(root)
+
+                if plain:
+                    with _contextlib.ExitStack() as stack:
+                        stack.enter_context(self._patch_plain(_main))
+                        return self._run_in(root, do)
+                return self._run_in(root, do)
+
+        plain_bytes, _ = run_once(plain=True)
+        atomic_bytes, atomic_orphans = run_once(plain=False)
+
+        self.assertEqual(plain_bytes, atomic_bytes)
+        self.assertEqual([], atomic_orphans)
+
+
+class TestHeterogeneousAtomicWrite(unittest.TestCase):
+    """WO 2026-08-16-005 Decision 3 / Slice B: the 4 heterogeneous write
+    sites (baseline.json, config.md, inbox.md, skill-map.yaml) rerouted to
+    atomic_write_text, with regression tests for correct content,
+    idempotency, determinism, and zero temp-file leftovers."""
+
+    @staticmethod
+    def _tmp_orphans(root):
+        return [str(p.relative_to(root)) for p in root.rglob("*.tmp")]
+
+    def test_init_bootstrap_atomic_idempotent_no_orphans(self):
+        """cmd_init writes config.md, inbox.md and active.md with correct
+        content, is idempotent on a second call, and leaves no .tmp file."""
+        import argparse
+        import io as _io
+        import contextlib as _contextlib
+        from ws.__main__ import cmd_init
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            cwd = os.getcwd()
+            os.chdir(root)
+            try:
+                with _contextlib.redirect_stdout(_io.StringIO()):
+                    code1 = cmd_init(argparse.Namespace(name="slice-b"))
+                with _contextlib.redirect_stdout(_io.StringIO()):
+                    code2 = cmd_init(argparse.Namespace(name="slice-b"))
+            finally:
+                os.chdir(cwd)
+
+            self.assertEqual(0, code1)
+            self.assertEqual(0, code2)
+            self.assertTrue((root / ".work-studio" / "config.md").exists())
+            self.assertTrue((root / ".work-studio" / "inbox.md").exists())
+            self.assertTrue((root / ".work-studio" / "active.md").exists())
+            self.assertEqual(
+                "# Inbox\n\n", (root / ".work-studio" / "inbox.md").read_text())
+            self.assertTrue(
+                (root / ".work-studio" / "config.md").read_text()
+                .startswith("# Work Studio Configuration"))
+            self.assertEqual([], self._tmp_orphans(root))
+
+    def test_baseline_capture_check_roundtrip_no_orphans(self):
+        """cmd_baseline_capture writes baseline.json atomically and
+        cmd_baseline_check round-trips cleanly with .work-studio gitignored
+        (matching the repo policy); no .tmp leftover."""
+        import argparse
+        import io as _io
+        import contextlib as _contextlib
+        import subprocess as _subprocess
+        from ws.baseline import cmd_baseline_capture, cmd_baseline_check
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / ".work-studio").mkdir(parents=True)
+            (root / ".work-studio" / "config.md").write_text("# config")
+            (root / ".gitignore").write_text(".work-studio/\nwork-studio/\n")
+            _subprocess.run(["git", "init", "-q"], cwd=root, check=True)
+            _subprocess.run(
+                ["git", "config", "user.email", "t@t.com"], cwd=root, check=True)
+            _subprocess.run(
+                ["git", "config", "user.name", "t"], cwd=root, check=True)
+            _subprocess.run(["git", "add", ".gitignore"], cwd=root, check=True)
+            _subprocess.run(
+                ["git", "commit", "-q", "-m", "init"], cwd=root, check=True)
+
+            cwd = os.getcwd()
+            os.chdir(root)
+            try:
+                with _contextlib.redirect_stdout(_io.StringIO()):
+                    cap = cmd_baseline_capture(argparse.Namespace())
+                with _contextlib.redirect_stdout(_io.StringIO()):
+                    chk = cmd_baseline_check(argparse.Namespace())
+            finally:
+                os.chdir(cwd)
+
+            self.assertEqual(0, cap)
+            self.assertEqual(0, chk)
+            baseline_file = root / ".work-studio" / "baseline.json"
+            self.assertTrue(baseline_file.exists())
+            self.assertIn("commit_sha", baseline_file.read_text())
+            self.assertEqual([], self._tmp_orphans(root))
+
+    def test_skill_map_build_no_orphans_deterministic(self):
+        """skill-map.yaml regenerates atomically: byte-identical on a second
+        build and no .tmp leftover in work-studio/."""
+        import subprocess as _subprocess
+        repo = TOOLS_DIR.parent
+        out_dir = repo / "work-studio"
+        env = os.environ.copy()
+        existing = env.get("PYTHONPATH", "")
+        env["PYTHONPATH"] = str(repo) + (f":{existing}" if existing else "")
+
+        r1 = _subprocess.run(
+            [sys.executable, "-m", "tools.ws", "skill-map", "build"],
+            capture_output=True, text=True, cwd=str(repo), env=env)
+        self.assertEqual(0, r1.returncode, r1.stderr)
+        first = (out_dir / "skill-map.yaml").read_bytes()
+
+        r2 = _subprocess.run(
+            [sys.executable, "-m", "tools.ws", "skill-map", "build"],
+            capture_output=True, text=True, cwd=str(repo), env=env)
+        self.assertEqual(0, r2.returncode, r2.stderr)
+        self.assertEqual(first, (out_dir / "skill-map.yaml").read_bytes())
+        self.assertEqual([], [p.name for p in out_dir.glob("*.tmp")])
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -3444,6 +4239,48 @@ class TestAppendArtifactCommand(unittest.TestCase):
             text = f.read_text()
             self.assertIn("fingerprint:", text)
             self.assertIn("uncommitted at record time", text)
+            # No-git-repo is a legitimate fingerprint-only degrade: no warning
+            # surfaces (WO 2026-08-17-006).
+            self.assertNotIn("Warning", result.stderr)
+
+    def test_git_subprocess_error_is_surfaced(self):
+        """A git subprocess failure warns to stderr instead of silently
+        recording commit=None (incident 2026-08-17-003 / WO 2026-08-17-006)."""
+        from unittest import mock
+        from ws.__main__ import _compute_artifact_stamp
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "artifact.txt").write_text("content\n")
+            stderr = io.StringIO()
+            with mock.patch("subprocess.run", side_effect=OSError("boom")):
+                with contextlib.redirect_stderr(stderr):
+                    stamp = _compute_artifact_stamp(root, "artifact.txt")
+            self.assertIsNone(stamp["commit"])
+            self.assertRegex(stamp["fingerprint"], r"^[0-9a-f]{12}$")
+            self.assertIn("Warning", stderr.getvalue())
+            self.assertIn("git subprocess error", stderr.getvalue())
+
+    def test_git_status_nonzero_is_surfaced(self):
+        """A git status failure (other than not-a-git-repository) warns to
+        stderr (WO 2026-08-17-006)."""
+        from unittest import mock
+        from ws.__main__ import _compute_artifact_stamp
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "artifact.txt").write_text("content\n")
+            stderr = io.StringIO()
+            failed = subprocess.CompletedProcess(
+                args=["git", "status"], returncode=1, stdout="", stderr=""
+            )
+            with mock.patch("subprocess.run", return_value=failed):
+                with contextlib.redirect_stderr(stderr):
+                    stamp = _compute_artifact_stamp(root, "artifact.txt")
+            self.assertIsNone(stamp["commit"])
+            self.assertRegex(stamp["fingerprint"], r"^[0-9a-f]{12}$")
+            self.assertIn("Warning", stderr.getvalue())
+            self.assertIn("git status failed", stderr.getvalue())
 
     def test_missing_path_fails_closed(self):
         with tempfile.TemporaryDirectory() as tmp:

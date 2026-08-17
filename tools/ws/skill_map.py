@@ -29,6 +29,8 @@ import json
 import sys
 from pathlib import Path
 
+from .atomic import atomic_write_text
+
 SKILL_MAP_FILENAME = "skill-map.yaml"
 CORE_SKILLS_DIRNAME = "core"
 MARKER_REQUIRED_SECTION = "## Boundaries and non-goals"
@@ -207,9 +209,7 @@ def build_skill_map(ws_root: Path) -> tuple:
     if entries:
         out_dir = ws_root / "work-studio"
         out_dir.mkdir(parents=True, exist_ok=True)
-        (out_dir / SKILL_MAP_FILENAME).write_text(
-            _render_skill_map(entries)
-        )
+        atomic_write_text(out_dir / SKILL_MAP_FILENAME, _render_skill_map(entries))
 
     return entries, errors
 

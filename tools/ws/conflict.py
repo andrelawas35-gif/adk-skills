@@ -29,6 +29,7 @@ from typing import Dict, List, Optional
 
 from .concurrency import check_concurrency
 from .schema import parse_frontmatter
+from .atomic import atomic_write_text
 from .sections import append_to_section, compose_object_text, get_section
 
 
@@ -268,7 +269,7 @@ def cmd_conflict_register(args: argparse.Namespace) -> int:
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     new_fm = _update_frontmatter_fields(content, {"updated_at": now})
 
-    obj_file.write_text(compose_object_text(new_fm, new_body))
+    atomic_write_text(obj_file, compose_object_text(new_fm, new_body))
 
     print(f"Conflict {conflict_id} registered in {args.id}")
     print(f"  claim_id: {args.claim_id}")
@@ -361,7 +362,7 @@ def cmd_conflict_resolve(args: argparse.Namespace) -> int:
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     new_fm = _update_frontmatter_fields(target_content, {"updated_at": now})
 
-    target_file.write_text(compose_object_text(new_fm, new_body))
+    atomic_write_text(target_file, compose_object_text(new_fm, new_body))
 
     print(f"Conflict resolution {resolution_id} registered in {target_id}")
     print(f"  conflict_id: {args.conflict_id}")

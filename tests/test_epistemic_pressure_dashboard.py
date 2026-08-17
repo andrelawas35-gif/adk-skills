@@ -117,6 +117,7 @@ class EpistemicPressureDashboardTest(unittest.TestCase):
     def test_browser_contract_includes_second_signal_card(self):
         html = (SERVER_PATH.parent / "index.html").read_text()
 
+        self.assertIn("<title>Epistemic pressure dashboard</title>", html)
         self.assertIn(
             '<output data-signal="claims-below-support-adequacy" '
             'aria-live="polite">—</output>',

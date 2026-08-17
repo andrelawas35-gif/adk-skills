@@ -9,6 +9,7 @@ import re
 from pathlib import Path
 from typing import List, Optional, Set
 
+from .atomic import atomic_write_text
 from .schema import parse_frontmatter
 
 # ── Active entry parsing ──────────────────────────────────────────────────────
@@ -72,10 +73,18 @@ def find_stale_entries(
 def find_missing_entries(
     active_md_path: Path,
     objects_dir: Path,
-) -> List[str]:
-    """Find active objects not listed in active.md.
+) -> List[tuple]:
+    """Find active objects not listed in active.md, and unparseable files.
 
-    Returns list of object IDs that should be in active.md but aren't.
+    Returns list of (obj_id, problem) tuples, mirroring find_stale_entries's
+    existing (id, desc, problem) pattern. `problem` is None for an ordinary
+    missing entry (parses fine, is active, and isn't listed in active.md);
+    it is "Cannot parse object frontmatter" for a file that could not be
+    parsed at all, using the filename stem as the identifier since the
+    object's own declared id may be unreadable. Previously such files were
+    silently skipped (`except ValueError: continue`) -- an asymmetry with
+    find_stale_entries, which already flags the identical failure for
+    entries reached via active.md.
     """
     active_ids = set()
     if active_md_path.exists():
@@ -97,11 +106,12 @@ def find_missing_entries(
                 try:
                     fm = parse_frontmatter(obj_file.read_text())
                 except ValueError:
+                    missing.append((obj_file.stem, "Cannot parse object frontmatter"))
                     continue
                 obj_id = str(fm.get("id", ""))
                 status = str(fm.get("status", ""))
                 if obj_id and status == "active" and obj_id not in active_ids:
-                    missing.append(obj_id)
+                    missing.append((obj_id, None))
 
     return missing
 
@@ -121,10 +131,53 @@ def check_attention_consistency(
         errors.append(f"Stale entry in active.md: {obj_id} — {problem}")
 
     missing = find_missing_entries(active_md_path, objects_dir)
-    for obj_id in missing:
-        errors.append(f"Active object not in active.md: {obj_id}")
+    for obj_id, problem in missing:
+        if problem:
+            errors.append(f"Active object not in active.md: {obj_id} — {problem}")
+        else:
+            errors.append(f"Active object not in active.md: {obj_id}")
 
     return errors
+
+
+def repair_missing_active_entries(
+    active_md_path: Path,
+    objects_dir: Path,
+    default_role: str = "supporting",
+) -> List[str]:
+    """Restore active.md entries for active objects missing from it.
+
+    Reconstructs each entry from the object file's own frontmatter (id,
+    title) only -- role is not stored in frontmatter (it only ever lived in
+    active.md), so a repaired entry always gets `default_role`, which may not
+    match whatever role the object originally had. Idempotent: re-running
+    against an already-consistent active.md makes no change. An entry that
+    `find_missing_entries` flags with a parse problem is skipped explicitly
+    -- it can't be repaired from a file that can't be read -- rather than
+    silently dropped; it remains visible via the next `find_missing_entries`
+    or `check_attention_consistency` call.
+
+    Returns the list of object IDs actually repaired.
+    """
+    missing = find_missing_entries(active_md_path, objects_dir)
+    repaired = []
+
+    for obj_id, problem in missing:
+        if problem:
+            continue
+        obj_file = _find_object_file(objects_dir, obj_id)
+        if obj_file is None:
+            continue
+        try:
+            fm = parse_frontmatter(obj_file.read_text())
+        except ValueError:
+            continue
+        title = str(fm.get("title", obj_id))
+        updated = update_active_entry(active_md_path, obj_id, title, default_role)
+        atomic_write_text(active_md_path, updated)
+        repaired.append(obj_id)
+
+    return repaired
 
 
 # ── Active.md updates ─────────────────────────────────────────────────────────

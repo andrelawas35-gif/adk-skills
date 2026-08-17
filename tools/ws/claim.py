@@ -33,6 +33,7 @@ from typing import Any, Dict, List, Optional
 
 from .concurrency import check_concurrency
 from .schema import parse_frontmatter
+from .atomic import atomic_write_text
 from .sections import append_to_section, compose_object_text, get_section
 
 # ── Constants ─────────────────────────────────────────────────────────────────
@@ -360,7 +361,7 @@ def cmd_claim_register(args: argparse.Namespace) -> int:
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     new_fm = _update_frontmatter_fields(content, {"updated_at": now})
 
-    obj_file.write_text(compose_object_text(new_fm, new_body))
+    atomic_write_text(obj_file, compose_object_text(new_fm, new_body))
 
     print(f"Claim {claim_id} registered in {args.id}")
     return 0

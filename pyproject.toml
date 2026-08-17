@@ -4,6 +4,8 @@ version = "0.1.0"
 description = "Work Studio local runtime contract layer (Phase 2, WO 2026-08-15-006): strict Pydantic envelope + JSON Schema snapshots for Work Object frontmatter. Isolated Python 3.11 environment; tools/ws stays dependency-free stdlib."
 requires-python = ">=3.11"
 dependencies = [
+    "langgraph>=1.2.11",
+    "langgraph-checkpoint-sqlite>=3.1.1",
     "pydantic>=2.0",
 ]
 

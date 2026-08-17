@@ -1,16 +1,10 @@
 # Epistemic Rules — Full (6‑tag)
 
 This skill uses the complete 6‑tag epistemic system. Every evidence‑ledger
-entry MUST use exactly one of the following tags:
-
-| Tag | Meaning |
-|-----|---------|
-| `[system]` | Verified fact from a system, tool, or document |
-| `[decision]` | Human decision with rationale and authority |
-| `[inference]` | Reasoned conclusion from available evidence |
-| `[gap]` | Known unknown — information that is missing or unresolved |
-| `[testimony]` | Reported information from a person or source |
-| `[memory]` | Relevant, user-approved reusable preferences admitted through the Memory Candidate gate. |
+entry MUST use exactly one of the six tags defined in
+`references/AGREEMENT-LOOP.md` (lines 98-111), which is the single
+authoritative source for tag definitions: `[system]`, `[decision]`,
+`[inference]`, `[gap]`, `[testimony]`, `[memory]`.
 
 Entries use the inline convention: `- [tag] <free text>`.
 
