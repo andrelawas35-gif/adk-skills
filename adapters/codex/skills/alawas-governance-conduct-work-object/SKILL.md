@@ -81,24 +81,18 @@ explicitly when one is unavailable (see `references/CAPABILITY-DEGRADATION.md`).
 
 Apply `references/CONSEQUENCE-AUTHORITY.md`.
 
-- Creating or updating a Work Object of **low** or **meaningful** consequence:
-  proceed, append History.
-- Creating or updating a Work Object of **high** consequence: ask first.
 - Writing **restricted-sensitivity** content to a Work Object body: ask first,
-  regardless of consequence level. The restricted-content pointer-only rule
-  (link to protected sources, never store restricted material directly) is
-  the substantive prohibition — this gate ensures the agent encounters it
-  before writing.
+  regardless of consequence level. This skill is the entry point for every
+  Work Object write, so this gate must be encountered here first.
 - For a high-consequence Work Object, confirmation must name the specific
   proposed mutation. Generic instructions such as `just execute`, `do
   recommended`, or `perform the next update` are not confirmation. Do not
   stage, annotate, change status, append History, or make any other mutation
   before receiving that scoped confirmation; reading and recommending remain
   allowed.
-- Never export, share, deploy, or write outside `.work-studio/` without
-  explicit human confirmation.
-- `just execute` accepts the current recommendation but never bypasses safety,
-  privacy, destructive-action, or external-commitment gates.
+- This skill is the only one that writes routinely into `.work-studio/` and
+  Work Object files — never export, share, deploy, or write outside
+  `.work-studio/` without explicit human confirmation.
 
 ## Grilling entry and stage lens
 
@@ -214,42 +208,19 @@ contract in `references/CONSEQUENCE-AUTHORITY.md`.
    - `consequence`: low, meaningful, or high
    - `sensitivity`: ordinary, private, or restricted
 
-2. Run the deterministic CLI to create the Work Object:
+2. Run the deterministic CLI to create the Work Object. See
+   `references/CONDUCT-CLI-OPERATIONS.md` § Create Work Object for the exact
+   invocation. The CLI handles: immutable ID allocation with collision
+   detection, YAML frontmatter generation with validated enums, body template
+   with 7 required sections plus structured Decisions template, file write to
+   the correct `objects/YYYY/MM/<id>-<slug>.md` path. It prints the created
+   file path and allocated ID.
 
-   ```sh
-   python3 -m tools.ws create \
-     --title "<human-readable-title>" \
-     --type <type> \
-     --consequence <consequence> \
-     --sensitivity <sensitivity>
-   ```
-
-   The CLI handles: immutable ID allocation with collision detection, YAML
-   frontmatter generation with validated enums, body template with 7 required
-   sections plus structured Decisions template, file write to the correct
-   `objects/YYYY/MM/<id>-<slug>.md` path. It prints the created file path and
-   allocated ID.
-
-3. Append the creation History entry:
-
-   ```sh
-   python3 -m tools.ws append-history <id> \
-     --action "Created" \
-     --state notice \
-     --status active \
-     --actor "<platform>" \
-     --rationale "<creation rationale>" \
-     --expect-updated <updated_at>
-   ```
+3. Append the creation History entry (`references/CONDUCT-CLI-OPERATIONS.md`
+   § Create Work Object).
 
 4. Update `active.md` if this is the first active object or the user confirms
-   it as Primary:
-
-   ```sh
-   python3 -m tools.ws activate <id> \
-     --role primary \
-     --expect-updated <updated_at>
-   ```
+   it as Primary (`references/CONDUCT-CLI-OPERATIONS.md` § Create Work Object).
 
 ### 5. Update Work Object
 
@@ -272,45 +243,10 @@ rules, and schema validation. Every write command except `ws create` and
 On any meaningful transition:
 
 1. Read the current file to get `updated_at` from the YAML frontmatter.
-2. Choose the appropriate CLI command for the change:
-
-   **State/status transitions:**
-   ```sh
-   python3 -m tools.ws transition <id> \
-     --state <target-state> \
-     --status <target-status> \
-     --expect-updated <current-updated_at> \
-     --action "<description>" \
-     --actor "<platform>" \
-     --rationale "<reason>"
-   ```
-
-   **Closing a Work Object:**
-   ```sh
-   python3 -m tools.ws close <id> \
-     --expect-updated <current-updated_at> \
-     --rationale "<reason>"
-   ```
-
-   **Appending History (without state change):**
-   ```sh
-   python3 -m tools.ws append-history <id> \
-     --action "<description>" \
-     --state <current-state> \
-     --status <current-status> \
-     --actor "<platform>" \
-     --rationale "<reason>" \
-     --expect-updated <current-updated_at>
-   ```
-
-   **Appending Evidence:**
-   ```sh
-   python3 -m tools.ws append-evidence <id> \
-     --tag "[system]|[decision]|[inference]|[gap]|[testimony]|[memory]" \
-     --source "<source>" \
-     --text "<entry>" \
-     --expect-updated <current-updated_at>
-   ```
+2. Choose the appropriate CLI command for the change — state/status
+   transitions, closing a Work Object, appending History without a state
+   change, or appending Evidence. See `references/CONDUCT-CLI-OPERATIONS.md`
+   § Update Work Object for the exact invocation of each.
 
 3. Direct edits are sanctioned, not a workaround, for the sections no append
    command covers: `Intent`, `Success evidence` checkboxes, `Constraints and
@@ -394,16 +330,9 @@ Update this file when:
 
 Do not change Work Object identity to represent attention shifts.
 
-Use the CLI to manage attention:
-
-```sh
-python3 -m tools.ws activate <id> \
-  --role primary|supporting|paused \
-  --expect-updated <current-updated_at>
-```
-
-The CLI cross-checks that the object exists and is not closed before
-updating `active.md`.
+Use the CLI to manage attention — see `references/CONDUCT-CLI-OPERATIONS.md`
+§ Manage attention for the exact invocation. The CLI cross-checks that the
+object exists and is not closed before updating `active.md`.
 
 ## Adjacent Possibility behavior
 

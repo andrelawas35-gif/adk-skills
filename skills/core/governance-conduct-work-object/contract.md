@@ -1,12 +1,29 @@
----
-name: alawas-governance-conduct-work-object
-description: "Use when work must start, resume, transition, or close; maintains the canonical Work Object and routes its next stage; does not perform specialist domain work."
-default_tier: medium
-platform: claude-code
----
-# Conduct Work Object
+<!--
+Lean authoring pilot (WO 2026-08-15-009 Decision 2). This file is the
+authored source of the conductor's unique content. tools/generate-adapters.py
+(--check-core-assembly) reassembles it, together with the six near-universal
+section bodies below, into a document comparable to skills/core/
+governance-conduct-work-object/SKILL.md. Nothing reads this file at runtime
+yet; SKILL.md remains the live source until a separate accepted decision
+cuts over.
+-->
 
-## Governing principle
+## Input
+
+**Required inputs:**
+- None for discovery and status check
+- For creation: a signal, intent, or request from the user
+- For resumption: an immutable Work Object ID or a request to "resume" with
+  enough disambiguation
+
+**Preconditions:**
+- A `.work-studio/config.md` must exist or be creatable at the workspace root
+- The workspace root must be identifiable (search upward for `.git`,
+  `.work-studio/`, or filesystem boundary)
+
+## Procedure
+
+### Governing principle
 
 A Work Object is the durable record of intent, evidence, decisions, and
 outcomes. The chat is for interaction; the Work Object is for continuity.
@@ -14,7 +31,7 @@ This skill ensures that every Work Object is discoverable, schema-valid,
 immutably identified, and sufficient as a standalone record when chat
 history is unavailable.
 
-## Personal working lens
+### Personal working lens
 
 Work Objects are not project management theater. They exist so that work
 can be paused, resumed, handed off, reviewed, and learned from without
@@ -26,7 +43,7 @@ all specialists need to know which object owns the current implementation
 pass. Supporting and other tracked-active objects have no numeric cap;
 the active.md register is advisory, not a concurrency constraint.
 
-## Boundaries and non-goals
+### Scope
 
 **This skill does:**
 - Discover the workspace and any existing Work Objects
@@ -40,92 +57,10 @@ the active.md register is advisory, not a concurrency constraint.
   implement-bounded-change, etc.) for substantive work
 - Manage the active.md attention register
 
-**This skill does NOT:**
-- Perform domain work itself (design, implementation, investigation,
-  deployment) — it routes to specialists
-- Export, share, or deploy anything
-- Create or modify personal memory entries
-- Run the Agreement Loop beyond identifying that a decision is needed
-- Modify closed Work Objects except to link successors
-- Migrate schemas without explicit human authority
-
-## Inputs and preconditions
-
-**Required inputs:**
-- None for discovery and status check
-- For creation: a signal, intent, or request from the user
-- For resumption: an immutable Work Object ID or a request to "resume" with
-  enough disambiguation
-
-**Preconditions:**
-- A `.work-studio/config.md` must exist or be creatable at the workspace root
-- The workspace root must be identifiable (search upward for `.git`,
-  `.work-studio/`, or filesystem boundary)
-
-## Required capabilities
-
-This skill requires the following abstract capabilities. The platform adapter
-classifies each as native, manual-fallback, or unsupported and degrades
-explicitly when one is unavailable (see `references/CAPABILITY-DEGRADATION.md`).
-
-- `file_read` — Read Work Object files, config, active.md
-- `file_write` — Create and update Work Object files, append History
-- `directory_list` — List `.work-studio/objects/` directory
-- `glob_search` — Find Work Objects by ID pattern (`YYYY/MM/<id>-*.md`)
-- `content_search` — Search for Work Objects by title or content
-- `terminal_run` — Run git commands for workspace discovery
-- `git_operations` — Check repository boundaries, commit work
-- `structured_output` — Produce valid YAML frontmatter
-
-## Consequence and authority rules
-
-Apply `references/CONSEQUENCE-AUTHORITY.md`.
-
-- Writing **restricted-sensitivity** content to a Work Object body: ask first,
-  regardless of consequence level. This skill is the entry point for every
-  Work Object write, so this gate must be encountered here first.
-- For a high-consequence Work Object, confirmation must name the specific
-  proposed mutation. Generic instructions such as `just execute`, `do
-  recommended`, or `perform the next update` are not confirmation. Do not
-  stage, annotate, change status, append History, or make any other mutation
-  before receiving that scoped confirmation; reading and recommending remain
-  allowed.
-- This skill is the only one that writes routinely into `.work-studio/` and
-  Work Object files — never export, share, deploy, or write outside
-  `.work-studio/` without explicit human confirmation.
-
-## Grilling entry and stage lens
-
-Follow `references/AGREEMENT-LOOP.md` in full; this skill contributes only its stage-specific lens below.
-
-Outside an explicit grilling request, nominate a Grilling Candidate only under the Agreement Loop's three-part threshold. Show its Candidate Card and wait for explicit entry; do not silently start a continuous session.
-
-The conductor owns durable checkpoint writes only. During ordinary operation,
-when evidence selects a different stage lens, it routes:
-
-- An unresolved decision about work direction → route to `alawas-thinking-pressure-test-decision`
-- An unresolved design question → route to `alawas-design-design-tracer-bullet`
-- An ambiguous signal without clear type → route to `alawas-thinking-turn-signal-into-work`
-
-Routine lifecycle actions inside existing authority do not activate grilling.
-
-## Skill Grilling Profile
-
-Apply the `alawas-governance-conduct-work-object` profile and continuous Grilling Session in
-`references/SKILL-AWARE-GRILLING.md`. Reconstruct one testable outcome, detect
-overlapping work, ground positive and negative evidence, and make consequence,
-sensitivity, lifecycle, rationale, and authority explicit before persistence.
-
-For a direct specialist request, discover or establish the Work Object before
-routing while preserving the same Context Card, Evidence Ledger, Decision
-Frontier, and accepted decisions. Create `## Grilling Session` lazily. Act as
-the sole writer of compact continuity state; keep full decisions and evidence
-in their canonical sections and never store a transcript.
-
-## Session-boundary rule
+### Session-boundary rule
 
 This skill includes a session-boundary rule expressed as a bounded trial with
-an explicit review condition (per the `alawas-governance-maintain-working-method` guardrail-expiry
+an explicit review condition (per the `maintain-working-method` guardrail-expiry
 gate). The rule governs what happens when this skill is invoked at session
 start:
 
@@ -139,11 +74,11 @@ start:
 recorded in the Work Object's `next_action` or (b) observed degradation at high
 context — a dropped constraint, a re-read of a file already in context, or a
 misremembered decision that survives a compaction. Either triggers a revisit
-via `alawas-governance-maintain-working-method`.
+via `maintain-working-method`.
 
-## Stage workflow
+### Stage workflow
 
-### 1. Discover workspace
+#### 1. Discover workspace
 
 First inspect root `WORKSPACE-DOCUMENTATION-CONTRACT.md` when it exists. Use
 its registry to locate artifacts; do not search for plausible alternatives. If
@@ -166,7 +101,7 @@ to create one at the current project root.
 Read `active.md` if it exists to identify current Primary and Supporting
 objects.
 
-### 2. Detect or create
+#### 2. Detect or create
 
 **If the user provides a Work Object ID** → resume (go to step 3).
 
@@ -182,7 +117,7 @@ objects.
 2. Read frontmatter of active objects.
 3. Report: ID, title, type, status, state, next_action.
 
-### 3. Resume by ID
+#### 3. Resume by ID
 
 1. Locate `.work-studio/objects/YYYY/MM/<id>-*.md` by glob for the ID.
 2. Read the full Work Object.
@@ -195,7 +130,7 @@ objects.
 4. Do NOT replay full history or evidence — the Work Object is the record.
 5. Route to the appropriate specialist based on state and next_action.
 
-### 4. Create Work Object
+#### 4. Create Work Object
 
 **Authority gate:** Creating a Work Object at `high` consequence requires
 explicit human confirmation. Before proceeding: (1) verify the consequence
@@ -208,21 +143,44 @@ contract in `references/CONSEQUENCE-AUTHORITY.md`.
    - `consequence`: low, meaningful, or high
    - `sensitivity`: ordinary, private, or restricted
 
-2. Run the deterministic CLI to create the Work Object. See
-   `references/CONDUCT-CLI-OPERATIONS.md` § Create Work Object for the exact
-   invocation. The CLI handles: immutable ID allocation with collision
-   detection, YAML frontmatter generation with validated enums, body template
-   with 7 required sections plus structured Decisions template, file write to
-   the correct `objects/YYYY/MM/<id>-<slug>.md` path. It prints the created
-   file path and allocated ID.
+2. Run the deterministic CLI to create the Work Object:
 
-3. Append the creation History entry (`references/CONDUCT-CLI-OPERATIONS.md`
-   § Create Work Object).
+   ```sh
+   python3 -m tools.ws create \
+     --title "<human-readable-title>" \
+     --type <type> \
+     --consequence <consequence> \
+     --sensitivity <sensitivity>
+   ```
+
+   The CLI handles: immutable ID allocation with collision detection, YAML
+   frontmatter generation with validated enums, body template with 7 required
+   sections plus structured Decisions template, file write to the correct
+   `objects/YYYY/MM/<id>-<slug>.md` path. It prints the created file path and
+   allocated ID.
+
+3. Append the creation History entry:
+
+   ```sh
+   python3 -m tools.ws append-history <id> \
+     --action "Created" \
+     --state notice \
+     --status active \
+     --actor "<platform>" \
+     --rationale "<creation rationale>" \
+     --expect-updated <updated_at>
+   ```
 
 4. Update `active.md` if this is the first active object or the user confirms
-   it as Primary (`references/CONDUCT-CLI-OPERATIONS.md` § Create Work Object).
+   it as Primary:
 
-### 5. Update Work Object
+   ```sh
+   python3 -m tools.ws activate <id> \
+     --role primary \
+     --expect-updated <updated_at>
+   ```
+
+#### 5. Update Work Object
 
 Apply `references/EVIDENCE-MODEL.md` for evidence capture, provenance, and the
 separation between the Evidence ledger and History.
@@ -243,10 +201,45 @@ rules, and schema validation. Every write command except `ws create` and
 On any meaningful transition:
 
 1. Read the current file to get `updated_at` from the YAML frontmatter.
-2. Choose the appropriate CLI command for the change — state/status
-   transitions, closing a Work Object, appending History without a state
-   change, or appending Evidence. See `references/CONDUCT-CLI-OPERATIONS.md`
-   § Update Work Object for the exact invocation of each.
+2. Choose the appropriate CLI command for the change:
+
+   **State/status transitions:**
+   ```sh
+   python3 -m tools.ws transition <id> \
+     --state <target-state> \
+     --status <target-status> \
+     --expect-updated <current-updated_at> \
+     --action "<description>" \
+     --actor "<platform>" \
+     --rationale "<reason>"
+   ```
+
+   **Closing a Work Object:**
+   ```sh
+   python3 -m tools.ws close <id> \
+     --expect-updated <current-updated_at> \
+     --rationale "<reason>"
+   ```
+
+   **Appending History (without state change):**
+   ```sh
+   python3 -m tools.ws append-history <id> \
+     --action "<description>" \
+     --state <current-state> \
+     --status <current-status> \
+     --actor "<platform>" \
+     --rationale "<reason>" \
+     --expect-updated <current-updated_at>
+   ```
+
+   **Appending Evidence:**
+   ```sh
+   python3 -m tools.ws append-evidence <id> \
+     --tag "[system]|[decision]|[inference]|[gap]|[testimony]|[memory]" \
+     --source "<source>" \
+     --text "<entry>" \
+     --expect-updated <current-updated_at>
+   ```
 
 3. Direct edits are sanctioned, not a workaround, for the sections no append
    command covers: `Intent`, `Success evidence` checkboxes, `Constraints and
@@ -271,7 +264,7 @@ On any meaningful transition:
    checks automatically. If the CLI rejects with a concurrency error, re-read
    the file to get the new `updated_at` and retry.
 
-### 6. Route to specialist
+#### 6. Route to specialist
 
 Based on current state and next_action, route to the appropriate skill:
 
@@ -286,15 +279,15 @@ Based on current state and next_action, route to the appropriate skill:
 | observe | review-outcome-and-adapt |
 | close | review-outcome-and-adapt (outcome review) |
 
-> `alawas-research-investigate-live-question` is reachable as a **downstream route** from
-> `alawas-thinking-develop-idea` when a specific falsifiable question emerges during
-> exploration. The conductor does not route to `alawas-research-investigate-live-question`
-> directly from the `explore` state — that path goes through `alawas-thinking-develop-idea`.
+> `investigate-live-question` is reachable as a **downstream route** from
+> `develop-idea` when a specific falsifiable question emerges during
+> exploration. The conductor does not route to `investigate-live-question`
+> directly from the `explore` state — that path goes through `develop-idea`.
 
 Route by stating: "Routing to [skill] for [specific task]." Include the Work
 Object ID and the concrete question or task.
 
-### 7. Manage attention
+#### 7. Manage attention
 
 `active.md` is an advisory attention register, not a cardinality constraint.
 
@@ -330,37 +323,46 @@ Update this file when:
 
 Do not change Work Object identity to represent attention shifts.
 
-Use the CLI to manage attention — see `references/CONDUCT-CLI-OPERATIONS.md`
-§ Manage attention for the exact invocation. The CLI cross-checks that the
-object exists and is not closed before updating `active.md`.
+Use the CLI to manage attention:
 
-## Adjacent Possibility behavior
+```sh
+python3 -m tools.ws activate <id> \
+  --role primary|supporting|paused \
+  --expect-updated <current-updated_at>
+```
+
+The CLI cross-checks that the object exists and is not closed before
+updating `active.md`.
+
+### Adjacent Possibility behavior
 
 During Explore or Design states, this skill may activate the
 Adjacent Possibility Pass as described in the planning document. This is
 delegated to the routed specialist, not performed by this skill directly.
 
-## Dependency invocation rules
+### Dependency invocation rules
 
 This skill composes with:
-- `alawas-thinking-turn-signal-into-work` — for classifying and activating signals
-- `alawas-thinking-develop-idea` — for divergent exploration in the explore state
-- `alawas-thinking-pressure-test-decision` — for unresolved decisions
-- `alawas-design-design-tracer-bullet` — for design work
-- `alawas-engineering-implement-bounded-change` — for implementation
-- `alawas-engineering-verify-release-evidence` — for verification
-- `alawas-operations-deploy-with-recovery` — for deployment
-- `alawas-operations-diagnose-production-incident` — for incidents
-- `alawas-governance-review-outcome-and-adapt` — for closing and review
-- `alawas-governance-maintain-working-method` — for workflow candidate governance
-- `alawas-governance-govern-scorecards` — for outcome scorecard review and candidate proposals
-- `alawas-design-track-components` — for registering, sweeping, and grilling durable components
-- `alawas-thinking-diagnose-homogenization` — for diagnosing and revising generic or unearned prose
+- `turn-signal-into-work` — for classifying and activating signals
+- `develop-idea` — for divergent exploration in the explore state
+- `pressure-test-decision` — for unresolved decisions
+- `design-tracer-bullet` — for design work
+- `implement-bounded-change` — for implementation
+- `verify-release-evidence` — for verification
+- `deploy-with-recovery` — for deployment
+- `diagnose-production-incident` — for incidents
+- `review-outcome-and-adapt` — for closing and review
+- `maintain-working-method` — for workflow candidate governance
+- `govern-scorecards` — for outcome scorecard review and candidate proposals
+- `track-components` — for registering, sweeping, and grilling durable components
+- `diagnose-homogenization` — for diagnosing and revising generic or unearned prose
 
 Missing dependencies must be reported as reduced capability rather than
 silently imitated.
 
-## Work Object updates
+## Output
+
+### Work Object updates
 
 After every interaction with a Work Object:
 - `updated_at` is current
@@ -368,7 +370,7 @@ After every interaction with a Work Object:
 - `next_action` reflects the concrete next move
 - The Work Object is sufficient to resume work without chat context
 
-## Routing and termination
+### Routing and termination
 
 **Route when:**
 - Domain work is needed (design, implement, investigate, etc.)
@@ -380,17 +382,91 @@ After every interaction with a Work Object:
 - The user explicitly ends the session
 - A blocking condition is recorded and the object is set to Waiting
 
-## Output template
+## Escalate-when
 
-Apply `references/DIRECTOR-LANGUAGE.md` to everything said to the
-director. Lead with plain meaning; attach the technical term to the explanation
-rather than substituting it. Order anything worth explaining as: what's
-happening, why it matters, the technical term, the evidence, the
-recommendation, what needs deciding. Short answers stay short, and any part may
-be marked absent — "Evidence: none, this is inference" is valid and preferred.
-Never fill a part to complete the shape. Never phrase a decision in terms the
-director must decode before choosing. Record content is never translated:
-field names, state names, record IDs, and file paths stay exact.
+### Scope exclusions
+
+**This skill does NOT:**
+- Perform domain work itself (design, implementation, investigation,
+  deployment) — it routes to specialists
+- Export, share, or deploy anything
+- Create or modify personal memory entries
+- Run the Agreement Loop beyond identifying that a decision is needed
+- Modify closed Work Objects except to link successors
+- Migrate schemas without explicit human authority
+
+### Failure and degradation behavior
+
+| Failure | Behavior |
+|---------|----------|
+| No `.work-studio/config.md` found | Offer to create at project root. If declined, report inability to proceed. |
+| Work Object file not found by ID | Report the ID, suggest checking active.md, list recent objects. |
+| `updated_at` conflict on write | Report the conflict with both timestamps. Do not overwrite. Offer to re-read and retry. |
+| Invalid frontmatter | Report the specific validation error. Offer to repair if the fix is unambiguous. |
+| Missing specialist skill | Report reduced capability. Offer manual alternatives. |
+| Home directory scan attempted | Stop immediately. Report the boundary. Suggest explicit configuration. |
+
+## Stage lens
+
+The conductor owns durable checkpoint writes only. During ordinary operation,
+when evidence selects a different stage lens, it routes:
+
+- An unresolved decision about work direction → route to `pressure-test-decision`
+- An unresolved design question → route to `design-tracer-bullet`
+- An ambiguous signal without clear type → route to `turn-signal-into-work`
+
+Routine lifecycle actions inside existing authority do not activate grilling.
+
+<!-- shared-section:required-capabilities -->
+
+This skill requires the following abstract capabilities. The platform adapter
+classifies each as native, manual-fallback, or unsupported and degrades
+explicitly when one is unavailable (see `references/CAPABILITY-DEGRADATION.md`).
+
+- `file_read` — Read Work Object files, config, active.md
+- `file_write` — Create and update Work Object files, append History
+- `directory_list` — List `.work-studio/objects/` directory
+- `glob_search` — Find Work Objects by ID pattern (`YYYY/MM/<id>-*.md`)
+- `content_search` — Search for Work Objects by title or content
+- `terminal_run` — Run git commands for workspace discovery
+- `git_operations` — Check repository boundaries, commit work
+- `structured_output` — Produce valid YAML frontmatter
+
+<!-- shared-section:consequence-and-authority-rules -->
+
+- Creating or updating a Work Object of **low** or **meaningful** consequence:
+  proceed, append History.
+- Creating or updating a Work Object of **high** consequence: ask first.
+- Writing **restricted-sensitivity** content to a Work Object body: ask first,
+  regardless of consequence level. The restricted-content pointer-only rule
+  (link to protected sources, never store restricted material directly) is
+  the substantive prohibition — this gate ensures the agent encounters it
+  before writing.
+- For a high-consequence Work Object, confirmation must name the specific
+  proposed mutation. Generic instructions such as `just execute`, `do
+  recommended`, or `perform the next update` are not confirmation. Do not
+  stage, annotate, change status, append History, or make any other mutation
+  before receiving that scoped confirmation; reading and recommending remain
+  allowed.
+- Never export, share, deploy, or write outside `.work-studio/` without
+  explicit human confirmation.
+- `just execute` accepts the current recommendation but never bypasses safety,
+  privacy, destructive-action, or external-commitment gates.
+
+<!-- shared-section:skill-grilling-profile -->
+
+Apply the `conduct-work-object` profile and continuous Grilling Session in
+`references/SKILL-AWARE-GRILLING.md`. Reconstruct one testable outcome, detect
+overlapping work, ground positive and negative evidence, and make consequence,
+sensitivity, lifecycle, rationale, and authority explicit before persistence.
+
+For a direct specialist request, discover or establish the Work Object before
+routing while preserving the same Context Card, Evidence Ledger, Decision
+Frontier, and accepted decisions. Create `## Grilling Session` lazily. Act as
+the sole writer of compact continuity state; keep full decisions and evidence
+in their canonical sections and never store a transcript.
+
+<!-- shared-section:output-template -->
 
 After each interaction, report:
 
@@ -403,18 +479,7 @@ After each interaction, report:
 **Route**: {next_skill or "none — awaiting user input"}
 ```
 
-## Failure and degradation behavior
-
-| Failure | Behavior |
-|---------|----------|
-| No `.work-studio/config.md` found | Offer to create at project root. If declined, report inability to proceed. |
-| Work Object file not found by ID | Report the ID, suggest checking active.md, list recent objects. |
-| `updated_at` conflict on write | Report the conflict with both timestamps. Do not overwrite. Offer to re-read and retry. |
-| Invalid frontmatter | Report the specific validation error. Offer to repair if the fix is unambiguous. |
-| Missing specialist skill | Report reduced capability. Offer manual alternatives. |
-| Home directory scan attempted | Stop immediately. Report the boundary. Suggest explicit configuration. |
-
-## Anti-patterns
+<!-- shared-section:anti-patterns -->
 
 1. **Stage theater**: Moving through lifecycle states just to check boxes.
    States describe reality, not progress rituals.
@@ -440,7 +505,7 @@ After each interaction, report:
 8. **Memory overreach**: Writing to personal memory during routine work.
    Memory is read-only during ordinary work sessions.
 
-## Final self-check
+<!-- shared-section:final-self-check -->
 
 Before reporting completion:
 
@@ -454,43 +519,3 @@ Before reporting completion:
 - [ ] Private storage is in `.work-studio/` (Git-excluded)
 - [ ] Home directory was not scanned
 - [ ] The Work Object is sufficient to resume without chat context
----
-
-## Platform Adapter
-
-Invocation-relevant wiring only; installation and maintainer guidance live outside this file.
-
-### Epistemic rules
-
-This skill uses the **essential 3‑tag system** (`references/epistemic/epistemic-rules-essential.md`).
-
-The epistemic tier is resolved from the skill's `default_tier` (medium).
-**Consequence-based escalation:** When a Work Object has `consequence: meaningful`,
-the epistemic tier is upgraded to at least `medium` (essential 3‑tag).
-When `consequence: high`, the epistemic tier is upgraded to the strongest
-available tier (full 6‑tag).
-`actual_epistemic_tier = max(skill.default_tier, consequence_escalation(wo.consequence))`.
-
-### Model tier
-
-This skill declares `default_tier: medium`.
-The platform overlay resolves this to `claude-sonnet-4-20250514`.
-The prompt budget for this tier is approximately 40000 tokens (advisory).
-
-**Consequence-based escalation:** When a Work Object has `consequence: meaningful`,
-the effective tier is upgraded to at least `medium`. When `consequence: high`,
-the effective tier is upgraded to the strongest available model.
-`actual_tier = max(skill.default_tier, consequence_escalation(wo.consequence))`.
-
-### Required capability mappings
-
-| Abstract capability | Platform tool | Classification |
-|---------------------|---------------|----------------|
-| `file_read` | `Read` | native |
-| `file_write` | `Write / Edit` | native |
-| `directory_list` | `Bash ls` | native |
-| `glob_search` | `Glob` | native |
-| `content_search` | `Grep` | native |
-| `terminal_run` | `Bash` | native |
-| `git_operations` | `Bash (git commands)` | native |
-| `structured_output` | `—` | native |

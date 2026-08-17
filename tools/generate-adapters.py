@@ -1022,10 +1022,219 @@ def check_platform(platform_name):
     return all_clean
 
 
+# ── Core assembly (WO 2026-08-15-009 Decision 2, mechanism-only pilot) ──────
+#
+# Tests whether a lean-authored contract.md (Input/Procedure/Output/
+# Escalate-when + Stage lens, plus six near-universal section bodies) can be
+# reassembled by this generator into a document that reproduces a skill's
+# current SKILL.md losslessly. Nothing here is wired into generate_platform()
+# or check_platform() — it is a standalone, additive check invoked via
+# --check-core-assembly <skill-name>. It does not write SKILL.md; it writes a
+# scratch copy for diffing.
+
+# (final_heading, resolution) where resolution is one of:
+#   ("whole", block_name)                       — entire top-level block body
+#   ("sub", block_name, subheading)              — one ### subsection of a block
+#   ("shared", section_key)                      — one <!-- shared-section:X --> block
+#   ("concat", [resolution, resolution, ...])     — join sub-resolutions with a blank line
+CORE_ASSEMBLY_ORDER = [
+    ("Governing principle", ("sub", "Procedure", "Governing principle")),
+    ("Personal working lens", ("sub", "Procedure", "Personal working lens")),
+    ("Boundaries and non-goals", ("concat", [
+        ("sub", "Procedure", "Scope"),
+        ("sub", "Escalate-when", "Scope exclusions"),
+    ])),
+    ("Inputs and preconditions", ("whole", "Input")),
+    ("Required capabilities", ("shared", "required-capabilities")),
+    ("Consequence and authority rules", ("shared", "consequence-and-authority-rules")),
+    ("Grilling entry and stage lens", ("whole", "Stage lens")),
+    ("Skill Grilling Profile", ("shared", "skill-grilling-profile")),
+    ("Session-boundary rule", ("sub", "Procedure", "Session-boundary rule")),
+    ("Stage workflow", ("sub", "Procedure", "Stage workflow")),
+    ("Adjacent Possibility behavior", ("sub", "Procedure", "Adjacent Possibility behavior")),
+    ("Dependency invocation rules", ("sub", "Procedure", "Dependency invocation rules")),
+    ("Work Object updates", ("sub", "Output", "Work Object updates")),
+    ("Routing and termination", ("sub", "Output", "Routing and termination")),
+    ("Output template", ("shared", "output-template")),
+    ("Failure and degradation behavior", ("sub", "Escalate-when", "Failure and degradation behavior")),
+    ("Anti-patterns", ("shared", "anti-patterns")),
+    ("Final self-check", ("shared", "final-self-check")),
+]
+
+
+def _iter_lines_outside_fences(body):
+    """Yield (line, is_inside_fence) pairs, tracking ``` fences so heading
+    regexes never match example text inside a fenced code block."""
+    in_fence = False
+    for line in body.split("\n"):
+        if re.match(r"^```", line):
+            in_fence = not in_fence
+            yield line, True  # the fence marker line itself is not a heading
+            continue
+        yield line, in_fence
+
+
+def split_top_blocks(contract_body):
+    """Split contract.md's body into ## headings and <!-- shared-section:X --> blocks.
+
+    Fence-aware: a line that looks like a heading but sits inside a fenced
+    code block (e.g. the ## Primary / ## Supporting example inside Stage
+    workflow's active.md template) is treated as literal content, not a
+    section boundary.
+    """
+    blocks = {}
+    current_name = None
+    current_lines = []
+    for line, in_fence in _iter_lines_outside_fences(contract_body):
+        heading_match = None if in_fence else re.match(r"^## (.+)$", line)
+        shared_match = None if in_fence else re.match(r"^<!-- shared-section:([a-z0-9-]+) -->$", line)
+        if heading_match or shared_match:
+            if current_name is not None:
+                blocks[current_name] = "\n".join(current_lines).strip("\n")
+            current_name = heading_match.group(1).strip() if heading_match else f"shared:{shared_match.group(1)}"
+            current_lines = []
+            continue
+        current_lines.append(line)
+    if current_name is not None:
+        blocks[current_name] = "\n".join(current_lines).strip("\n")
+    return blocks
+
+
+def split_sub_blocks(block_body):
+    """Split one top-level block's body into ### subsections (#### and deeper,
+    and anything inside a fenced code block, pass through as content)."""
+    subs = {}
+    current_name = None
+    current_lines = []
+    for line, in_fence in _iter_lines_outside_fences(block_body):
+        sub_match = None if in_fence else re.match(r"^### (.+)$", line)
+        if sub_match:
+            if current_name is not None:
+                subs[current_name] = "\n".join(current_lines).strip("\n")
+            current_name = sub_match.group(1).strip()
+            current_lines = []
+            continue
+        current_lines.append(line)
+    if current_name is not None:
+        subs[current_name] = "\n".join(current_lines).strip("\n")
+    return subs
+
+
+def demote_headings(text):
+    """Shift every Markdown heading in text down one level (#### -> ###, etc.),
+    skipping fenced code blocks. Used when 'sub' content that was nested one
+    level deeper inside contract.md (under ## Procedure/Output/Escalate-when)
+    is promoted back to top-level (##) on assembly."""
+    out = []
+    for line, in_fence in _iter_lines_outside_fences(text):
+        heading_match = None if in_fence else re.match(r"^(#{2,6}) (.+)$", line)
+        if heading_match:
+            out.append("#" * (len(heading_match.group(1)) - 1) + " " + heading_match.group(2))
+        else:
+            out.append(line)
+    return "\n".join(out)
+
+
+def resolve_assembly_piece(resolution, top_blocks, sub_cache):
+    kind = resolution[0]
+    if kind == "whole":
+        return top_blocks.get(resolution[1], "")
+    if kind == "shared":
+        return top_blocks.get(f"shared:{resolution[1]}", "")
+    if kind == "sub":
+        block_name, subheading = resolution[1], resolution[2]
+        if block_name not in sub_cache:
+            sub_cache[block_name] = split_sub_blocks(top_blocks.get(block_name, ""))
+        return demote_headings(sub_cache[block_name].get(subheading, ""))
+    if kind == "concat":
+        return "\n\n".join(resolve_assembly_piece(r, top_blocks, sub_cache) for r in resolution[1])
+    raise ValueError(f"unknown resolution kind: {kind}")
+
+
+def assemble_core_from_contract(skill_dir):
+    """Assemble a full SKILL.md-shaped document from contract.md + CORE_ASSEMBLY_ORDER.
+
+    Returns the assembled text. Does not read or write the real SKILL.md
+    except to borrow its frontmatter + title preamble (unchanged, not part
+    of this pilot's scope).
+    """
+    skill_md_text = (skill_dir / "SKILL.md").read_text()
+    preamble = skill_md_text.split("\n## ", 1)[0].rstrip("\n") + "\n\n"
+
+    contract_text = (skill_dir / "contract.md").read_text()
+    contract_body = extract_body_from_contract(contract_text)
+    top_blocks = split_top_blocks(contract_body)
+    sub_cache = {}
+
+    sections = []
+    for heading, resolution in CORE_ASSEMBLY_ORDER:
+        content = resolve_assembly_piece(resolution, top_blocks, sub_cache)
+        sections.append(f"## {heading}\n\n{content.strip()}")
+
+    return preamble + "\n\n".join(sections) + "\n"
+
+
+def extract_body_from_contract(contract_text):
+    """Strip the leading HTML-comment note block from contract.md, if present."""
+    text = contract_text
+    if text.lstrip().startswith("<!--"):
+        end = text.find("-->")
+        if end != -1:
+            text = text[end + 3:]
+    return text.lstrip("\n")
+
+
+def check_core_assembly(skill_name, scratch_dir=None):
+    """Assemble skill_name's contract.md, diff it against the real SKILL.md,
+    and write the assembled copy to scratch_dir (never overwrites SKILL.md).
+    Prints a unified diff and returns True if there is no diff.
+    """
+    import difflib
+
+    skill_dir = CORE_DIR / skill_name
+    real_path = skill_dir / "SKILL.md"
+    if not real_path.exists():
+        print(f"MISSING: {real_path.relative_to(ROOT)}")
+        return False
+    if not (skill_dir / "contract.md").exists():
+        print(f"MISSING: {(skill_dir / 'contract.md').relative_to(ROOT)}")
+        return False
+
+    assembled = assemble_core_from_contract(skill_dir)
+    real = real_path.read_text()
+
+    scratch_dir = Path(scratch_dir) if scratch_dir else Path(os.environ.get("CLAUDE_JOB_DIR", "/tmp")) / "tmp"
+    scratch_dir.mkdir(parents=True, exist_ok=True)
+    scratch_path = scratch_dir / f"{skill_name}.assembled.SKILL.md"
+    scratch_path.write_text(assembled)
+    print(f"Assembled output written to: {scratch_path}")
+
+    diff = list(difflib.unified_diff(
+        real.splitlines(keepends=True),
+        assembled.splitlines(keepends=True),
+        fromfile=str(real_path.relative_to(ROOT)),
+        tofile=str(scratch_path),
+    ))
+    if diff:
+        print(f"DIFF ({len(diff)} lines):")
+        sys.stdout.writelines(diff)
+        return False
+    print("MATCH: assembled output is byte-identical to the real SKILL.md.")
+    return True
+
+
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def main():
-    if "--check" in sys.argv:
+    if "--check-core-assembly" in sys.argv:
+        idx = sys.argv.index("--check-core-assembly")
+        if idx + 1 >= len(sys.argv):
+            print("Usage: generate-adapters.py --check-core-assembly <skill-name>")
+            sys.exit(2)
+        skill_name = sys.argv[idx + 1]
+        print(f"Checking core assembly for {skill_name} (WO 2026-08-15-009 pilot)...")
+        sys.exit(0 if check_core_assembly(skill_name) else 1)
+    elif "--check" in sys.argv:
         print("Checking generated adapters...")
         all_clean = True
         for platform in PLATFORMS:

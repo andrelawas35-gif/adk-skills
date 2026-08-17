@@ -181,7 +181,7 @@
     {
       "name": "alawas-governance-conduct-work-object",
       "path": "adapters/github-copilot/skills/alawas-governance-conduct-work-object/SKILL.md",
-      "sha256": "8a4b76c8bd1241547ddefb2c4c7edea6b1840ebef7cfe3c9b1be37835492d7e5"
+      "sha256": "5ac5d4c31ad7cd028d0f46772f7b7ebb37cbaf37c9102fa5cea59eca8fa972fa"
     },
     {
       "name": "alawas-governance-conduct-work-object/references/MISSING-ARTIFACT-GAP.md",
