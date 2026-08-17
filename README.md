@@ -37,6 +37,15 @@ tools/install.sh --platform codex --global
 tools/install.sh --platform codex --project .
 ```
 
+Without a local checkout, `tools/install-global.sh` is a one-line global
+install — it clones a throwaway copy of this repo and delegates to
+`tools/install.sh --global`:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/andrelawas35-gif/adk-skills/master/tools/install-global.sh \
+  | sh -s -- claude-code   # or: codex | github-copilot (default: claude-code)
+```
+
 | Platform | Global path | Project pin path |
 |----------|-------------|------------------|
 | Codex | `~/.agents/skills/` | `.agents/skills/` |
