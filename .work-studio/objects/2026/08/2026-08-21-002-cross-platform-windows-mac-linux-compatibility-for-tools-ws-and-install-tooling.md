@@ -8,8 +8,9 @@ state: verify
 consequence: meaningful
 sensitivity: ordinary
 created_at: 2026-08-21T08:32:44Z
-updated_at: 2026-08-21T09:11:49Z
-next_action: Director review and commit; nothing pushed or committed yet
+updated_at: 2026-08-21T09:17:07Z
+next_action: None -- director may resume work from the Mac by pulling this commit
+
 
 
 
@@ -112,3 +113,10 @@ tests/test_codex_install.sh asserts against stale pre-namespace skill names.
 - **Status:** active
 - **Actor:** director
 - **Rationale:** Encoding-safety, native Windows tooling, and repo-level determinism (gitattributes + Windows CI) all implemented and locally verified; two unrelated pre-existing bugs found along the way were flagged as separate tasks rather than folded in
+### 2026-08-21T09:17:07Z — committed-and-wo-sync-enabled
+
+- **State:** verify
+- **Status:** active
+- **Actor:** director
+- **Rationale:** Director confirmed and committed all three directions. Also fixed tools/ws/atomic.py missing newline (was still writing CRLF on Windows despite the UTF-8 fix), and removed .work-studio/objects, active.md, inbox.md from .gitignore per director request so Work Objects sync across machines via ordinary git push/pull.
+- **Commit:** 7eecc3f

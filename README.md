@@ -140,7 +140,6 @@ reasoning.
 
 | Fixture | Description |
 |---------|-------------|
-| [personal-institution-work-studio-contract.md](fixtures/personal-institution-work-studio-contract.md) | Privacy, provenance, personalization, and handoff behavior across the two packages |
 | [slice-2-design-tracer-bullet.md](fixtures/slice-2-design-tracer-bullet.md) | Bounded tracer-bullet recommendation, acceptance, risk treatment, rollback, and routing behavior |
 | [slice-2-implement-bounded-change.md](fixtures/slice-2-implement-bounded-change.md) | Accepted bounded implementation, working-tree preservation, continuous verification, deviation, and degradation behavior |
 | [slice-2-verify-release-evidence.md](fixtures/slice-2-verify-release-evidence.md) | Proportionate acceptance, recovery, dependency, privacy, security, and evidence-gap verification without release claims |

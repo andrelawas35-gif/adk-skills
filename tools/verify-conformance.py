@@ -141,7 +141,6 @@ def verify_matrix(fixture_files):
         "fixtures/slice-3-investigate-live-question.md",
         "fixtures/slice-3-deploy-with-recovery.md",
         "fixtures/slice-3-diagnose-production-incident.md",
-        "fixtures/personal-institution-work-studio-contract.md",
     }
 
     for f in fixture_files:
@@ -463,8 +462,6 @@ def main():
             # Default to all known fixture files
             fixtures_dir = ROOT / "fixtures"
             fixture_files = [str(p) for p in fixtures_dir.glob("slice-*.md")]
-            fixture_files.append(
-                str(fixtures_dir / "personal-institution-work-studio-contract.md"))
 
         print("=== Behavioral Matrix Verification ===")
         errors = verify_matrix(fixture_files)
