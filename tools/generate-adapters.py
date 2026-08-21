@@ -44,6 +44,17 @@ SHARED_REFERENCES = [
     "DIRECTOR-LANGUAGE.md",
 ]
 
+# Capability primitives (capabilities/*.md) — small, stable, composable
+# building blocks a skill's body can point to instead of restating inline.
+# Distinct from the abstract platform "Required capabilities" system
+# (file_read, file_write, etc.) used elsewhere in this file.
+SHARED_CAPABILITY_PRIMITIVES = [
+    "classify-provenance.md",
+    "generate-recommendation.md",
+    "rank.md",
+    "generate.md",
+]
+
 # Kernel/overlay split: AGREEMENT-LOOP.md and SKILL-AWARE-GRILLING.md form the
 # grilling overlay. They ship only with the grilling-session skill; all other
 # skills get kernel-only output (Decision 3, WO 2026-07-26-004).
@@ -854,6 +865,47 @@ def build_reference_entries(skill_name, output_dir, core_skill_dir=None, write=F
     return entries
 
 
+def build_capability_entries(skill_name, output_dir, core_skill_dir=None, write=False):
+    """Include capability primitives (capabilities/*.md) that the skill body
+    actually mentions — mirrors build_reference_entries' mention-scan approach
+    (Decision 88, Session 11) for the capabilities/ layer.
+
+    When core_skill_dir is None (legacy path), includes all capability files.
+    """
+    entries = []
+    capability_dir = output_dir / "capabilities"
+
+    if core_skill_dir is not None:
+        body = extract_body(core_skill_dir / "SKILL.md")
+        active_caps = [f for f in SHARED_CAPABILITY_PRIMITIVES if Path(f).name in body]
+    else:
+        active_caps = SHARED_CAPABILITY_PRIMITIVES
+
+    if write:
+        if active_caps:
+            capability_dir.mkdir(parents=True, exist_ok=True)
+            active_names = {Path(f).name for f in active_caps}
+            for existing in capability_dir.iterdir():
+                if existing.is_file() and existing.name not in active_names:
+                    existing.unlink()
+        elif capability_dir.exists():
+            shutil.rmtree(capability_dir)
+
+    for filename in active_caps:
+        source = ROOT / "capabilities" / filename
+        destination = capability_dir / Path(filename).name
+        content = source.read_bytes()
+        if write:
+            shutil.copyfile(source, destination)
+        entries.append({
+            "name": f"{skill_name}/capabilities/{filename}",
+            "path": str(destination.relative_to(ROOT)),
+            "sha256": hashlib.sha256(content).hexdigest(),
+        })
+
+    return entries
+
+
 def generate_platform(platform_name):
     """Generate all adapter skills for one platform."""
     overlay_file = ADAPTERS_DIR / platform_name / "overlay.yaml"
@@ -885,6 +937,8 @@ def generate_platform(platform_name):
             print(f"  Generated: {entry['path']} ({entry['sha256'][:12]}...)")
             manifest_entries.extend(
                 build_reference_entries(output_skill_name, output_dir, core_skill_dir=skill_dir, write=True))
+            manifest_entries.extend(
+                build_capability_entries(output_skill_name, output_dir, core_skill_dir=skill_dir, write=True))
 
     return manifest_entries
 
@@ -987,6 +1041,16 @@ def check_platform(platform_name):
                 all_clean = False
             elif hashlib.sha256(reference_file.read_bytes()).hexdigest() != entry["sha256"]:
                 print(f"  DRIFT: {reference_file.relative_to(ROOT)}")
+                all_clean = False
+            expected_entries.append(entry)
+
+        for entry in build_capability_entries(output_skill_name, output_file.parent, core_skill_dir=skill_dir):
+            capability_file = ROOT / entry["path"]
+            if not capability_file.exists():
+                print(f"  MISSING: {capability_file.relative_to(ROOT)}")
+                all_clean = False
+            elif hashlib.sha256(capability_file.read_bytes()).hexdigest() != entry["sha256"]:
+                print(f"  DRIFT: {capability_file.relative_to(ROOT)}")
                 all_clean = False
             expected_entries.append(entry)
 

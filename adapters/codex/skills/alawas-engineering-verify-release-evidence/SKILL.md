@@ -166,8 +166,9 @@ decides whether any later release action is appropriate.
 
 ## Evidence rules
 
-- Label commands, tests, logs, and repository facts as `[system]`; accepted
-  criteria and confirmations as `[decision]`; conclusions as `[inference]`.
+- Apply `capabilities/classify-provenance.md` (reduced 3-tag variant): commands,
+  tests, logs, and repository facts as `[system]`; accepted criteria and
+  confirmations as `[decision]`; conclusions as `[inference]`.
 - Capture minimum-necessary commands, result summaries, affected boundaries,
   and redacted artifacts. Never copy secrets or private records into the
   evidence report.

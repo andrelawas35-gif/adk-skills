@@ -172,7 +172,14 @@ For the chosen decision:
    concrete criteria ("handles 10k concurrent requests," "one file per concern,"
    "passes the existing test suite without modification").
 
-Then recommend one branch. State why it wins.
+Apply `capabilities/rank.md` to order the branches by confidence, then
+`capabilities/generate.md` to produce one recommended branch with up to two
+alternatives. Neither capability owns the refusal condition or the
+invocation judgment, so both stay here: if every branch ranks low
+confidence, do not manufacture a recommendation — say so and name the
+missing evidence instead. Only rank and recommend when the branches are
+credible and materially distinct enough that a recommendation would
+actually help.
 
 ### 5. Ask one question
 

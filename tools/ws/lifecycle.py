@@ -6,9 +6,10 @@ that lack structured Decisions by producing a "not yet satisfiable" message
 rather than a hard failure.
 """
 
+import re
 from typing import Dict, List, Optional, Tuple
 
-from .sections import parse_decisions_table
+from .sections import get_section, parse_decisions_table
 
 # ── Valid states ──────────────────────────────────────────────────────────────
 
@@ -146,8 +147,29 @@ def check_release_gate(body: str) -> GATE_RESULT:
     return (True, "")
 
 
+_CHECKLIST_ITEM_RE = re.compile(r"^-\s*\[[ xX]\]\s*\S")
+
+
+def _success_evidence_is_populated(body: str) -> bool:
+    """True if Success evidence has at least one non-empty checklist line.
+
+    Strips HTML comments before scanning so the bare template placeholder
+    (the instructional comment plus an empty ``- [ ]`` line) never counts
+    as populated (WO 2026-08-17-009 Decision 2).
+    """
+    section = get_section(body, "success evidence")
+    if not section:
+        return False
+    text = re.sub(r"<!--.*?-->", "", section, flags=re.DOTALL)
+    for line in text.splitlines():
+        if _CHECKLIST_ITEM_RE.match(line.strip()):
+            return True
+    return False
+
+
 def check_close_gate(body: str) -> GATE_RESULT:
-    """CLOSE GATE (all consequence levels): requires an outcome record.
+    """CLOSE GATE (all consequence levels): requires an outcome record and
+    a populated Success evidence checklist (WO 2026-08-17-009 Decision 2).
 
     An outcome record is a decision with either result: pass or result: fail
     and a populated rationale or scope.
@@ -161,16 +183,23 @@ def check_close_gate(body: str) -> GATE_RESULT:
             "before closing.",
         )
 
-    for d in reversed(decisions):
-        result = d.get("result", "").strip()
-        if result in ("pass", "fail"):
-            return (True, "")
+    has_outcome = any(d.get("result", "").strip() in ("pass", "fail") for d in decisions)
+    if not has_outcome:
+        return (
+            False,
+            "Close gate failed: no decision record with result: pass or result: fail found. "
+            "An outcome record is required before closing.",
+        )
 
-    return (
-        False,
-        "Close gate failed: no decision record with result: pass or result: fail found. "
-        "An outcome record is required before closing.",
-    )
+    if not _success_evidence_is_populated(body):
+        return (
+            False,
+            "Close gate failed: Success evidence is empty or still the template "
+            "placeholder. At least one real checklist line ('- [ ] ...' or "
+            "'- [x] ...') is required before closing.",
+        )
+
+    return (True, "")
 
 
 def check_observe_gate(body: str) -> GATE_RESULT:

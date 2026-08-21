@@ -315,6 +315,51 @@ class TestLifecycleGates(unittest.TestCase):
         passed, msg = check_close_gate(body_pending)
         self.assertFalse(passed)
 
+    def test_close_gate_fails_with_empty_success_evidence(self):
+        """WO 2026-08-17-009 Decision 2: close gate rejects the raw
+        template placeholder ('<!-- comment --> \\n- [ ] ' with no text)."""
+        body_empty_evidence = SAMPLE_BODY.replace(
+            "## Success evidence\n\n- [ ] Done\n",
+            "## Success evidence\n\n"
+            "<!-- Checklist of observable outcomes that indicate completion. -->\n"
+            "- [ ] \n",
+        )
+        passed, msg = check_close_gate(body_empty_evidence)
+        self.assertFalse(passed)
+        self.assertIn("Success evidence", msg)
+
+    def test_close_gate_fails_with_html_comment_only_success_evidence(self):
+        """A section holding only the instructional comment (no checklist
+        line at all) is also rejected."""
+        body_comment_only = SAMPLE_BODY.replace(
+            "## Success evidence\n\n- [ ] Done\n",
+            "## Success evidence\n\n"
+            "<!-- Checklist of observable outcomes that indicate completion. -->\n",
+        )
+        passed, msg = check_close_gate(body_comment_only)
+        self.assertFalse(passed)
+
+    def test_close_gate_passes_with_checked_success_evidence_item(self):
+        """A checked ('- [x]') item counts as populated, not just unchecked."""
+        body_checked = SAMPLE_BODY.replace("- [ ] Done", "- [x] Done")
+        passed, _ = check_close_gate(body_checked)
+        self.assertTrue(passed)
+
+    def test_close_gate_via_design_verify_close_path_is_still_caught(self):
+        """Exit criterion 3: a WO following this session's actual
+        design->verify->close path (never touching build/release/observe)
+        is still caught by the gate -- proving the corrected placement
+        (extending check_close_gate, not check_build_gate) actually works."""
+        body_empty_evidence = SAMPLE_BODY.replace(
+            "## Success evidence\n\n- [ ] Done\n",
+            "## Success evidence\n\n- [ ] \n",
+        )
+        # This WO never transitions through "build" -- check_gates_for_transition
+        # is only ever called with to_state="close" for it, exactly as cmd_close does.
+        passed, msg = check_gates_for_transition(body_empty_evidence, "close", "meaningful")
+        self.assertFalse(passed)
+        self.assertIn("Success evidence", msg)
+
     def test_observe_gate_passes_with_pass_result(self):
         """Observe gate passes with any pass result."""
         passed, _ = check_observe_gate(SAMPLE_BODY)

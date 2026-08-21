@@ -116,7 +116,9 @@ After recovery is verified or the incident is safely bounded, distinguish confir
 
 ## Evidence rules
 
-- Label observations as `[system]` or `[testimony]`, recorded authority as `[decision]`, hypotheses as `[inference]`, and unavailable information as `[gap]` according to `references/EVIDENCE-MODEL.md`.
+- Apply `capabilities/classify-provenance.md`: observations as `[system]` or
+  `[testimony]`, recorded authority as `[decision]`, hypotheses as
+  `[inference]`, and unavailable information as `[gap]`.
 - Sanitize evidence before persistence. Keep stable references, timestamps, path classes, metric deltas, command categories, and outcomes—not raw sensitive payloads or credentials.
 - Distinguish containment performed, restoration attempted, recovery verified on the affected path, and root cause confirmed; none implies the next.
 - Preserve disconfirming results and failed tests. A negative test narrows a hypothesis; it does not prove a different one.

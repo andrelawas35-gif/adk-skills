@@ -35,7 +35,7 @@ from typing import Literal, Optional, TypedDict
 from langgraph.checkpoint.sqlite import SqliteSaver
 from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
 from langgraph.graph import END, START, StateGraph
-from langgraph.types import Command, interrupt
+from langgraph.types import Command, RetryPolicy, interrupt
 
 from runtime.envelope import WorkObjectEnvelope
 from runtime.handoff import (
@@ -253,6 +253,48 @@ def claim_idempotency_receipt(
             (thread_id, work_object_id, effect_name, time.time()),
         )
         return cursor.rowcount == 1
+
+
+def has_idempotency_receipt(
+    idempotency_db: Path,
+    *,
+    thread_id: str,
+    work_object_id: str,
+    effect_name: str,
+) -> bool:
+    """Read-only check for an existing receipt, without claiming one.
+
+    For an effect that can fail *after* being claimed (WO 2026-08-17-016
+    Decision 6): claim-before-effect (`claim_idempotency_receipt`) assumes
+    the effect always succeeds once claimed, which node1_load_envelope's
+    effectively-infallible marker write satisfies but a real file append
+    under simulated failure does not -- a claim burned by a failed attempt
+    would block every subsequent retry from ever performing the effect.
+    The correct order for a fallible effect is: check (this function,
+    read-only) -> attempt the effect -> claim only after it succeeds.
+    """
+    if not idempotency_db.exists():
+        return False
+    with sqlite3.connect(str(idempotency_db)) as conn:
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS idempotency_receipts (
+                thread_id TEXT NOT NULL,
+                work_object_id TEXT NOT NULL,
+                effect_name TEXT NOT NULL,
+                created_at REAL NOT NULL,
+                PRIMARY KEY (thread_id, work_object_id, effect_name)
+            )
+            """
+        )
+        row = conn.execute(
+            """
+            SELECT 1 FROM idempotency_receipts
+            WHERE thread_id = ? AND work_object_id = ? AND effect_name = ?
+            """,
+            (thread_id, work_object_id, effect_name),
+        ).fetchone()
+        return row is not None
 
 
 def node1_load_envelope(state: GraphState) -> dict:
@@ -499,6 +541,7 @@ class Phase6State(TypedDict, total=False):
     branch_b_completed: bool
     join_fired: bool
     join_proposal: str
+    direction_approved: bool
 
 
 def phase6_dispatch(state: Phase6State) -> dict:
@@ -617,6 +660,21 @@ def phase6_join(state: Phase6State) -> dict:
     return {"join_fired": True, "join_proposal": proposal}
 
 
+def phase6_direction_gate(state: Phase6State) -> dict:
+    """Pause for explicit director approval of the joined proposal (WO 2026-08-17-016 Decision 11).
+
+    The build plan's own reference architecture names a "Director direction
+    interrupt" immediately after "Join proposals" -- this is that point,
+    generalized via `authority_gate` rather than a hand-rolled `interrupt()`.
+    Uses `direction_approved`, not `authority_gate`'s own `approved` key, to
+    leave room for a second gate type on this graph later without collision.
+    No differential routing on the outcome yet -- both approved and rejected
+    directions simply complete, recording which one happened.
+    """
+    result = authority_gate(reason=f"approve direction: {state['join_proposal']}")
+    return {"direction_approved": bool(result.get("approved"))}
+
+
 def build_phase6_graph(checkpoint_db: Path):
     """Build the Phase 6 two-branch/join graph; returns (compiled_graph, conn)."""
     recover_checkpoint_db(checkpoint_db)
@@ -625,12 +683,14 @@ def build_phase6_graph(checkpoint_db: Path):
     builder.add_node("branch_a", phase6_branch_a)
     builder.add_node("branch_b", phase6_branch_b)
     builder.add_node("join", phase6_join)
+    builder.add_node("direction_gate", phase6_direction_gate)
     builder.add_edge(START, "dispatch")
     builder.add_edge("dispatch", "branch_a")
     builder.add_edge("dispatch", "branch_b")
     builder.add_edge("branch_a", "join")
     builder.add_edge("branch_b", "join")
-    builder.add_edge("join", END)
+    builder.add_edge("join", "direction_gate")
+    builder.add_edge("direction_gate", END)
     conn = sqlite3.connect(str(checkpoint_db), check_same_thread=False)
     saver = SqliteSaver(conn, serde=build_checkpoint_serializer())
     return builder.compile(checkpointer=saver), conn
@@ -648,10 +708,25 @@ def run_phase6(
     thread_id: str,
     checkpoint_db: Path,
     resume: bool = False,
+    approve_direction: Optional[bool] = None,
 ) -> dict:
-    """Run the Phase 6 graph once (used directly by tests)."""
+    """Run the Phase 6 graph once (used directly by tests).
+
+    `resume` and `approve_direction` are distinct mechanisms that never
+    share a code path (WO 2026-08-17-016 Decision 11): `resume` continues
+    a run after an uncaught crash via LangGraph's checkpoint (`graph.invoke
+    (None, ...)`); `approve_direction`, when not None, answers the
+    `direction_gate` interrupt via `Command(resume=...)`. A crash always
+    happens before `direction_gate` (at dispatch/branch_a/branch_b/join),
+    so `resume=True` alone always gets a thread past a crash and up to the
+    interrupt; a separate `approve_direction` call is then needed to pass it.
+    """
     graph, conn = build_phase6_graph(checkpoint_db)
     try:
+        if approve_direction is not None:
+            return graph.invoke(
+                Command(resume=approve_direction), config=_phase6_config(thread_id)
+            )
         if resume:
             return graph.invoke(None, config=_phase6_config(thread_id))
         return graph.invoke(
@@ -778,6 +853,7 @@ class ResearchState(TypedDict, total=False):
     url: str
     approved: bool
     research_receipt: dict
+    note_recorded: bool
 
 
 def research_propose_fetch(state: ResearchState) -> dict:
@@ -785,16 +861,28 @@ def research_propose_fetch(state: ResearchState) -> dict:
     return {"url": state["url"]}
 
 
+def authority_gate(reason: str) -> dict:
+    """Pause for explicit human approval, named by `reason`.
+
+    Performs no side effect itself. `interrupt()` checkpoints the pause; a
+    resume without `Command(resume=True)` (approval) leaves `approved` False.
+    Generalizes the research-only approval gate below (Direction 4, ADR 0026)
+    for reuse across the four director-gate types (direction, restricted,
+    high_consequence, release) -- WO 2026-08-17-016 Decision 2 wires only the
+    research call site for now; the other three remain unimplemented.
+    """
+    approval = interrupt({"reason": reason, "ask": "approve this action?"})
+    return {"approved": bool(approval)}
+
+
 def research_gate_fetch(state: ResearchState) -> dict:
     """Pause for explicit human approval of the exact proposed URL.
 
-    Performs no network call. `interrupt()` checkpoints the pause; a resume
-    without `Command(resume=True)` (approval) leaves `approved` False and the
-    fetch node below performs no fetch -- proving exit criterion 1 (no fetch
-    without approval).
+    Wraps the generalized `authority_gate` with a research-specific reason.
+    Performs no network call itself; the fetch node below performs no fetch
+    without approval -- proving exit criterion 1 (no fetch without approval).
     """
-    approval = interrupt({"url": state["url"], "ask": "approve this fetch?"})
-    return {"approved": bool(approval)}
+    return authority_gate(reason=f"approve fetch: {state['url']}")
 
 
 def research_fetch_source(state: ResearchState) -> dict:
@@ -820,17 +908,113 @@ def research_fetch_source(state: ResearchState) -> dict:
     return {"research_receipt": receipt.model_dump()}
 
 
-def build_research_graph(checkpoint_db: Path):
-    """Build the propose -> gate -> fetch research graph; returns (graph, conn)."""
+def _make_research_record_note(notes_dir: Path):
+    """Build the record_note node, closed over a test-isolable notes directory.
+
+    Runtime-local only (WO 2026-08-17-016 Decision 6) -- not a canonical
+    Evidence Ledger entry; a human or `investigate-live-question` still owns
+    promoting fetched content into `.work-studio/` (research.py's own
+    constraint). `notes_dir` is derived from `checkpoint_db`'s directory by
+    `build_research_graph` so tests using an isolated temp checkpoint dir get
+    an isolated notes dir too, matching the existing test-isolation pattern
+    (`claim_idempotency_receipt`'s db is likewise never a fixed shared path).
+    """
+
+    def research_record_note(state: ResearchState) -> dict:
+        """Append the fetched receipt to a runtime-local, durable log.
+
+        Check-then-write-then-claim, not claim-then-write: this effect can
+        fail (a real file append, unlike node1_load_envelope's effectively-
+        infallible marker write), so claiming before attempting it would
+        burn the claim on a failed try and block every retry from ever
+        completing. `has_idempotency_receipt` skips the append if a prior
+        attempt already succeeded (the crash-resume case); `RetryableError`
+        on a transient `OSError` lets the node's `retry_policy` retry the
+        write itself (the in-process case); the claim is only recorded once
+        the write actually succeeds.
+        """
+        thread_id = state["thread_id"]
+        idempotency_db = notes_dir / "idempotency.sqlite"
+        work_object_id = state["work_object_id"]
+
+        if has_idempotency_receipt(
+            idempotency_db,
+            thread_id=thread_id,
+            work_object_id=work_object_id,
+            effect_name="record_note",
+        ):
+            return {"note_recorded": True}
+
+        log_path = notes_dir / f"{thread_id}.jsonl"
+        try:
+            log_path.parent.mkdir(parents=True, exist_ok=True)
+            with log_path.open("a", encoding="utf-8") as fh:
+                fh.write(
+                    json.dumps(state.get("research_receipt", {}), default=_json_default)
+                    + "\n"
+                )
+        except OSError as exc:
+            raise RetryableError(f"note append failed: {exc}") from exc
+
+        claim_idempotency_receipt(
+            idempotency_db,
+            thread_id=thread_id,
+            work_object_id=work_object_id,
+            effect_name="record_note",
+        )
+        return {"note_recorded": True}
+
+    return research_record_note
+
+
+def _make_record_note_error_handler(notes_dir: Path):
+    """Build record_note's error_handler, closed over the same notes_dir.
+
+    Fires once `record_note`'s `retry_policy` exhausts all attempts (WO
+    2026-08-17-016 Decision 8) -- proven pattern (`test_phase7_tracer.py`'s
+    `risky_effect_error_handler`): journal a distinct `record_note:failed`
+    identity, never the `record_note` success identity, so an exhausted note
+    append is visible in the effect journal instead of crashing the run.
+    """
+
+    def record_note_error_handler(state: ResearchState) -> dict:
+        idempotency_db = notes_dir / "idempotency.sqlite"
+        claim_idempotency_receipt(
+            idempotency_db,
+            thread_id=state["thread_id"],
+            work_object_id=state["work_object_id"],
+            effect_name="record_note:failed",
+        )
+        return {"note_recorded": False}
+
+    return record_note_error_handler
+
+
+def build_research_graph(checkpoint_db: Path, notes_dir: Optional[Path] = None):
+    """Build the propose -> gate -> fetch -> record research graph; returns (graph, conn).
+
+    `notes_dir` defaults to a sibling of `checkpoint_db` so callers get an
+    isolated research-notes directory for free; pass explicitly to share one
+    across separate checkpoint DBs.
+    """
     recover_checkpoint_db(checkpoint_db)
+    if notes_dir is None:
+        notes_dir = checkpoint_db.parent / "research_notes"
     builder = StateGraph(ResearchState)
     builder.add_node("propose_fetch", research_propose_fetch)
     builder.add_node("gate_fetch", research_gate_fetch)
     builder.add_node("fetch_source", research_fetch_source)
+    builder.add_node(
+        "record_note",
+        _make_research_record_note(notes_dir),
+        retry_policy=RetryPolicy(max_attempts=3, retry_on=RetryableError),
+        error_handler=_make_record_note_error_handler(notes_dir),
+    )
     builder.add_edge(START, "propose_fetch")
     builder.add_edge("propose_fetch", "gate_fetch")
     builder.add_edge("gate_fetch", "fetch_source")
-    builder.add_edge("fetch_source", END)
+    builder.add_edge("fetch_source", "record_note")
+    builder.add_edge("record_note", END)
     conn = sqlite3.connect(str(checkpoint_db), check_same_thread=False)
     saver = SqliteSaver(conn, serde=build_checkpoint_serializer())
     return builder.compile(checkpointer=saver), conn
@@ -884,6 +1068,30 @@ def inspect_research(thread_id: str, checkpoint_db: Path) -> dict:
     finally:
         conn.close()
     return summary
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Phase 7 — error classes (WO 2026-08-17-016 Decisions 3-4, ADR 0026)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Not yet wired to any real node. Declared here as reusable Phase 7
+# primitives; retry_on's isinstance-based matching (confirmed directly
+# against langgraph.pregel._retry._should_retry_on) means RetryPolicy(
+# retry_on=RetryableError) retries RetryableError and its subclasses only --
+# TerminalError and AuthorityRequiredError are unrelated sibling classes, so
+# they propagate immediately with zero retries.
+
+
+class RetryableError(Exception):
+    """A node effect failed in a way that may succeed if attempted again."""
+
+
+class TerminalError(Exception):
+    """A node effect failed in a way retrying cannot fix."""
+
+
+class AuthorityRequiredError(Exception):
+    """A node effect was blocked pending human authority; not a retry condition."""
 
 
 def _add_runtime_db_options(parser: argparse.ArgumentParser) -> None:

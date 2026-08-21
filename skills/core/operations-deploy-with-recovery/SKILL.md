@@ -148,8 +148,9 @@ unavailable, or failed rollback is an explicit gap, never a successful release.
 
 ### 5. Sanitize and persist evidence
 
-Label deployment facts and command outcomes as `[system]`, authority as
-`[decision]`, and interpretations as `[inference]`. Record only minimum-
+Apply `capabilities/classify-provenance.md` (reduced 3-tag variant): deployment
+facts and command outcomes as `[system]`, authority as `[decision]`, and
+interpretations as `[inference]`. Record only minimum-
 necessary sanitized production evidence: artifact identity, target class,
 increment, gate outcomes, check results, rollback status, remaining risks, and
 the observation window. Redact credentials, secrets, personally identifiable

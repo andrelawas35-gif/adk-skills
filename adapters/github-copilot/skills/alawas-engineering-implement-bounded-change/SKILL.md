@@ -174,9 +174,9 @@ its declared degradation path. Do not claim deployment or release readiness.
 
 ## Evidence rules
 
-- Label repository facts and command results as `[system]`, accepted constraints
-  and confirmations as `[decision]`, and implementation reasoning as
-  `[inference]`, following `references/EVIDENCE-MODEL.md`.
+- Apply `capabilities/classify-provenance.md` (reduced 3-tag variant): repository
+  facts and command results as `[system]`, accepted constraints and
+  confirmations as `[decision]`, and implementation reasoning as `[inference]`.
 - Capture only minimum-necessary file names, commands, outcomes, and diffs;
   never copy secrets, restricted material, or full command output into the Work
   Object.

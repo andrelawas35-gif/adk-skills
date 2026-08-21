@@ -86,7 +86,7 @@
     {
       "name": "alawas-design-track-components",
       "path": "adapters/github-copilot/skills/alawas-design-track-components/SKILL.md",
-      "sha256": "30c437fb8acdd431597ef40176d07f8bdc749bcf60f3027b9022633ce1991d25"
+      "sha256": "a16ec3a8cd1df3d3d1b4edc9a228c15a860fd06dfdefc281ede0a6e9646206c5"
     },
     {
       "name": "alawas-design-track-components/references/MISSING-ARTIFACT-GAP.md",
@@ -109,6 +109,11 @@
       "sha256": "7692ebf99ef04444dc7eed398c345c6a7df9e6f172f03f97de5453e10cff6a7f"
     },
     {
+      "name": "alawas-design-track-components/capabilities/classify-provenance.md",
+      "path": "adapters/github-copilot/skills/alawas-design-track-components/capabilities/classify-provenance.md",
+      "sha256": "cc2798e2e0411840c0c878dd19e4c487c7a18b1397bd94a3ad2d4e6b52307ac7"
+    },
+    {
       "name": "alawas-design-verify-design-implementation",
       "path": "adapters/github-copilot/skills/alawas-design-verify-design-implementation/SKILL.md",
       "sha256": "1fce461f4db995ec2944884343e190b77ef0470684793c6ad59c22459483c3a2"
@@ -126,7 +131,7 @@
     {
       "name": "alawas-engineering-implement-bounded-change",
       "path": "adapters/github-copilot/skills/alawas-engineering-implement-bounded-change/SKILL.md",
-      "sha256": "3b9587e24f985c447187e850d73e5d2072f251242147012c2341e9539aba880e"
+      "sha256": "8112176a2ab1a98a957272c3f91e7fc26acd4a6f26845f97743bb4d15aa558a8"
     },
     {
       "name": "alawas-engineering-implement-bounded-change/references/CAPABILITY-DEGRADATION.md",
@@ -139,11 +144,6 @@
       "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
     },
     {
-      "name": "alawas-engineering-implement-bounded-change/references/EVIDENCE-MODEL.md",
-      "path": "adapters/github-copilot/skills/alawas-engineering-implement-bounded-change/references/EVIDENCE-MODEL.md",
-      "sha256": "409f3ebe84208f2e440b475de7b9c7359ab641523e5d39e41f8ee2c81bd7c526"
-    },
-    {
       "name": "alawas-engineering-implement-bounded-change/references/DIRECTOR-LANGUAGE.md",
       "path": "adapters/github-copilot/skills/alawas-engineering-implement-bounded-change/references/DIRECTOR-LANGUAGE.md",
       "sha256": "74753e8e90962526fe9f9cde49ce6efec82f51e281700266edfca3f554e6a856"
@@ -154,9 +154,14 @@
       "sha256": "7692ebf99ef04444dc7eed398c345c6a7df9e6f172f03f97de5453e10cff6a7f"
     },
     {
+      "name": "alawas-engineering-implement-bounded-change/capabilities/classify-provenance.md",
+      "path": "adapters/github-copilot/skills/alawas-engineering-implement-bounded-change/capabilities/classify-provenance.md",
+      "sha256": "cc2798e2e0411840c0c878dd19e4c487c7a18b1397bd94a3ad2d4e6b52307ac7"
+    },
+    {
       "name": "alawas-engineering-verify-release-evidence",
       "path": "adapters/github-copilot/skills/alawas-engineering-verify-release-evidence/SKILL.md",
-      "sha256": "dc4767b4d4813f9b46d6fc2109521a65aa30e96268543bc55a69f534b4554c11"
+      "sha256": "019d367812076bac3ebd91630ecdff7bb958425a38943c2029bc27aab0f72e7d"
     },
     {
       "name": "alawas-engineering-verify-release-evidence/references/CAPABILITY-DEGRADATION.md",
@@ -177,6 +182,11 @@
       "name": "alawas-engineering-verify-release-evidence/references/epistemic/epistemic-rules-essential.md",
       "path": "adapters/github-copilot/skills/alawas-engineering-verify-release-evidence/references/epistemic/epistemic-rules-essential.md",
       "sha256": "7692ebf99ef04444dc7eed398c345c6a7df9e6f172f03f97de5453e10cff6a7f"
+    },
+    {
+      "name": "alawas-engineering-verify-release-evidence/capabilities/classify-provenance.md",
+      "path": "adapters/github-copilot/skills/alawas-engineering-verify-release-evidence/capabilities/classify-provenance.md",
+      "sha256": "cc2798e2e0411840c0c878dd19e4c487c7a18b1397bd94a3ad2d4e6b52307ac7"
     },
     {
       "name": "alawas-governance-conduct-work-object",
@@ -321,7 +331,7 @@
     {
       "name": "alawas-operations-deploy-with-recovery",
       "path": "adapters/github-copilot/skills/alawas-operations-deploy-with-recovery/SKILL.md",
-      "sha256": "a9fe403742740c91d740655b714eb251cdad81f3e42dd12956ab135a2763518b"
+      "sha256": "9cc5207ed7014474d88beba6458bdf769060061c09a8bd5cc998d2c3d9aa7c57"
     },
     {
       "name": "alawas-operations-deploy-with-recovery/references/CAPABILITY-DEGRADATION.md",
@@ -344,9 +354,14 @@
       "sha256": "7692ebf99ef04444dc7eed398c345c6a7df9e6f172f03f97de5453e10cff6a7f"
     },
     {
+      "name": "alawas-operations-deploy-with-recovery/capabilities/classify-provenance.md",
+      "path": "adapters/github-copilot/skills/alawas-operations-deploy-with-recovery/capabilities/classify-provenance.md",
+      "sha256": "cc2798e2e0411840c0c878dd19e4c487c7a18b1397bd94a3ad2d4e6b52307ac7"
+    },
+    {
       "name": "alawas-operations-diagnose-production-incident",
       "path": "adapters/github-copilot/skills/alawas-operations-diagnose-production-incident/SKILL.md",
-      "sha256": "b40564561fc991d09bcd22f1b6e727e85f6f7d9ce046e5581f2150bd7d89bc8d"
+      "sha256": "eb13e40df6bb902b47acac2520345149059bc061fa894c6f34884bbeb469dc65"
     },
     {
       "name": "alawas-operations-diagnose-production-incident/references/CAPABILITY-DEGRADATION.md",
@@ -357,11 +372,6 @@
       "name": "alawas-operations-diagnose-production-incident/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/github-copilot/skills/alawas-operations-diagnose-production-incident/references/CONSEQUENCE-AUTHORITY.md",
       "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
-    },
-    {
-      "name": "alawas-operations-diagnose-production-incident/references/EVIDENCE-MODEL.md",
-      "path": "adapters/github-copilot/skills/alawas-operations-diagnose-production-incident/references/EVIDENCE-MODEL.md",
-      "sha256": "409f3ebe84208f2e440b475de7b9c7359ab641523e5d39e41f8ee2c81bd7c526"
     },
     {
       "name": "alawas-operations-diagnose-production-incident/references/DIRECTOR-LANGUAGE.md",
@@ -379,19 +389,19 @@
       "sha256": "15e0b0bfdc4638c94f5dde38b09fd4dfd4b346950afa241a35cbc419c4b6b8a8"
     },
     {
+      "name": "alawas-operations-diagnose-production-incident/capabilities/classify-provenance.md",
+      "path": "adapters/github-copilot/skills/alawas-operations-diagnose-production-incident/capabilities/classify-provenance.md",
+      "sha256": "cc2798e2e0411840c0c878dd19e4c487c7a18b1397bd94a3ad2d4e6b52307ac7"
+    },
+    {
       "name": "alawas-research-investigate-live-question",
       "path": "adapters/github-copilot/skills/alawas-research-investigate-live-question/SKILL.md",
-      "sha256": "0c90852eb3f8835b81680346e8dac4579cef047cc1fda3c542f23dc70cd38503"
+      "sha256": "f6eed5a38f7ed100768e6e22f6b2354c96bdaebc9203bbe42184e863665585df"
     },
     {
       "name": "alawas-research-investigate-live-question/references/CAPABILITY-DEGRADATION.md",
       "path": "adapters/github-copilot/skills/alawas-research-investigate-live-question/references/CAPABILITY-DEGRADATION.md",
       "sha256": "ae7e228cf66bbb1b00ba6b67edc6cfe0fbc2eb26cca2717123923dddba3e3be7"
-    },
-    {
-      "name": "alawas-research-investigate-live-question/references/EVIDENCE-MODEL.md",
-      "path": "adapters/github-copilot/skills/alawas-research-investigate-live-question/references/EVIDENCE-MODEL.md",
-      "sha256": "409f3ebe84208f2e440b475de7b9c7359ab641523e5d39e41f8ee2c81bd7c526"
     },
     {
       "name": "alawas-research-investigate-live-question/references/CONSEQUENCE-AUTHORITY.md",
@@ -407,6 +417,11 @@
       "name": "alawas-research-investigate-live-question/references/epistemic/epistemic-rules-essential.md",
       "path": "adapters/github-copilot/skills/alawas-research-investigate-live-question/references/epistemic/epistemic-rules-essential.md",
       "sha256": "7692ebf99ef04444dc7eed398c345c6a7df9e6f172f03f97de5453e10cff6a7f"
+    },
+    {
+      "name": "alawas-research-investigate-live-question/capabilities/classify-provenance.md",
+      "path": "adapters/github-copilot/skills/alawas-research-investigate-live-question/capabilities/classify-provenance.md",
+      "sha256": "cc2798e2e0411840c0c878dd19e4c487c7a18b1397bd94a3ad2d4e6b52307ac7"
     },
     {
       "name": "alawas-thinking-develop-idea",
@@ -516,7 +531,7 @@
     {
       "name": "alawas-thinking-pressure-test-decision",
       "path": "adapters/github-copilot/skills/alawas-thinking-pressure-test-decision/SKILL.md",
-      "sha256": "c3c1565d2254600763c134feb33a8bd9cb39496d4e90bcc86d2043dfe4e1ad79"
+      "sha256": "1514bdfc3a4940c79c00b065ba909adcb6b30b310b7ac988b4735d4775590be4"
     },
     {
       "name": "alawas-thinking-pressure-test-decision/references/CAPABILITY-DEGRADATION.md",
@@ -542,6 +557,16 @@
       "name": "alawas-thinking-pressure-test-decision/references/epistemic/agreement-loop-tag-table-excerpt.md",
       "path": "adapters/github-copilot/skills/alawas-thinking-pressure-test-decision/references/epistemic/agreement-loop-tag-table-excerpt.md",
       "sha256": "15e0b0bfdc4638c94f5dde38b09fd4dfd4b346950afa241a35cbc419c4b6b8a8"
+    },
+    {
+      "name": "alawas-thinking-pressure-test-decision/capabilities/rank.md",
+      "path": "adapters/github-copilot/skills/alawas-thinking-pressure-test-decision/capabilities/rank.md",
+      "sha256": "56b109a5c9cfec88f45d35766eb8f93b91ae8ed1e225b37e66e58ce068c6e313"
+    },
+    {
+      "name": "alawas-thinking-pressure-test-decision/capabilities/generate.md",
+      "path": "adapters/github-copilot/skills/alawas-thinking-pressure-test-decision/capabilities/generate.md",
+      "sha256": "d4fc658334307b2254c3f8715c7f51e619972fcb30dd092d486e0dc5dcf5a615"
     },
     {
       "name": "alawas-thinking-resume-work",

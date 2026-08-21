@@ -1,6 +1,25 @@
-# Generate Recommendation
+# Generate Recommendation (superseded)
 
-## Purpose
+This capability has been split into two smaller primitives:
+
+- [`rank.md`](rank.md) — compare and confidence-order options.
+- [`generate.md`](generate.md) — produce the bounded Recommended +
+  Alternatives output shape from ranked options.
+
+Split by Work Object `2026-08-17-013` Decision 2, on 2026-08-17, after gap
+resolution found this capability was not composed by any skill (documented
+as "restated independently" in the section below, rather than referenced).
+`thinking-pressure-test-decision/SKILL.md`'s branch-walk step now points to
+`rank.md` and `generate.md` directly; the cap-at-3/refusal-condition policy
+and the judgment of when a recommendation is warranted at all moved to that
+skill, since gap resolution found no evidence either was reused as a
+primitive elsewhere.
+
+Preserved below for reference; not the current canonical content.
+
+---
+
+## Purpose (original, superseded)
 
 Given a decision point with credible, materially distinct options, produce
 one ranked recommendation with bounded alternatives — never an unranked

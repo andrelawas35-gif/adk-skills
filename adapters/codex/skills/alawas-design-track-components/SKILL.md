@@ -172,8 +172,9 @@ reuse its identifier or erase lineage.
 
 ## Evidence and Work Object updates
 
-Label local files and command results `[system]`, approval `[decision]`, and
-reasoning `[inference]`. Return `alawas-governance-conduct-work-object` a concise record with
+Apply `capabilities/classify-provenance.md` (reduced 3-tag variant): local
+files and command results `[system]`, approval `[decision]`, and reasoning
+`[inference]`. Return `alawas-governance-conduct-work-object` a concise record with
 the entry ID, requested operation, resolved pointers, lineage, debt inputs,
 reopen trigger or cooldown, pass evidence, findings or re-stamp, inbox signal,
 cascade or retirement result, authority, and unverified gaps. The conductor

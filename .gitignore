@@ -34,4 +34,6 @@ __pycache__/
 runtime/traces/
 
 # Runtime checkpoint DBs (WO 2026-08-15-008, Decision 2) -- gitignored durability
+# Also covers runtime/checkpoints/research_notes/, the default research-notes
+# log directory (WO 2026-08-17-016 Decision 6) -- not canonical.
 runtime/checkpoints/

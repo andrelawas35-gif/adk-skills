@@ -63,7 +63,7 @@ class InvestigateLiveQuestionContract(unittest.TestCase):
             with self.subTest(platform=platform):
                 adapter_dir = ROOT / "adapters" / platform / "skills" / f"alawas-{CORE.parent.name}"
                 self.assertIn(core_body, (adapter_dir / "SKILL.md").read_text())
-                self.assertTrue((adapter_dir / "references" / "EVIDENCE-MODEL.md").is_file())
+                self.assertTrue((adapter_dir / "capabilities" / "classify-provenance.md").is_file())
 
 
 if __name__ == "__main__":

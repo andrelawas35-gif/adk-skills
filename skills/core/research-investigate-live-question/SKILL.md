@@ -153,7 +153,7 @@ contradictions, missing evidence, and confidence. Route only to:
 ## Evidence rules
 
 - Every factual statement uses the provenance lanes in
-  `references/EVIDENCE-MODEL.md`; label conclusions as `[inference]`.
+  `capabilities/classify-provenance.md`; label conclusions as `[inference]`.
 - Record source evidence with attributable author or institution, date,
   durable location, relevant claim, confidence, and corroboration or
   contradiction.

@@ -620,5 +620,85 @@ class Phase6HandoffTests(unittest.TestCase):
                     )
 
 
+class Phase6DirectionGateTests(unittest.TestCase):
+    """direction_gate: the join transition pauses for explicit director
+    approval (WO 2026-08-17-016 Decision 11), and its resume mechanism
+    (Command(resume=...) via approve_direction) never conflicts with the
+    pre-existing crash-checkpoint resume mechanism (resume=True)."""
+
+    def test_run_pauses_after_join_before_direction_is_answered(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            checkpoint_db = Path(tmp) / "tracer.sqlite"
+            thread_id = "direction-pause"
+
+            result = run_phase6(TARGET_WO, thread_id, checkpoint_db)
+
+            self.assertIn("__interrupt__", result)
+            self.assertTrue(result.get("join_fired"))
+            self.assertNotIn("direction_approved", result)
+
+            state = inspect_phase6(thread_id, checkpoint_db)
+            self.assertTrue(state["join_fired"])
+
+    def test_approve_direction_true_and_false_complete_with_matching_flag(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            checkpoint_db = Path(tmp) / "tracer.sqlite"
+
+            run_phase6(TARGET_WO, "direction-approve", checkpoint_db)
+            approved = run_phase6(
+                TARGET_WO, "direction-approve", checkpoint_db, approve_direction=True
+            )
+            self.assertIs(approved.get("direction_approved"), True)
+            self.assertNotIn("__interrupt__", approved)
+
+            run_phase6(TARGET_WO, "direction-reject", checkpoint_db)
+            rejected = run_phase6(
+                TARGET_WO, "direction-reject", checkpoint_db, approve_direction=False
+            )
+            self.assertIs(rejected.get("direction_approved"), False)
+            self.assertNotIn("__interrupt__", rejected)
+
+    def test_crash_checkpoint_resume_and_direction_approval_compose_on_one_thread(self):
+        """The riskiest assumption behind Decision 11: a thread can recover
+        from an in-process crash (resume=True) and then, separately, have
+        its direction interrupt answered (approve_direction=True) -- the two
+        resume mechanisms never need to apply in the same invoke() call."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            checkpoint_db = tmp / "tracer.sqlite"
+            branch_marker = tmp / "branches.txt"
+            crash_marker = tmp / "crash.txt"
+            thread_id = "crash-then-approve"
+            env = {
+                "PHASE6_BRANCH_MARKER": str(branch_marker),
+                "PHASE6_CRASH_NODE": "branch_a",
+                "PHASE6_CRASH_MARKER": str(crash_marker),
+            }
+
+            # Run 1: crashes at branch_a's first attempt.
+            with patch.dict(os.environ, env):
+                with self.assertRaises(Phase6Crash):
+                    run_phase6(TARGET_WO, thread_id, checkpoint_db)
+
+            # Run 2: crash-checkpoint resume gets past the crash, through
+            # join, and up to (but not past) the new direction_gate pause.
+            with patch.dict(os.environ, env):
+                paused = run_phase6(TARGET_WO, thread_id, checkpoint_db, resume=True)
+            self.assertIn("__interrupt__", paused)
+            self.assertTrue(paused.get("join_fired"))
+            self.assertNotIn("direction_approved", paused)
+
+            # Run 3: a separate, later call answers the interrupt.
+            final = run_phase6(
+                TARGET_WO, thread_id, checkpoint_db, approve_direction=True
+            )
+            self.assertIs(final.get("direction_approved"), True)
+            self.assertNotIn("__interrupt__", final)
+            self.assertEqual(
+                2, len(branch_marker.read_text(encoding="utf-8").splitlines()),
+                "a branch re-ran across the crash/resume/approve sequence",
+            )
+
+
 if __name__ == "__main__":
     unittest.main()
