@@ -3,13 +3,15 @@ schema_version: 1
 id: 2026-08-21-002
 title: Cross-platform (Windows/Mac/Linux) compatibility for tools/ws and install tooling
 type: inquiry
-status: active
-state: verify
+status: closed
+state: close
 consequence: meaningful
 sensitivity: ordinary
 created_at: 2026-08-21T08:32:44Z
-updated_at: 2026-08-21T09:17:07Z
-next_action: None -- director may resume work from the Mac by pulling this commit
+updated_at: 2026-08-21T09:24:35Z
+next_action: Resolve remaining Open question: whether a Mac/Linux native run is needed before closing, or whether Windows-side verification plus CI coverage is sufficient to close this Work Object
+
+
 
 
 
@@ -78,17 +80,23 @@ console crashes, POSIX-only scripts, line-ending drift) to use the system.
 | [system] | this session | Direction 3 complete: added .gitattributes (forces LF for all text files regardless of contributor autocrlf -- fixes the exact checkout corruption hit earlier this session) and a conformance-windows job in .github/workflows/ci.yml running on windows-latest. Gates 1/3/4/5 reuse the existing bash scripts via Git Bash (bundled on windows-latest runners, no OS-specific behavior to exercise there); Gate 2 runs tests/run.ps1 via native PowerShell specifically, to exercise the no-Git-Bash path a real Windows user would take. Verified locally: full unittest suite unaffected (439 tests, same 2 failures/3 errors as before -- pre-existing and unrelated), Gate 5's file-existence checks pass, Gate 3 (verify-conformance.py --all) hits one pre-existing unrelated bug (missing fixtures/personal-institution-work-studio-contract.md, reproduces on a bare clone) -- flagged as a separate task, not fixed here since it's a content/documentation gap unrelated to platform compatibility. |
 ## Open questions
 
-- Do the actual Mac/Linux code paths already work cleanly as-is, or do they have their own untested gaps? (no CI or native Mac/Linux run has been observed this session — only Windows via Git Bash and native PowerShell)
+- **Mac verification pending.** Director closed this object on the basis that
+  the fix only adds explicit `encoding="utf-8"` (already Mac/Linux's effective
+  default) and touches no Mac/Linux-specific code path — not on an actual Mac
+  run. Confirm on the Mac before treating this as fully verified cross-platform:
+  `tools/ws` CLI (create/transition/append-evidence round-trip), `sh
+  tests/run.sh`, and `python tools/generate-adapters.py --check`.
 - Is a GitHub Actions Windows CI job (needed to prevent regression of any fix, per Direction 3 below) acceptable on cost/quota grounds? (external, not discoverable locally)
 
 ## Next move
 
-All three directions implemented and locally verified. Nothing has been
-committed yet -- director review and commit is the next step. Two unrelated
-pre-existing bugs were found and flagged as separate tasks rather than fixed
-here: (1) fixtures/personal-institution-work-studio-contract.md is missing
-from the repo though referenced by verify-conformance.py and README.md, (2)
-tests/test_codex_install.sh asserts against stale pre-namespace skill names.
+All three directions implemented, locally verified, and committed
+(7eecc3f, 6a52693). Remaining before this Work Object can close: resolve
+the two Open questions below, which need director judgment or an
+environment this session doesn't have (a real Mac/Linux run; GitHub
+Actions cost/quota tolerance) -- not something to answer unilaterally.
+The tests/test_codex_install.sh stale-skill-names issue is tracked
+separately and does not block closing this object.
 
 ## History
 
@@ -120,3 +128,16 @@ tests/test_codex_install.sh asserts against stale pre-namespace skill names.
 - **Actor:** director
 - **Rationale:** Director confirmed and committed all three directions. Also fixed tools/ws/atomic.py missing newline (was still writing CRLF on Windows despite the UTF-8 fix), and removed .work-studio/objects, active.md, inbox.md from .gitignore per director request so Work Objects sync across machines via ordinary git push/pull.
 - **Commit:** 7eecc3f
+### 2026-08-21T09:23:27Z — recorded-fixture-reference-fix
+
+- **State:** verify
+- **Status:** active
+- **Actor:** director
+- **Rationale:** Fixed the missing-fixture pre-existing bug flagged in Open questions/Next move: verify-conformance.py and README.md still referenced fixtures/personal-institution-work-studio-contract.md, which commit e457678 deliberately deleted under an authorized constitutional-override (2026-07-27-018 Decision 3) when retiring the unused Shared Protocol mechanism. Removed the stale references; verify-conformance.py --all now passes clean.
+- **Commit:** 6a52693
+### 2026-08-21T09:24:35Z — Closed: Directions 1-3 implemented, verified on Windows, and committed (7eecc3f, 6a52693). Closing with Mac verification explicitly pending -- recorded in Open questions with the specific commands to re-run on the Mac before treating this as fully cross-platform-verified. The other open question (Windows CI cost/quota) is accepted as a standing cost of the conformance-windows job, not a blocker.
+
+- **State:** close
+- **Status:** closed
+- **Actor:** director
+- **Rationale:** Directions 1-3 implemented, verified on Windows, and committed (7eecc3f, 6a52693). Closing with Mac verification explicitly pending -- recorded in Open questions with the specific commands to re-run on the Mac before treating this as fully cross-platform-verified. The other open question (Windows CI cost/quota) is accepted as a standing cost of the conformance-windows job, not a blocker.
