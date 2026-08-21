@@ -84,8 +84,19 @@ class CheckpointRestoreResult:
     restored_checkpoint_db: Path
 
 
+def _resolve_repo_root() -> Path:
+    """Optional cross-repo override (WO 2026-08-21-001).
+
+    Defaults to this repo's root -- unchanged behavior for every existing
+    caller -- unless WS_REPO_ROOT is set, in which case Work Object lookups
+    and node 2's `tools.ws validate` subprocess both redirect there instead.
+    """
+    override = os.environ.get("WS_REPO_ROOT")
+    return Path(override) if override else _REPO_ROOT
+
+
 def _find_work_object(wo_id: str) -> Path:
-    matches = sorted(_REPO_ROOT.glob(f".work-studio/objects/*/*/{wo_id}-*.md"))
+    matches = sorted(_resolve_repo_root().glob(f".work-studio/objects/*/*/{wo_id}-*.md"))
     if not matches:
         raise FileNotFoundError(f"No Work Object found for id {wo_id!r}")
     return matches[0]
@@ -336,9 +347,23 @@ def node2_validate(state: GraphState) -> dict:
     if sleep_seconds > 0:
         time.sleep(sleep_seconds)
     wo_path = _find_work_object(state["work_object_id"])
+    resolved_root = _resolve_repo_root()
+    # cwd drives tools/ws's own CWD-based root discovery (_find_work_studio_root),
+    # so it must be the resolved root -- not always _REPO_ROOT -- or ambient
+    # checks like `dashboard-signals` silently scan this repo's own
+    # .work-studio/objects/ instead of the target repo's (WO 2026-08-21-001
+    # Open questions). `tools.ws` still lives in this repo's code, though, so
+    # PYTHONPATH is set explicitly rather than relying on cwd for the import --
+    # `-m` normally adds cwd to sys.path, which would break once cwd moves.
+    env = dict(os.environ)
+    existing_pythonpath = env.get("PYTHONPATH", "")
+    env["PYTHONPATH"] = (
+        str(_REPO_ROOT) if not existing_pythonpath
+        else str(_REPO_ROOT) + os.pathsep + existing_pythonpath
+    )
     result = subprocess.run(
         [sys.executable, "-m", "tools.ws", "validate", "--files", str(wo_path)],
-        cwd=str(_REPO_ROOT), capture_output=True, text=True,
+        cwd=str(resolved_root), env=env, capture_output=True, text=True,
     )
     return {"node2_completed": result.returncode == 0}
 
