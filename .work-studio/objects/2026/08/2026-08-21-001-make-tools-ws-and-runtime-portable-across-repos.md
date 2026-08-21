@@ -8,8 +8,9 @@ state: verify
 consequence: meaningful
 sensitivity: ordinary
 created_at: 2026-08-21T08:28:24Z
-updated_at: 2026-08-21T13:00:12Z
-next_action: Director decision: commit/merge tracer/repo-root-portability as-is, or decide separately on the fuller feature (packaging, checkpoint-DB policy, multi-repo orchestration remain non-goals)
+updated_at: 2026-08-21T13:03:32Z
+next_action: None further for this object -- successor 2026-08-21-003 carries the fuller feature forward
+
 
 
 
@@ -117,3 +118,9 @@ multi-repo orchestration remain explicit non-goals, not addressed here).
 - **Status:** active
 - **Actor:** director
 - **Rationale:** Implemented the accepted tracer-bullet feature in runtime/graph.py: WS_REPO_ROOT override plus the dashboard-signals leak fix (node 2's subprocess cwd now resolves correctly, with PYTHONPATH set explicitly for import resolution). Verified directly against the sandbox with zero regression in runtime/tests. No deviation from the accepted boundary. Not yet committed -- awaiting director decision on branch tracer/repo-root-portability.
+### 2026-08-21T13:03:32Z — successor-created
+
+- **State:** verify
+- **Status:** active
+- **Actor:** director
+- **Rationale:** Director decided to expand past this tracer bullet's Non-goals (packaging, checkpoint-DB policy, multi-repo orchestration). Created 2026-08-21-003 as the successor project for that fuller feature, rather than reopening this object's boundary.

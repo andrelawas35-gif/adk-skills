@@ -1,0 +1,17 @@
+[project]
+name = "work-studio-ws"
+version = "0.1.0"
+description = "Deterministic CLI for Work Studio state file operations (dependency-free stdlib)."
+requires-python = ">=3.9"
+dependencies = []
+
+[project.scripts]
+ws = "tools.ws.__main__:main"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["tools.ws"]
+package-dir = { "tools.ws" = "ws" }

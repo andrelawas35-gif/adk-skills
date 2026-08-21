@@ -95,6 +95,31 @@ def _resolve_repo_root() -> Path:
     return Path(override) if override else _REPO_ROOT
 
 
+def _default_checkpoint_db() -> Path:
+    """Default --checkpoint-db location (WO 2026-08-21-003, Direction 1).
+
+    Unset WS_REPO_ROOT: unchanged behavior, `runtime/checkpoints/tracer.sqlite`
+    inside this repo. Set: a platform-appropriate user-data directory instead
+    of the target repo's own tree, since the runtime's checkpoint state isn't
+    canonical data that repo owns -- computed inline (no platformdirs
+    dependency) to keep tools/ws and this override dependency-free.
+
+    Known gap, not addressed here: this default doesn't key by which repo
+    WS_REPO_ROOT pointed at, so switching targets without an explicit
+    --checkpoint-db reuses the same file. Explicit --checkpoint-db avoids it;
+    per-repo keying is left for a future revision if it proves necessary.
+    """
+    if not os.environ.get("WS_REPO_ROOT"):
+        return _REPO_ROOT / "runtime" / "checkpoints" / "tracer.sqlite"
+    if sys.platform == "win32":
+        base = Path(os.environ.get("LOCALAPPDATA", str(Path.home() / "AppData" / "Local")))
+    elif sys.platform == "darwin":
+        base = Path.home() / "Library" / "Application Support"
+    else:
+        base = Path(os.environ.get("XDG_DATA_HOME", str(Path.home() / ".local" / "share")))
+    return base / "work-studio" / "checkpoints" / "tracer.sqlite"
+
+
 def _find_work_object(wo_id: str) -> Path:
     matches = sorted(_resolve_repo_root().glob(f".work-studio/objects/*/*/{wo_id}-*.md"))
     if not matches:
@@ -1122,7 +1147,7 @@ class AuthorityRequiredError(Exception):
 def _add_runtime_db_options(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         "--checkpoint-db",
-        default=str(_REPO_ROOT / "runtime" / "checkpoints" / "tracer.sqlite"),
+        default=str(_default_checkpoint_db()),
     )
     parser.add_argument("--idempotency-db")
 
@@ -1179,7 +1204,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     inspect_parser.add_argument("thread_id")
     inspect_parser.add_argument(
         "--checkpoint-db",
-        default=str(_REPO_ROOT / "runtime" / "checkpoints" / "tracer.sqlite"),
+        default=str(_default_checkpoint_db()),
     )
 
     resume_parser = subparsers.add_parser(
@@ -1197,7 +1222,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     fork_parser.add_argument("new_thread_id")
     fork_parser.add_argument(
         "--checkpoint-db",
-        default=str(_REPO_ROOT / "runtime" / "checkpoints" / "tracer.sqlite"),
+        default=str(_default_checkpoint_db()),
     )
     fork_parser.add_argument("--work-object-id")
     fork_parser.add_argument("--marker-file")
@@ -1226,7 +1251,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     )
     run_phase6_parser.add_argument(
         "--checkpoint-db",
-        default=str(_REPO_ROOT / "runtime" / "checkpoints" / "tracer.sqlite"),
+        default=str(_default_checkpoint_db()),
     )
 
     inspect_phase6_parser = subparsers.add_parser(
@@ -1236,7 +1261,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     inspect_phase6_parser.add_argument("thread_id")
     inspect_phase6_parser.add_argument(
         "--checkpoint-db",
-        default=str(_REPO_ROOT / "runtime" / "checkpoints" / "tracer.sqlite"),
+        default=str(_default_checkpoint_db()),
     )
 
     fork_phase6_parser = subparsers.add_parser(
@@ -1250,7 +1275,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     fork_phase6_parser.add_argument("new_thread_id")
     fork_phase6_parser.add_argument(
         "--checkpoint-db",
-        default=str(_REPO_ROOT / "runtime" / "checkpoints" / "tracer.sqlite"),
+        default=str(_default_checkpoint_db()),
     )
     fork_phase6_parser.add_argument("--work-object-id")
 
@@ -1266,7 +1291,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     )
     run_research_parser.add_argument(
         "--checkpoint-db",
-        default=str(_REPO_ROOT / "runtime" / "checkpoints" / "tracer.sqlite"),
+        default=str(_default_checkpoint_db()),
     )
 
     inspect_research_parser = subparsers.add_parser(
@@ -1276,7 +1301,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     inspect_research_parser.add_argument("thread_id")
     inspect_research_parser.add_argument(
         "--checkpoint-db",
-        default=str(_REPO_ROOT / "runtime" / "checkpoints" / "tracer.sqlite"),
+        default=str(_default_checkpoint_db()),
     )
 
     args = parser.parse_args(argv)

@@ -13,6 +13,7 @@ Thumbs.db
 __pycache__/
 *.pyc
 .venv/
+*.egg-info/
 
 # Work Studio — operational records. Tracked deliberately (2026-08-21) so
 # Work Objects sync between machines via ordinary git push/pull instead of
