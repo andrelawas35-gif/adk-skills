@@ -82,7 +82,7 @@ def check_schema(file_path: Path) -> List[str]:
     errors = []
 
     try:
-        content = file_path.read_text()
+        content = file_path.read_text(encoding="utf-8")
     except Exception as e:
         return [f"{file_path}: Cannot read file: {e}"]
 
@@ -144,7 +144,7 @@ def _find_workspace_root(file_path: Path) -> Optional[Path]:
 def check_campaign_anchor(file_path: Path) -> List[str]:
     """Warn when a valid campaign field points to a missing design document."""
     try:
-        content = file_path.read_text()
+        content = file_path.read_text(encoding="utf-8")
         fm = parse_frontmatter(content)
     except (OSError, ValueError):
         return []
@@ -168,7 +168,7 @@ def check_campaign_anchor(file_path: Path) -> List[str]:
 def check_consequence_plausibility(file_path: Path) -> List[str]:
     """Warn when explicit scope markers make a low consequence implausible."""
     try:
-        content = file_path.read_text()
+        content = file_path.read_text(encoding="utf-8")
         fm = parse_frontmatter(content)
     except (OSError, ValueError):
         return []
@@ -233,7 +233,7 @@ def _predates_cutoff(file_path: Path) -> bool:
     boundary remain evaluated on their own history.
     """
     try:
-        content = file_path.read_text()
+        content = file_path.read_text(encoding="utf-8")
     except Exception:
         return False
     fm = parse_frontmatter(content)
@@ -249,7 +249,7 @@ def check_sections(file_path: Path) -> List[str]:
     if _predates_cutoff(file_path):
         return []
     try:
-        content = file_path.read_text()
+        content = file_path.read_text(encoding="utf-8")
     except Exception as e:
         return [f"{file_path}: Cannot read file: {e}"]
 
@@ -357,7 +357,7 @@ def check_append_only(file_path: Path) -> List[str]:
     errors = []
 
     try:
-        content = file_path.read_text()
+        content = file_path.read_text(encoding="utf-8")
     except Exception as e:
         return [f"{file_path}: Cannot read file: {e}"]
 
@@ -413,7 +413,7 @@ def check_append_only(file_path: Path) -> List[str]:
     snapshot = _find_snapshot(file_path)
     if snapshot is not None:
         try:
-            snap_sections = parse_sections(_extract_body(snapshot.read_text()))
+            snap_sections = parse_sections(_extract_body(snapshot.read_text(encoding="utf-8")))
         except Exception as e:
             errors.append(f"{file_path}: Cannot parse snapshot {snapshot.name}: {e}")
             snap_sections = {}
@@ -564,7 +564,7 @@ def check_evidence_lanes(file_path: Path) -> List[str]:
     errors = []
 
     try:
-        content = file_path.read_text()
+        content = file_path.read_text(encoding="utf-8")
     except Exception as e:
         return [f"{file_path}: Cannot read file: {e}"]
 
@@ -640,7 +640,7 @@ def _system_locators(
     rows: List[Tuple[Path, int, str, Tuple[Path, int, int]]] = []
     for obj_file in sorted(file_paths):
         try:
-            content = obj_file.read_text()
+            content = obj_file.read_text(encoding="utf-8")
         except Exception:
             continue
 
@@ -710,7 +710,7 @@ def check_evidence_freshness(
             reason = "file not found"
         else:
             try:
-                line_count = len(target.read_text().splitlines())
+                line_count = len(target.read_text(encoding="utf-8").splitlines())
             except Exception as exc:
                 reason = f"cannot read source: {exc}"
             else:
@@ -890,7 +890,7 @@ def check_verification_freshness(
 
     for obj_file in sorted(file_paths):
         try:
-            content = obj_file.read_text()
+            content = obj_file.read_text(encoding="utf-8")
         except Exception:
             continue
 
@@ -934,7 +934,7 @@ def check_sensitivity(file_path: Path) -> List[str]:
     errors = []
 
     try:
-        content = file_path.read_text()
+        content = file_path.read_text(encoding="utf-8")
     except Exception as e:
         return [f"{file_path}: Cannot read file: {e}"]
 
@@ -967,7 +967,7 @@ def check_lifecycle(file_path: Path) -> List[str]:
     errors = []
 
     try:
-        content = file_path.read_text()
+        content = file_path.read_text(encoding="utf-8")
     except Exception as e:
         return [f"{file_path}: Cannot read file: {e}"]
 
@@ -1063,7 +1063,7 @@ def check_claims(file_path: Path) -> List[str]:
     errors = []
 
     try:
-        content = file_path.read_text()
+        content = file_path.read_text(encoding="utf-8")
     except Exception as e:
         return [f"{file_path}: Cannot read file: {e}"]
 
@@ -1210,7 +1210,7 @@ def check_authority(file_path: Path) -> List[str]:
     errors = []
 
     try:
-        content = file_path.read_text()
+        content = file_path.read_text(encoding="utf-8")
     except Exception as e:
         return [f"{file_path}: Cannot read file: {e}"]
 
@@ -1306,7 +1306,7 @@ def mint_or_reuse_auth_id(action: str, objects_dir: Path) -> str:
     max_seq = 0
     for obj_file in sorted(objects_dir.rglob("*.md")):
         try:
-            content = obj_file.read_text()
+            content = obj_file.read_text(encoding="utf-8")
         except Exception:
             continue
         body = _extract_body(content)
@@ -1347,7 +1347,7 @@ def check_attention_limits(
         return []  # No register, nothing to enforce
 
     try:
-        content = active_md_path.read_text()
+        content = active_md_path.read_text(encoding="utf-8")
     except Exception as e:
         return [f"Cannot read active.md: {e}"]
 
@@ -1423,7 +1423,7 @@ def check_protected_fields(file_path: Path) -> List[str]:
     errors = []
 
     try:
-        content = file_path.read_text()
+        content = file_path.read_text(encoding="utf-8")
     except Exception as e:
         return [f"{file_path}: Cannot read file: {e}"]
 
@@ -1498,7 +1498,7 @@ def check_sensitivity_policy(file_path: Path) -> List[str]:
     errors = []
 
     try:
-        content = file_path.read_text()
+        content = file_path.read_text(encoding="utf-8")
     except Exception as e:
         return [f"{file_path}: Cannot read file: {e}"]
 
@@ -1588,7 +1588,7 @@ def check_history_integrity(file_path: Path) -> List[str]:
     errors = []
 
     try:
-        content = file_path.read_text()
+        content = file_path.read_text(encoding="utf-8")
     except Exception as e:
         return [f"{file_path}: Cannot read file: {e}"]
 
@@ -1715,7 +1715,7 @@ def check_file_integrity(file_path: Path) -> List[str]:
     errors = []
 
     try:
-        content = file_path.read_text()
+        content = file_path.read_text(encoding="utf-8")
     except Exception as e:
         return [f"{file_path}: Cannot read file: {e}"]
 
@@ -1804,7 +1804,7 @@ def check_incident_routing(file_path: Path) -> List[str]:
     errors = []
 
     try:
-        content = file_path.read_text()
+        content = file_path.read_text(encoding="utf-8")
     except Exception as e:
         return [f"{file_path}: Cannot read file: {e}"]
 
@@ -1885,7 +1885,7 @@ def check_prerequisites(file_path: Path) -> List[str]:
     errors = []
 
     try:
-        content = file_path.read_text()
+        content = file_path.read_text(encoding="utf-8")
     except Exception as e:
         return [f"{file_path}: Cannot read file: {e}"]
 
@@ -2017,7 +2017,7 @@ def check_unsupported_capabilities(file_path: Path) -> List[str]:
     errors = []
 
     try:
-        content = file_path.read_text()
+        content = file_path.read_text(encoding="utf-8")
     except Exception as e:
         return [f"{file_path}: Cannot read file: {e}"]
 
@@ -2290,7 +2290,7 @@ def check_ledger(objects_dir: Optional[Path] = None) -> List[str]:
     if not ledger_path.is_file():
         return [f"ledger check: {_LEDGER_FILENAME} not found at {ledger_path}"]
 
-    records = _parse_component_ledger(ledger_path.read_text())
+    records = _parse_component_ledger(ledger_path.read_text(encoding="utf-8"))
     live_ids = [r["id"] for r in records]
     by_id = {r["id"]: r for r in records}
 
@@ -2466,7 +2466,7 @@ def check_outcome_review(objects_dir: Optional[Path] = None) -> List[str]:
                 if obj_file.suffix != ".md":
                     continue
                 try:
-                    content = obj_file.read_text()
+                    content = obj_file.read_text(encoding="utf-8")
                 except Exception:
                     continue
                 fm = parse_frontmatter(content)
@@ -2507,7 +2507,7 @@ def _cohort_total(objects_dir: Path, cohort: str) -> int:
                 if obj_file.suffix != ".md":
                     continue
                 try:
-                    content = obj_file.read_text()
+                    content = obj_file.read_text(encoding="utf-8")
                 except Exception:
                     continue
                 fm = parse_frontmatter(content)
@@ -2582,7 +2582,7 @@ def list_outcomes(objects_dir: Path) -> List[str]:
                 if obj_file.suffix != ".md":
                     continue
                 try:
-                    content = obj_file.read_text()
+                    content = obj_file.read_text(encoding="utf-8")
                 except Exception:
                     continue
                 fm = parse_frontmatter(content)
@@ -2619,7 +2619,7 @@ def check_next_action_presence(file_path: Path) -> List[str]:
     """
     errors = []
     try:
-        content = file_path.read_text()
+        content = file_path.read_text(encoding="utf-8")
     except Exception:
         return errors
     fm = parse_frontmatter(content)
@@ -2641,7 +2641,7 @@ def check_revisit_trigger_presence(file_path: Path) -> List[str]:
     """
     warnings = []
     try:
-        content = file_path.read_text()
+        content = file_path.read_text(encoding="utf-8")
     except Exception:
         return warnings
     fm = parse_frontmatter(content)
@@ -2700,7 +2700,7 @@ def check_contract_drift(main_py_path: Optional[Path] = None) -> List[str]:
         return ["contract-drift check requires the __main__.py path"]
 
     try:
-        main_source = main_py_path.read_text()
+        main_source = main_py_path.read_text(encoding="utf-8")
     except Exception as e:
         return [f"contract-drift: cannot read {main_py_path}: {e}"]
 

@@ -15,7 +15,10 @@ repository or filesystem boundary.
 - Work Objects: `.work-studio/objects/`
 - Active register: `.work-studio/active.md`
 - Signal inbox: `.work-studio/inbox.md`
-- Private records are Git-excluded by default
+- Tracked in this repo's git history (2026-08-21) so Work Objects sync across
+  machines via ordinary push/pull. A Work Object needing to stay off git
+  (e.g. `sensitivity: restricted`) should be excluded by its specific path,
+  not by reverting to the old blanket exclusion.
 
 ## Boundaries
 

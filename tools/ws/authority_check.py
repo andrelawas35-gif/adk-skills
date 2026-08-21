@@ -95,7 +95,7 @@ def cmd_authority_check(args: argparse.Namespace) -> int:
             return 1
 
     try:
-        content = file_path.read_text()
+        content = file_path.read_text(encoding="utf-8")
     except Exception as e:
         print(f"Error: Cannot read {file_path}: {e}", file=sys.stderr)
         return 1

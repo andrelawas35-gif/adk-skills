@@ -112,7 +112,7 @@ def _index_objects(objects_dir: Path) -> Dict[str, Tuple[dict, Path]]:
     index: Dict[str, Tuple[dict, Path]] = {}
     for path in iter_object_files(objects_dir):
         try:
-            fm = parse_frontmatter(path.read_text())
+            fm = parse_frontmatter(path.read_text(encoding="utf-8"))
         except (ValueError, OSError):
             continue
         wid = fm.get("id")

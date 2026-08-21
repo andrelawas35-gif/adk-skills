@@ -40,7 +40,7 @@ def _find_target() -> Path:
 
 
 def _read_updated_at(file_path: Path) -> str:
-    text = file_path.read_text()
+    text = file_path.read_text(encoding="utf-8")
     match = re.search(r"^updated_at:\s*(\S+)", text, re.MULTILINE)
     return match.group(1) if match else None
 
@@ -48,7 +48,7 @@ def _read_updated_at(file_path: Path) -> str:
 def _run_tracer(answer: str) -> subprocess.CompletedProcess:
     return subprocess.run(
         [sys.executable, "-m", "tools.runtime.tracer", "2026-07-27-001"],
-        cwd=ROOT, input=f"{answer}\n", capture_output=True, text=True,
+        cwd=ROOT, input=f"{answer}\n", capture_output=True, text=True, encoding="utf-8",
     )
 
 
@@ -87,7 +87,7 @@ class RuntimeTracerTest(unittest.TestCase):
     def test_unknown_work_object_id_fails_without_touching_anything(self):
         result = subprocess.run(
             [sys.executable, "-m", "tools.runtime.tracer", "9999-99-99-999"],
-            cwd=ROOT, input="y\n", capture_output=True, text=True,
+            cwd=ROOT, input="y\n", capture_output=True, text=True, encoding="utf-8",
         )
         self.assertEqual(result.returncode, 1)
         self.assertIn('"event": "failed"', result.stdout)

@@ -49,7 +49,7 @@ class TestIDAllocation(unittest.TestCase):
             # Create a file with ID 001
             month_dir = objects_dir / "2026" / "07"
             month_dir.mkdir(parents=True, exist_ok=True)
-            (month_dir / "2026-07-21-001-some-object.md").write_text("")
+            (month_dir / "2026-07-21-001-some-object.md").write_text("", encoding="utf-8")
 
             obj_id = allocate_id(objects_dir, today=test_date)
             self.assertEqual(obj_id, "2026-07-21-002")
@@ -62,8 +62,8 @@ class TestIDAllocation(unittest.TestCase):
 
             month_dir = objects_dir / "2026" / "07"
             month_dir.mkdir(parents=True, exist_ok=True)
-            (month_dir / "README.md").write_text("")
-            (month_dir / "some-other-file.txt").write_text("")
+            (month_dir / "README.md").write_text("", encoding="utf-8")
+            (month_dir / "some-other-file.txt").write_text("", encoding="utf-8")
 
             obj_id = allocate_id(objects_dir, today=test_date)
             self.assertEqual(obj_id, "2026-07-21-001")
@@ -76,9 +76,9 @@ class TestIDAllocation(unittest.TestCase):
 
             month_dir = objects_dir / "2026" / "07"
             month_dir.mkdir(parents=True, exist_ok=True)
-            (month_dir / "2026-07-21-005-alpha.md").write_text("")
-            (month_dir / "2026-07-21-003-beta.md").write_text("")
-            (month_dir / "2026-07-21-010-gamma.md").write_text("")
+            (month_dir / "2026-07-21-005-alpha.md").write_text("", encoding="utf-8")
+            (month_dir / "2026-07-21-003-beta.md").write_text("", encoding="utf-8")
+            (month_dir / "2026-07-21-010-gamma.md").write_text("", encoding="utf-8")
 
             obj_id = allocate_id(objects_dir, today=test_date)
             self.assertEqual(obj_id, "2026-07-21-011")
@@ -91,7 +91,7 @@ class TestIDAllocation(unittest.TestCase):
             # July 20 has 5 objects
             month_dir_07 = objects_dir / "2026" / "07"
             month_dir_07.mkdir(parents=True, exist_ok=True)
-            (month_dir_07 / "2026-07-20-005-something.md").write_text("")
+            (month_dir_07 / "2026-07-20-005-something.md").write_text("", encoding="utf-8")
 
             # New allocation for July 21 starts at 001
             test_date = date(2026, 7, 21)
@@ -106,8 +106,8 @@ class TestIDAllocation(unittest.TestCase):
 
             month_dir = objects_dir / "2026" / "07"
             month_dir.mkdir(parents=True, exist_ok=True)
-            (month_dir / "2026-07-21-003-real-object.md").write_text("")
-            (month_dir / "2026-07-21-999-tracer-fixture.md").write_text("")
+            (month_dir / "2026-07-21-003-real-object.md").write_text("", encoding="utf-8")
+            (month_dir / "2026-07-21-999-tracer-fixture.md").write_text("", encoding="utf-8")
 
             obj_id = allocate_id(objects_dir, today=test_date)
             self.assertEqual(obj_id, "2026-07-21-004")
@@ -120,7 +120,7 @@ class TestIDAllocation(unittest.TestCase):
 
             month_dir = objects_dir / "2026" / "07"
             month_dir.mkdir(parents=True, exist_ok=True)
-            (month_dir / "2026-07-21-899-last-real-object.md").write_text("")
+            (month_dir / "2026-07-21-899-last-real-object.md").write_text("", encoding="utf-8")
 
             with self.assertRaises(RuntimeError):
                 allocate_id(objects_dir, today=test_date)
@@ -152,7 +152,7 @@ class TestIDAllocation(unittest.TestCase):
             month_dir = objects_dir / "2026" / "07"
             month_dir.mkdir(parents=True, exist_ok=True)
             existing = month_dir / "2026-07-21-010-fix-auth-middleware.md"
-            existing.write_text("existing content")
+            existing.write_text("existing content", encoding="utf-8")
 
             target = build_path(objects_dir, "2026-07-21-010", "Fix auth middleware")
             self.assertTrue(target.exists())
@@ -371,7 +371,7 @@ class TestCreateIntegration(unittest.TestCase):
         return subprocess.run(
             [sys.executable, "-m", "tools.ws"] + list(args),
             capture_output=True,
-            text=True,
+            text=True, encoding="utf-8",
             cwd=str(tmp_path),
             env=env,
         )
@@ -409,7 +409,7 @@ class TestCreateIntegration(unittest.TestCase):
             self.assertTrue(created_file.exists())
 
             # Read and verify content
-            content = created_file.read_text()
+            content = created_file.read_text(encoding="utf-8")
             self.assertIn("---", content)
             self.assertIn("id:", content)
             self.assertIn("title: Fix auth middleware", content)

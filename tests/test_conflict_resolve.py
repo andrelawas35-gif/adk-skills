@@ -38,7 +38,7 @@ def workspace_with_conflict():
             "        file_path: \"fixtures/source-b.md\"\n"
             "        dirty_hash: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n"
             "    created_at: 2026-07-27T17:39:01Z\n"
-        )
+        , encoding="utf-8")
         os.chdir(root)
         try:
             yield obj
@@ -79,7 +79,7 @@ def workspace_with_cross_object_conflict(
             "        file_path: \"~/.claude/skills/alawas-thinking-pressure-test-decision/SKILL.md\"\n"
             "        dirty_hash: install-drift\n"
             "    created_at: 2026-07-27T16:16:01Z\n"
-        )
+        , encoding="utf-8")
         resolution = ""
         if preexisting_resolution:
             resolution = (
@@ -102,7 +102,7 @@ def workspace_with_cross_object_conflict(
             "---\n"
             "## Claims\n"
             f"{resolution}"
-        )
+        , encoding="utf-8")
         os.chdir(root)
         try:
             yield source, target
@@ -113,7 +113,7 @@ def workspace_with_cross_object_conflict(
 class ConflictResolveTest(unittest.TestCase):
     def test_resolve_appends_confres_and_leaves_conflict_block_intact(self):
         with workspace_with_conflict() as obj:
-            before = obj.read_text()
+            before = obj.read_text(encoding="utf-8")
             stdout = io.StringIO()
             with redirect_stdout(stdout):
                 result = cmd_conflict_resolve(argparse.Namespace(
@@ -132,7 +132,7 @@ class ConflictResolveTest(unittest.TestCase):
                 "Conflict resolution CONFRES-2026_07_28_999-001 registered",
                 stdout.getvalue(),
             )
-            after = obj.read_text()
+            after = obj.read_text(encoding="utf-8")
             self.assertIn("  CONF-2026_07_28_999-001:", after)
             self.assertIn("  CONFRES-2026_07_28_999-001:", after)
             self.assertIn("    conflict_id: CONF-2026_07_28_999-001", after)
@@ -155,7 +155,7 @@ class ConflictResolveTest(unittest.TestCase):
 
     def test_record_in_appends_resolution_to_successor_without_mutating_source(self):
         with workspace_with_cross_object_conflict() as (source, target):
-            source_before = source.read_text()
+            source_before = source.read_text(encoding="utf-8")
             stdout = io.StringIO()
             with redirect_stdout(stdout):
                 result = cmd_conflict_resolve(argparse.Namespace(
@@ -174,8 +174,8 @@ class ConflictResolveTest(unittest.TestCase):
                 "Conflict resolution CONFRES-2026_08_09_002-001 registered in 2026-08-09-002",
                 stdout.getvalue(),
             )
-            self.assertEqual(source.read_text(), source_before)
-            target_after = target.read_text()
+            self.assertEqual(source.read_text(encoding="utf-8"), source_before)
+            target_after = target.read_text(encoding="utf-8")
             self.assertIn("  CONFRES-2026_08_09_002-001:", target_after)
             self.assertIn("    conflict_id: CONF-2026_07_27_019-001", target_after)
             self.assertIn("    source_object_id: 2026-07-27-019", target_after)
@@ -184,7 +184,7 @@ class ConflictResolveTest(unittest.TestCase):
 
     def test_record_in_rejects_closed_target_without_append(self):
         with workspace_with_cross_object_conflict(target_status="closed") as (source, target):
-            target_before = target.read_text()
+            target_before = target.read_text(encoding="utf-8")
             stderr = io.StringIO()
             with redirect_stderr(stderr):
                 result = cmd_conflict_resolve(argparse.Namespace(
@@ -200,12 +200,12 @@ class ConflictResolveTest(unittest.TestCase):
 
             self.assertEqual(result, 1)
             self.assertIn("closed object 2026-08-09-002", stderr.getvalue())
-            self.assertEqual(target.read_text(), target_before)
+            self.assertEqual(target.read_text(encoding="utf-8"), target_before)
             self.assertEqual(count_unresolved_conflicts(source.parents[2]), 1)
 
     def test_record_in_rejects_missing_source_conflict_without_append(self):
         with workspace_with_cross_object_conflict() as (source, target):
-            target_before = target.read_text()
+            target_before = target.read_text(encoding="utf-8")
             stderr = io.StringIO()
             with redirect_stderr(stderr):
                 result = cmd_conflict_resolve(argparse.Namespace(
@@ -221,12 +221,12 @@ class ConflictResolveTest(unittest.TestCase):
 
             self.assertEqual(result, 1)
             self.assertIn("not found in 2026-07-27-019", stderr.getvalue())
-            self.assertEqual(target.read_text(), target_before)
+            self.assertEqual(target.read_text(encoding="utf-8"), target_before)
             self.assertEqual(count_unresolved_conflicts(source.parents[2]), 1)
 
     def test_record_in_rejects_duplicate_resolution_anywhere(self):
         with workspace_with_cross_object_conflict(preexisting_resolution=True) as (source, target):
-            target_before = target.read_text()
+            target_before = target.read_text(encoding="utf-8")
             stderr = io.StringIO()
             with redirect_stderr(stderr):
                 result = cmd_conflict_resolve(argparse.Namespace(
@@ -242,7 +242,7 @@ class ConflictResolveTest(unittest.TestCase):
 
             self.assertEqual(result, 1)
             self.assertIn("already has a CONFRES- record", stderr.getvalue())
-            self.assertEqual(target.read_text(), target_before)
+            self.assertEqual(target.read_text(encoding="utf-8"), target_before)
             self.assertEqual(count_unresolved_conflicts(source.parents[2]), 0)
 
 

@@ -58,9 +58,9 @@ def _effect_attempt(marker: Path, fail_until: int) -> int:
     state channel to carry an attempt counter between failed tries, so the
     counter lives in a file instead.
     """
-    attempts = int(marker.read_text()) if marker.exists() else 0
+    attempts = int(marker.read_text(encoding="utf-8")) if marker.exists() else 0
     attempts += 1
-    marker.write_text(str(attempts))
+    marker.write_text(str(attempts), encoding="utf-8")
     if attempts <= fail_until:
         raise TracerRetryable(f"attempt {attempts} failed")
     return attempts

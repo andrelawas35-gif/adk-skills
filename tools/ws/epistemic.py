@@ -70,7 +70,7 @@ def load_allowlist(ws_root: Path) -> Optional[dict]:
 
     if yaml is not None:
         try:
-            with open(path, "r") as f:
+            with open(path, "r", encoding="utf-8") as f:
                 return yaml.safe_load(f)
         except Exception:
             return None
@@ -132,7 +132,7 @@ def load_taxonomy(ws_root: Path) -> Optional[dict]:
         return _fallback_parse_taxonomy(taxonomy_path)
 
     try:
-        with open(taxonomy_path, "r") as f:
+        with open(taxonomy_path, "r", encoding="utf-8") as f:
             return yaml.safe_load(f)
     except Exception:
         return _fallback_parse_taxonomy(taxonomy_path)
@@ -148,7 +148,7 @@ def _fallback_parse_taxonomy(path: Path) -> Optional[dict]:
     current_subtype: Optional[dict] = None
 
     try:
-        with open(path, "r") as f:
+        with open(path, "r", encoding="utf-8") as f:
             for line in f:
                 stripped = line.rstrip()
 
@@ -404,7 +404,7 @@ def run_lint(
         if alt_path.exists():
             if yaml is not None:
                 try:
-                    with open(alt_path, "r") as f:
+                    with open(alt_path, "r", encoding="utf-8") as f:
                         allowlist_data = yaml.safe_load(f)
                 except Exception:
                     allowlist_data = None

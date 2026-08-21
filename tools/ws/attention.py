@@ -46,7 +46,7 @@ def find_stale_entries(
     if not active_md_path.exists():
         return []
 
-    content = active_md_path.read_text()
+    content = active_md_path.read_text(encoding="utf-8")
     entries = parse_active_md(content)
     stale = []
 
@@ -58,7 +58,7 @@ def find_stale_entries(
             continue
 
         try:
-            fm = parse_frontmatter(obj_file.read_text())
+            fm = parse_frontmatter(obj_file.read_text(encoding="utf-8"))
         except ValueError:
             stale.append((obj_id, desc, "Cannot parse object frontmatter"))
             continue
@@ -88,7 +88,7 @@ def find_missing_entries(
     """
     active_ids = set()
     if active_md_path.exists():
-        active_ids = get_active_ids(active_md_path.read_text())
+        active_ids = get_active_ids(active_md_path.read_text(encoding="utf-8"))
 
     missing = []
     if not objects_dir.exists():
@@ -104,7 +104,7 @@ def find_missing_entries(
                 if not obj_file.suffix == ".md":
                     continue
                 try:
-                    fm = parse_frontmatter(obj_file.read_text())
+                    fm = parse_frontmatter(obj_file.read_text(encoding="utf-8"))
                 except ValueError:
                     missing.append((obj_file.stem, "Cannot parse object frontmatter"))
                     continue
@@ -169,7 +169,7 @@ def repair_missing_active_entries(
         if obj_file is None:
             continue
         try:
-            fm = parse_frontmatter(obj_file.read_text())
+            fm = parse_frontmatter(obj_file.read_text(encoding="utf-8"))
         except ValueError:
             continue
         title = str(fm.get("title", obj_id))
@@ -199,7 +199,7 @@ def update_active_entry(
     if not active_md_path.exists():
         return f"# Active Work Objects\n\n- `{obj_id}` — {title} ({role})\n"
 
-    content = active_md_path.read_text()
+    content = active_md_path.read_text(encoding="utf-8")
     entry_line = f"- `{obj_id}` — {title} ({role})"
 
     # Check if ID already exists
@@ -230,7 +230,7 @@ def remove_active_entry(
     if not active_md_path.exists():
         return None
 
-    content = active_md_path.read_text()
+    content = active_md_path.read_text(encoding="utf-8")
     if f"`{obj_id}`" not in content:
         return None
 

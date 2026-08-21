@@ -17,7 +17,7 @@ PLATFORMS = ("codex", "claude-code", "github-copilot")
 
 class DiagnoseProductionIncidentContract(unittest.TestCase):
     def test_core_skill_separates_containment_restoration_diagnosis_and_prevention(self):
-        text = CORE.read_text()
+        text = CORE.read_text(encoding="utf-8")
 
         for required_clause in (
             "## Governing principle",
@@ -40,7 +40,7 @@ class DiagnoseProductionIncidentContract(unittest.TestCase):
                 self.assertIn(required_clause, text)
 
     def test_fixture_covers_safe_intake_ranked_testing_recovery_dependency_and_follow_up(self):
-        text = FIXTURE.read_text()
+        text = FIXTURE.read_text(encoding="utf-8")
 
         for required_clause in (
             "Scenario 1", "Scenario 2", "Scenario 3", "Scenario 4", "Scenario 5",
@@ -53,7 +53,7 @@ class DiagnoseProductionIncidentContract(unittest.TestCase):
 
     def test_generated_adapters_preserve_core_and_include_references(self):
         result = subprocess.run(
-            [sys.executable, str(GENERATOR)], capture_output=True, text=True, cwd=str(ROOT)
+            [sys.executable, str(GENERATOR)], capture_output=True, text=True, encoding="utf-8", cwd=str(ROOT)
         )
         self.assertEqual(result.returncode, 0, result.stderr)
 
@@ -61,7 +61,7 @@ class DiagnoseProductionIncidentContract(unittest.TestCase):
         for platform in PLATFORMS:
             with self.subTest(platform=platform):
                 adapter_dir = ROOT / "adapters" / platform / "skills" / f"alawas-{CORE.parent.name}"
-                self.assertIn(core_body, (adapter_dir / "SKILL.md").read_text())
+                self.assertIn(core_body, (adapter_dir / "SKILL.md").read_text(encoding="utf-8"))
                 self.assertTrue((adapter_dir / "references" / "CONSEQUENCE-AUTHORITY.md").is_file())
                 self.assertTrue((adapter_dir / "capabilities" / "classify-provenance.md").is_file())
 

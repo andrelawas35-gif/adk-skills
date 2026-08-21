@@ -159,7 +159,7 @@ def _claims_contains_resolution_for(claims_section: str, conflict_id: str) -> bo
 def _any_claims_contains_resolution_for(objects_dir: Path, conflict_id: str) -> bool:
     """Return whether any Work Object has a CONFRES- for conflict_id."""
     for obj_file in objects_dir.rglob("*.md"):
-        content = obj_file.read_text()
+        content = obj_file.read_text(encoding="utf-8")
         body = (
             content[content.find("---", 3) + 3:].strip()
             if content.startswith("---")
@@ -236,7 +236,7 @@ def cmd_conflict_register(args: argparse.Namespace) -> int:
         print(f"Error: {err}", file=sys.stderr)
         return 1
 
-    content = obj_file.read_text()
+    content = obj_file.read_text(encoding="utf-8")
     body = (
         content[content.find("---", 3) + 3:].strip()
         if content.startswith("---")
@@ -307,7 +307,7 @@ def cmd_conflict_resolve(args: argparse.Namespace) -> int:
         print(f"Error: {err}", file=sys.stderr)
         return 1
 
-    target_fm = parse_frontmatter(target_file.read_text())
+    target_fm = parse_frontmatter(target_file.read_text(encoding="utf-8"))
     if str(target_fm.get("status", "")) == "closed":
         print(
             f"Error: Cannot record conflict resolution in closed object {target_id}.",
@@ -315,7 +315,7 @@ def cmd_conflict_resolve(args: argparse.Namespace) -> int:
         )
         return 1
 
-    source_content = source_file.read_text()
+    source_content = source_file.read_text(encoding="utf-8")
     source_body = (
         source_content[source_content.find("---", 3) + 3:].strip()
         if source_content.startswith("---")
@@ -340,7 +340,7 @@ def cmd_conflict_resolve(args: argparse.Namespace) -> int:
         )
         return 1
 
-    target_content = target_file.read_text()
+    target_content = target_file.read_text(encoding="utf-8")
     target_body = (
         target_content[target_content.find("---", 3) + 3:].strip()
         if target_content.startswith("---")

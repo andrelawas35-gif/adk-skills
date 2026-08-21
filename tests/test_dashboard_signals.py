@@ -18,7 +18,7 @@ def workspace_with_claims(claims: str):
         objects.mkdir(parents=True)
         (objects / "2026-07-28-999-fixture.md").write_text(
             f"## Claims\n\n{claims}\n"
-        )
+        , encoding="utf-8")
         os.chdir(root)
         try:
             yield

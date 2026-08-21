@@ -17,7 +17,7 @@ FIXTURE = ROOT / "fixtures" / "skill-aware-grilling-conversation.md"
 
 class SkillAwareGrillingContract(unittest.TestCase):
     def test_engine_is_a_real_one_question_conversation(self):
-        text = " ".join(AGREEMENT.read_text().split())
+        text = " ".join(AGREEMENT.read_text(encoding="utf-8").split())
         for phrase in (
             "continuous **Grilling Session**",
             "Opening context card",
@@ -44,7 +44,7 @@ class SkillAwareGrillingContract(unittest.TestCase):
             self.assertIn(phrase, text)
 
     def test_engine_defines_grounding_memory_and_code_challenges(self):
-        text = " ".join(AGREEMENT.read_text().split())
+        text = " ".join(AGREEMENT.read_text(encoding="utf-8").split())
         for phrase in (
             "**Evidence Ledger**",
             "cite the exact local file",
@@ -55,7 +55,7 @@ class SkillAwareGrillingContract(unittest.TestCase):
             self.assertIn(phrase, text)
 
     def test_engine_has_activation_non_activation_and_narrow_acceptance(self):
-        text = " ".join(AGREEMENT.read_text().split())
+        text = " ".join(AGREEMENT.read_text(encoding="utf-8").split())
         self.assertIn("the user explicitly asks to be grilled", text)
         self.assertIn("Do not nominate routine work", text)
         self.assertIn("`do recommended` accepts only", text)
@@ -70,7 +70,7 @@ class SkillAwareGrillingContract(unittest.TestCase):
             if path == ENGINE:
                 continue
             adapter = ADAPTERS / f"alawas-{skill}" / "SKILL.md"
-            text = " ".join(adapter.read_text().split())
+            text = " ".join(adapter.read_text(encoding="utf-8").split())
             with self.subTest(skill=skill):
                 self.assertIn("## Grilling entry and stage lens", text)
                 self.assertIn(f"`alawas-{skill}` profile", text)
@@ -81,7 +81,7 @@ class SkillAwareGrillingContract(unittest.TestCase):
                 self.assertIn("do not silently start a continuous session", text)
 
     def test_engine_is_a_first_class_ephemeral_entry_point(self):
-        text = " ".join(ENGINE.read_text().split())
+        text = " ".join(ENGINE.read_text(encoding="utf-8").split())
         for phrase in (
             "visible entry point",
             "explicit grilling request in a Work Studio-pinned project",
@@ -92,7 +92,7 @@ class SkillAwareGrillingContract(unittest.TestCase):
             self.assertIn(phrase, text)
 
     def test_reference_has_every_profile_and_profile_shape(self):
-        text = PROFILES.read_text()
+        text = PROFILES.read_text(encoding="utf-8")
         for path in sorted(CORE.glob("*/SKILL.md")):
             if path == ENGINE:
                 continue
@@ -111,8 +111,8 @@ class SkillAwareGrillingContract(unittest.TestCase):
                     self.assertIn(field, section)
 
     def test_engine_owns_continuity_and_profiles_remain_stage_only(self):
-        agreement = AGREEMENT.read_text()
-        profiles = PROFILES.read_text()
+        agreement = AGREEMENT.read_text(encoding="utf-8")
+        profiles = PROFILES.read_text(encoding="utf-8")
         for field in (
             "Context Card",
             "Active profile and activation reason",
@@ -134,8 +134,8 @@ class SkillAwareGrillingContract(unittest.TestCase):
             self.assertNotIn(forbidden, profiles)
 
     def test_conductor_owns_lazy_persistence_and_concurrency(self):
-        conductor = (CORE / "governance-conduct-work-object" / "SKILL.md").read_text()
-        work_object = WORK_OBJECT.read_text()
+        conductor = (CORE / "governance-conduct-work-object" / "SKILL.md").read_text(encoding="utf-8")
+        work_object = WORK_OBJECT.read_text(encoding="utf-8")
         self.assertIn("conductor owns durable checkpoint writes only", conductor)
         self.assertIn("sole writer", conductor)
         self.assertIn("reconstruct the Context Card", work_object)
@@ -145,14 +145,14 @@ class SkillAwareGrillingContract(unittest.TestCase):
         for path in sorted(CORE.glob("*/SKILL.md")):
             if path.parent.name in {"governance-conduct-work-object", "thinking-grilling-session"}:
                 continue
-            text = " ".join(path.read_text().split())
+            text = " ".join(path.read_text(encoding="utf-8").split())
             with self.subTest(skill=path.parent.name):
                 self.assertNotIn("IS the Agreement Loop", text)
                 self.assertNotIn("end every response after exactly one", text)
                 self.assertNotIn("owns Grilling Session continuity", text)
 
     def test_fixture_covers_multiturn_nonactivation_long_loop_and_recovery(self):
-        text = FIXTURE.read_text()
+        text = FIXTURE.read_text(encoding="utf-8")
         for scenario in range(1, 16):
             self.assertIn(f"## Scenario {scenario} ", text)
         for path in sorted(CORE.glob("*/SKILL.md")):
@@ -180,7 +180,7 @@ class SkillAwareGrillingContract(unittest.TestCase):
             self.assertIn(phrase, text)
 
     def test_glossary_uses_canonical_terms(self):
-        text = (ROOT / "CONTEXT.md").read_text()
+        text = (ROOT / "CONTEXT.md").read_text(encoding="utf-8")
         for term in (
             "**Grilling Session**",
             "**Context Card**",

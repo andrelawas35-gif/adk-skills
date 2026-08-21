@@ -55,7 +55,7 @@ def _write_object(
     lines += [f"{k}: {v}" for k, v in edges.items()]
     frontmatter = "---\n" + "\n".join(lines) + "\n---\n"
     path = d / f"{wid}-fixture.md"
-    path.write_text(frontmatter + body)
+    path.write_text(frontmatter + body, encoding="utf-8")
     return path
 
 
@@ -103,7 +103,7 @@ class TestDeterministicExtraction(ProjectionTestBase):
         snapshot = src.with_name(src.name + ".bak-20260810T143745Z")
         snapshot.write_text(
             "---\nid: 2026-07-23-003\nsupersedes: 2026-08-99-001\n---\n"
-        )
+        , encoding="utf-8")
         edges = extract_edges(self.objects)
         self.assertNotIn(Edge("2026-07-23-003", "2026-08-99-001", "supersedes"), edges)
 
@@ -225,7 +225,7 @@ class TestStaleLocators(ProjectionTestBase):
         )
         _g, recorded, _k = build_projection(self.objects)
         # Mutate the target's content between the recorded and current projections.
-        target.write_text("---\nid: 2026-07-22-001\n---\n## Changed\n\n")
+        target.write_text("---\nid: 2026-07-22-001\n---\n## Changed\n\n", encoding="utf-8")
         _g, current, _k = build_projection(self.objects)
         problems = check_stale_locators(recorded, current)
         self.assertEqual(len(problems), 1)

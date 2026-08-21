@@ -93,7 +93,7 @@ def _write_object(file_path: Path, frontmatter: str, body: str) -> None:
 
 def _get_updated_at(file_path: Path) -> str:
     """Extract updated_at from a Work Object's frontmatter."""
-    content = file_path.read_text()
+    content = file_path.read_text(encoding="utf-8")
     fm = parse_frontmatter(content)
     return str(fm.get("updated_at", ""))
 
@@ -310,7 +310,7 @@ def cmd_members(args: argparse.Namespace) -> int:
             if not ID_PATTERN.match(obj_file.name):
                 continue
             try:
-                fm = parse_frontmatter(obj_file.read_text())
+                fm = parse_frontmatter(obj_file.read_text(encoding="utf-8"))
             except (OSError, ValueError) as e:
                 print(
                     f"Error: Cannot inspect Work Object '{obj_file}': {e}",
@@ -358,7 +358,7 @@ def cmd_set_campaign(args: argparse.Namespace) -> int:
         print(f"Error: {err}", file=sys.stderr)
         return 1
 
-    content = obj_file.read_text()
+    content = obj_file.read_text(encoding="utf-8")
     fm = parse_frontmatter(content)
     if fm.get("campaign") == args.campaign:
         print(f"Campaign unchanged for {args.id}: {args.campaign}")
@@ -415,7 +415,7 @@ def cmd_transition(args: argparse.Namespace) -> int:
         print(f"Error: {err}", file=sys.stderr)
         return 1
 
-    content = obj_file.read_text()
+    content = obj_file.read_text(encoding="utf-8")
     fm = parse_frontmatter(content)
 
     from_state = str(fm.get("state", ""))
@@ -468,7 +468,7 @@ def cmd_transition(args: argparse.Namespace) -> int:
     )
     if audit_msg is not None:
         # Re-read current file to get the frontmatter with the new updated_at
-        current_content = obj_file.read_text()
+        current_content = obj_file.read_text(encoding="utf-8")
         current_fm_end = current_content.find("---", 3)
         current_body = current_content[current_fm_end + 3:].strip()
 
@@ -515,7 +515,7 @@ def cmd_close(args: argparse.Namespace) -> int:
         print(f"Error: {err}", file=sys.stderr)
         return 1
 
-    content = obj_file.read_text()
+    content = obj_file.read_text(encoding="utf-8")
     fm = parse_frontmatter(content)
 
     from_state = str(fm.get("state", ""))
@@ -603,7 +603,7 @@ def cmd_activate(args: argparse.Namespace) -> int:
         return 1
 
     # Cross-check: object must not be closed
-    content = obj_file.read_text()
+    content = obj_file.read_text(encoding="utf-8")
     fm = parse_frontmatter(content)
     if str(fm.get("status", "")) == "closed":
         print(
@@ -697,7 +697,7 @@ def cmd_append_evidence(args: argparse.Namespace) -> int:
         print(f"Error: {err}", file=sys.stderr)
         return 1
 
-    content = obj_file.read_text()
+    content = obj_file.read_text(encoding="utf-8")
     body = content[content.find("---", 3) + 3:].strip() if content.startswith("---") else content
 
     # Generate evidence entry
@@ -756,7 +756,7 @@ def cmd_append_history(args: argparse.Namespace) -> int:
         print(f"Error: {err}", file=sys.stderr)
         return 1
 
-    content = obj_file.read_text()
+    content = obj_file.read_text(encoding="utf-8")
     body = content[content.find("---", 3) + 3:].strip() if content.startswith("---") else content
 
     action = args.action
@@ -898,7 +898,7 @@ def cmd_append_artifact(args: argparse.Namespace) -> int:
             f"commit: uncommitted at record time) — {args.description}"
         )
 
-    content = obj_file.read_text()
+    content = obj_file.read_text(encoding="utf-8")
     body = content[content.find("---", 3) + 3:].strip() if content.startswith("---") else content
     new_body = append_to_section(body, "artifacts", entry)
 
@@ -978,7 +978,7 @@ def cmd_inputs(args: argparse.Namespace) -> int:
         print(f"Error: {e}", file=sys.stderr)
         return 1
 
-    content = obj_file.read_text()
+    content = obj_file.read_text(encoding="utf-8")
     body = content[content.find("---", 3) + 3:].strip() if content.startswith("---") else content
     # Strip HTML comment blocks (template metadata, not object content).
     body = re.sub(r"<!--.*?-->", "", body, flags=re.DOTALL)
@@ -1671,6 +1671,15 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> int:
+    # Windows consoles default stdout/stderr to the locale codepage (e.g.
+    # cp1252), which raises UnicodeEncodeError on the arrows and other
+    # non-ASCII characters this CLI prints. Reconfigure to UTF-8 unless the
+    # stream has already been redirected to something that doesn't support it.
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is not None:
+            reconfigure(encoding="utf-8")
+
     parser = build_parser()
     args = parser.parse_args()
 

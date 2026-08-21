@@ -25,7 +25,7 @@ def make_workspace(root: Path, file_count: int = 3) -> Path:
     for i in range(1, file_count + 1):
         (objects_dir / f"2026-08-14-{i:03d}.md").write_text(
             f"---\nid: 2026-08-14-{i:03d}\n---\nbody {i}\n"
-        )
+        , encoding="utf-8")
     return root
 
 

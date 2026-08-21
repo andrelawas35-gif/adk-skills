@@ -16,7 +16,7 @@ PLATFORMS = ("codex", "claude-code", "github-copilot")
 
 class ApplyDesignDirectionContract(unittest.TestCase):
     def test_core_skill_runs_confirmed_creative_authority_loop(self):
-        text = CORE.read_text()
+        text = CORE.read_text(encoding="utf-8")
 
         for required_clause in (
             "## Governing principle",
@@ -38,7 +38,7 @@ class ApplyDesignDirectionContract(unittest.TestCase):
         result = subprocess.run(
             [sys.executable, str(GENERATOR)],
             capture_output=True,
-            text=True,
+            text=True, encoding="utf-8",
             cwd=str(ROOT),
         )
         self.assertEqual(result.returncode, 0, result.stderr)
@@ -47,7 +47,7 @@ class ApplyDesignDirectionContract(unittest.TestCase):
         for platform in PLATFORMS:
             with self.subTest(platform=platform):
                 adapter_dir = ROOT / "adapters" / platform / "skills" / f"alawas-{CORE.parent.name}"
-                self.assertIn(core_body, (adapter_dir / "SKILL.md").read_text())
+                self.assertIn(core_body, (adapter_dir / "SKILL.md").read_text(encoding="utf-8"))
                 self.assertTrue((adapter_dir / "references" / "CONSEQUENCE-AUTHORITY.md").is_file())
 
 

@@ -17,7 +17,7 @@ PLATFORMS = ("codex", "claude-code", "github-copilot")
 
 class InvestigateLiveQuestionContract(unittest.TestCase):
     def test_core_skill_frames_evidence_and_reality_contact_without_archive_access(self):
-        text = CORE.read_text()
+        text = CORE.read_text(encoding="utf-8")
 
         for required_clause in (
             "## Governing principle",
@@ -41,7 +41,7 @@ class InvestigateLiveQuestionContract(unittest.TestCase):
                 self.assertIn(required_clause, text)
 
     def test_fixture_covers_primary_sources_reality_contact_contradiction_unresolved_and_bridge_gate(self):
-        text = FIXTURE.read_text()
+        text = FIXTURE.read_text(encoding="utf-8")
 
         for required_clause in (
             "Scenario 1", "Scenario 2", "Scenario 3", "Scenario 4", "Scenario 5",
@@ -54,7 +54,7 @@ class InvestigateLiveQuestionContract(unittest.TestCase):
 
     def test_generated_adapters_preserve_core_and_include_references(self):
         result = subprocess.run(
-            [sys.executable, str(GENERATOR)], capture_output=True, text=True, cwd=str(ROOT)
+            [sys.executable, str(GENERATOR)], capture_output=True, text=True, encoding="utf-8", cwd=str(ROOT)
         )
         self.assertEqual(result.returncode, 0, result.stderr)
 
@@ -62,7 +62,7 @@ class InvestigateLiveQuestionContract(unittest.TestCase):
         for platform in PLATFORMS:
             with self.subTest(platform=platform):
                 adapter_dir = ROOT / "adapters" / platform / "skills" / f"alawas-{CORE.parent.name}"
-                self.assertIn(core_body, (adapter_dir / "SKILL.md").read_text())
+                self.assertIn(core_body, (adapter_dir / "SKILL.md").read_text(encoding="utf-8"))
                 self.assertTrue((adapter_dir / "capabilities" / "classify-provenance.md").is_file())
 
 

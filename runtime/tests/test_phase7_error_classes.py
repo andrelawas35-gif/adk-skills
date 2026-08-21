@@ -103,7 +103,7 @@ class ErrorClassDiscriminationTests(unittest.TestCase):
                     config={"configurable": {"thread_id": "retryable-case"}},
                 )
                 self.assertEqual("succeeded", result["outcome"])
-                self.assertEqual(3, len(marker.read_text().splitlines()))
+                self.assertEqual(3, len(marker.read_text(encoding="utf-8").splitlines()))
             finally:
                 conn.close()
 
@@ -124,7 +124,7 @@ class ErrorClassDiscriminationTests(unittest.TestCase):
                         },
                         config={"configurable": {"thread_id": "terminal-case"}},
                     )
-                self.assertEqual(1, len(marker.read_text().splitlines()))
+                self.assertEqual(1, len(marker.read_text(encoding="utf-8").splitlines()))
             finally:
                 conn.close()
 

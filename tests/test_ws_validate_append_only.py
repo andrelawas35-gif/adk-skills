@@ -112,8 +112,8 @@ class TestWsValidateAppendOnly(unittest.TestCase):
 
     def _write_fixture(self):
         """(Re)write the live fixture and its snapshot as identical baselines."""
-        self.path.write_text(FIXTURE)
-        self.snapshot.write_text(FIXTURE)
+        self.path.write_text(FIXTURE, encoding="utf-8")
+        self.snapshot.write_text(FIXTURE, encoding="utf-8")
 
     # ── _find_snapshot ────────────────────────────────────────────────────
 
@@ -122,7 +122,7 @@ class TestWsValidateAppendOnly(unittest.TestCase):
         # the last, matching real timestamps where a later timestamp is a
         # lexicographically larger string.
         newer = self.dir / "2026-08-11-900-fixture.md.bak-20260811T000002Z"
-        newer.write_text(FIXTURE)
+        newer.write_text(FIXTURE, encoding="utf-8")
         self.assertEqual(_find_snapshot(self.path), newer)
 
     def test_find_snapshot_none_when_absent(self):
@@ -138,7 +138,7 @@ class TestWsValidateAppendOnly(unittest.TestCase):
 
     def test_seeded_edit_to_history_fails(self):
         mutated = FIXTURE.replace("- **Rationale:** fixture", "- **Rationale:** fixture!")
-        self.path.write_text(mutated)
+        self.path.write_text(mutated, encoding="utf-8")
         errors = check_append_only(self.path)
         self.assertTrue(
             any("append-only violation" in e and "'history'" in e for e in errors),
@@ -147,7 +147,7 @@ class TestWsValidateAppendOnly(unittest.TestCase):
 
     def test_seeded_edit_to_evidence_fails(self):
         mutated = FIXTURE.replace("| [system] | fixture |", "| [system] | fixturex |")
-        self.path.write_text(mutated)
+        self.path.write_text(mutated, encoding="utf-8")
         errors = check_append_only(self.path)
         self.assertTrue(
             any("append-only violation" in e and "'evidence ledger'" in e for e in errors),
@@ -158,7 +158,7 @@ class TestWsValidateAppendOnly(unittest.TestCase):
 
     def test_append_new_history_passes(self):
         self._write_fixture()
-        with self.path.open("a") as fh:
+        with self.path.open("a", encoding="utf-8") as fh:
             fh.write(
                 "\n### 2026-08-11T00:01:00Z — Appended\n"
                 "\n- **State:** build\n"
@@ -172,7 +172,7 @@ class TestWsValidateAppendOnly(unittest.TestCase):
 
     def test_duplicate_whole_second_timestamp_fails(self):
         self._write_fixture()
-        with self.path.open("a") as fh:
+        with self.path.open("a", encoding="utf-8") as fh:
             fh.write(
                 "\n### 2026-08-11T00:00:00Z — Duplicate timestamp\n"
                 "\n- **State:** build\n"

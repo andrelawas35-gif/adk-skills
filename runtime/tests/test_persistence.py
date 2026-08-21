@@ -105,7 +105,7 @@ class AdapterExitCriteriaTests(unittest.TestCase):
             adapter = CliAppendHistoryAdapter(root, idempotency_db=root / "idempotency.sqlite")
             result = adapter.execute(env)
             self.assertEqual(("applied", "ok"), (result.status, result.code))
-            wo_text = (root / ".work-studio" / "objects" / "2026" / "08" / f"{WO_ID}-persistence-fixture.md").read_text()
+            wo_text = (root / ".work-studio" / "objects" / "2026" / "08" / f"{WO_ID}-persistence-fixture.md").read_text(encoding="utf-8")
             self.assertIn("Tracer-bullet receipt", wo_text)
 
     def test_repeat_run_same_key_is_replayed_without_second_write(self) -> None:
@@ -119,7 +119,7 @@ class AdapterExitCriteriaTests(unittest.TestCase):
             self.assertEqual(("applied", "ok"), (first.status, first.code))
             self.assertEqual(("replayed", "duplicate_intended_effect"), (second.status, second.code))
 
-            wo_text = (root / ".work-studio" / "objects" / "2026" / "08" / f"{WO_ID}-persistence-fixture.md").read_text()
+            wo_text = (root / ".work-studio" / "objects" / "2026" / "08" / f"{WO_ID}-persistence-fixture.md").read_text(encoding="utf-8")
             self.assertEqual(1, wo_text.count("Tracer-bullet receipt"))
 
     def test_stale_baseline_is_rejected_and_file_untouched(self) -> None:
@@ -127,13 +127,13 @@ class AdapterExitCriteriaTests(unittest.TestCase):
         with _workspace() as tmp:
             root = Path(tmp)
             wo_path = root / ".work-studio" / "objects" / "2026" / "08" / f"{WO_ID}-persistence-fixture.md"
-            before_text = wo_path.read_text()
+            before_text = wo_path.read_text(encoding="utf-8")
 
             adapter = CliAppendHistoryAdapter(root, idempotency_db=root / "idempotency.sqlite")
             result = adapter.execute(env)
 
             self.assertEqual(("rejected", "stale_updated_at"), (result.status, result.code))
-            self.assertEqual(before_text, wo_path.read_text())
+            self.assertEqual(before_text, wo_path.read_text(encoding="utf-8"))
 
     def test_failed_cli_call_leaves_no_idempotency_record_and_stays_retryable(self) -> None:
         """A crashed/failed attempt must not be silently remembered as applied."""

@@ -62,7 +62,7 @@ def _get_workspace_name(ws_root: Path) -> str:
     """Read the workspace name from .work-studio/config.md, with fallback."""
     config = ws_root / ".work-studio" / "config.md"
     if config.exists():
-        for line in config.read_text().splitlines():
+        for line in config.read_text(encoding="utf-8").splitlines():
             if "- **Name**" in line:
                 name = line.split("**", 2)[-1].split(":", 1)[-1].strip()
                 if name:
@@ -298,7 +298,7 @@ def cmd_claim_register(args: argparse.Namespace) -> int:
         print(f"Error: {err}", file=sys.stderr)
         return 1
 
-    content = obj_file.read_text()
+    content = obj_file.read_text(encoding="utf-8")
 
     # Reject low-consequence Work Objects
     consequence = _get_consequence(content)
@@ -387,7 +387,7 @@ def cmd_claim_inspect(args: argparse.Namespace) -> int:
         print(f"Error: {e}", file=sys.stderr)
         return 1
 
-    content = obj_file.read_text()
+    content = obj_file.read_text(encoding="utf-8")
     body = content[content.find("---", 3) + 3:].strip() if content.startswith("---") else content
 
     claims = parse_claims(body)

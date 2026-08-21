@@ -14,12 +14,13 @@ __pycache__/
 *.pyc
 .venv/
 
-# Work Studio — private operational records
-.work-studio/active.md
-.work-studio/inbox.md
-.work-studio/objects/
-.work-studio/adapter.lock
+# Work Studio — operational records. Tracked deliberately (2026-08-21) so
+# Work Objects sync between machines via ordinary git push/pull instead of
+# a separate private channel. If a Work Object ever needs to stay off this
+# repo's history (e.g. sensitivity: restricted content), exclude it by path
+# explicitly rather than reverting this block wholesale.
 # .work-studio/config.md is tracked (workspace identity)
+.work-studio/adapter.lock
 
 # Generated runtime installations; canonical artifacts live in adapters/
 .agents/skills/

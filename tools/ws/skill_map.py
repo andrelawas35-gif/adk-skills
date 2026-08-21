@@ -67,7 +67,7 @@ def _load_adapter_generator():
 
 def _body_after_frontmatter(skill_file: Path) -> str:
     """Return the Markdown body after the YAML frontmatter."""
-    text = skill_file.read_text()
+    text = skill_file.read_text(encoding="utf-8")
     parts = text.split("---", 2)
     return parts[2].lstrip("\n") if len(parts) >= 3 else text
 

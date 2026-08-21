@@ -160,7 +160,7 @@ Continue.
 def make_object_file(dir_path: Path, filename: str, content: str) -> Path:
     """Create a Work Object file and return its path."""
     file_path = dir_path / filename
-    file_path.write_text(content)
+    file_path.write_text(content, encoding="utf-8")
     return file_path
 
 
@@ -398,7 +398,7 @@ class TestLifecycleGates(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / ".work-studio" / "objects" / "2026" / "08").mkdir(parents=True)
-            (root / ".work-studio" / "active.md").write_text("# Active\n")
+            (root / ".work-studio" / "active.md").write_text("# Active\n", encoding="utf-8")
 
             obj_id = "2026-08-15-999"
             frontmatter = generate_frontmatter(
@@ -411,9 +411,9 @@ class TestLifecycleGates(unittest.TestCase):
                 root / ".work-studio" / "objects" / "2026" / "08"
                 / f"{obj_id}-test-close-state-advance.md"
             )
-            obj_file.write_text(frontmatter + SAMPLE_BODY)
+            obj_file.write_text(frontmatter + SAMPLE_BODY, encoding="utf-8")
 
-            fm_before = parse_frontmatter(obj_file.read_text())
+            fm_before = parse_frontmatter(obj_file.read_text(encoding="utf-8"))
 
             cwd = os.getcwd()
             os.chdir(root)
@@ -432,7 +432,7 @@ class TestLifecycleGates(unittest.TestCase):
                 os.chdir(cwd)
 
             self.assertEqual(exit_code, 0)
-            fm_after = parse_frontmatter(obj_file.read_text())
+            fm_after = parse_frontmatter(obj_file.read_text(encoding="utf-8"))
             self.assertEqual(fm_after["status"], "closed")
             self.assertEqual(
                 fm_after["state"], "close",
@@ -585,7 +585,7 @@ class TestAttention(unittest.TestCase):
                 "## Primary\n\n- `001` — Existing\n\n"
                 "## Supporting\n\n- `002` — Other\n\n"
                 "## Paused\n"
-            )
+            , encoding="utf-8")
 
             updated = update_active_entry(active_md, "003", "New object", "primary")
             self.assertIn("003", updated)
@@ -601,7 +601,7 @@ class TestAttention(unittest.TestCase):
                 "## Primary\n\n- `001` — P\n\n"
                 "## Supporting\n\n- `002` — S\n\n"
                 "## Paused\n"
-            )
+            , encoding="utf-8")
 
             updated = update_active_entry(active_md, "003", "New supporting", "supporting")
             # The new entry must appear before ## Paused
@@ -620,7 +620,7 @@ class TestAttention(unittest.TestCase):
                 "## Primary\n\n- `001` — P\n\n"
                 "## Supporting\n\n- `002` — S\n\n"
                 "## Paused\n"
-            )
+            , encoding="utf-8")
 
             updated = update_active_entry(active_md, "003", "Paused entry", "paused")
             # Should be after ## Paused (at end)
@@ -634,7 +634,7 @@ class TestAttention(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             tmpdir = Path(tmp)
             active_md = tmpdir / "active.md"
-            active_md.write_text("# Active\n\n- `001` — Original\n")
+            active_md.write_text("# Active\n\n- `001` — Original\n", encoding="utf-8")
 
             updated = update_active_entry(active_md, "001", "Updated", "paused")
             self.assertIn("Updated (paused)", updated)
@@ -649,7 +649,7 @@ class TestAttention(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             tmpdir = Path(tmp)
             active_md = tmpdir / "active.md"
-            active_md.write_text(content)
+            active_md.write_text(content, encoding="utf-8")
 
             updated = remove_active_entry(active_md, "002")
             self.assertIsNotNone(updated)
@@ -661,7 +661,7 @@ class TestAttention(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             tmpdir = Path(tmp)
             active_md = tmpdir / "active.md"
-            active_md.write_text("- `001` — Only\n")
+            active_md.write_text("- `001` — Only\n", encoding="utf-8")
 
             result = remove_active_entry(active_md, "999")
             self.assertIsNone(result)
@@ -681,7 +681,7 @@ class TestAttentionRepair(unittest.TestCase):
         frontmatter = generate_frontmatter(obj_id, title, "change", "meaningful", "ordinary")
         frontmatter = frontmatter.replace("state: notice", "state: explore")
         obj_file = obj_dir / f"{obj_id}-{title.lower().replace(' ', '-')}.md"
-        obj_file.write_text(frontmatter + SAMPLE_BODY)
+        obj_file.write_text(frontmatter + SAMPLE_BODY, encoding="utf-8")
         return obj_file
 
     def test_repair_restores_missing_entry_from_frontmatter(self):
@@ -690,7 +690,7 @@ class TestAttentionRepair(unittest.TestCase):
             root = Path(tmp)
             active_md = root / ".work-studio" / "active.md"
             active_md.parent.mkdir(parents=True, exist_ok=True)
-            active_md.write_text("# Active Work Objects\n\n## Primary\n\n\n## Supporting\n\n")
+            active_md.write_text("# Active Work Objects\n\n## Primary\n\n\n## Supporting\n\n", encoding="utf-8")
 
             objects_dir = root / ".work-studio" / "objects"
             self._make_active_object(root, "2026-08-16-901", "Phantom object")
@@ -698,7 +698,7 @@ class TestAttentionRepair(unittest.TestCase):
             repaired = repair_missing_active_entries(active_md, objects_dir)
 
             self.assertEqual(["2026-08-16-901"], repaired)
-            content = active_md.read_text()
+            content = active_md.read_text(encoding="utf-8")
             self.assertIn("`2026-08-16-901`", content)
             self.assertIn("Phantom object", content)
             self.assertIn("(supporting)", content)
@@ -709,15 +709,15 @@ class TestAttentionRepair(unittest.TestCase):
             root = Path(tmp)
             active_md = root / ".work-studio" / "active.md"
             active_md.parent.mkdir(parents=True, exist_ok=True)
-            active_md.write_text("# Active Work Objects\n\n## Primary\n\n\n## Supporting\n\n")
+            active_md.write_text("# Active Work Objects\n\n## Primary\n\n\n## Supporting\n\n", encoding="utf-8")
 
             objects_dir = root / ".work-studio" / "objects"
             self._make_active_object(root, "2026-08-16-902", "Phantom two")
 
             first = repair_missing_active_entries(active_md, objects_dir)
-            content_after_first = active_md.read_text()
+            content_after_first = active_md.read_text(encoding="utf-8")
             second = repair_missing_active_entries(active_md, objects_dir)
-            content_after_second = active_md.read_text()
+            content_after_second = active_md.read_text(encoding="utf-8")
 
             self.assertEqual(["2026-08-16-902"], first)
             self.assertEqual([], second)
@@ -731,17 +731,17 @@ class TestAttentionRepair(unittest.TestCase):
             active_md.parent.mkdir(parents=True, exist_ok=True)
             objects_dir = root / ".work-studio" / "objects"
             obj_file = self._make_active_object(root, "2026-08-16-903", "Consistent object")
-            fm = parse_frontmatter(obj_file.read_text())
+            fm = parse_frontmatter(obj_file.read_text(encoding="utf-8"))
             active_md.write_text(
                 "# Active Work Objects\n\n## Primary\n\n\n## Supporting\n\n"
                 f"- `2026-08-16-903` — {fm['title']} (supporting)\n"
-            )
-            before = active_md.read_text()
+            , encoding="utf-8")
+            before = active_md.read_text(encoding="utf-8")
 
             repaired = repair_missing_active_entries(active_md, objects_dir)
 
             self.assertEqual([], repaired)
-            self.assertEqual(before, active_md.read_text())
+            self.assertEqual(before, active_md.read_text(encoding="utf-8"))
 
     def test_repaired_role_is_a_default_not_a_recovered_original(self):
         """Exit criterion 4: the role-default limitation is explicit, not hidden.
@@ -756,15 +756,15 @@ class TestAttentionRepair(unittest.TestCase):
             root = Path(tmp)
             active_md = root / ".work-studio" / "active.md"
             active_md.parent.mkdir(parents=True, exist_ok=True)
-            active_md.write_text("# Active Work Objects\n\n## Primary\n\n\n## Supporting\n\n")
+            active_md.write_text("# Active Work Objects\n\n## Primary\n\n\n## Supporting\n\n", encoding="utf-8")
             objects_dir = root / ".work-studio" / "objects"
 
             obj_file = self._make_active_object(root, "2026-08-16-904", "Was meant to be primary")
-            self.assertNotIn("role", obj_file.read_text().split("---")[1])
+            self.assertNotIn("role", obj_file.read_text(encoding="utf-8").split("---")[1])
 
             repaired = repair_missing_active_entries(active_md, objects_dir, default_role="primary")
             self.assertEqual(["2026-08-16-904"], repaired)
-            self.assertIn("(primary)", active_md.read_text())
+            self.assertIn("(primary)", active_md.read_text(encoding="utf-8"))
 
             repaired_default = repair_missing_active_entries(
                 active_md.parent / "active.md", objects_dir
@@ -777,10 +777,10 @@ class TestAttentionRepair(unittest.TestCase):
             root = Path(tmp)
             active_md = root / ".work-studio" / "active.md"
             active_md.parent.mkdir(parents=True, exist_ok=True)
-            active_md.write_text("# Active Work Objects\n\n## Primary\n\n\n## Supporting\n\n")
+            active_md.write_text("# Active Work Objects\n\n## Primary\n\n\n## Supporting\n\n", encoding="utf-8")
             objects_dir = root / ".work-studio" / "objects" / "2026" / "08"
             objects_dir.mkdir(parents=True)
-            (objects_dir / "2026-08-16-905-broken.md").write_text("not valid frontmatter at all")
+            (objects_dir / "2026-08-16-905-broken.md").write_text("not valid frontmatter at all", encoding="utf-8")
 
             repaired = repair_missing_active_entries(active_md, root / ".work-studio" / "objects")
 
@@ -799,7 +799,7 @@ class TestFindMissingEntriesSurfacesParseFailures(unittest.TestCase):
             active_md = root / ".work-studio" / "active.md"
             objects_dir = root / ".work-studio" / "objects" / "2026" / "08"
             objects_dir.mkdir(parents=True)
-            (objects_dir / "2026-08-16-910-broken.md").write_text("not valid frontmatter at all")
+            (objects_dir / "2026-08-16-910-broken.md").write_text("not valid frontmatter at all", encoding="utf-8")
 
             missing = find_missing_entries(active_md, root / ".work-studio" / "objects")
 
@@ -811,12 +811,12 @@ class TestFindMissingEntriesSurfacesParseFailures(unittest.TestCase):
             root = Path(tmp)
             active_md = root / ".work-studio" / "active.md"
             active_md.parent.mkdir(parents=True, exist_ok=True)
-            active_md.write_text("# Active Work Objects\n\n## Primary\n\n\n## Supporting\n\n")
+            active_md.write_text("# Active Work Objects\n\n## Primary\n\n\n## Supporting\n\n", encoding="utf-8")
             objects_dir = root / ".work-studio" / "objects" / "2026" / "08"
             objects_dir.mkdir(parents=True)
             frontmatter = generate_frontmatter("2026-08-16-911", "Ordinary missing", "change", "meaningful", "ordinary")
             frontmatter = frontmatter.replace("state: notice", "state: explore")
-            (objects_dir / "2026-08-16-911-ordinary-missing.md").write_text(frontmatter + SAMPLE_BODY)
+            (objects_dir / "2026-08-16-911-ordinary-missing.md").write_text(frontmatter + SAMPLE_BODY, encoding="utf-8")
 
             missing = find_missing_entries(active_md, root / ".work-studio" / "objects")
 
@@ -829,7 +829,7 @@ class TestFindMissingEntriesSurfacesParseFailures(unittest.TestCase):
             active_md = root / ".work-studio" / "active.md"
             objects_dir = root / ".work-studio" / "objects" / "2026" / "08"
             objects_dir.mkdir(parents=True)
-            (objects_dir / "2026-08-16-912-broken.md").write_text("garbage")
+            (objects_dir / "2026-08-16-912-broken.md").write_text("garbage", encoding="utf-8")
 
             errors = check_attention_consistency(active_md, root / ".work-studio" / "objects")
 
@@ -844,10 +844,10 @@ class TestFindMissingEntriesSurfacesParseFailures(unittest.TestCase):
             root = Path(tmp)
             active_md = root / ".work-studio" / "active.md"
             active_md.parent.mkdir(parents=True, exist_ok=True)
-            active_md.write_text("# Active Work Objects\n\n## Primary\n\n\n## Supporting\n\n")
+            active_md.write_text("# Active Work Objects\n\n## Primary\n\n\n## Supporting\n\n", encoding="utf-8")
             objects_dir = root / ".work-studio" / "objects" / "2026" / "08"
             objects_dir.mkdir(parents=True)
-            (objects_dir / "2026-08-16-913-broken.md").write_text("garbage")
+            (objects_dir / "2026-08-16-913-broken.md").write_text("garbage", encoding="utf-8")
 
             repaired = repair_missing_active_entries(active_md, root / ".work-studio" / "objects")
             remaining = check_attention_consistency(active_md, root / ".work-studio" / "objects")
@@ -868,7 +868,7 @@ class TestAtomicWrite(unittest.TestCase):
             target = Path(tmp) / "active.md"
             atomic_write_text(target, "# Active Work Objects\n\nhello\n")
 
-            self.assertEqual("# Active Work Objects\n\nhello\n", target.read_text())
+            self.assertEqual("# Active Work Objects\n\nhello\n", target.read_text(encoding="utf-8"))
             leftovers = [p for p in Path(tmp).iterdir() if p.name != "active.md"]
             self.assertEqual([], leftovers, f"unexpected leftover files: {leftovers}")
 
@@ -879,7 +879,7 @@ class TestAtomicWrite(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             target = root / "active.md"
-            target.write_text("# Active Work Objects\n\noriginal\n")
+            target.write_text("# Active Work Objects\n\noriginal\n", encoding="utf-8")
 
             # Reproduce exactly what atomic_write_text does up to (but not
             # including) the os.replace swap -- the "kill" point.
@@ -891,7 +891,7 @@ class TestAtomicWrite(unittest.TestCase):
                 fh.write("# Active Work Objects\n\nnew content that never lands\n")
             # No os.replace -- this is the simulated kill.
 
-            self.assertEqual("# Active Work Objects\n\noriginal\n", target.read_text())
+            self.assertEqual("# Active Work Objects\n\noriginal\n", target.read_text(encoding="utf-8"))
             orphans = [p for p in root.iterdir() if p.name != "active.md"]
             self.assertEqual(1, len(orphans))
             self.assertTrue(orphans[0].name.endswith(".tmp"))
@@ -902,8 +902,8 @@ class TestAtomicWrite(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             target = root / "active.md"
-            target.write_text("# Active Work Objects\n\noriginal\n")
-            (root / f"{target.name}.abc123.tmp").write_text("partial")
+            target.write_text("# Active Work Objects\n\noriginal\n", encoding="utf-8")
+            (root / f"{target.name}.abc123.tmp").write_text("partial", encoding="utf-8")
 
             errors = check_interrupted_mutations(target)
 
@@ -930,7 +930,7 @@ class TestAtomicWrite(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             target = root / "active.md"
-            target.write_text("original\n")
+            target.write_text("original\n", encoding="utf-8")
 
             class _Boom(Exception):
                 pass
@@ -948,7 +948,7 @@ class TestAtomicWrite(unittest.TestCase):
             finally:
                 atomic_module.os.replace = original_replace
 
-            self.assertEqual("original\n", target.read_text())
+            self.assertEqual("original\n", target.read_text(encoding="utf-8"))
             leftovers = [p for p in root.iterdir() if p.name != "active.md"]
             self.assertEqual([], leftovers)
 
@@ -963,7 +963,7 @@ class TestObjectFileAtomicWrite(unittest.TestCase):
     def _plain_write_text(path, content):
         """The plain-writer equivalent of atomic_write_text (mkdir + write)."""
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(content)
+        path.write_text(content, encoding="utf-8")
 
     @staticmethod
     def _patch_plain(module):
@@ -976,7 +976,7 @@ class TestObjectFileAtomicWrite(unittest.TestCase):
     def _make_workspace(self, tmp):
         root = Path(tmp)
         (root / ".work-studio" / "objects" / "2026" / "08").mkdir(parents=True)
-        (root / ".work-studio" / "active.md").write_text("# Active\n")
+        (root / ".work-studio" / "active.md").write_text("# Active\n", encoding="utf-8")
         return root
 
     def _make_object(self, root, obj_id="2026-08-16-900", state="design",
@@ -989,7 +989,7 @@ class TestObjectFileAtomicWrite(unittest.TestCase):
             root / ".work-studio" / "objects" / "2026" / "08"
             / f"{obj_id}-slice-a-test.md"
         )
-        obj_file.write_text(frontmatter + body)
+        obj_file.write_text(frontmatter + body, encoding="utf-8")
         return obj_file
 
     @staticmethod
@@ -1014,7 +1014,7 @@ class TestObjectFileAtomicWrite(unittest.TestCase):
             root = Path(tmp)
             obj = root / "2026-08-16-900-slice-a-test.md"
             original = "---\nid: 2026-08-16-900\ntitle: t\n---\noriginal\n"
-            obj.write_text(original)
+            obj.write_text(original, encoding="utf-8")
 
             import tempfile as _tempfile
             import os as _os
@@ -1023,7 +1023,7 @@ class TestObjectFileAtomicWrite(unittest.TestCase):
             with _os.fdopen(fd, "w", encoding="utf-8") as fh:
                 fh.write("partial content that never lands\n")
 
-            self.assertEqual(original, obj.read_text())
+            self.assertEqual(original, obj.read_text(encoding="utf-8"))
             errors = check_interrupted_mutations(obj)
             self.assertTrue(
                 any("Orphaned temp file" in e for e in errors),
@@ -1051,7 +1051,7 @@ class TestObjectFileAtomicWrite(unittest.TestCase):
                     "| [gap] | test | residual uncertainty |",
                 )
                 obj_file = self._make_object(root, body=body)
-                fm_before = parse_frontmatter(obj_file.read_text())
+                fm_before = parse_frontmatter(obj_file.read_text(encoding="utf-8"))
 
                 def do():
                     buf = _io.StringIO()
@@ -1067,7 +1067,7 @@ class TestObjectFileAtomicWrite(unittest.TestCase):
                     )
                     with _contextlib.redirect_stdout(buf):
                         code = cmd_transition(args)
-                    return code, obj_file.read_text(), self._tmp_orphans(root)
+                    return code, obj_file.read_text(encoding="utf-8"), self._tmp_orphans(root)
 
                 if plain:
                     with _contextlib.ExitStack() as stack:
@@ -1107,13 +1107,13 @@ class TestObjectFileAtomicWrite(unittest.TestCase):
                 # Force a deterministically stale baseline timestamp so session
                 # B's rewrite can never land in the same whole second as the
                 # fixture (generate_frontmatter stamps whole-second UTC).
-                text = obj_file.read_text()
+                text = obj_file.read_text(encoding="utf-8")
                 text = re.sub(
                     r"(updated_at: )\S+", r"\g<1>2026-01-01T00:00:00Z",
                     text, count=1,
                 )
-                obj_file.write_text(text)
-                t0 = str(parse_frontmatter(obj_file.read_text())["updated_at"])
+                obj_file.write_text(text, encoding="utf-8")
+                t0 = str(parse_frontmatter(obj_file.read_text(encoding="utf-8"))["updated_at"])
 
                 def do():
                     # Session B writes and bumps updated_at.
@@ -1138,7 +1138,7 @@ class TestObjectFileAtomicWrite(unittest.TestCase):
                     )
                     with _contextlib.redirect_stdout(buf_a), _contextlib.redirect_stderr(err_a):
                         code_a = cmd_append_history(args_a)
-                    return code_a, err_a.getvalue(), obj_file.read_text()
+                    return code_a, err_a.getvalue(), obj_file.read_text(encoding="utf-8")
 
                 if plain:
                     with _contextlib.ExitStack() as stack:
@@ -1173,7 +1173,7 @@ class TestObjectFileAtomicWrite(unittest.TestCase):
                 obj_file = self._make_object(root)
                 snapshot = obj_file.parent / f"{obj_file.name}.bak-20260816T160000Z"
                 shutil.copyfile(obj_file, snapshot)
-                fm_before = parse_frontmatter(obj_file.read_text())
+                fm_before = parse_frontmatter(obj_file.read_text(encoding="utf-8"))
 
                 def do():
                     buf = _io.StringIO()
@@ -1186,7 +1186,7 @@ class TestObjectFileAtomicWrite(unittest.TestCase):
                     )
                     with _contextlib.redirect_stdout(buf):
                         code = cmd_append_evidence(args)
-                    return (code, obj_file.read_text(),
+                    return (code, obj_file.read_text(encoding="utf-8"),
                             check_append_only(obj_file), self._tmp_orphans(root))
 
                 if plain:
@@ -1240,10 +1240,10 @@ class TestObjectFileAtomicWrite(unittest.TestCase):
                     created_rel = _re.search(
                         r"Created: (\S+)", buf.getvalue()).group(1)
                     obj_file = root / created_rel
-                    obj_id = str(parse_frontmatter(obj_file.read_text())["id"])
+                    obj_id = str(parse_frontmatter(obj_file.read_text(encoding="utf-8"))["id"])
 
                     def _ts():
-                        return str(parse_frontmatter(obj_file.read_text())["updated_at"])
+                        return str(parse_frontmatter(obj_file.read_text(encoding="utf-8"))["updated_at"])
 
                     # append-history
                     buf = _io.StringIO()
@@ -1279,7 +1279,7 @@ class TestObjectFileAtomicWrite(unittest.TestCase):
                         code = cmd_transition(args_t)
                     self.assertEqual(0, code)
 
-                    return obj_file.read_text(), self._tmp_orphans(root)
+                    return obj_file.read_text(encoding="utf-8"), self._tmp_orphans(root)
 
                 if plain:
                     with _contextlib.ExitStack() as stack:
@@ -1330,9 +1330,9 @@ class TestHeterogeneousAtomicWrite(unittest.TestCase):
             self.assertTrue((root / ".work-studio" / "inbox.md").exists())
             self.assertTrue((root / ".work-studio" / "active.md").exists())
             self.assertEqual(
-                "# Inbox\n\n", (root / ".work-studio" / "inbox.md").read_text())
+                "# Inbox\n\n", (root / ".work-studio" / "inbox.md").read_text(encoding="utf-8"))
             self.assertTrue(
-                (root / ".work-studio" / "config.md").read_text()
+                (root / ".work-studio" / "config.md").read_text(encoding="utf-8")
                 .startswith("# Work Studio Configuration"))
             self.assertEqual([], self._tmp_orphans(root))
 
@@ -1349,8 +1349,8 @@ class TestHeterogeneousAtomicWrite(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / ".work-studio").mkdir(parents=True)
-            (root / ".work-studio" / "config.md").write_text("# config")
-            (root / ".gitignore").write_text(".work-studio/\nwork-studio/\n")
+            (root / ".work-studio" / "config.md").write_text("# config", encoding="utf-8")
+            (root / ".gitignore").write_text(".work-studio/\nwork-studio/\n", encoding="utf-8")
             _subprocess.run(["git", "init", "-q"], cwd=root, check=True)
             _subprocess.run(
                 ["git", "config", "user.email", "t@t.com"], cwd=root, check=True)
@@ -1374,7 +1374,7 @@ class TestHeterogeneousAtomicWrite(unittest.TestCase):
             self.assertEqual(0, chk)
             baseline_file = root / ".work-studio" / "baseline.json"
             self.assertTrue(baseline_file.exists())
-            self.assertIn("commit_sha", baseline_file.read_text())
+            self.assertIn("commit_sha", baseline_file.read_text(encoding="utf-8"))
             self.assertEqual([], self._tmp_orphans(root))
 
     def test_skill_map_build_no_orphans_deterministic(self):
@@ -1389,13 +1389,13 @@ class TestHeterogeneousAtomicWrite(unittest.TestCase):
 
         r1 = _subprocess.run(
             [sys.executable, "-m", "tools.ws", "skill-map", "build"],
-            capture_output=True, text=True, cwd=str(repo), env=env)
+            capture_output=True, text=True, encoding="utf-8", cwd=str(repo), env=env)
         self.assertEqual(0, r1.returncode, r1.stderr)
         first = (out_dir / "skill-map.yaml").read_bytes()
 
         r2 = _subprocess.run(
             [sys.executable, "-m", "tools.ws", "skill-map", "build"],
-            capture_output=True, text=True, cwd=str(repo), env=env)
+            capture_output=True, text=True, encoding="utf-8", cwd=str(repo), env=env)
         self.assertEqual(0, r2.returncode, r2.stderr)
         self.assertEqual(first, (out_dir / "skill-map.yaml").read_bytes())
         self.assertEqual([], [p.name for p in out_dir.glob("*.tmp")])
@@ -2175,7 +2175,7 @@ class TestCheckAttentionLimits(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             tmpdir = Path(tmp)
             active_md = tmpdir / "active.md"
-            active_md.write_text("# Active\n\n## Primary\n\n## Supporting\n\n")
+            active_md.write_text("# Active\n\n## Primary\n\n## Supporting\n\n", encoding="utf-8")
             errors = check_attention_limits(active_md)
             self.assertEqual(len(errors), 0)
 
@@ -2188,7 +2188,7 @@ class TestCheckAttentionLimits(unittest.TestCase):
                 "# Active\n\n"
                 "## Primary\n\n- `001` — Main\n\n"
                 "## Supporting\n\n- `002` — Helper\n\n"
-            )
+            , encoding="utf-8")
             errors = check_attention_limits(active_md)
             self.assertEqual(len(errors), 0)
 
@@ -2204,7 +2204,7 @@ class TestCheckAttentionLimits(unittest.TestCase):
                 "# Active\n\n"
                 "## Primary\n\n- `001` — Main\n\n"
                 f"## Supporting\n\n{supporting_lines}\n"
-            )
+            , encoding="utf-8")
             errors = check_attention_limits(active_md)
             self.assertEqual(len(errors), 0)
 
@@ -2217,7 +2217,7 @@ class TestCheckAttentionLimits(unittest.TestCase):
                 "# Active\n\n"
                 "## Primary\n\n- `001` — First\n- `002` — Second\n\n"
                 "## Supporting\n\n"
-            )
+            , encoding="utf-8")
             errors = check_attention_limits(active_md)
             self.assertTrue(len(errors) > 0)
             self.assertTrue(any("Primary" in e for e in errors))
@@ -2243,7 +2243,7 @@ class TestCheckAttentionLimits(unittest.TestCase):
                 "## Primary\n\n- `001` — Main\n\n"
                 "## Supporting\n\n- `002` — Helper\n\n"
                 "## Paused\n\n- `003` — Paused item\n\n"
-            )
+            , encoding="utf-8")
             errors = check_attention_limits(active_md)
             self.assertEqual(len(errors), 0)
 
@@ -3266,7 +3266,7 @@ class TestCheckInterruptedMutations(unittest.TestCase):
                 SAMPLE_FRONTMATTER + "\n" + SAMPLE_BODY,
             )
             # Create orphaned temp file
-            (tmpdir / "2026-07-21-010-test.tmp").write_text("partial data")
+            (tmpdir / "2026-07-21-010-test.tmp").write_text("partial data", encoding="utf-8")
             errors = check_interrupted_mutations(obj_file)
             self.assertTrue(len(errors) > 0)
             self.assertTrue(any("temp" in e.lower() for e in errors))
@@ -3279,7 +3279,7 @@ class TestCheckInterruptedMutations(unittest.TestCase):
                 tmpdir, "2026-07-21-010-test.md",
                 SAMPLE_FRONTMATTER + "\n" + SAMPLE_BODY,
             )
-            (tmpdir / "2026-07-21-010-test.swp").write_text("vim swap")
+            (tmpdir / "2026-07-21-010-test.swp").write_text("vim swap", encoding="utf-8")
             errors = check_interrupted_mutations(obj_file)
             self.assertTrue(len(errors) > 0)
 
@@ -3291,7 +3291,7 @@ class TestCheckInterruptedMutations(unittest.TestCase):
                 tmpdir, "2026-07-21-010-test.md",
                 SAMPLE_FRONTMATTER + "\n" + SAMPLE_BODY,
             )
-            (tmpdir / "2026-07-21-010-test.md.lock").write_text("locked")
+            (tmpdir / "2026-07-21-010-test.md.lock").write_text("locked", encoding="utf-8")
             errors = check_interrupted_mutations(obj_file)
             self.assertTrue(len(errors) > 0)
             self.assertTrue(any("lock" in e.lower() for e in errors))
@@ -3304,7 +3304,7 @@ class TestCheckInterruptedMutations(unittest.TestCase):
                 tmpdir, "2026-07-21-010-test.md",
                 SAMPLE_FRONTMATTER + "\n" + SAMPLE_BODY,
             )
-            (tmpdir / ".2026-07-21-010-test.md.lock").write_text("locked")
+            (tmpdir / ".2026-07-21-010-test.md.lock").write_text("locked", encoding="utf-8")
             errors = check_interrupted_mutations(obj_file)
             self.assertTrue(len(errors) > 0)
 
@@ -3316,7 +3316,7 @@ class TestCheckInterruptedMutations(unittest.TestCase):
                 tmpdir, "2026-07-21-010-test.md",
                 SAMPLE_FRONTMATTER + "\n" + SAMPLE_BODY,
             )
-            (tmpdir / "2026-07-21-010-test.md~").write_text("backup")
+            (tmpdir / "2026-07-21-010-test.md~").write_text("backup", encoding="utf-8")
             errors = check_interrupted_mutations(obj_file)
             self.assertTrue(len(errors) > 0)
 
@@ -3329,8 +3329,8 @@ class TestCheckInterruptedMutations(unittest.TestCase):
                 SAMPLE_FRONTMATTER + "\n" + SAMPLE_BODY,
             )
             # Unrelated file — different prefix
-            (tmpdir / "2026-07-21-999-other.md").write_text("other")
-            (tmpdir / "README.md").write_text("readme")
+            (tmpdir / "2026-07-21-999-other.md").write_text("other", encoding="utf-8")
+            (tmpdir / "README.md").write_text("readme", encoding="utf-8")
             errors = check_interrupted_mutations(obj_file)
             self.assertEqual(len(errors), 0)
 
@@ -3400,7 +3400,7 @@ class TestEvidenceFreshnessCheck(unittest.TestCase):
             root = Path(tmp)
             source_dir = root / "tools"
             source_dir.mkdir()
-            (source_dir / "example.py").write_text("line 1\n")
+            (source_dir / "example.py").write_text("line 1\n", encoding="utf-8")
             obj_file = self._object_with_evidence(
                 root,
                 "\n".join([
@@ -3448,7 +3448,7 @@ class TestEvidenceFreshnessCheck(unittest.TestCase):
             obj_dir.mkdir(parents=True, exist_ok=True)
             source_dir = root / "tools"
             source_dir.mkdir()
-            (source_dir / "other.py").write_text("\n".join(f"line {n}" for n in range(1, 10)) + "\n")
+            (source_dir / "other.py").write_text("\n".join(f"line {n}" for n in range(1, 10)) + "\n", encoding="utf-8")
 
             moved_body = SAMPLE_BODY.replace(
                 "| [system] | test | Initial evidence |",
@@ -3512,7 +3512,7 @@ class TestEvidenceFreshnessCheck(unittest.TestCase):
             root = Path(tmp)
             work_studio_dir = root / ".work-studio"
             work_studio_dir.mkdir(parents=True, exist_ok=True)
-            (work_studio_dir / "inbox.md").write_text("line 1\nline 2\n")
+            (work_studio_dir / "inbox.md").write_text("line 1\nline 2\n", encoding="utf-8")
 
             obj_file = self._object_with_evidence(
                 root,
@@ -3935,7 +3935,7 @@ class TestContractDriftCheck(unittest.TestCase):
             ')\n'
         )
         p = Path(tmp) / "__main__.py"
-        p.write_text(content)
+        p.write_text(content, encoding="utf-8")
         return p
 
     def test_real_repo_is_clean(self):
@@ -3976,7 +3976,7 @@ class TestContractDriftCheck(unittest.TestCase):
                 ')\n'
             )
             p = Path(tmp) / "__main__.py"
-            p.write_text(content)
+            p.write_text(content, encoding="utf-8")
             self.assertEqual(check_contract_drift(p), [])
 
 
@@ -4011,7 +4011,7 @@ class TestCampaignAndPlausibilityWarnings(unittest.TestCase):
             root = Path(tmp)
             anchor = root / "docs" / "design" / "campaign.md"
             anchor.parent.mkdir(parents=True)
-            anchor.write_text("# Campaign\n")
+            anchor.write_text("# Campaign\n", encoding="utf-8")
             fm = SAMPLE_FRONTMATTER.replace(
                 "sensitivity: ordinary",
                 "sensitivity: ordinary\ncampaign: docs/design/campaign.md",
@@ -4116,7 +4116,7 @@ class TestSkillMapExtraction(unittest.TestCase):
             'description: "A test skill."\n'
             "---\n"
         )
-        (skill_dir / "SKILL.md").write_text(fm + body)
+        (skill_dir / "SKILL.md").write_text(fm + body, encoding="utf-8")
         return skill_dir
 
     def test_does_not_bullets_extracted(self):
@@ -4190,7 +4190,7 @@ class TestAppendArtifactCommand(unittest.TestCase):
         )
         return subprocess.run(
             [sys.executable, "-m", "tools.ws", *args],
-            capture_output=True, text=True,
+            capture_output=True, text=True, encoding="utf-8",
             cwd=str(root),
             env=env,
         )
@@ -4205,20 +4205,20 @@ class TestAppendArtifactCommand(unittest.TestCase):
 
     def _get_updated(self, root: Path, obj_id: str) -> str:
         f = list((root / ".work-studio" / "objects").rglob(f"{obj_id}-*.md"))[0]
-        return re.search(r"updated_at:\s*(\S+)", f.read_text()).group(1)
+        return re.search(r"updated_at:\s*(\S+)", f.read_text(encoding="utf-8")).group(1)
 
     def test_committed_file_gets_fingerprint_and_commit(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / ".work-studio").mkdir(parents=True)
-            (root / ".work-studio" / "config.md").write_text("# config")
+            (root / ".work-studio" / "config.md").write_text("# config", encoding="utf-8")
             subprocess.run(["git", "init", "-q"], cwd=root)
             subprocess.run(["git", "config", "user.email", "t@t.com"], cwd=root)
             subprocess.run(["git", "config", "user.name", "t"], cwd=root)
 
             obj_id = self._create_object(root)
 
-            (root / "committed.txt").write_text("hello world\n")
+            (root / "committed.txt").write_text("hello world\n", encoding="utf-8")
             subprocess.run(["git", "add", "committed.txt"], cwd=root)
             subprocess.run(["git", "commit", "-q", "-m", "add"], cwd=root)
 
@@ -4230,7 +4230,7 @@ class TestAppendArtifactCommand(unittest.TestCase):
             self.assertEqual(result.returncode, 0)
 
             f = list((root / ".work-studio" / "objects").rglob(f"{obj_id}-*.md"))[0]
-            text = f.read_text()
+            text = f.read_text(encoding="utf-8")
             self.assertIn("committed.txt", text)
             self.assertIn("fingerprint:", text)
             self.assertNotIn("uncommitted at record time", text)
@@ -4242,14 +4242,14 @@ class TestAppendArtifactCommand(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / ".work-studio").mkdir(parents=True)
-            (root / ".work-studio" / "config.md").write_text("# config")
+            (root / ".work-studio" / "config.md").write_text("# config", encoding="utf-8")
             subprocess.run(["git", "init", "-q"], cwd=root)
             subprocess.run(["git", "config", "user.email", "t@t.com"], cwd=root)
             subprocess.run(["git", "config", "user.name", "t"], cwd=root)
 
             obj_id = self._create_object(root)
 
-            (root / "dirty.txt").write_text("work in progress\n")
+            (root / "dirty.txt").write_text("work in progress\n", encoding="utf-8")
 
             updated = self._get_updated(root, obj_id)
             result = self._run_ws(
@@ -4259,7 +4259,7 @@ class TestAppendArtifactCommand(unittest.TestCase):
             self.assertEqual(result.returncode, 0)
 
             f = list((root / ".work-studio" / "objects").rglob(f"{obj_id}-*.md"))[0]
-            text = f.read_text()
+            text = f.read_text(encoding="utf-8")
             self.assertIn("fingerprint:", text)
             self.assertIn("uncommitted at record time", text)
 
@@ -4267,11 +4267,11 @@ class TestAppendArtifactCommand(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / ".work-studio").mkdir(parents=True)
-            (root / ".work-studio" / "config.md").write_text("# config")
+            (root / ".work-studio" / "config.md").write_text("# config", encoding="utf-8")
             # No git init at all.
 
             obj_id = self._create_object(root)
-            (root / "nogit.txt").write_text("no git here\n")
+            (root / "nogit.txt").write_text("no git here\n", encoding="utf-8")
 
             updated = self._get_updated(root, obj_id)
             result = self._run_ws(
@@ -4281,7 +4281,7 @@ class TestAppendArtifactCommand(unittest.TestCase):
             self.assertEqual(result.returncode, 0)
 
             f = list((root / ".work-studio" / "objects").rglob(f"{obj_id}-*.md"))[0]
-            text = f.read_text()
+            text = f.read_text(encoding="utf-8")
             self.assertIn("fingerprint:", text)
             self.assertIn("uncommitted at record time", text)
             # No-git-repo is a legitimate fingerprint-only degrade: no warning
@@ -4296,7 +4296,7 @@ class TestAppendArtifactCommand(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            (root / "artifact.txt").write_text("content\n")
+            (root / "artifact.txt").write_text("content\n", encoding="utf-8")
             stderr = io.StringIO()
             with mock.patch("subprocess.run", side_effect=OSError("boom")):
                 with contextlib.redirect_stderr(stderr):
@@ -4314,7 +4314,7 @@ class TestAppendArtifactCommand(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            (root / "artifact.txt").write_text("content\n")
+            (root / "artifact.txt").write_text("content\n", encoding="utf-8")
             stderr = io.StringIO()
             failed = subprocess.CompletedProcess(
                 args=["git", "status"], returncode=1, stdout="", stderr=""
@@ -4331,7 +4331,7 @@ class TestAppendArtifactCommand(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / ".work-studio").mkdir(parents=True)
-            (root / ".work-studio" / "config.md").write_text("# config")
+            (root / ".work-studio" / "config.md").write_text("# config", encoding="utf-8")
 
             obj_id = self._create_object(root)
             updated = self._get_updated(root, obj_id)
@@ -4358,7 +4358,7 @@ class TestAppendHistoryNextAction(unittest.TestCase):
         )
         return subprocess.run(
             [sys.executable, "-m", "tools.ws", *args],
-            capture_output=True, text=True,
+            capture_output=True, text=True, encoding="utf-8",
             cwd=str(root),
             env=env,
         )
@@ -4373,13 +4373,13 @@ class TestAppendHistoryNextAction(unittest.TestCase):
 
     def _read(self, root: Path, obj_id: str) -> str:
         f = list((root / ".work-studio" / "objects").rglob(f"{obj_id}-*.md"))[0]
-        return f.read_text()
+        return f.read_text(encoding="utf-8")
 
     def test_next_action_updated_alongside_history(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / ".work-studio").mkdir(parents=True)
-            (root / ".work-studio" / "config.md").write_text("# config")
+            (root / ".work-studio" / "config.md").write_text("# config", encoding="utf-8")
 
             obj_id = self._create_object(root)
             content = self._read(root, obj_id)
@@ -4402,7 +4402,7 @@ class TestAppendHistoryNextAction(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / ".work-studio").mkdir(parents=True)
-            (root / ".work-studio" / "config.md").write_text("# config")
+            (root / ".work-studio" / "config.md").write_text("# config", encoding="utf-8")
 
             obj_id = self._create_object(root)
             content = self._read(root, obj_id)
@@ -4436,7 +4436,7 @@ class TestSkillMapCommand(unittest.TestCase):
         )
         return subprocess.run(
             [sys.executable, "-m", "tools.ws", *args],
-            capture_output=True, text=True,
+            capture_output=True, text=True, encoding="utf-8",
             cwd=str(root),
             env=env,
         )
@@ -4447,7 +4447,7 @@ class TestSkillMapCommand(unittest.TestCase):
         self.assertIn("22 skills", result.stdout)
         out = self.REPO_ROOT / "work-studio" / "skill-map.yaml"
         self.assertTrue(out.exists())
-        text = out.read_text()
+        text = out.read_text(encoding="utf-8")
         for field in ("responsibility:", "non_goals:", "requires_capabilities:"):
             self.assertIn(field, text)
         # Both formerly non-conforming skills are repaired and present.
@@ -4477,7 +4477,7 @@ class TestMembersCommand(unittest.TestCase):
         return subprocess.run(
             [sys.executable, "-m", "tools.ws", *args],
             capture_output=True,
-            text=True,
+            text=True, encoding="utf-8",
             cwd=str(root),
             env=env,
         )
@@ -4490,7 +4490,7 @@ class TestMembersCommand(unittest.TestCase):
             obj_dir.mkdir(parents=True)
             (objects_dir / "README.md").write_text(
                 "# Work Objects\n\nThis registered documentation file is not an object.\n"
-            )
+            , encoding="utf-8")
             for obj_id, title, campaign in [
                 ("2026-07-21-003", "Third", "docs/design/campaign.md"),
                 ("2026-07-21-001", "First", "docs/design/campaign.md"),
@@ -4544,7 +4544,7 @@ class TestMembersCommand(unittest.TestCase):
             )
 
             self.assertEqual(result.returncode, 0, result.stderr)
-            content = obj_file.read_text()
+            content = obj_file.read_text(encoding="utf-8")
             fm = parse_frontmatter(content)
             self.assertEqual(fm["campaign"], "docs/design/campaign.md")
             self.assertNotEqual(fm["updated_at"], "2026-07-21T00:00:00Z")
@@ -4557,7 +4557,7 @@ class TestMembersCommand(unittest.TestCase):
             objects_dir = root / ".work-studio" / "objects"
             obj_dir = objects_dir / "2026" / "07"
             obj_dir.mkdir(parents=True)
-            (objects_dir / "README.md").write_text("# Work Objects\n")
+            (objects_dir / "README.md").write_text("# Work Objects\n", encoding="utf-8")
             make_object_file(
                 obj_dir,
                 "2026-07-21-010-malformed.md",
@@ -4583,7 +4583,7 @@ class TestMembersCommand(unittest.TestCase):
                 "2026-07-21-010-test.md",
                 SAMPLE_FRONTMATTER + "\n" + SAMPLE_BODY,
             )
-            before = obj_file.read_text()
+            before = obj_file.read_text(encoding="utf-8")
 
             result = self._run_ws(
                 root,
@@ -4596,7 +4596,7 @@ class TestMembersCommand(unittest.TestCase):
 
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("Concurrent write detected", result.stderr)
-            self.assertEqual(obj_file.read_text(), before)
+            self.assertEqual(obj_file.read_text(encoding="utf-8"), before)
 
     def test_set_campaign_rejects_invalid_anchor_without_mutation(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -4608,7 +4608,7 @@ class TestMembersCommand(unittest.TestCase):
                 "2026-07-21-010-test.md",
                 SAMPLE_FRONTMATTER + "\n" + SAMPLE_BODY,
             )
-            before = obj_file.read_text()
+            before = obj_file.read_text(encoding="utf-8")
 
             result = self._run_ws(
                 root,
@@ -4621,7 +4621,7 @@ class TestMembersCommand(unittest.TestCase):
 
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("Invalid campaign", result.stderr)
-            self.assertEqual(obj_file.read_text(), before)
+            self.assertEqual(obj_file.read_text(encoding="utf-8"), before)
 
 
 class TestBuildAuditRationaleCheck(unittest.TestCase):
@@ -4645,7 +4645,7 @@ class TestBuildAuditRationaleCheck(unittest.TestCase):
         )
         return subprocess.run(
             [sys.executable, "-m", "tools.ws", *args],
-            capture_output=True, text=True,
+            capture_output=True, text=True, encoding="utf-8",
             cwd=str(root),
             env=env,
         )
@@ -4690,7 +4690,7 @@ class TestBuildAuditRationaleCheck(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("populated rationale", result.stdout)
             obj_file = root / ".work-studio" / "objects" / "2026" / "07" / "2026-07-21-010-test-object.md"
-            self.assertIn("[gap]", obj_file.read_text())
+            self.assertIn("[gap]", obj_file.read_text(encoding="utf-8"))
 
     def test_build_transition_passes_with_populated_rationale(self):
         """A decision with result: pass and a real rationale produces no gap."""
@@ -4706,7 +4706,7 @@ class TestBuildAuditRationaleCheck(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertNotIn("Audit:", result.stdout)
             obj_file = root / ".work-studio" / "objects" / "2026" / "07" / "2026-07-21-010-test-object.md"
-            self.assertNotIn("[gap]", obj_file.read_text())
+            self.assertNotIn("[gap]", obj_file.read_text(encoding="utf-8"))
 
     def test_verify_transition_unaffected_by_the_removed_branch(self):
         """Removing the decision branch doesn't disturb the verify audit."""
@@ -4745,7 +4745,7 @@ class TestCreatePrivateSensitivity(unittest.TestCase):
         )
         return subprocess.run(
             [sys.executable, "-m", "tools.ws", *args],
-            capture_output=True, text=True,
+            capture_output=True, text=True, encoding="utf-8",
             cwd=str(root),
             env=env,
         )
@@ -4765,7 +4765,7 @@ class TestCreatePrivateSensitivity(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             created = list((root / ".work-studio" / "objects").glob("**/*.md"))
             self.assertEqual(len(created), 1)
-            self.assertIn("sensitivity: private", created[0].read_text())
+            self.assertIn("sensitivity: private", created[0].read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

@@ -20,7 +20,7 @@ from tools.ws.validate import check_dashboard_signals, run_checks
 def _write_object(objects_dir: Path, rel: str, body: str) -> Path:
     path = objects_dir / rel
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text("---\nid: 2026-08-09-999\n---\n" + body)
+    path.write_text("---\nid: 2026-08-09-999\n---\n" + body, encoding="utf-8")
     return path
 
 

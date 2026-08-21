@@ -17,7 +17,7 @@ PLATFORMS = ("codex", "claude-code", "github-copilot")
 
 class DesignTracerBulletContract(unittest.TestCase):
     def test_core_skill_records_an_agreed_bounded_design_without_implementation(self):
-        text = CORE.read_text()
+        text = CORE.read_text(encoding="utf-8")
 
         for required_clause in (
             "## Governing principle",
@@ -37,7 +37,7 @@ class DesignTracerBulletContract(unittest.TestCase):
                 self.assertIn(required_clause, text)
 
     def test_fixture_covers_recommendation_recording_risk_rollback_and_adjacent_possibility(self):
-        text = FIXTURE.read_text()
+        text = FIXTURE.read_text(encoding="utf-8")
 
         for required_clause in (
             "Scenario 1", "Scenario 2", "Scenario 3", "Scenario 4",
@@ -52,7 +52,7 @@ class DesignTracerBulletContract(unittest.TestCase):
         result = subprocess.run(
             [sys.executable, str(GENERATOR)],
             capture_output=True,
-            text=True,
+            text=True, encoding="utf-8",
             cwd=str(ROOT),
         )
         self.assertEqual(result.returncode, 0, result.stderr)
@@ -61,7 +61,7 @@ class DesignTracerBulletContract(unittest.TestCase):
         for platform in PLATFORMS:
             with self.subTest(platform=platform):
                 adapter_dir = ROOT / "adapters" / platform / "skills" / f"alawas-{CORE.parent.name}"
-                self.assertIn(core_body, (adapter_dir / "SKILL.md").read_text())
+                self.assertIn(core_body, (adapter_dir / "SKILL.md").read_text(encoding="utf-8"))
                 self.assertTrue((adapter_dir / "references" / "CAPABILITY-DEGRADATION.md").is_file())
 
 

@@ -31,7 +31,7 @@ def check_concurrency(
     if not file_path.exists():
         return f"File not found: {file_path}"
 
-    content = file_path.read_text()
+    content = file_path.read_text(encoding="utf-8")
     try:
         fm = parse_frontmatter(content)
     except ValueError as e:

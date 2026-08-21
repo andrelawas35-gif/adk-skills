@@ -98,7 +98,7 @@ class CmdInputsTests(unittest.TestCase):
         objects = self._tmpdir / ".work-studio" / "objects" / "2026" / "08"
         objects.mkdir(parents=True)
         self._obj_path = objects / "2026-08-14-900-fixture.md"
-        self._obj_path.write_text(FIXTURE)
+        self._obj_path.write_text(FIXTURE, encoding="utf-8")
         self._old_cwd = os.getcwd()
         os.chdir(self._tmpdir)
 

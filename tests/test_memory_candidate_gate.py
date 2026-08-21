@@ -14,7 +14,7 @@ PLATFORMS = ("codex", "claude-code", "github-copilot")
 
 class MemoryCandidateGateContract(unittest.TestCase):
     def test_memory_candidates_require_a_user_approved_redacted_summary(self):
-        text = " ".join(CORE.read_text().split())
+        text = " ".join(CORE.read_text(encoding="utf-8").split())
 
         for required_clause in (
             "Memory Candidate gate",
@@ -30,7 +30,7 @@ class MemoryCandidateGateContract(unittest.TestCase):
         result = subprocess.run(
             [sys.executable, str(GENERATOR), "--check"],
             capture_output=True,
-            text=True,
+            text=True, encoding="utf-8",
             cwd=str(ROOT),
         )
         self.assertEqual(result.returncode, 0, result.stderr)
@@ -38,5 +38,5 @@ class MemoryCandidateGateContract(unittest.TestCase):
         for platform in PLATFORMS:
             with self.subTest(platform=platform):
                 adapter = ROOT / "adapters" / platform / "skills" / f"alawas-{CORE.parent.name}" / "SKILL.md"
-                self.assertIn("Memory Candidate gate", adapter.read_text())
+                self.assertIn("Memory Candidate gate", adapter.read_text(encoding="utf-8"))
 

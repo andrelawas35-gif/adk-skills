@@ -98,7 +98,7 @@ def count_unresolved_conflicts(objects_dir: Optional[Path] = None) -> int:
     conflicts = set()
     resolved_conflicts = set()
     for path in root.rglob("*.md"):
-        content = path.read_text()
+        content = path.read_text(encoding="utf-8")
         body = content[content.find("---", 3) + 3:] if content.startswith("---") else content
         claims = get_section(body, "Claims")
         if claims:
@@ -156,7 +156,7 @@ def count_claims_below_support_adequacy(
     count = 0
     root = _objects_dir() if objects_dir is None else objects_dir
     for path in root.rglob("*.md"):
-        content = path.read_text()
+        content = path.read_text(encoding="utf-8")
         body = content[content.find("---", 3) + 3:] if content.startswith("---") else content
         claims_section = get_section(body, "Claims")
         if not claims_section:

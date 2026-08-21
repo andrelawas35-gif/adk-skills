@@ -55,7 +55,7 @@ def adapter_skill_name(skill):
 
 def _load_overlay(platform):
     overlay_path = ADAPTERS_DIR / platform / "overlay.yaml"
-    return GENERATE_ADAPTERS.parse_yaml(overlay_path.read_text())
+    return GENERATE_ADAPTERS.parse_yaml(overlay_path.read_text(encoding="utf-8"))
 
 
 def _expected_adapter_output(skill, overlay):
@@ -109,7 +109,7 @@ FORBIDDEN_COLD_PATH_SECTIONS = [
 
 
 def required_capabilities(skill):
-    content = (CORE_DIR / skill / "SKILL.md").read_text()
+    content = (CORE_DIR / skill / "SKILL.md").read_text(encoding="utf-8")
     section = content.split("## Required capabilities", 1)[1].split("\n## ", 1)[0]
     declared = []
     for line in section.splitlines():
@@ -149,7 +149,7 @@ def verify_matrix(fixture_files):
         if not path.exists():
             errors.append(f"Fixture file not found: {f}")
             continue
-        content = path.read_text()
+        content = path.read_text(encoding="utf-8")
 
         # Verify required patterns per fixture type
         name = path.name
@@ -275,7 +275,7 @@ def verify_structure():
                 errors.append(f"MISSING: {adapter_path.relative_to(ROOT)}")
                 continue
 
-            content = adapter_path.read_text()
+            content = adapter_path.read_text(encoding="utf-8")
 
             # Check required sections
             for section in REQUIRED_SECTIONS:
@@ -371,7 +371,7 @@ def verify_structure():
     # Verify core skills have Required capabilities
     for skill in SKILLS:
         core_path = CORE_DIR / skill / "SKILL.md"
-        content = core_path.read_text()
+        content = core_path.read_text(encoding="utf-8")
         if "## Required capabilities" not in content:
             errors.append(
                 f"core/{skill}: missing Required capabilities section")
@@ -384,7 +384,7 @@ def verify_structure():
             continue
 
         try:
-            manifest = json.loads(manifest_path.read_text())
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
             if manifest.get("platform") != platform:
                 errors.append(f"{platform}: manifest platform mismatch")
             if not manifest.get("files"):
@@ -409,7 +409,7 @@ def verify_structure():
             errors.append(f"MISSING: SHA256SUMS for {platform}")
             continue
 
-        for line in sums_path.read_text().splitlines():
+        for line in sums_path.read_text(encoding="utf-8").splitlines():
             if not line.strip():
                 continue
             try:

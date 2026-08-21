@@ -46,7 +46,7 @@ def workspace_with_wo(body: str):
         objects.mkdir(parents=True)
         (objects / "2026-08-08-999-fixture.md").write_text(
             "---\nid: 2026-08-08-999\n---\n" + body
-        )
+        , encoding="utf-8")
         os.chdir(root)
         try:
             yield

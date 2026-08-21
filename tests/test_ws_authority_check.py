@@ -70,7 +70,7 @@ class TestAuthorityCheck(unittest.TestCase):
             [sys.executable, "-m", "tools.ws", "authority", "check",
              str(wo_path), "--action", action],
             capture_output=True,
-            text=True,
+            text=True, encoding="utf-8",
             cwd=str(wo_path.parent),
             env=env,
         )
@@ -90,11 +90,11 @@ class TestAuthorityCheck(unittest.TestCase):
         ws_root = tmp / "ws"
         config_dir = ws_root / ".work-studio"
         config_dir.mkdir(parents=True)
-        (config_dir / "config.md").write_text("# config\n")
+        (config_dir / "config.md").write_text("# config\n", encoding="utf-8")
         obj_dir = ws_root / ".work-studio" / "objects" / "2026" / "07"
         obj_dir.mkdir(parents=True)
         wo_path = obj_dir / "2026-07-28-TEST-authority-fixture.md"
-        wo_path.write_text(_build_wo(scope=scope))
+        wo_path.write_text(_build_wo(scope=scope), encoding="utf-8")
         return wo_path
 
     def _run_check_by_id(self, ws_root: Path, obj_id: str, action: str) -> str:
@@ -110,7 +110,7 @@ class TestAuthorityCheck(unittest.TestCase):
             [sys.executable, "-m", "tools.ws", "authority", "check",
              obj_id, "--action", action],
             capture_output=True,
-            text=True,
+            text=True, encoding="utf-8",
             cwd=str(ws_root),
             env=env,
         )
@@ -126,7 +126,7 @@ class TestAuthorityCheck(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             tmp_path = Path(tmp)
             wo_path = tmp_path / "test-wo.md"
-            wo_path.write_text(_build_wo(scope="deploy"))
+            wo_path.write_text(_build_wo(scope="deploy"), encoding="utf-8")
 
             output = self._run_check(wo_path, "deploy")
             self.assertIn("GRANTED", output)
@@ -138,7 +138,7 @@ class TestAuthorityCheck(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             tmp_path = Path(tmp)
             wo_path = tmp_path / "test-wo.md"
-            wo_path.write_text(_build_wo(scope="deploy"))
+            wo_path.write_text(_build_wo(scope="deploy"), encoding="utf-8")
 
             output = self._run_check(wo_path, "delete")
             self.assertIn("DENIED", output)
@@ -149,7 +149,7 @@ class TestAuthorityCheck(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             tmp_path = Path(tmp)
             wo_path = tmp_path / "test-wo.md"
-            wo_path.write_text(_build_wo(scope="deploy *"))
+            wo_path.write_text(_build_wo(scope="deploy *"), encoding="utf-8")
 
             output = self._run_check(wo_path, "deploy")
             self.assertIn("AMBIGUOUS", output)
@@ -160,7 +160,7 @@ class TestAuthorityCheck(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             tmp_path = Path(tmp)
             wo_path = tmp_path / "test-wo.md"
-            wo_path.write_text(_build_wo(scope="deploy", expiry="2000-01-01"))
+            wo_path.write_text(_build_wo(scope="deploy", expiry="2000-01-01"), encoding="utf-8")
 
             output = self._run_check(wo_path, "deploy")
             self.assertIn("DENIED", output)
@@ -171,7 +171,7 @@ class TestAuthorityCheck(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             tmp_path = Path(tmp)
             wo_path = tmp_path / "test-wo.md"
-            wo_path.write_text(_build_wo(scope="deploy rollback restart"))
+            wo_path.write_text(_build_wo(scope="deploy rollback restart"), encoding="utf-8")
 
             output = self._run_check(wo_path, "rollback")
             self.assertIn("GRANTED", output)
@@ -198,7 +198,7 @@ next_action: None.
 ## Intent
 
 No History section.
-""")
+""", encoding="utf-8")
 
             output = self._run_check(wo_path, "deploy")
             self.assertIn("AMBIGUOUS", output)
@@ -231,7 +231,7 @@ No History section.
                 [sys.executable, "-m", "tools.ws", "authority", "check",
                  "2026-07-28-DOES-NOT-EXIST", "--action", "deploy"],
                 capture_output=True,
-                text=True,
+                text=True, encoding="utf-8",
                 cwd=str(ws_root),
                 env=env,
             )

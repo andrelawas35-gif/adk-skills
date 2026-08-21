@@ -73,7 +73,7 @@ class EpistemicPressureDashboardTest(unittest.TestCase):
         self.assertIn(detail, diagnostics.getvalue())
 
     def test_browser_contract_starts_without_a_numeric_count(self):
-        html = (SERVER_PATH.parent / "index.html").read_text()
+        html = (SERVER_PATH.parent / "index.html").read_text(encoding="utf-8")
 
         self.assertIn(
             '<output data-signal="unresolved-material-conflicts" '
@@ -115,7 +115,7 @@ class EpistemicPressureDashboardTest(unittest.TestCase):
         self.assertIn(detail, diagnostics.getvalue())
 
     def test_browser_contract_includes_second_signal_card(self):
-        html = (SERVER_PATH.parent / "index.html").read_text()
+        html = (SERVER_PATH.parent / "index.html").read_text(encoding="utf-8")
 
         self.assertIn("<title>Epistemic pressure dashboard</title>", html)
         self.assertIn(

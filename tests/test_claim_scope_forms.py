@@ -46,7 +46,7 @@ def workspace_with_wo(content: str, obj_id: str = "2026-08-09-999"):
         root = Path(tmp)
         objects = root / ".work-studio" / "objects" / "2026" / "08"
         objects.mkdir(parents=True)
-        (objects / f"{obj_id}-fixture.md").write_text(content)
+        (objects / f"{obj_id}-fixture.md").write_text(content, encoding="utf-8")
         os.chdir(root)
         try:
             yield root
@@ -84,7 +84,7 @@ class TestStructuredRegisterRoundTrip(unittest.TestCase):
                 root / ".work-studio" / "objects" / "2026" / "08"
                 / "2026-08-09-999-fixture.md"
             )
-            body = obj_file.read_text()
+            body = obj_file.read_text(encoding="utf-8")
             claims = parse_claims(body)
             self.assertEqual(len(claims), 1)
             claim = claims[0]
@@ -122,7 +122,7 @@ class TestStructuredRegisterRoundTrip(unittest.TestCase):
                 root / ".work-studio" / "objects" / "2026" / "08"
                 / "2026-08-09-999-fixture.md"
             )
-            body = obj_file.read_text()
+            body = obj_file.read_text(encoding="utf-8")
             claims = parse_claims(body)
             self.assertEqual(len(claims), 1)
             self.assertEqual(claims[0]["scope"], "2026-07-27-016")
@@ -212,8 +212,8 @@ class TestRealLegacyRegression(unittest.TestCase):
         if not obj_016.exists() or not obj_019.exists():
             self.skipTest("real legacy claim objects not present")
 
-        claims_016 = {c["id"]: c for c in parse_claims(obj_016.read_text())}
-        claims_019 = {c["id"]: c for c in parse_claims(obj_019.read_text())}
+        claims_016 = {c["id"]: c for c in parse_claims(obj_016.read_text(encoding="utf-8"))}
+        claims_019 = {c["id"]: c for c in parse_claims(obj_019.read_text(encoding="utf-8"))}
 
         expected = {
             "CLM-2026_07_27_016-001": "2026-07-27-014/015",

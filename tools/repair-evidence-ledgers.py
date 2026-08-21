@@ -427,7 +427,7 @@ def repair_work_object(filepath: Path) -> dict:
     Returns dict with 'status' ('repaired', 'skipped', 'error') and details.
     """
     try:
-        original = filepath.read_text()
+        original = filepath.read_text(encoding="utf-8")
     except Exception as e:
         return {"status": "error", "error": str(e)}
 
@@ -462,7 +462,7 @@ def repair_work_object(filepath: Path) -> dict:
     new_content = append_history_entry(new_content, repair_summary)
 
     try:
-        filepath.write_text(new_content)
+        filepath.write_text(new_content, encoding="utf-8")
     except Exception as e:
         return {"status": "error", "error": str(e)}
 

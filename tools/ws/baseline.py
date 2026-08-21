@@ -132,7 +132,7 @@ def cmd_baseline_check(args: argparse.Namespace) -> int:
         return 1
 
     try:
-        baseline = json.loads(baseline_path.read_text())
+        baseline = json.loads(baseline_path.read_text(encoding="utf-8"))
     except (json.JSONDecodeError, OSError) as e:
         print(f"Error: Cannot read baseline: {e}", file=sys.stderr)
         return 1

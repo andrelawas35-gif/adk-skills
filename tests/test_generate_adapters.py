@@ -37,7 +37,7 @@ def _generator():
 def run_generator(*args):
     return subprocess.run(
         [sys.executable, str(GENERATOR), *args],
-        capture_output=True, text=True, cwd=str(ROOT),
+        capture_output=True, text=True, encoding="utf-8", cwd=str(ROOT),
     )
 
 
@@ -69,7 +69,7 @@ def adapter_file(platform, skill):
 
 
 def required_capabilities(skill):
-    text = (CORE_DIR / skill / "SKILL.md").read_text()
+    text = (CORE_DIR / skill / "SKILL.md").read_text(encoding="utf-8")
     section = text.split("## Required capabilities", 1)[1].split("\n## ", 1)[0]
     declared = []
     for line in section.splitlines():
@@ -111,7 +111,7 @@ class GeneratorContract(unittest.TestCase):
         authority rules, or schema semantics."""
         for platform in PLATFORMS:
             for skill in core_skill_names():
-                adapter = adapter_file(platform, skill).read_text()
+                adapter = adapter_file(platform, skill).read_text(encoding="utf-8")
                 body_before_adapter = adapter.split(
                     "\n---\n\n## Platform Adapter", 1)[0]
                 # Strip the generated frontmatter to isolate the body.
@@ -125,7 +125,7 @@ class GeneratorContract(unittest.TestCase):
         appended section — it never inserts into or rewrites the body."""
         for platform in PLATFORMS:
             for skill in core_skill_names():
-                adapter = adapter_file(platform, skill).read_text()
+                adapter = adapter_file(platform, skill).read_text(encoding="utf-8")
                 after_fm = adapter.split("---", 2)[2].lstrip("\n")
                 self.assertTrue(
                     after_fm.startswith(core_body(skill)),
@@ -136,7 +136,7 @@ class GeneratorContract(unittest.TestCase):
     def test_frontmatter_declares_platform(self):
         for platform in PLATFORMS:
             for skill in core_skill_names():
-                adapter = adapter_file(platform, skill).read_text()
+                adapter = adapter_file(platform, skill).read_text(encoding="utf-8")
                 frontmatter = adapter.split("---", 2)[1]
                 self.assertIn(f"platform: {platform}", frontmatter)
                 self.assertIn(f"name: {adapter_skill_name(skill)}", frontmatter)
@@ -145,7 +145,7 @@ class GeneratorContract(unittest.TestCase):
         """Keep the generated description in a directly parseable YAML scalar."""
         for platform in PLATFORMS:
             for skill in core_skill_names():
-                adapter = adapter_file(platform, skill).read_text()
+                adapter = adapter_file(platform, skill).read_text(encoding="utf-8")
                 frontmatter = adapter.split("---", 2)[1].splitlines()
                 description_line = next(
                     line for line in frontmatter if line.startswith("description: "))
@@ -160,7 +160,7 @@ class GeneratorContract(unittest.TestCase):
         descriptions = set()
         for platform in PLATFORMS:
             for skill in core_skill_names():
-                frontmatter = adapter_file(platform, skill).read_text().split("---", 2)[1]
+                frontmatter = adapter_file(platform, skill).read_text(encoding="utf-8").split("---", 2)[1]
                 encoded = next(
                     line[len("description: "):]
                     for line in frontmatter.splitlines()
@@ -183,14 +183,14 @@ class GeneratorContract(unittest.TestCase):
         """
         # Verify the conductor references ws create (the new write path)
         for platform in PLATFORMS:
-            adapter = adapter_file(platform, "governance-conduct-work-object").read_text()
+            adapter = adapter_file(platform, "governance-conduct-work-object").read_text(encoding="utf-8")
             self.assertTrue(
                 "ws create" in adapter or "tools.ws" in adapter,
                 f"{platform}: conductor should reference ws CLI for creation"
             )
 
         # Verify WORK-OBJECT.md contains the minimum schema
-        wo_md = (ROOT / "references" / "WORK-OBJECT.md").read_text()
+        wo_md = (ROOT / "references" / "WORK-OBJECT.md").read_text(encoding="utf-8")
         schema_fields = [
             "schema_version",
             "id:",
@@ -214,7 +214,7 @@ class GeneratorContract(unittest.TestCase):
         )
         for platform in PLATFORMS:
             for skill in core_skill_names():
-                adapter = adapter_file(platform, skill).read_text()
+                adapter = adapter_file(platform, skill).read_text(encoding="utf-8")
                 self.assertIn(
                     required, " ".join(adapter.split()),
                     f"{platform}/{skill}: weak authority gate")
@@ -223,7 +223,7 @@ class GeneratorContract(unittest.TestCase):
             "`do recommended` accepts"
         )
         for platform in PLATFORMS:
-            adapter = adapter_file(platform, "thinking-pressure-test-decision").read_text()
+            adapter = adapter_file(platform, "thinking-pressure-test-decision").read_text(encoding="utf-8")
             self.assertIn(local_flow, " ".join(adapter.split()))
 
     def test_gated_skills_have_inline_authority_blocks(self):
@@ -247,7 +247,7 @@ class GeneratorContract(unittest.TestCase):
 
         # Core skills must have inline authority blocks
         for skill in gated_skills:
-            core_text = (CORE_DIR / skill / "SKILL.md").read_text()
+            core_text = (CORE_DIR / skill / "SKILL.md").read_text(encoding="utf-8")
             self.assertIn(
                 authority_marker, core_text,
                 f"core/{skill}: missing inline authority gate block"
@@ -260,7 +260,7 @@ class GeneratorContract(unittest.TestCase):
         # Generated adapters must propagate authority blocks
         for platform in PLATFORMS:
             for skill in gated_skills:
-                adapter = adapter_file(platform, skill).read_text()
+                adapter = adapter_file(platform, skill).read_text(encoding="utf-8")
                 self.assertIn(
                     authority_marker, adapter,
                     f"{platform}/{skill}: authority gate missing in adapter"
@@ -274,7 +274,7 @@ class GeneratorContract(unittest.TestCase):
         all_skills = set(core_skill_names())
         non_gated = all_skills - gated_skills
         for skill in non_gated:
-            core_text = (CORE_DIR / skill / "SKILL.md").read_text()
+            core_text = (CORE_DIR / skill / "SKILL.md").read_text(encoding="utf-8")
             self.assertNotIn(
                 authority_marker, core_text,
                 f"core/{skill}: has authority gate but is not in gated-skills list"
@@ -331,12 +331,12 @@ class GeneratorContract(unittest.TestCase):
                                      f"{platform}/{skill}: unexpected references dir")
 
     def test_conductor_evidence_rules_are_owned_by_shipped_evidence_model(self):
-        conductor = (CORE_DIR / "governance-conduct-work-object" / "SKILL.md").read_text()
+        conductor = (CORE_DIR / "governance-conduct-work-object" / "SKILL.md").read_text(encoding="utf-8")
         pointer = "Apply `references/EVIDENCE-MODEL.md` for evidence capture"
         self.assertNotIn("\n## Evidence rules\n", conductor)
         self.assertIn(pointer, conductor)
 
-        canonical_model = (ROOT / "references" / "EVIDENCE-MODEL.md").read_text()
+        canonical_model = (ROOT / "references" / "EVIDENCE-MODEL.md").read_text(encoding="utf-8")
         for obligation in (
             "Distinguish what is known, inferred, decided, and unresolved",
             "Every factual claim carries attributable provenance",
@@ -348,16 +348,16 @@ class GeneratorContract(unittest.TestCase):
         for platform in PLATFORMS:
             adapter_dir = (ADAPTERS_DIR / platform / "skills"
                            / "alawas-governance-conduct-work-object")
-            self.assertIn(pointer, (adapter_dir / "SKILL.md").read_text())
+            self.assertIn(pointer, (adapter_dir / "SKILL.md").read_text(encoding="utf-8"))
             installed_model = adapter_dir / "references" / "EVIDENCE-MODEL.md"
             self.assertTrue(installed_model.is_file(),
                             f"{platform}: conductor evidence model not shipped")
-            self.assertEqual(installed_model.read_text(), canonical_model)
+            self.assertEqual(installed_model.read_text(encoding="utf-8"), canonical_model)
 
     def test_generated_adapters_include_local_grilling_profile_summary(self):
         for platform in PLATFORMS:
             for skill in core_skill_names():
-                adapter = adapter_file(platform, skill).read_text()
+                adapter = adapter_file(platform, skill).read_text(encoding="utf-8")
                 normalized = " ".join(adapter.split())
                 if skill == "thinking-grilling-session":
                     self.assertIn("## Entry and delegation", adapter)
@@ -369,13 +369,13 @@ class GeneratorContract(unittest.TestCase):
     def test_every_required_core_capability_is_mapped_and_classified(self):
         """A core requirement cannot silently disappear at an adapter boundary."""
         for skill in core_skill_names():
-            core_text = (CORE_DIR / skill / "SKILL.md").read_text()
+            core_text = (CORE_DIR / skill / "SKILL.md").read_text(encoding="utf-8")
             capabilities_section = core_text.split("## Required capabilities", 1)[1]
             capabilities_section = capabilities_section.split("\n## ", 1)[0]
             required = re.findall(r"^- `([^`]+)`", capabilities_section, re.MULTILINE)
 
             for platform in PLATFORMS:
-                adapter = adapter_file(platform, skill).read_text()
+                adapter = adapter_file(platform, skill).read_text(encoding="utf-8")
                 for capability in required:
                     with self.subTest(skill=skill, platform=platform, capability=capability):
                         self.assertRegex(
@@ -386,7 +386,7 @@ class GeneratorContract(unittest.TestCase):
     def test_platform_appendix_contains_only_required_capability_rows(self):
         for platform in PLATFORMS:
             for skill in core_skill_names():
-                adapter = adapter_file(platform, skill).read_text()
+                adapter = adapter_file(platform, skill).read_text(encoding="utf-8")
                 appendix = adapter.split("\n---\n\n## Platform Adapter", 1)[1]
                 table = appendix.split("### Required capability mappings", 1)[1]
                 table = table.split("\n### ", 1)[0]
@@ -405,14 +405,14 @@ class GeneratorContract(unittest.TestCase):
         )
         for platform in PLATFORMS:
             for skill in core_skill_names():
-                appendix = adapter_file(platform, skill).read_text().split(
+                appendix = adapter_file(platform, skill).read_text(encoding="utf-8").split(
                     "\n---\n\n## Platform Adapter", 1)[1]
                 for text in forbidden:
                     self.assertNotIn(text, appendix, f"{platform}/{skill}: {text}")
 
     def test_degradation_details_are_emitted_only_when_required(self):
-        codex_inquiry = adapter_file("codex", "research-investigate-live-question").read_text()
-        codex_build = adapter_file("codex", "engineering-implement-bounded-change").read_text()
+        codex_inquiry = adapter_file("codex", "research-investigate-live-question").read_text(encoding="utf-8")
+        codex_build = adapter_file("codex", "engineering-implement-bounded-change").read_text(encoding="utf-8")
         self.assertIn("#### `web_search` (manual-fallback)", codex_inquiry)
         self.assertNotIn("`browser_automation`", codex_inquiry)
         self.assertNotIn("### Capability Degradation", codex_build)
@@ -420,18 +420,18 @@ class GeneratorContract(unittest.TestCase):
         # deployment: manual-fallback on all platforms — degradation present in deploy-with-recovery
         for platform in PLATFORMS:
             with self.subTest(platform=platform):
-                adapter = adapter_file(platform, "operations-deploy-with-recovery").read_text()
+                adapter = adapter_file(platform, "operations-deploy-with-recovery").read_text(encoding="utf-8")
                 self.assertIn("#### `deployment` (manual-fallback)", adapter)
                 self.assertIn("#### `secret_access` (manual-fallback)", adapter)
                 self.assertIn("#### `file_uploads` (manual-fallback)", adapter)
 
         # artifact_rendering: native on Claude Code — no degradation section there
-        cc_gov = adapter_file("claude-code", "governance-govern-scorecards").read_text()
+        cc_gov = adapter_file("claude-code", "governance-govern-scorecards").read_text(encoding="utf-8")
         self.assertNotIn("#### `artifact_rendering`", cc_gov)
         # artifact_rendering: manual-fallback on Codex and Copilot — degradation present
-        codex_gov = adapter_file("codex", "governance-govern-scorecards").read_text()
+        codex_gov = adapter_file("codex", "governance-govern-scorecards").read_text(encoding="utf-8")
         self.assertIn("#### `artifact_rendering` (manual-fallback)", codex_gov)
-        copilot_gov = adapter_file("github-copilot", "governance-govern-scorecards").read_text()
+        copilot_gov = adapter_file("github-copilot", "governance-govern-scorecards").read_text(encoding="utf-8")
         self.assertIn("#### `artifact_rendering` (manual-fallback)", copilot_gov)
 
     def test_new_capabilities_classified_across_platforms(self):
@@ -442,7 +442,7 @@ class GeneratorContract(unittest.TestCase):
         valid_classifications = {"native", "manual-fallback", "unsupported"}
 
         for platform in PLATFORMS:
-            overlay_text = (ADAPTERS_DIR / platform / "overlay.yaml").read_text()
+            overlay_text = (ADAPTERS_DIR / platform / "overlay.yaml").read_text(encoding="utf-8")
             # Extract capabilities section: from "capabilities:" to next top-level key
             caps_section = overlay_text.split("capabilities:", 1)[1]
             caps_section = caps_section.split("\n#", 1)[0]
@@ -460,7 +460,7 @@ class GeneratorContract(unittest.TestCase):
     def test_manifest_checksums_match_files(self):
         for platform in PLATFORMS:
             manifest = json.loads(
-                (ADAPTERS_DIR / platform / "manifest.json").read_text())
+                (ADAPTERS_DIR / platform / "manifest.json").read_text(encoding="utf-8"))
             self.assertEqual(manifest["platform"], platform)
             self.assertTrue(manifest["version"])
             self.assertTrue(manifest["files"])
@@ -475,7 +475,7 @@ class GeneratorContract(unittest.TestCase):
         for platform in PLATFORMS:
             sums_file = ADAPTERS_DIR / platform / "SHA256SUMS"
             self.assertTrue(sums_file.exists(), f"{platform}: no SHA256SUMS")
-            for line in sums_file.read_text().splitlines():
+            for line in sums_file.read_text(encoding="utf-8").splitlines():
                 sha, rel = line.split("  ", 1)
                 actual = hashlib.sha256(
                     (ADAPTERS_DIR / platform / rel).read_bytes()).hexdigest()
@@ -490,7 +490,7 @@ class GeneratorContract(unittest.TestCase):
         for skill in core_skill_names():
             bodies = {}
             for platform in PLATFORMS:
-                adapter = adapter_file(platform, skill).read_text()
+                adapter = adapter_file(platform, skill).read_text(encoding="utf-8")
                 after_fm = adapter.split("---", 2)[2].lstrip("\n")
                 bodies[platform] = after_fm.split(
                     "\n---\n\n## Platform Adapter", 1)[0]
@@ -501,7 +501,7 @@ class GeneratorContract(unittest.TestCase):
 
     def test_platform_constraints_are_disclosed(self):
         """A required manual-fallback capability remains explicit."""
-        adapter = adapter_file("claude-code", "research-investigate-live-question").read_text()
+        adapter = adapter_file("claude-code", "research-investigate-live-question").read_text(encoding="utf-8")
         self.assertIn("manual-fallback", adapter)
         self.assertIn("#### `web_search` (manual-fallback)", adapter)
 
@@ -509,7 +509,7 @@ class GeneratorContract(unittest.TestCase):
         """Codex may discover duplicate same-name skills, so either copy must
         explicitly defer to the project-pinned artifact recorded by installer."""
         for skill in core_skill_names():
-            adapter = adapter_file("codex", skill).read_text()
+            adapter = adapter_file("codex", skill).read_text(encoding="utf-8")
             self.assertIn("### Runtime pin resolution", adapter)
             self.assertIn(".work-studio/adapter.codex.lock", adapter)
             self.assertIn("load and follow the pinned copy", adapter)
@@ -519,7 +519,7 @@ class GeneratorContract(unittest.TestCase):
         unverified assumption about other platforms' native precedence."""
         for skill in core_skill_names():
             for platform in ["claude-code", "github-copilot"]:
-                adapter = adapter_file(platform, skill).read_text()
+                adapter = adapter_file(platform, skill).read_text(encoding="utf-8")
                 self.assertNotIn("### Runtime pin resolution", adapter)
 
     def test_drift_is_detected(self):
@@ -527,7 +527,7 @@ class GeneratorContract(unittest.TestCase):
         target = adapter_file("claude-code", "governance-conduct-work-object")
         original = target.read_bytes()
         try:
-            target.write_text(target.read_text() + "\ndrifted\n")
+            target.write_text(target.read_text(encoding="utf-8") + "\ndrifted\n", encoding="utf-8")
             result = run_generator("--check")
             self.assertEqual(result.returncode, 1,
                              "drift should make --check fail")

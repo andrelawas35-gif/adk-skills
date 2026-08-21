@@ -1,0 +1,14 @@
+# Force LF line endings for all text files, regardless of each contributor's
+# global core.autocrlf setting. Without this, a Windows checkout with
+# autocrlf=true silently converts LF to CRLF, which breaks anything that
+# reads checked-out files byte-for-byte -- notably tools/install.sh's
+# SHA256SUMS verification (confirmed broken by exactly this gap; see WO
+# 2026-08-21-002). `eol=lf` fixes the checkout regardless of local config;
+# `text=auto` lets Git still detect genuinely binary files automatically.
+* text=auto eol=lf
+
+# Windows batch/PowerShell files are conventionally CRLF, but LF works fine
+# for both cmd.exe and PowerShell -- keeping everything LF avoids any
+# checkout depending on which OS/tool last touched a file.
+*.ps1 text eol=lf
+*.sh text eol=lf

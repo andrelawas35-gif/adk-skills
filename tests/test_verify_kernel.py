@@ -87,7 +87,7 @@ class VerifyKernelChecksTest(unittest.TestCase):
             tmp = Path(td)
             skills_dir = tmp / "skills" / "core"
             (skills_dir / "ghost-skill").mkdir(parents=True)
-            (skills_dir / "ghost-skill" / "SKILL.md").write_text("# Ghost\n")
+            (skills_dir / "ghost-skill" / "SKILL.md").write_text("# Ghost\n", encoding="utf-8")
             manifest = make_manifest([
                 {"path": "skills/core/", "skills": []},
             ])
@@ -106,7 +106,7 @@ class VerifyKernelChecksTest(unittest.TestCase):
             tmp = Path(td)
             skills_dir = tmp / "skills" / "core"
             (skills_dir / "known-skill").mkdir(parents=True)
-            (skills_dir / "known-skill" / "SKILL.md").write_text("# Known\n")
+            (skills_dir / "known-skill" / "SKILL.md").write_text("# Known\n", encoding="utf-8")
             manifest = make_manifest([
                 {"path": "skills/core/", "skills": ["known-skill"]},
             ])
