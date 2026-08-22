@@ -263,6 +263,23 @@ skills:
       - content_search
       - structured_output
 
+  - name: design-compose-design-system
+    responsibility: "Use when a governed foundation, semantic token set, theme recipe, variant, or component-family relationship must be created or revised; composes design-system properties and preserves director authority over creative choices without mutating canonical assets."
+    non_goals:
+      - "Discover existing UI structure; route to `design-audit-product-interface`."
+      - "Audit existing tokens or themes as a separate discovery pass; route to `design-build-design-foundation`."
+      - "Silently choose a creative direction or approve themes, tokens, or variants on the director's behalf."
+      - "Mutate canonical asset records, the component ledger, code, or external design tools by itself."
+      - "Implement code or verify browser parity against a rendered direction."
+    requires_capabilities:
+      - file_read
+      - content_search
+      - directory_list
+      - terminal_run
+      - file_write
+      - user_confirmation
+      - structured_output
+
   - name: design-design-tracer-bullet
     responsibility: "Use when an accepted direction needs the smallest end-to-end experiment; returns a bounded, observable, reversible tracer design; does not implement it or authorize production effects."
     non_goals:
@@ -280,10 +297,43 @@ skills:
   - name: design-manage-assets
     responsibility: "Use when a reusable design asset needs identity, lifecycle status, provenance, impact, or routing; classifies the current asset frontier and routes to the owning design skill without creating, mutating, or approving assets."
     non_goals:
-      - "Create, edit, approve, style, implement, verify, register, export, deploy, or retire assets by itself."
       - "Choose creative direction or silently revise a theme, component, token, UX pattern, or implementation."
-      - "Mutate the component ledger, generate adapters, write to external design tools, or turn a workbench projection into source truth."
+      - "Mutate the component ledger, generate adapters, write to external design tools, or turn a workbench projection into source truth. It does not become the source of truth."
       - "Replace the Work Object lifecycle, the component ledger, or the asset registry validator."
+    requires_capabilities:
+      - file_read
+      - content_search
+      - directory_list
+      - terminal_run
+      - file_write
+      - user_confirmation
+      - structured_output
+
+  - name: design-project-asset-workbench
+    responsibility: "Use when a person needs to browse, compare, trace, or inspect relationships among assets, Work Objects, evidence, themes, components, patterns, and implementations; produces read-only catalog, graph, comparison, or trace projections from canonical records without creating or editing assets or becoming a source of truth."
+    non_goals:
+      - "Create or edit assets, Work Objects, or component-ledger records."
+      - "Become the source of truth for asset, theme, UX-pattern, or component knowledge."
+      - "Infer unrecorded relationships or invent data to fill gaps."
+      - "Approve design choices, implement code, or register durable components."
+      - "Export, publish, or share a projection without scoped authority."
+    requires_capabilities:
+      - file_read
+      - content_search
+      - directory_list
+      - terminal_run
+      - file_write
+      - user_confirmation
+      - structured_output
+
+  - name: design-steward-experience-patterns
+    responsibility: "Use when a reusable user goal, flow, state model, accessibility expectation, content behavior, or failure/recovery behavior needs stewardship; governs reusable UX patterns and their evidence links without styling or implementing them or mutating canonical assets."
+    non_goals:
+      - "Style the pattern or choose visual themes for it."
+      - "Implement code or verify browser parity against a rendered direction."
+      - "Replace user research or claim accessibility compliance from a written pattern alone."
+      - "Register durable components in the component ledger by itself."
+      - "Mutate canonical asset records, the component ledger, code, or external design tools by itself."
     requires_capabilities:
       - file_read
       - content_search

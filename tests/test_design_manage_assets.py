@@ -29,7 +29,7 @@ class DesignManageAssetsTests(unittest.TestCase):
         route = route_asset_record(path)
         self.assertEqual("`asset.design.reviewbadge`", route.asset_id)
         self.assertEqual("component-family", route.asset_kind)
-        self.assertEqual("tracer", route.status)
+        self.assertEqual("active", route.status)
         self.assertEqual("identity", route.frontier)
         self.assertEqual("design-manage-assets", route.owner)
         self.assertEqual((), route.gaps)

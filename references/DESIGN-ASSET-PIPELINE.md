@@ -31,6 +31,7 @@ design-manage-assets
 -> design-apply-design-direction
 -> alawas-engineering-implement-bounded-change
 -> design-verify-design-implementation
+-> design-audit-accessibility when accessibility conformance needs checking
 -> design-track-components
 -> design-project-asset-workbench
 -> alawas-governance-review-outcome-and-adapt
@@ -48,6 +49,7 @@ design-manage-assets
 | Confirmed creative interpretation and execution boundary | `design-apply-design-direction` |
 | Reversible implementation of an accepted tracer or bounded change | `alawas-engineering-implement-bounded-change` |
 | Browser-visible design parity against the confirmed direction | `design-verify-design-implementation` |
+| Accessibility conformance (contrast, semantic structure) against a stewarded expectation or the WCAG generic baseline | `design-audit-accessibility` |
 | Durable shipped component registration, dependency edges, and component governance | `design-track-components` |
 | Read-only graph, catalog, and comparison projection over canonical records | `design-project-asset-workbench` |
 

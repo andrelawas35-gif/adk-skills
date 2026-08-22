@@ -6,108 +6,250 @@ h1 { font-size: 20px; font-weight: 500; }
 .section-label { font-size: 13px; font-weight: 500; color: #666; margin: 1.25rem 0 8px; }
 .row { display: flex; align-items: center; gap: 10px; padding: 8px 4px; border-bottom: 0.5px solid #ddd; font-size: 13px; }
 .pill { font-size: 11px; padding: 2px 8px; border-radius: 6px; flex-shrink: 0; background: #eee; }
-.id { font-family: monospace; font-size: 12px; color: #888; flex-shrink: 0; width: 112px; }
+.id { font-family: monospace; font-size: 12px; color: #666; flex-shrink: 0; width: 112px; }
 .title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.cons { font-size: 11px; flex-shrink: 0; width: 70px; color: #888; }
-.cons-high { color: #b91c1c; }
-.stale { font-size: 11px; color: #888; flex-shrink: 0; width: 56px; }
-.attn { font-size: 11px; color: #888; flex-shrink: 0; width: 64px; text-align: right; }
+.cons { font-size: 11px; flex-shrink: 0; width: 70px; color: #666; }
+.cons-high { color: #b91c1c; font-weight: 600; }
+.stale { font-size: 11px; color: #666; flex-shrink: 0; width: 56px; }
+.attn { font-size: 11px; color: #666; flex-shrink: 0; width: 64px; text-align: right; }
 .banner { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: #fff7ed; border-radius: 8px; margin-bottom: 1rem; font-size: 13px; color: #92400e; }
 .banner.danger { background: #fef2f2; color: #991b1b; }
 button { margin-top: 1rem; font-size: 12px; padding: 4px 10px; }
 #closed-wrap { display: none; margin-top: 8px; }
+.summary-row { display: flex; gap: 12px; margin-bottom: 4px; }
+.summary-card { flex: 1; border: 1px solid #e5e5e5; border-radius: 8px; padding: 10px 12px; }
+.card-head { display: flex; align-items: baseline; justify-content: space-between; }
+.card-title { font-size: 13px; font-weight: 500; }
+.card-total { font-size: 18px; font-weight: 500; }
+.card-pills { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px; }
+.count-pill { font-size: 11px; padding: 2px 8px; border-radius: 6px; background: #eee; color: #555; }
+.count-empty { font-size: 11px; color: #666; }
+.card-flag { margin-top: 6px; font-size: 11px; color: #b91c1c; }
+.card-link { margin-top: 8px; font-size: 11px; color: #666; }
 </style></head>
 <body>
 <h1>Work Studio command center</h1>
-<div class="banner"><i class="ti ti-alert-triangle" aria-hidden="true"></i> No primary work object set — 7 supporting, 0 primary</div>
 
-<div class="section-label">Active — 12</div>
+
+<div class="summary-row">
+<div class="summary-card">
+  <div class="card-head"><span class="card-title">Asset management</span><span class="card-total">4</span></div>
+  <div class="card-pills"><span class="count-pill">active: 1</span> <span class="count-pill">draft: 3</span></div>
+  
+  <div class="card-link">See .work-studio/asset-workbench.html for detail</div>
+</div><div class="summary-card">
+  <div class="card-head"><span class="card-title">Engineering</span><span class="card-total">0</span></div>
+  <div class="card-pills"><span class="count-empty">none</span></div>
+  
+  <div class="card-link">See .work-studio/component-ledger.md (governance domain: engineering) for detail</div>
+</div>
+</div>
+<div class="section-label">Active — 29</div>
 <div class="row" style="">
   <span class="pill c-teal">verify</span>
   <span class="id">2026-08-21-001</span>
   <span class="title">Make tools/ws and runtime/ portable across repos</span>
   <span class="cons cons-med">meaningful</span>
-  <span class="stale">22h ago</span>
+  <span class="stale">1d ago</span>
   <span class="attn">supporting</span>
 </div><div class="row" style="">
   <span class="pill c-teal">verify</span>
   <span class="id">2026-08-21-005</span>
   <span class="title">Multi-repo registry: Direction 2 successor to 2026-08-21-003</span>
   <span class="cons cons-med">meaningful</span>
-  <span class="stale">21h ago</span>
+  <span class="stale">1d ago</span>
   <span class="attn">supporting</span>
 </div><div class="row" style="">
   <span class="pill c-blue">explore</span>
   <span class="id">2026-08-21-006</span>
   <span class="title">Utilize the runtime with the alawas skills -- does the runtime invoke skills, or is HandoffEnvelope.to_skill only a proposal?</span>
   <span class="cons cons-med">meaningful</span>
-  <span class="stale">20h ago</span>
+  <span class="stale">1d ago</span>
   <span class="attn">supporting</span>
 </div><div class="row" style="">
   <span class="pill c-purple">design</span>
   <span class="id">2026-08-21-009</span>
   <span class="title">Refine each alawas skill&#x27;s docs and structure to represent the current system</span>
   <span class="cons cons-med">meaningful</span>
-  <span class="stale">16h ago</span>
+  <span class="stale">20h ago</span>
   <span class="attn"></span>
 </div><div class="row" style="">
   <span class="pill c-teal">verify</span>
   <span class="id">2026-08-21-010</span>
   <span class="title">Give this Work Studio its own MCP server -- feasibility and shape</span>
   <span class="cons cons-med">meaningful</span>
-  <span class="stale">16h ago</span>
+  <span class="stale">20h ago</span>
   <span class="attn"></span>
 </div><div class="row" style="">
   <span class="pill c-purple">design</span>
   <span class="id">2026-08-21-011</span>
   <span class="title">MCP agency mode -- can a tool call spawn real skill reasoning on another repo</span>
   <span class="cons cons-med">meaningful</span>
-  <span class="stale">16h ago</span>
+  <span class="stale">19h ago</span>
   <span class="attn"></span>
 </div><div class="row" style="">
   <span class="pill c-blue">explore</span>
   <span class="id">2026-08-22-002</span>
   <span class="title">Skill-existence test and Role/Skill/Capability taxonomy -- resolve &#x27;capability&#x27; term collision</span>
   <span class="cons cons-med">meaningful</span>
-  <span class="stale">1h ago</span>
+  <span class="stale">5h ago</span>
   <span class="attn">supporting</span>
 </div><div class="row" style="">
   <span class="pill c-amber">build</span>
   <span class="id">2026-08-22-003</span>
   <span class="title">Refine alawas-research-produce-report toward a Deep-Research-style dynamic workflow</span>
   <span class="cons cons-med">meaningful</span>
-  <span class="stale">7m ago</span>
+  <span class="stale">3h ago</span>
   <span class="attn">supporting</span>
 </div><div class="row" style="">
   <span class="pill c-blue">explore</span>
   <span class="id">2026-08-22-005</span>
   <span class="title">Determine whether validator failures reveal canonical skill defects or contract incompatibilities</span>
   <span class="cons cons-med">meaningful</span>
-  <span class="stale">10m ago</span>
+  <span class="stale">3h ago</span>
   <span class="attn">supporting</span>
 </div><div class="row" style="">
   <span class="pill c-teal">verify</span>
   <span class="id">2026-08-22-006</span>
   <span class="title">Build a visual central command center for Work Studio</span>
   <span class="cons cons-med">meaningful</span>
-  <span class="stale">5m ago</span>
+  <span class="stale">3h ago</span>
   <span class="attn">supporting</span>
 </div><div class="row" style="">
   <span class="pill c-teal">verify</span>
   <span class="id">2026-08-22-007</span>
   <span class="title">Repair stale skill corpus verification expectations</span>
   <span class="cons cons-med">meaningful</span>
-  <span class="stale">7m ago</span>
+  <span class="stale">3h ago</span>
   <span class="attn"></span>
 </div><div class="row" style="">
-  <span class="pill c-blue">explore</span>
+  <span class="pill c-pink">observe</span>
   <span class="id">2026-08-22-008</span>
   <span class="title">Research comprehensive next business-management skills for Work Studio</span>
   <span class="cons cons-med">meaningful</span>
-  <span class="stale">0m ago</span>
+  <span class="stale">2h ago</span>
+  <span class="attn">supporting</span>
+</div><div class="row" style="">
+  <span class="pill c-amber">build</span>
+  <span class="id">2026-08-22-009</span>
+  <span class="title">Audit the routing/handoff system for correctness and gaps</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">3h ago</span>
+  <span class="attn">supporting</span>
+</div><div class="row" style="">
+  <span class="pill c-teal">verify</span>
+  <span class="id">2026-08-22-010</span>
+  <span class="title">Add governed business component taxonomy to deterministic CLI and runtime</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">3h ago</span>
   <span class="attn"></span>
+</div><div class="row" style="">
+  <span class="pill c-amber">build</span>
+  <span class="id">2026-08-22-011</span>
+  <span class="title">Stable low-consequence build-state fixture for read-only runtime tests</span>
+  <span class="cons cons-low">low</span>
+  <span class="stale">3h ago</span>
+  <span class="attn"></span>
+</div><div class="row" style="">
+  <span class="pill c-blue">explore</span>
+  <span class="id">2026-08-22-013</span>
+  <span class="title">Integrate business artifacts (spreadsheets, dashboards, reports, presentations) into the skill portfolio</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">2h ago</span>
+  <span class="attn">supporting</span>
+</div><div class="row" style="">
+  <span class="pill c-pink">observe</span>
+  <span class="id">2026-08-22-014</span>
+  <span class="title">Add canonical business operating pipeline</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">2h ago</span>
+  <span class="attn"></span>
+</div><div class="row" style="">
+  <span class="pill c-teal">verify</span>
+  <span class="id">2026-08-22-015</span>
+  <span class="title">Design next business skill slice from portfolio report</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">2h ago</span>
+  <span class="attn"></span>
+</div><div class="row" style="">
+  <span class="pill c-teal">verify</span>
+  <span class="id">2026-08-22-016</span>
+  <span class="title">Promote business operating pipeline into graph runtime tracer</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">1h ago</span>
+  <span class="attn"></span>
+</div><div class="row" style="">
+  <span class="pill c-pink">observe</span>
+  <span class="id">2026-08-22-017</span>
+  <span class="title">Create a studio-native design asset management system</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">20m ago</span>
+  <span class="attn"></span>
+</div><div class="row" style="">
+  <span class="pill c-teal">verify</span>
+  <span class="id">2026-08-22-018</span>
+  <span class="title">Add checkpointed LangGraph business operating router</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">1h ago</span>
+  <span class="attn"></span>
+</div><div class="row" style="">
+  <span class="pill c-teal">verify</span>
+  <span class="id">2026-08-22-019</span>
+  <span class="title">Expose business router through runtime CLI</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">1h ago</span>
+  <span class="attn"></span>
+</div><div class="row" style="">
+  <span class="pill c-teal">verify</span>
+  <span class="id">2026-08-22-020</span>
+  <span class="title">Expose business router through runtime.graph command surface</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">1h ago</span>
+  <span class="attn"></span>
+</div><div class="row" style="">
+  <span class="pill c-teal">verify</span>
+  <span class="id">2026-08-22-021</span>
+  <span class="title">Integrate business router into Phase 6 dispatch</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">1h ago</span>
+  <span class="attn"></span>
+</div><div class="row" style="">
+  <span class="pill c-teal">verify</span>
+  <span class="id">2026-08-22-022</span>
+  <span class="title">Prefer explicit business_scope metadata in Phase 6 dispatch</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">1h ago</span>
+  <span class="attn"></span>
+</div><div class="row" style="">
+  <span class="pill c-pink">observe</span>
+  <span class="id">2026-08-22-023</span>
+  <span class="title">Design engineering operating pipeline graph capabilities</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">1h ago</span>
+  <span class="attn"></span>
+</div><div class="row" style="">
+  <span class="pill c-purple">design</span>
+  <span class="id">2026-08-22-026</span>
+  <span class="title">Connect business pipeline into the graph system</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">0m ago</span>
+  <span class="attn">primary</span>
+</div><div class="row" style="">
+  <span class="pill c-teal">verify</span>
+  <span class="id">2026-08-22-027</span>
+  <span class="title">Recommend additional skills to enhance the design pipeline</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">12m ago</span>
+  <span class="attn">supporting</span>
+</div><div class="row" style="">
+  <span class="pill c-teal">verify</span>
+  <span class="id">2026-08-22-028</span>
+  <span class="title">Build design-audit-accessibility skill</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">0m ago</span>
+  <span class="attn">supporting</span>
 </div>
-<button id="toggle">Show closed (7)</button>
+<button id="toggle" aria-controls="closed-wrap" aria-expanded="false">Show closed (10)</button>
 <div id="closed-wrap"><div class="row" style="opacity:0.55;">
   <span class="pill c-gray">close</span>
   <span class="id">2026-08-21-002</span>
@@ -120,42 +262,63 @@ button { margin-top: 1rem; font-size: 12px; padding: 4px 10px; }
   <span class="id">2026-08-21-003</span>
   <span class="title">Full one-system-any-repo feature: package tools/ws, checkpoint-DB policy, multi-repo orchestration</span>
   <span class="cons cons-med">meaningful</span>
-  <span class="stale">16h ago</span>
+  <span class="stale">19h ago</span>
   <span class="attn"></span>
 </div><div class="row" style="opacity:0.55;">
   <span class="pill c-gray">close</span>
   <span class="id">2026-08-21-004</span>
   <span class="title">Phase 7: retry, compensation, and director gates (successor to lost 2026-08-17-015/016)</span>
   <span class="cons cons-med">meaningful</span>
-  <span class="stale">21h ago</span>
+  <span class="stale">1d ago</span>
   <span class="attn"></span>
 </div><div class="row" style="opacity:0.55;">
   <span class="pill c-gray">close</span>
   <span class="id">2026-08-21-007</span>
   <span class="title">Expose --approve-direction on the run-phase6 CLI subcommand</span>
   <span class="cons cons-low">low</span>
-  <span class="stale">20h ago</span>
+  <span class="stale">1d ago</span>
   <span class="attn"></span>
 </div><div class="row" style="opacity:0.55;">
   <span class="pill c-gray">close</span>
   <span class="id">2026-08-21-008</span>
   <span class="title">Add a deep-research/plan skill, heavier than investigate-live-question</span>
   <span class="cons cons-med">meaningful</span>
-  <span class="stale">16h ago</span>
+  <span class="stale">20h ago</span>
   <span class="attn"></span>
 </div><div class="row" style="opacity:0.55;">
   <span class="pill c-gray">close</span>
   <span class="id">2026-08-22-001</span>
   <span class="title">Add epistemic loop (Hypothesis/Prediction/Test/Judgment) as a formal Work Object mechanism</span>
   <span class="cons cons-med">meaningful</span>
-  <span class="stale">1h ago</span>
+  <span class="stale">5h ago</span>
   <span class="attn"></span>
 </div><div class="row" style="opacity:0.55;">
   <span class="pill c-gray">close</span>
   <span class="id">2026-08-22-004</span>
   <span class="title">Which business management skills belong in Work Studio from sales through operations</span>
   <span class="cons cons-med">meaningful</span>
-  <span class="stale">14m ago</span>
+  <span class="stale">3h ago</span>
+  <span class="attn"></span>
+</div><div class="row" style="opacity:0.55;">
+  <span class="pill c-gray">close</span>
+  <span class="id">2026-08-22-012</span>
+  <span class="title">Add a database management system for Work Studio using Neon</span>
+  <span class="cons cons-high">high</span>
+  <span class="stale">2h ago</span>
+  <span class="attn"></span>
+</div><div class="row" style="opacity:0.55;">
+  <span class="pill c-gray">close</span>
+  <span class="id">2026-08-22-024</span>
+  <span class="title">Integrate engineering operating-pipeline routing into Phase 6 dispatch</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">53m ago</span>
+  <span class="attn"></span>
+</div><div class="row" style="opacity:0.55;">
+  <span class="pill c-gray">close</span>
+  <span class="id">2026-08-22-025</span>
+  <span class="title">Add CLI inspection/approval surface for engineering handoff dispatch</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">35m ago</span>
   <span class="attn"></span>
 </div></div>
 <script>
@@ -163,7 +326,8 @@ document.getElementById('toggle').addEventListener('click', function() {
   const w = document.getElementById('closed-wrap');
   const hidden = w.style.display === 'none' || !w.style.display;
   w.style.display = hidden ? 'block' : 'none';
-  this.textContent = hidden ? 'Hide closed (7)' : 'Show closed (7)';
+  this.setAttribute('aria-expanded', hidden ? 'true' : 'false');
+  this.textContent = hidden ? 'Hide closed (10)' : 'Show closed (10)';
 });
 </script>
 </body></html>

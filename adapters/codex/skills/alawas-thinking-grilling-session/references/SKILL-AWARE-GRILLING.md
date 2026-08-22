@@ -709,3 +709,27 @@ browser matches at all three viewports, but the diff also touches a file
 outside the confirmed scope: does the report pass on the confirmed changes
 alone, or does the unintended change make this a fail that routes back to
 `alawas-design-apply-design-direction`?
+
+### `alawas-design-audit-accessibility`
+
+**Gates** — (1) Mechanism honesty: confirm each finding discloses whether it
+came from browser-computed styles or static parsing, since static parsing
+cannot see cascade, `:hover`/`:focus` states, or JS-driven color. (2)
+Deferred-dimension honesty: confirm keyboard navigation, focus order, and
+screen-reader behavior are named as deferred with a reason, never silently
+folded into a passing report.
+
+**Escalation** — Default: audit the real rendered surface for contrast and
+semantic-structure conformance against a stewarded expectation or the WCAG
+generic baseline, and produce a `[system:accessibility-audit]` Evidence
+Ledger entry with concrete per-check values. Information value overrides the
+default when no stewarded expectation exists for the audited surface —
+escalate to naming that gap explicitly (which baseline was used and why)
+rather than silently treating the generic baseline as equivalent to a
+project-specific one.
+
+**Pressure scenario** — A contrast pair passes the WCAG generic threshold but
+the surface has a stewarded pattern stating a stricter project-specific
+minimum: does the audit report against the generic pass, or does it apply the
+stricter stewarded expectation and report a fail the generic check would have
+missed?

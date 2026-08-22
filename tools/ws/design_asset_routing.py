@@ -10,14 +10,17 @@ from .design_assets import parse_asset_fields, validate_asset_record
 
 FRONTIER_OWNERS = {
     "identity": "design-manage-assets",
+    "foundation": "design-compose-design-system",
     "tokens": "design-compose-design-system",
     "theme": "design-compose-design-system",
+    "variant": "design-compose-design-system",
     "component-family": "design-compose-design-system",
     "ux-pattern": "design-steward-experience-patterns",
     "flow": "design-steward-experience-patterns",
     "creative-direction": "design-apply-design-direction",
     "implementation": "alawas-engineering-implement-bounded-change",
     "verification": "design-verify-design-implementation",
+    "accessibility": "design-audit-accessibility",
     "component-registration": "design-track-components",
     "projection": "design-project-asset-workbench",
 }

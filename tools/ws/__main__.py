@@ -50,6 +50,9 @@ from .authority_check import cmd_authority_check
 from .baseline import cmd_baseline_capture, cmd_baseline_check
 from .backup import cmd_backup, cmd_restore
 from .claim import cmd_claim_inspect, cmd_claim_register
+from .relation import cmd_relation_add
+from .graph import cmd_graph_trace
+from .engineering_handoff import cmd_engineering_handoff
 from .conflict import cmd_conflict_register, cmd_conflict_resolve
 from .epistemic import cmd_epistemic_lint
 from .epistemic_controls import audit_epistemic_state
@@ -1102,6 +1105,7 @@ def cmd_command_center(args: argparse.Namespace) -> int:
     print(f"Wrote {summary['out_path']}")
     print(f"Active: {summary['active']}, Closed: {summary['closed']}, Failed: {summary['failed']}")
     print(f"Primary: {summary['primary']}, Supporting: {summary['supporting']}")
+    print(f"Assets: {summary['assets']} ({summary['asset_gaps']} gap(s)), Engineering components: {summary['engineering_components']}")
     return 0
 
 
@@ -1567,6 +1571,91 @@ def build_parser() -> argparse.ArgumentParser:
         help="Filter by claim state: captured, supported, accepted_for_action",
     )
 
+    # ── ws relation ───────────────────────────────────────────────────────
+    relation_parser = subparsers.add_parser(
+        "relation", help="Typed Relationship edge write path (tracer bullet)"
+    )
+    relation_sub = relation_parser.add_subparsers(dest="relation_command")
+
+    relation_add_parser = relation_sub.add_parser(
+        "add",
+        help="Append a typed edge into a Work Object's ## Relationships section",
+    )
+    relation_add_parser.add_argument("id", help="Work Object ID the edge originates from")
+    relation_add_parser.add_argument(
+        "--type", required=True,
+        help="Edge type: responds_to, resulted_in, supersedes, depends_on, "
+             "blocks, implements, verifies, observes, revises, supports, "
+             "counters, authorized_by, generated_by, used, invalidates, "
+             "hands_off_to",
+    )
+    relation_add_parser.add_argument(
+        "--to", required=True,
+        help="Edge target: a Work Object ID (YYYY-MM-DD-NNN, optionally "
+             "'wo:'-prefixed) or an explicit 'external:<locator>' reference",
+    )
+    relation_add_parser.add_argument(
+        "--basis", default=None,
+        help="Optional supporting reference for the edge (e.g. a Decision ID)",
+    )
+    relation_add_parser.add_argument(
+        "--expect-updated", required=True,
+        help="Expected updated_at timestamp",
+    )
+    relation_add_parser.add_argument(
+        "--force", action="store_true",
+        help="Bypass optimistic concurrency check",
+    )
+
+    # ── ws graph ──────────────────────────────────────────────────────────
+    graph_parser = subparsers.add_parser(
+        "graph", help="Read-only Relationship-edge trace across the corpus"
+    )
+    graph_sub = graph_parser.add_subparsers(dest="graph_command")
+
+    graph_trace_parser = graph_sub.add_parser(
+        "trace",
+        help="Print Relationship edges touching one ref",
+    )
+    graph_trace_parser.add_argument(
+        "ref", help="Work Object ID or 'external:<locator>' reference to trace",
+    )
+    graph_trace_parser.add_argument(
+        "--direction", default="both", choices=["upstream", "downstream", "both"],
+        help="Edge direction to show (default: both)",
+    )
+
+    # ── ws engineering-handoff ────────────────────────────────────────────
+    def _add_handoff_common(p):
+        p.add_argument("id", help="Work Object ID")
+        p.add_argument(
+            "--thread-id", default=None,
+            help="Phase 6 thread id (default: the Work Object ID)",
+        )
+        p.add_argument(
+            "--checkpoint-db", default=None,
+            help="Phase 6 checkpoint database "
+                 "(default: runtime/checkpoints/tracer.sqlite)",
+        )
+
+    handoff_parser = subparsers.add_parser(
+        "engineering-handoff",
+        help="Inspect or approve/reject a proposed engineering handoff",
+    )
+    handoff_sub = handoff_parser.add_subparsers(dest="handoff_command")
+    handoff_inspect_parser = handoff_sub.add_parser(
+        "inspect", help="Inspect the proposed engineering handoff (read-only)"
+    )
+    _add_handoff_common(handoff_inspect_parser)
+    handoff_approve_parser = handoff_sub.add_parser(
+        "approve", help="Approve the proposed engineering handoff"
+    )
+    _add_handoff_common(handoff_approve_parser)
+    handoff_reject_parser = handoff_sub.add_parser(
+        "reject", help="Reject the proposed engineering handoff"
+    )
+    _add_handoff_common(handoff_reject_parser)
+
     # ── ws epistemic lint ─────────────────────────────────────────────────
     epi_parser = subparsers.add_parser(
         "epistemic", help="Epistemic provenance-tag checks"
@@ -1824,6 +1913,28 @@ def main() -> int:
         if args.claim_command == "inspect":
             return cmd_claim_inspect(args)
         print("Error: Unknown claim command. Use 'ws claim register' or 'ws claim inspect'.",
+              file=sys.stderr)
+        return 1
+
+    if args.command == "relation":
+        if args.relation_command == "add":
+            return cmd_relation_add(args)
+        print("Error: Unknown relation command. Use 'ws relation add'.",
+              file=sys.stderr)
+        return 1
+
+    if args.command == "graph":
+        if args.graph_command == "trace":
+            return cmd_graph_trace(args)
+        print("Error: Unknown graph command. Use 'ws graph trace'.",
+              file=sys.stderr)
+        return 1
+
+    if args.command == "engineering-handoff":
+        if args.handoff_command in ("inspect", "approve", "reject"):
+            return cmd_engineering_handoff(args)
+        print("Error: Unknown engineering-handoff command. "
+              "Use 'ws engineering-handoff inspect|approve|reject <id>'.",
               file=sys.stderr)
         return 1
 

@@ -8,8 +8,71 @@ state: observe
 consequence: meaningful
 sensitivity: ordinary
 created_at: 2026-08-22T13:06:59Z
-updated_at: 2026-08-22T13:59:16Z
-next_action: Use alawas-engineering-implement-bounded-change to implement the next bounded slice: draft design-compose-design-system skill contract and routing tests for composing foundations, token sets, themes, and component-family relationships without applying creative changes or mutating canonical assets.
+updated_at: 2026-08-22T14:45:02Z
+next_action: Route to alawas-governance-review-outcome-and-adapt with the creative-use evidence; the editorial-contrast composition record is ready for the director's review, and the open decision is whether to proceed to a bounded implementation of the composed theme (design-apply-design-direction -> alawas-engineering-implement-bounded-change -> design-verify-design-implementation) or to stop.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -259,6 +322,20 @@ frontier; do not force every asset through every step.
 | [system] | real-use asset ingest testing, 2026-08-22 | Implemented Slice 5 real-use asset ingest testing by ingesting two representative draft records from the accepted ReviewBadge tracer scope through the existing CLI: .work-studio/design-assets/reviewbadge-themes.asset.md as a theme asset and .work-studio/design-assets/create-review-approve-pattern.asset.md as a ux-pattern asset. Both generated records validate, remain status draft, retain explicit source notes, and state they are not accepted canonical assets. Refreshed .work-studio/asset-workbench.html; it reports 4 assets and 0 validation gaps and displays the new asset IDs. |
 | [gap] | ws transition audit (verify) | Unresolved [gap] entries exist in the Evidence ledger. Residual uncertainty should be reviewed before proceeding. |
 | [system] | real-use ingest verification, 2026-08-22 | Verified Slice 5 real-use ingest testing. Commands passed: python -m tools.ws asset-workbench; python -m tools.ws validate design-assets; python -m unittest tests.test_asset_ingest tests.test_design_assets tests.test_design_manage_assets tests.test_asset_workbench; python -m tools.ws validate --files .work-studio/objects/2026/08/2026-08-22-017-create-a-studio-native-design-asset-management-system.md. Focused content checks confirmed the workbench displays asset.design.reviewbadge-themes and asset.design.create-review-approve-pattern, and both new records are draft proposals rather than canonical assets. Work Object validation still carries the standing no-baseline append-only warning and the historical unresolved-gap audit note. |
+| [system] | slice 6 implementation, 2026-08-22 | Implemented Slice 6 design-compose-design-system contract: added skills/core/design-compose-design-system/SKILL.md, tests/test_design_compose_design_system.py, aligned FRONTIER_OWNERS with the accepted pipeline ownership for foundation and variant compose frontiers, added the design governance-domain mapping, declared the skill in work-studio/kernel-manifest.yaml, and regenerated work-studio/skill-map.yaml (40 skills). Focused checks passed: python -m unittest tests.test_design_compose_design_system tests.test_design_manage_assets tests.test_design_assets tests.test_asset_ingest tests.test_asset_workbench; python -m tools.ws skill-map build. |
+| [system] | slice 6 verification, 2026-08-22 | Verified Slice 6 design-compose-design-system contract within local scope. Commands passed: python -m unittest tests.test_design_compose_design_system tests.test_design_manage_assets tests.test_design_assets tests.test_asset_ingest tests.test_asset_workbench (22 OK); python -m unittest tests.test_verify_kernel; python -m tools.ws validate design-assets. The generated skill-map lists design-compose-design-system with its responsibility, non-goals, and capabilities. Verified boundaries include: the contract declares it does not silently choose a creative direction, does not mutate canonical assets, and does not implement or verify code; compose frontiers (foundation, tokens, theme, variant, component-family) route to design-compose-design-system with single-owner routing; adjacent frontiers route to their own owners; governance domain is design. Work Object validation still carries the standing no-baseline append-only warning. |
+| [system] | slice 7 implementation, 2026-08-22 | Implemented Slice 7 design-steward-experience-patterns contract: added skills/core/design-steward-experience-patterns/SKILL.md, tests/test_design_steward_experience_patterns.py, the design governance-domain mapping, the work-studio/kernel-manifest.yaml declaration, and regenerated work-studio/skill-map.yaml (41 skills). The ux-pattern and flow frontiers already routed to design-steward-experience-patterns in FRONTIER_OWNERS, so no routing-map change was required. Focused checks passed: python -m unittest tests.test_design_steward_experience_patterns tests.test_design_compose_design_system tests.test_design_manage_assets tests.test_design_assets tests.test_asset_ingest tests.test_asset_workbench; python -m tools.ws skill-map build. |
+| [system] | slice 7 verification, 2026-08-22 | Verified Slice 7 design-steward-experience-patterns contract within local scope. Commands passed: python -m unittest tests.test_design_steward_experience_patterns tests.test_design_compose_design_system tests.test_design_manage_assets tests.test_design_assets tests.test_asset_ingest tests.test_asset_workbench (27 OK); python -m unittest tests.test_verify_kernel; python -m tools.ws validate design-assets. The generated skill-map lists design-steward-experience-patterns with its responsibility, non-goals, and capabilities. Verified boundaries include: the contract declares it does not style the pattern or choose visual themes, does not implement or verify code, does not claim accessibility compliance from a written pattern alone, and does not register durable components; ux-pattern and flow frontiers route to design-steward-experience-patterns with single-owner routing; adjacent frontiers route to their own owners; the draft create-review-approve-pattern asset routes to the steward skill with no gaps; governance domain is design. Work Object validation still carries the standing no-baseline append-only warning. |
+| [system] | slice 8 implementation, 2026-08-22 | Implemented Slice 8 design-project-asset-workbench contract: added skills/core/design-project-asset-workbench/SKILL.md, tests/test_design_project_asset_workbench.py, the design governance-domain mapping, the work-studio/kernel-manifest.yaml declaration, and regenerated work-studio/skill-map.yaml (42 skills). The projection frontier already routed to design-project-asset-workbench in FRONTIER_OWNERS, so no routing-map change was required. Focused checks passed: python -m unittest tests.test_design_project_asset_workbench tests.test_design_steward_experience_patterns tests.test_design_compose_design_system tests.test_design_manage_assets tests.test_design_assets tests.test_asset_ingest tests.test_asset_workbench; python -m tools.ws skill-map build. |
+| [system] | slice 8 verification, 2026-08-22 | Verified Slice 8 design-project-asset-workbench contract within local scope. Commands passed: python -m unittest tests.test_design_project_asset_workbench tests.test_design_steward_experience_patterns tests.test_design_compose_design_system tests.test_design_manage_assets tests.test_design_assets tests.test_asset_ingest tests.test_asset_workbench (32 OK); python -m unittest tests.test_verify_kernel; python -m tools.ws validate design-assets. The generated skill-map lists design-project-asset-workbench with its responsibility, non-goals, and capabilities. Verified boundaries include: the contract declares it does not create or edit assets, does not become the source of truth, does not infer unrecorded relationships, and does not register durable components; the projection frontier routes to design-project-asset-workbench with single-owner routing; adjacent frontiers route to their own owners; the reviewbadge asset routes to the workbench skill at the projection frontier with no gaps; governance domain is design. Work Object validation still carries the standing no-baseline append-only warning. |
+| [decision] | outcome review + director, 2026-08-22 | Director accepted the outcome-review recommendation 'deepen' for 2026-08-22-017: the review found the accepted pipeline ownership map confirmed within local scope while observed value remained insufficient; the accepted deepen direction is one live-use slice exercising the four-contract pipeline on the real draft assets and recording where the ownership map holds or strains. |
+| [system] | slice 9 implementation, 2026-08-22 | Implemented Slice 9 live pipeline walk: added tests/test_live_pipeline_walk.py walking all four real draft assets through the accepted four-contract pipeline (reviewbadge, studio-status-tokens, reviewbadge-themes, create-review-approve-pattern), recorded .work-studio/deliverables/2026-08-22-017-live-pipeline-walk.md, and refreshed the read-only workbench. Focused checks passed: python -m unittest tests.test_live_pipeline_walk -v (3 OK); python -m tools.ws asset-workbench (4 assets, 0 gaps). |
+| [system] | slice 9 verification, 2026-08-22 | Verified Slice 9 live pipeline walk within local scope. Commands passed: python -m unittest tests.test_live_pipeline_walk tests.test_design_project_asset_workbench tests.test_design_steward_experience_patterns tests.test_design_compose_design_system tests.test_design_manage_assets tests.test_design_assets tests.test_asset_ingest tests.test_asset_workbench (35 OK); python -m unittest tests.test_verify_kernel; python -m tools.ws asset-workbench (4 assets, 0 gaps); python -m tools.ws validate design-assets. Verified: all four real draft assets validate with zero gaps; each resolves to exactly one owner at its kind-appropriate frontier and to design-manage-assets at the identity frontier; the pipeline ownership map holds on real kinds. Work Object validation still carries the standing no-baseline append-only warning. |
+| [decision] | outcome review follow-up + director, 2026-08-22 | Director selected 'repair' with scoped authority for the exact mutation: align the create-review-approve-pattern.asset.md lifecycle prose from frontier 'experience-patterns' to the canonical routing vocabulary 'ux-pattern'. No other asset, ledger, or code change is authorized. |
+| [system] | slice 10 repair implementation and verification, 2026-08-22 | Repaired the prose naming strain: .work-studio/design-assets/create-review-approve-pattern.asset.md lifecycle prose now reads 'current frontier is ux-pattern' matching the canonical routing vocabulary and the record's own asset kind; added a resolution note to .work-studio/deliverables/2026-08-22-017-live-pipeline-walk.md; refreshed the read-only workbench (4 assets, 0 gaps). Verified: ws validate design-assets passed; 35 focused tests OK; no 'experience-patterns' remains in the asset record. The ingest CLI --frontier remains a free string; constraining it to the routing vocabulary is an optional future hardening, recorded as an observation, not part of this repair. |
+| [decision] | director, 2026-08-22 | Director confirmed the creative direction 'editorial-contrast' (stronger visual contrast for review-heavy editorial systems: higher contrast text and borders) for the ReviewBadge composition, and authorized accepting the ReviewBadge asset to status 'active' as part of the creative-use slice. |
+| [system] | slice 11 implementation, 2026-08-22 | Implemented the creative-use slice: accepted .work-studio/design-assets/reviewbadge.asset.md to status active with an acceptance note; created .work-studio/deliverables/2026-08-22-017-reviewbadge-editorial-contrast-composition.md and .work-studio/deliverables/2026-08-22-017-reviewbadge-experience-stewardship.md as read-only proposals; added tests/test_creative_use_composition.py; updated the stale tracer-status assertion in tests/test_design_manage_assets.py; refreshed the read-only workbench. No visual implementation or external effect was made. |
+| [system] | slice 11 verification, 2026-08-22 | Verified the creative-use slice within local scope. Commands passed: python -m unittest tests.test_creative_use_composition tests.test_live_pipeline_walk tests.test_design_project_asset_workbench tests.test_design_steward_experience_patterns tests.test_design_compose_design_system tests.test_design_manage_assets tests.test_design_assets tests.test_asset_ingest tests.test_asset_workbench (40 OK); python -m unittest tests.test_verify_kernel; python -m tools.ws asset-workbench (4 assets, 0 gaps); python -m tools.ws validate design-assets. Verified: reviewbadge is status active and validates; it still routes to a single owner at theme/component-family/ux-pattern frontiers; the composition and stewardship records are well-formed proposals; all real assets still validate. Work Object validation still carries the standing no-baseline append-only warning. |
 ## Open questions
 
 - Discoverable during tracer design: which current design skill contracts are implemented capabilities versus contract shells?
@@ -267,13 +344,24 @@ frontier; do not force every asset through every step.
 
 ## Next move
 
-Use `alawas-engineering-implement-bounded-change` to implement the next bounded
-slice: draft the `design-compose-design-system` skill contract and routing
-tests for composing foundations, token sets, themes, and component-family
-relationships without applying creative changes or mutating canonical assets.
+Route to `alawas-governance-review-outcome-and-adapt` with the creative-use
+evidence. The `editorial-contrast` composition record is ready for the
+director's review; the open decision is whether to proceed to a bounded
+implementation of the composed theme (`design-apply-design-direction` →
+`alawas-engineering-implement-bounded-change` →
+`design-verify-design-implementation`) or to stop.
 
 Gap plan and database recommendation:
 `.work-studio/deliverables/2026-08-22-017-explicit-gap-plan-and-database-decision.md`.
+
+Live pipeline walk observation:
+`.work-studio/deliverables/2026-08-22-017-live-pipeline-walk.md`.
+
+Editorial-contrast composition:
+`.work-studio/deliverables/2026-08-22-017-reviewbadge-editorial-contrast-composition.md`.
+
+Experience-pattern stewardship:
+`.work-studio/deliverables/2026-08-22-017-reviewbadge-experience-stewardship.md`.
 
 ## History
 
@@ -460,6 +548,132 @@ Gap plan and database recommendation:
 - **Status:** active
 - **Actor:** director
 - **Rationale:** Human-readable Next move now matches the verified real-use ingest testing state and frontmatter next_action.
+### 2026-08-22T14:14:31Z — Slice 6 design-compose-design-system contract implemented
+
+- **State:** verify
+- **Status:** active
+- **Actor:** github-copilot
+- **Rationale:** Implemented Slice 6 as the accepted next slice: drafted skills/core/design-compose-design-system/SKILL.md contract, added focused routing tests (tests/test_design_compose_design_system.py), aligned compose frontiers (foundation, variant) in the routing map with the accepted pipeline ownership, declared the design governance domain, added the kernel-manifest entry, and regenerated skill-map.yaml. No creative changes or canonical asset mutations were made.
+### 2026-08-22T14:14:39Z — Slice 6 design-compose-design-system contract verified
+
+- **State:** observe
+- **Status:** active
+- **Actor:** github-copilot
+- **Rationale:** Slice 6 verification passed: 22 focused tests OK (including 5 new compose contract and routing tests), ws skill-map build regenerated 40 skills including design-compose-design-system, the kernel-manifest consistency test passed, and ws validate design-assets passed. The contract preserves director creative authority and does not mutate canonical assets.
+### 2026-08-22T14:15:28Z — Synced Next move after Slice 6 verification
+
+- **State:** observe
+- **Status:** active
+- **Actor:** github-copilot
+- **Rationale:** Human-readable Next move now matches the verified design-compose-design-system contract state and frontmatter next_action, routing the next bounded slice to design-steward-experience-patterns.
+### 2026-08-22T14:18:29Z — Slice 7 design-steward-experience-patterns contract implemented
+
+- **State:** verify
+- **Status:** active
+- **Actor:** github-copilot
+- **Rationale:** Implemented Slice 7 as the accepted next slice: drafted skills/core/design-steward-experience-patterns/SKILL.md contract, added focused routing tests (tests/test_design_steward_experience_patterns.py), declared the design governance domain, added the kernel-manifest entry, and regenerated skill-map.yaml. The ux-pattern and flow frontiers already routed to the steward skill, so no routing-map change was needed. No styling, implementation, or canonical asset mutations were made.
+### 2026-08-22T14:18:37Z — Slice 7 design-steward-experience-patterns contract verified
+
+- **State:** observe
+- **Status:** active
+- **Actor:** github-copilot
+- **Rationale:** Slice 7 verification passed: 27 focused tests OK (including 5 new steward contract and routing tests), ws skill-map build regenerated 41 skills including design-steward-experience-patterns, the kernel-manifest consistency test passed, and ws validate design-assets passed. The contract keeps behavior, evidence, and accessibility claims distinct and does not style, implement, or register patterns itself.
+### 2026-08-22T14:19:07Z — Synced Next move after Slice 7 verification
+
+- **State:** observe
+- **Status:** active
+- **Actor:** github-copilot
+- **Rationale:** Human-readable Next move now matches the verified design-steward-experience-patterns contract state and frontmatter next_action, routing the next bounded slice to design-project-asset-workbench.
+### 2026-08-22T14:21:52Z — Slice 8 design-project-asset-workbench contract implemented
+
+- **State:** verify
+- **Status:** active
+- **Actor:** github-copilot
+- **Rationale:** Implemented Slice 8 as the accepted next slice: drafted skills/core/design-project-asset-workbench/SKILL.md contract, added focused routing tests (tests/test_design_project_asset_workbench.py), declared the design governance domain, added the kernel-manifest entry, and regenerated skill-map.yaml. The projection frontier already routed to the workbench skill, so no routing-map change was needed. No asset, ledger, or source-of-truth mutations were made.
+### 2026-08-22T14:22:01Z — Slice 8 design-project-asset-workbench contract verified
+
+- **State:** observe
+- **Status:** active
+- **Actor:** github-copilot
+- **Rationale:** Slice 8 verification passed: 32 focused tests OK (including 5 new workbench contract and routing tests), ws skill-map build regenerated 42 skills including design-project-asset-workbench, the kernel-manifest consistency test passed, and ws validate design-assets passed. With this slice, all four drafted asset-specialist contracts in the accepted pipeline are drafted and verified: design-manage-assets, design-compose-design-system, design-steward-experience-patterns, design-project-asset-workbench.
+### 2026-08-22T14:22:33Z — Synced Next move after Slice 8 verification
+
+- **State:** observe
+- **Status:** active
+- **Actor:** github-copilot
+- **Rationale:** Human-readable Next move now matches the verified design-project-asset-workbench contract state and frontmatter next_action, routing the four drafted asset-specialist contracts to outcome review against the accepted pipeline.
+### 2026-08-22T14:28:26Z — Outcome review: pipeline confirmed locally, value insufficient; accepted deepen
+
+- **State:** build
+- **Status:** active
+- **Actor:** github-copilot
+- **Rationale:** Reviewed the four drafted asset-specialist contracts against the accepted pipeline (Decision 2/3) and the gap-plan database deferral. System evidence confirms the pipeline ownership map holds within local scope: 4 real draft assets validate with zero gaps, every frontier has exactly one owner, 32 focused tests green, 42-skill map. Observed value is insufficient: no live creative use of compose, steward, or workbench decisions. Director selected 'deepen': one live-use slice exercising the four-contract pipeline on the real draft assets and recording where the ownership map holds or strains.
+### 2026-08-22T14:29:32Z — Slice 9 live pipeline walk implemented
+
+- **State:** verify
+- **Status:** active
+- **Actor:** github-copilot
+- **Rationale:** Implemented the accepted deepen slice: added tests/test_live_pipeline_walk.py walking all four real draft assets through the accepted four-contract pipeline, recorded .work-studio/deliverables/2026-08-22-017-live-pipeline-walk.md, and refreshed the read-only workbench. No creative changes or canonical asset mutations were made.
+### 2026-08-22T14:29:41Z — Slice 9 live pipeline walk verified
+
+- **State:** observe
+- **Status:** active
+- **Actor:** github-copilot
+- **Rationale:** Slice 9 verification passed: 35 focused tests OK (including 3 new live-walk tests), the refreshed workbench reports 4 assets and 0 gaps, kernel-manifest consistency passed, and ws validate design-assets passed. The walk confirms the accepted pipeline ownership map holds on all four real draft assets with single-owner routing and no validation gaps. Observed strains: the create-review-approve-pattern lifecycle prose names frontier 'experience-patterns' while the routing vocabulary uses 'ux-pattern' (prose, not binding); all four assets remain drafts/tracer, so compose and steward have not yet been exercised on an accepted asset under confirmed creative direction; workbench value for real decisions remains unobserved.
+### 2026-08-22T14:30:23Z — Synced Next move after Slice 9 verification
+
+- **State:** observe
+- **Status:** active
+- **Actor:** github-copilot
+- **Rationale:** Human-readable Next move now matches the verified live pipeline walk state and frontmatter next_action, routing the deepen evidence to outcome review.
+### 2026-08-22T14:35:56Z — Outcome review follow-up: director selected repair
+
+- **State:** build
+- **Status:** active
+- **Actor:** github-copilot
+- **Rationale:** After the deepen walk surfaced a prose naming strain, the director selected 'repair' with scoped authority for the exact mutation: align the draft asset record create-review-approve-pattern.asset.md lifecycle prose from frontier 'experience-patterns' to the canonical routing vocabulary 'ux-pattern'. The asset kind is already ux-pattern; no other asset, ledger, or code change is authorized.
+### 2026-08-22T14:36:29Z — Slice 10 prose naming repair implemented
+
+- **State:** verify
+- **Status:** active
+- **Actor:** github-copilot
+- **Rationale:** Implemented the accepted repair: changed the create-review-approve-pattern.asset.md lifecycle prose from frontier 'experience-patterns' to the canonical routing vocabulary 'ux-pattern', and added a resolution note to the live-pipeline-walk deliverable. No other asset, ledger, or code change was made.
+### 2026-08-22T14:36:38Z — Slice 10 prose naming repair verified
+
+- **State:** observe
+- **Status:** active
+- **Actor:** github-copilot
+- **Rationale:** Repair verification passed: ws validate design-assets passed, the live-walk and asset tests pass (35 focused tests OK across the suite), the refreshed workbench reports 4 assets and 0 gaps, and the asset record no longer contains 'experience-patterns'. The remaining open value question is whether design-compose-design-system and design-steward-experience-patterns add value on an accepted asset under a confirmed creative direction, which requires the director's creative authority.
+### 2026-08-22T14:37:09Z — Synced Next move after repair verification
+
+- **State:** observe
+- **Status:** active
+- **Actor:** github-copilot
+- **Rationale:** Human-readable Next move now matches the verified prose naming repair state and frontmatter next_action, routing the repair and deepen evidence to outcome review for the creative-use decision.
+### 2026-08-22T14:39:07Z — Outcome review follow-up: director selected creative-use slice
+
+- **State:** build
+- **Status:** active
+- **Actor:** github-copilot
+- **Rationale:** The director selected the live creative-use slice. Target: exercise design-compose-design-system and design-steward-experience-patterns on the ReviewBadge asset under a confirmed creative direction, then project it read-only. The compose contract requires a confirmed creative direction before composing; this slice is awaiting that confirmation.
+### 2026-08-22T14:43:20Z — Slice 11 creative-use composition and stewardship implemented
+
+- **State:** verify
+- **Status:** active
+- **Actor:** github-copilot
+- **Rationale:** Implemented the accepted creative-use slice under the director-confirmed editorial-contrast creative direction: accepted reviewbadge.asset.md to status active, created the editorial-contrast composition record and the create-review-approve experience-stewardship record as read-only proposals, added focused tests, refreshed the workbench, and updated the stale tracer-status assertion. No visual implementation or external effect was made.
+### 2026-08-22T14:43:51Z — Slice 11 creative-use composition and stewardship verified
+
+- **State:** observe
+- **Status:** active
+- **Actor:** github-copilot
+- **Rationale:** Creative-use verification passed: 40 focused tests OK (including 5 new creative-use tests), kernel-manifest consistency passed, ws validate design-assets passed, and the refreshed workbench reports 4 assets with 0 gaps. Observation: under a confirmed creative direction, design-compose-design-system produced a well-formed editorial-contrast composition record and design-steward-experience-patterns produced a behavior stewardship record with the blocked non-color expectation; single-owner routing held after asset acceptance to active. The composition and stewardship records are proposals awaiting the director's review; no rendered badge exists, so contrast and accessibility remain unverified.
+### 2026-08-22T14:44:55Z — Synced Next move after creative-use verification
+
+- **State:** observe
+- **Status:** active
+- **Actor:** github-copilot
+- **Rationale:** Human-readable Next move now matches the verified creative-use composition state and frontmatter next_action, routing the creative-use evidence to outcome review for the composed-theme implementation decision.
 ## artifacts
 
 - `references/DESIGN-ASSET-PIPELINE.md` (fingerprint: `350065cc424b`, commit: uncommitted at record time) — Design asset pipeline routing reference created by ReviewBadge tracer
@@ -494,3 +708,31 @@ Gap plan and database recommendation:
 - `.work-studio/design-assets/reviewbadge-themes.asset.md` (fingerprint: `a64dca67350b`, commit: uncommitted at record time) — Draft theme asset record created through real-use ingest testing
 - `.work-studio/design-assets/create-review-approve-pattern.asset.md` (fingerprint: `be3e576aa61b`, commit: uncommitted at record time) — Draft UX-pattern asset record created through real-use ingest testing
 - `.work-studio/asset-workbench.html` (fingerprint: `bb4458caebac`, commit: uncommitted at record time) — Regenerated read-only asset workbench projection showing four mixed-kind assets
+- `skills/core/design-compose-design-system/SKILL.md` (fingerprint: `72e70733e08f`, commit: uncommitted at record time) — Core design-compose-design-system skill contract draft
+- `tests/test_design_compose_design_system.py` (fingerprint: `a88d8f4fe61b`, commit: uncommitted at record time) — Focused tests for compose contract and routing boundaries
+- `tools/ws/design_asset_routing.py` (fingerprint: `bf3513d7e52a`, commit: uncommitted at record time) — Routing map aligned with accepted compose frontiers (foundation, variant)
+- `tools/ws/component_governance.py` (fingerprint: `e1b755bda08b`, commit: uncommitted at record time) — Governance-domain mapping for design-compose-design-system
+- `work-studio/kernel-manifest.yaml` (fingerprint: `190e932ceb6c`, commit: uncommitted at record time) — Kernel manifest declaration for design-compose-design-system
+- `work-studio/skill-map.yaml` (fingerprint: `9b5faa3a5f02`, commit: uncommitted at record time) — Regenerated skill map including design-compose-design-system
+- `skills/core/design-steward-experience-patterns/SKILL.md` (fingerprint: `ff1ebee520b9`, commit: uncommitted at record time) — Core design-steward-experience-patterns skill contract draft
+- `tests/test_design_steward_experience_patterns.py` (fingerprint: `d8940e1d3220`, commit: uncommitted at record time) — Focused tests for steward contract and routing boundaries
+- `tools/ws/component_governance.py` (fingerprint: `a6822ae5b13e`, commit: uncommitted at record time) — Governance-domain mapping for design-steward-experience-patterns
+- `work-studio/kernel-manifest.yaml` (fingerprint: `e21601a37557`, commit: uncommitted at record time) — Kernel manifest declaration for design-steward-experience-patterns
+- `work-studio/skill-map.yaml` (fingerprint: `62cc9a6ca152`, commit: uncommitted at record time) — Regenerated skill map including design-steward-experience-patterns
+- `skills/core/design-project-asset-workbench/SKILL.md` (fingerprint: `6e5bde4cb403`, commit: uncommitted at record time) — Core design-project-asset-workbench skill contract draft
+- `tests/test_design_project_asset_workbench.py` (fingerprint: `631e2179f118`, commit: uncommitted at record time) — Focused tests for workbench contract and routing boundaries
+- `tools/ws/component_governance.py` (fingerprint: `dc69abad3ee5`, commit: uncommitted at record time) — Governance-domain mapping for design-project-asset-workbench
+- `work-studio/kernel-manifest.yaml` (fingerprint: `df57f4722d88`, commit: uncommitted at record time) — Kernel manifest declaration for design-project-asset-workbench
+- `work-studio/skill-map.yaml` (fingerprint: `5523cdc9cb01`, commit: uncommitted at record time) — Regenerated skill map including design-project-asset-workbench
+- `tests/test_live_pipeline_walk.py` (fingerprint: `7748da385cfb`, commit: uncommitted at record time) — Live pipeline walk tests over the four real draft design assets
+- `.work-studio/deliverables/2026-08-22-017-live-pipeline-walk.md` (fingerprint: `96e6be9c2529`, commit: uncommitted at record time) — Live pipeline walk observation record from the accepted deepen slice
+- `.work-studio/asset-workbench.html` (fingerprint: `25f59f8ab39b`, commit: uncommitted at record time) — Regenerated read-only workbench projection (4 assets, 0 gaps)
+- `.work-studio/design-assets/create-review-approve-pattern.asset.md` (fingerprint: `8930574f2c17`, commit: uncommitted at record time) — Draft UX-pattern asset record with lifecycle frontier prose aligned to 'ux-pattern' (repair)
+- `.work-studio/deliverables/2026-08-22-017-live-pipeline-walk.md` (fingerprint: `9b07fe570956`, commit: uncommitted at record time) — Live pipeline walk observation record with repair resolution note
+- `.work-studio/asset-workbench.html` (fingerprint: `96ebded4cb81`, commit: uncommitted at record time) — Regenerated read-only workbench projection after repair (4 assets, 0 gaps)
+- `.work-studio/design-assets/reviewbadge.asset.md` (fingerprint: `4313a0c509b4`, commit: uncommitted at record time) — ReviewBadge asset record accepted to status active (director, 2026-08-22)
+- `.work-studio/deliverables/2026-08-22-017-reviewbadge-editorial-contrast-composition.md` (fingerprint: `28719d4e1a1c`, commit: uncommitted at record time) — Editorial-contrast design-system composition record under confirmed creative direction
+- `.work-studio/deliverables/2026-08-22-017-reviewbadge-experience-stewardship.md` (fingerprint: `fa2bb4b1c8ab`, commit: uncommitted at record time) — Create-review-approve experience-pattern stewardship record
+- `tests/test_creative_use_composition.py` (fingerprint: `1fa3d9e2b3db`, commit: uncommitted at record time) — Focused tests for the creative-use composition and stewardship slice
+- `tests/test_design_manage_assets.py` (fingerprint: `a1598a078e3d`, commit: uncommitted at record time) — Updated stale reviewbadge status assertion (tracer to active)
+- `.work-studio/asset-workbench.html` (fingerprint: `ebe17fa1e1c8`, commit: uncommitted at record time) — Regenerated read-only workbench projection (4 assets, 0 gaps)

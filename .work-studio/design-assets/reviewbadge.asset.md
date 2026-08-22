@@ -2,7 +2,7 @@
 
 **Work Object:** `2026-08-22-017`  
 **Pipeline:** `references/DESIGN-ASSET-PIPELINE.md`  
-**Status:** tracer  
+**Status:** active  
 **Asset ID:** `asset.design.reviewbadge`  
 **Asset kind:** component-family  
 **Source of truth:** this tracer record, pending future asset registry shape  
@@ -14,10 +14,11 @@
 `create-review-approve` experience. It shows whether an item is `draft`,
 `in_review`, `approved`, or `blocked`.
 
-This record is a tracer asset, not a production asset. Its job is to test
-whether the design asset pipeline can represent identity, system composition,
-experience behavior, verification, component registration, and projection
-without owner ambiguity.
+This record is an accepted studio asset. It began as the ReviewBadge tracer
+and was accepted to `active` by the director on 2026-08-22 in the creative-use
+slice of Work Object `2026-08-22-017`. Its job is to test whether the design
+asset pipeline can represent identity, system composition, experience behavior,
+verification, component registration, and projection without owner ambiguity.
 
 ## Lifecycle
 

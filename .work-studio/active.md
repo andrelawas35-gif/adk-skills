@@ -10,4 +10,7 @@
 - `2026-08-22-009` — Audit the routing/handoff system for correctness and gaps (supporting)
 - `2026-08-22-008` — Research comprehensive next business-management skills for Work Studio (supporting)
 - `2026-08-22-013` — Integrate business artifacts (spreadsheets, dashboards, reports, presentations) into the skill portfolio (supporting)
-- `2026-08-22-024` — Integrate engineering operating-pipeline routing into Phase 6 dispatch (primary)
+- `2026-08-22-026` — Connect business pipeline into the graph system (primary)
+- `2026-08-22-027` — Recommend additional skills to enhance the design pipeline (supporting)
+- `2026-08-22-028` — Build design-audit-accessibility skill (supporting)
+- `2026-08-22-029` — Manage liquidity and cash runway (supporting)

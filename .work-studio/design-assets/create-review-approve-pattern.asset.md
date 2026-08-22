@@ -16,7 +16,7 @@ Draft UX-pattern asset for the create-review-approve flow used to test ingest of
 
 | Step | Owning skill | Evidence |
 |------|--------------|----------|
-| Intake and identity | `design-manage-assets` | Draft asset record proposed from explicit ingest input; current frontier is `experience-patterns`. |
+| Intake and identity | `design-manage-assets` | Draft asset record proposed from explicit ingest input; current frontier is `ux-pattern`. |
 
 ## Verification Notes
 

@@ -69,8 +69,11 @@ kernel:
         - design-apply-design-direction
         - design-audit-product-interface
         - design-build-design-foundation
+        - design-compose-design-system
         - design-design-tracer-bullet
         - design-manage-assets
+        - design-project-asset-workbench
+        - design-steward-experience-patterns
         - design-track-components
         - design-verify-design-implementation
         - engineering-implement-bounded-change
