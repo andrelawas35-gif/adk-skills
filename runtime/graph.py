@@ -46,6 +46,7 @@ from runtime.handoff import (
     derive_verification_gaps,
     merge_proposals,
 )
+from tools.ws.component_governance import governance_domain_for_skill
 from runtime.research import ResearchReceipt, build_receipt, fetch_url
 
 _REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -118,6 +119,64 @@ def _default_checkpoint_db() -> Path:
     else:
         base = Path(os.environ.get("XDG_DATA_HOME", str(Path.home() / ".local" / "share")))
     return base / "work-studio" / "checkpoints" / "tracer.sqlite"
+
+
+def _repo_registry_path() -> Path:
+    """Location of the optional cross-repo registry (WO 2026-08-21-005)."""
+    return _REPO_ROOT / ".work-studio" / "repos.json"
+
+
+def _load_repo_registry() -> dict:
+    """Load the optional named-target registry (WO 2026-08-21-005, Direction 2).
+
+    Schema: {"<name>": {"repo_root": "<path>", "checkpoint_db": "<path>"}, ...}.
+    Read-path only so far -- only `checkpoint_db` is consumed here (by
+    `inspect --repo`/`--repo-all`); `repo_root` is reserved for a future
+    write-path (`run`/`resume`) revision, per the tracer bullet's Non-goals
+    (WO 2026-08-21-005, Decision 2). Missing file returns an empty registry,
+    not an error -- the registry is opt-in and does not change any existing
+    caller's default behavior. JSON, not YAML, to add zero new dependencies
+    (json is stdlib), consistent with tools/ws's dependency-free-by-design
+    posture recorded in WO 2026-08-21-003's evidence ledger.
+    """
+    path = _repo_registry_path()
+    if not path.exists():
+        return {}
+    with path.open("r", encoding="utf-8") as fh:
+        return json.load(fh)
+
+
+def _resolve_registry_entry(name: str) -> dict:
+    registry = _load_repo_registry()
+    if name not in registry:
+        raise KeyError(
+            f"'{name}' not found in registry ({_repo_registry_path()}); "
+            f"known entries: {sorted(registry)}"
+        )
+    return registry[name]
+
+
+def _resolve_registry_checkpoint_db(name: str) -> Path:
+    entry = _resolve_registry_entry(name)
+    if "checkpoint_db" not in entry:
+        raise KeyError(f"registry entry '{name}' has no checkpoint_db")
+    return Path(entry["checkpoint_db"])
+
+
+def _resolve_registry_repo_root(name: str) -> Path:
+    """Resolve a registry entry's repo_root (WO 2026-08-21-005, write path).
+
+    Sets WS_REPO_ROOT for this process from the registry instead of
+    requiring it pre-set in the environment. Safe for a single `run`/`resume`
+    invocation targeting one named entry -- the tracer bullet (Decision 3)
+    tested the harder case, mutating WS_REPO_ROOT *between* sequential
+    iterations in one process, and confirmed no leakage; a single set before
+    one graph execution is strictly simpler than what was tested.
+    """
+    entry = _resolve_registry_entry(name)
+    if "repo_root" not in entry:
+        raise KeyError(f"registry entry '{name}' has no repo_root")
+    return Path(entry["repo_root"])
 
 
 def _find_work_object(wo_id: str) -> Path:
@@ -585,6 +644,10 @@ class Phase6State(TypedDict, total=False):
     work_object_id: str
     thread_id: str
     handoff_envelope: dict
+    business_route_result: dict
+    business_handoff_envelope: dict
+    engineering_route_result: dict
+    engineering_handoff_envelope: dict
     branch_a_receipt: dict
     branch_b_receipt: dict
     branch_a_completed: bool
@@ -594,15 +657,217 @@ class Phase6State(TypedDict, total=False):
     direction_approved: bool
 
 
+def _phase6_is_business_scoped(frontmatter: dict, body_text: str) -> bool:
+    """Return whether Phase 6 dispatch should use business operating routing."""
+    explicit_scope = frontmatter.get("business_scope")
+    if isinstance(explicit_scope, bool):
+        return explicit_scope
+    if isinstance(explicit_scope, str):
+        normalized_scope = explicit_scope.strip().lower()
+        if normalized_scope in {"true", "yes", "business", "business-operating"}:
+            return True
+        if normalized_scope in {"false", "no", "none", "generic"}:
+            return False
+    open_questions = re.search(
+        r"## Open questions\s*(.*?)(?:\n## |\Z)",
+        body_text,
+        flags=re.DOTALL,
+    )
+    scoped_text = " ".join(
+        [
+            str(frontmatter.get("title", "")),
+            str(frontmatter.get("next_action", "")),
+            open_questions.group(1) if open_questions else "",
+        ]
+    ).lower()
+    explicit_markers = (
+        "business",
+        "pricing",
+        "package",
+        "pipeline",
+        "market",
+        "commercial",
+        "customer success",
+        "cash runway",
+        "supplier",
+        "workforce",
+        "capacity",
+    )
+    return any(marker in scoped_text for marker in explicit_markers)
+
+
+def _phase6_business_next_gap(frontmatter: dict, body_text: str) -> str:
+    """Extract a deterministic business frontier for dispatch routing."""
+    next_action = str(frontmatter.get("next_action", "")).strip()
+    if next_action and "awaiting activation" not in next_action.lower():
+        return next_action
+    open_questions = re.search(
+        r"## Open questions\s*(.*?)(?:\n## |\Z)",
+        body_text,
+        flags=re.DOTALL,
+    )
+    if open_questions:
+        for raw in open_questions.group(1).splitlines():
+            line = raw.strip()
+            if line.startswith("- "):
+                return line[2:].strip()
+    return str(frontmatter.get("title", "")).strip()
+
+
+def _phase6_is_engineering_scoped(frontmatter: dict, body_text: str) -> bool:
+    """Return whether Phase 6 dispatch should use engineering routing.
+
+    This first tracer intentionally honors only explicit metadata. It does not
+    infer engineering scope from prose, so generic lifecycle routing remains
+    the fallback unless a Work Object opts in with ``engineering_scope``.
+    """
+    explicit_scope = frontmatter.get("engineering_scope")
+    if isinstance(explicit_scope, bool):
+        return explicit_scope
+    if isinstance(explicit_scope, str):
+        normalized_scope = explicit_scope.strip().lower()
+        if normalized_scope in {"true", "yes", "engineering", "engineering-operating"}:
+            return True
+        if normalized_scope in {"false", "no", "none", "generic"}:
+            return False
+    return False
+
+
+def _phase6_engineering_next_gap(frontmatter: dict, body_text: str) -> str:
+    """Extract a deterministic engineering frontier for dispatch routing."""
+    next_action = str(frontmatter.get("next_action", "")).strip()
+    if next_action and "awaiting activation" not in next_action.lower():
+        return next_action
+    open_questions = re.search(
+        r"## Open questions\s*(.*?)(?:\n## |\Z)",
+        body_text,
+        flags=re.DOTALL,
+    )
+    if open_questions:
+        for raw in open_questions.group(1).splitlines():
+            line = raw.strip()
+            if line.startswith("- "):
+                return line[2:].strip()
+    return str(frontmatter.get("title", "")).strip()
+
+
+def _phase6_business_dispatch_payload(
+    state: Phase6State,
+    frontmatter: dict,
+    wo_path: Path,
+) -> dict:
+    """Build runtime-only business routing payloads for Phase 6 dispatch."""
+    from runtime.business import propose_business_handoff, route_business_frontier
+
+    body_text = wo_path.read_text(encoding="utf-8")
+    if not _phase6_is_business_scoped(frontmatter, body_text):
+        return {}
+    next_gap = _phase6_business_next_gap(frontmatter, body_text)
+    route = route_business_frontier(next_gap)
+    authority_scope = derive_authority_scope(frontmatter.get("consequence", ""))
+    business_envelope = propose_business_handoff(
+        handoff_id=f"BUSINESS-HANDOFF-{state['work_object_id']}-{state['thread_id']}",
+        work_object_id=state["work_object_id"],
+        lifecycle_state=str(frontmatter.get("state", "")),
+        current_frontier=str(frontmatter.get("title", "")),
+        from_skill="business-formulate-strategy",
+        evidence_resolved=[],
+        next_gap=next_gap,
+        same_work_object=True,
+        authority_boundary=authority_scope,
+    )
+    dispatch_envelope = HandoffEnvelope(
+        handoff_id=f"HANDOFF-{state['work_object_id']}-{state['thread_id']}",
+        from_role="runtime",
+        to_skill=business_envelope.to_skill,
+        component_kind="skill",
+        governance_domain=governance_domain_for_skill(business_envelope.to_skill),
+        task=f"route business frontier: {next_gap}",
+        input_refs=[state["work_object_id"]],
+        expected_output="business handoff proposal",
+        authority_scope=authority_scope,
+    )
+    return {
+        "business_route_result": route.model_dump(),
+        "business_handoff_envelope": business_envelope.model_dump(),
+        "handoff_envelope": dispatch_envelope.model_dump(),
+    }
+
+
+def _phase6_engineering_dispatch_payload(
+    state: Phase6State,
+    frontmatter: dict,
+    wo_path: Path,
+) -> dict:
+    """Build runtime-only engineering routing payloads for Phase 6 dispatch."""
+    from runtime.engineering import (
+        propose_engineering_handoff,
+        route_engineering_frontier,
+    )
+
+    body_text = wo_path.read_text(encoding="utf-8")
+    if not _phase6_is_engineering_scoped(frontmatter, body_text):
+        return {}
+    next_gap = _phase6_engineering_next_gap(frontmatter, body_text)
+    route = route_engineering_frontier(next_gap)
+    authority_scope = derive_authority_scope(frontmatter.get("consequence", ""))
+    engineering_envelope = propose_engineering_handoff(
+        handoff_id=(
+            f"ENGINEERING-HANDOFF-{state['work_object_id']}-{state['thread_id']}"
+        ),
+        work_object_id=state["work_object_id"],
+        lifecycle_state=str(frontmatter.get("state", "")),
+        current_frontier=str(frontmatter.get("title", "")),
+        from_skill="engineering-implement-bounded-change",
+        evidence_resolved=[],
+        next_gap=next_gap,
+        same_work_object=True,
+        authority_boundary=authority_scope,
+    )
+    dispatch_envelope = HandoffEnvelope(
+        handoff_id=f"HANDOFF-{state['work_object_id']}-{state['thread_id']}",
+        from_role="runtime",
+        to_skill=engineering_envelope.to_skill,
+        component_kind="skill",
+        governance_domain=governance_domain_for_skill(engineering_envelope.to_skill),
+        task=f"route engineering frontier: {next_gap}",
+        input_refs=[state["work_object_id"]],
+        expected_output="engineering handoff proposal",
+        authority_scope=authority_scope,
+    )
+    return {
+        "engineering_route_result": route.model_dump(),
+        "engineering_handoff_envelope": engineering_envelope.model_dump(),
+        "handoff_envelope": dispatch_envelope.model_dump(),
+    }
+
+
 def phase6_dispatch(state: Phase6State) -> dict:
-    """Record the HandoffEnvelope in runtime state before fan-out (build plan 362)."""
+    """Record the HandoffEnvelope in runtime state before fan-out (build plan 362).
+
+    ``to_skill`` is derived from the WO's canonical state via derive_proposal
+    (routing audit WO 2026-08-22-009, G1) -- previously a hardcoded
+    "specialist" placeholder that carried no routing meaning, since the real
+    proposal was only ever computed later, per-branch, on the HandoffReceipt.
+    """
     _phase6_crash_hook("dispatch")
     wo_path = _find_work_object(state["work_object_id"])
     frontmatter = _read_frontmatter(wo_path)  # read-only probe of canonical state
+    business_payload = _phase6_business_dispatch_payload(state, frontmatter, wo_path)
+    if business_payload:
+        return business_payload
+    engineering_payload = _phase6_engineering_dispatch_payload(
+        state, frontmatter, wo_path
+    )
+    if engineering_payload:
+        return engineering_payload
+    routed_skill = derive_proposal(frontmatter.get("state", ""), role="dispatch")
     envelope = HandoffEnvelope(
         handoff_id=f"HANDOFF-{state['work_object_id']}-{state['thread_id']}",
         from_role="runtime",
-        to_skill="specialist",
+        to_skill=routed_skill,
+        component_kind="skill",
+        governance_domain=governance_domain_for_skill(routed_skill),
         task="propose next step",
         input_refs=[state["work_object_id"]],
         expected_output="proposal",
@@ -611,6 +876,20 @@ def phase6_dispatch(state: Phase6State) -> dict:
         ),
     )
     return {"handoff_envelope": envelope.model_dump()}
+
+
+def _phase6_dispatch_routed_skill(state: Phase6State) -> Optional[str]:
+    """Return a dispatch-level routed skill when Phase 6 has one."""
+    business_envelope = state.get("business_handoff_envelope") or {}
+    if business_envelope.get("to_skill"):
+        return business_envelope.get("to_skill")
+    engineering_envelope = state.get("engineering_handoff_envelope") or {}
+    if engineering_envelope.get("to_skill"):
+        return engineering_envelope.get("to_skill")
+    envelope = state.get("handoff_envelope") or {}
+    if envelope.get("governance_domain") in {"business", "engineering", "operations"}:
+        return envelope.get("to_skill")
+    return None
 
 
 def _phase6_wo_verification_signals(wo_path: Path) -> tuple[bool, bool]:
@@ -646,7 +925,9 @@ def _phase6_branch(state: Phase6State, key: str, role: str, node: str) -> dict:
     _phase6_crash_hook(node)
     wo_path = _find_work_object(state["work_object_id"])
     frontmatter = _read_frontmatter(wo_path)  # read-only probe of canonical state
-    proposal = derive_proposal(frontmatter.get("state", ""), role)
+    proposal = _phase6_dispatch_routed_skill(state) or derive_proposal(
+        frontmatter.get("state", ""), role
+    )
     gaps: list[str] = []
     if role == "verify":
         has_checked, has_ledger = _phase6_wo_verification_signals(wo_path)
@@ -812,6 +1093,14 @@ def inspect_phase6(thread_id: str, checkpoint_db: Path) -> dict:
         summary["join_fired"] = values.get("join_fired", False)
         summary["join_proposal"] = values.get("join_proposal")
         summary["has_envelope"] = bool(values.get("handoff_envelope"))
+        summary["has_business_handoff_envelope"] = bool(
+            values.get("business_handoff_envelope")
+        )
+        summary["business_route_result"] = values.get("business_route_result")
+        summary["has_engineering_handoff_envelope"] = bool(
+            values.get("engineering_handoff_envelope")
+        )
+        summary["engineering_route_result"] = values.get("engineering_route_result")
         summary["has_branch_a_receipt"] = bool(values.get("branch_a_receipt"))
         summary["has_branch_b_receipt"] = bool(values.get("branch_b_receipt"))
     finally:
@@ -1145,9 +1434,13 @@ class AuthorityRequiredError(Exception):
 
 
 def _add_runtime_db_options(parser: argparse.ArgumentParser) -> None:
-    parser.add_argument(
-        "--checkpoint-db",
-        default=str(_default_checkpoint_db()),
+    db_group = parser.add_mutually_exclusive_group()
+    db_group.add_argument("--checkpoint-db", default=None)
+    db_group.add_argument(
+        "--repo",
+        help="Registry entry name (WO 2026-08-21-005); sets WS_REPO_ROOT "
+             "for this invocation and resolves --checkpoint-db from "
+             ".work-studio/repos.json if not also given explicitly",
     )
     parser.add_argument("--idempotency-db")
 
@@ -1161,7 +1454,13 @@ def _legacy_main(argv: list[str]) -> int:
     parser.add_argument("--resume", action="store_true",
                         help="Resume from the checkpoint (no fresh input; completed nodes skip)")
     args = parser.parse_args(argv)
-    checkpoint_db = Path(args.checkpoint_db)
+    if args.repo:
+        os.environ["WS_REPO_ROOT"] = str(_resolve_registry_repo_root(args.repo))
+    checkpoint_db = Path(
+        args.checkpoint_db
+        or (_resolve_registry_checkpoint_db(args.repo) if args.repo
+            else _default_checkpoint_db())
+    )
     idempotency_db = (
         Path(args.idempotency_db)
         if args.idempotency_db
@@ -1177,12 +1476,17 @@ def _print_json(value: dict) -> None:
     print(json.dumps(value, sort_keys=True, default=_json_default))
 
 
+def _split_semicolon_list(raw: str) -> list[str]:
+    return [part.strip() for part in raw.split(";") if part.strip()] if raw else []
+
+
 def main(argv: Optional[list[str]] = None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
     commands = {
         "run", "inspect", "resume", "fork", "backup", "restore",
         "run-phase6", "inspect-phase6", "fork-phase6",
         "run-research", "inspect-research",
+        "run-business-router", "inspect-business-router",
     }
     if argv and argv[0] not in {*commands, "-h", "--help"}:
         return _legacy_main(argv)
@@ -1202,9 +1506,16 @@ def main(argv: Optional[list[str]] = None) -> int:
         "inspect", help="Inspect one thread's runtime checkpoint state"
     )
     inspect_parser.add_argument("thread_id")
-    inspect_parser.add_argument(
-        "--checkpoint-db",
-        default=str(_default_checkpoint_db()),
+    inspect_db_group = inspect_parser.add_mutually_exclusive_group()
+    inspect_db_group.add_argument("--checkpoint-db", default=None)
+    inspect_db_group.add_argument(
+        "--repo",
+        help="Registry entry name to inspect (WO 2026-08-21-005); "
+             "resolves --checkpoint-db from .work-studio/repos.json",
+    )
+    inspect_db_group.add_argument(
+        "--repo-all", action="store_true",
+        help="Inspect this thread_id against every registry entry",
     )
 
     resume_parser = subparsers.add_parser(
@@ -1245,9 +1556,18 @@ def main(argv: Optional[list[str]] = None) -> int:
     )
     run_phase6_parser.add_argument("work_object_id")
     run_phase6_parser.add_argument("thread_id")
-    run_phase6_parser.add_argument(
+    run_phase6_direction_group = run_phase6_parser.add_mutually_exclusive_group()
+    run_phase6_direction_group.add_argument(
         "--resume", action="store_true",
         help="Resume from the checkpoint without fresh input",
+    )
+    run_phase6_direction_group.add_argument(
+        "--approve-direction", action="store_true",
+        help="Answer the direction_gate interrupt with approval",
+    )
+    run_phase6_direction_group.add_argument(
+        "--reject-direction", action="store_true",
+        help="Answer the direction_gate interrupt with rejection",
     )
     run_phase6_parser.add_argument(
         "--checkpoint-db",
@@ -1304,15 +1624,72 @@ def main(argv: Optional[list[str]] = None) -> int:
         default=str(_default_checkpoint_db()),
     )
 
+    run_business_router_parser = subparsers.add_parser(
+        "run-business-router",
+        help="Run the checkpointed business operating router",
+    )
+    run_business_router_parser.add_argument("--work-object-id", required=True)
+    run_business_router_parser.add_argument("--thread-id", required=True)
+    run_business_router_parser.add_argument("--checkpoint-db", required=True)
+    run_business_router_parser.add_argument("--lifecycle-state", default="build")
+    run_business_router_parser.add_argument("--current-frontier", default="")
+    run_business_router_parser.add_argument(
+        "--from-skill", default="business-formulate-strategy"
+    )
+    run_business_router_parser.add_argument(
+        "--evidence-resolved",
+        default="",
+        help="Semicolon-separated evidence already resolved by the current skill",
+    )
+    run_business_router_parser.add_argument(
+        "--next-gap",
+        default="",
+        help="Specific business frontier to route on a fresh run",
+    )
+    run_business_router_parser.add_argument(
+        "--linked-work-object",
+        action="store_true",
+        help="Propose the handoff against a linked Work Object instead of same WO",
+    )
+    run_business_router_parser.add_argument(
+        "--authority-boundary", default="read-only-propose"
+    )
+    business_approval_group = (
+        run_business_router_parser.add_mutually_exclusive_group()
+    )
+    business_approval_group.add_argument(
+        "--approve",
+        action="store_true",
+        help="Resume a paused router thread and approve its handoff proposal",
+    )
+    business_approval_group.add_argument(
+        "--reject",
+        action="store_true",
+        help="Resume a paused router thread and reject its handoff proposal",
+    )
+
+    inspect_business_router_parser = subparsers.add_parser(
+        "inspect-business-router",
+        help="Inspect one business-router thread's runtime checkpoint state",
+    )
+    inspect_business_router_parser.add_argument("--thread-id", required=True)
+    inspect_business_router_parser.add_argument("--checkpoint-db", required=True)
+
     args = parser.parse_args(argv)
 
     if args.command == "run-phase6":
+        approve_direction = (
+            True if args.approve_direction
+            else False if args.reject_direction
+            else None
+        )
         _print_json(
             run_phase6(
                 args.work_object_id,
                 args.thread_id,
                 Path(args.checkpoint_db),
                 resume=args.resume,
+                approve_direction=approve_direction,
             )
         )
         return 0
@@ -1348,8 +1725,62 @@ def main(argv: Optional[list[str]] = None) -> int:
         _print_json(inspect_research(args.thread_id, Path(args.checkpoint_db)))
         return 0
 
+    if args.command == "run-business-router":
+        from runtime.business import run_business_router
+
+        approve = True if args.approve else False if args.reject else None
+        if approve is None and not args.next_gap:
+            print(
+                "Error: --next-gap is required for a fresh business-router run",
+                file=sys.stderr,
+            )
+            return 2
+        try:
+            result = run_business_router(
+                work_object_id=args.work_object_id,
+                thread_id=args.thread_id,
+                lifecycle_state=args.lifecycle_state,
+                current_frontier=args.current_frontier,
+                from_skill=args.from_skill,
+                evidence_resolved=_split_semicolon_list(args.evidence_resolved),
+                next_gap=args.next_gap,
+                same_work_object=not args.linked_work_object,
+                authority_boundary=args.authority_boundary,
+                checkpoint_db=Path(args.checkpoint_db),
+                approve=approve,
+            )
+        except Exception as exc:
+            print(f"Error: business router failed: {exc}", file=sys.stderr)
+            return 1
+        _print_json(result)
+        return 0
+
+    if args.command == "inspect-business-router":
+        from runtime.business import inspect_business_router
+
+        _print_json(inspect_business_router(args.thread_id, Path(args.checkpoint_db)))
+        return 0
+
     if args.command == "inspect":
-        _print_json(inspect_thread(args.thread_id, Path(args.checkpoint_db)))
+        if args.repo_all:
+            registry = _load_repo_registry()
+            if not registry:
+                _print_json({
+                    "error": f"registry empty or not found at {_repo_registry_path()}"
+                })
+                return 1
+            for name in sorted(registry):
+                result = inspect_thread(
+                    args.thread_id, _resolve_registry_checkpoint_db(name)
+                )
+                result["repo"] = name
+                _print_json(result)
+            return 0
+        if args.repo:
+            checkpoint_db = _resolve_registry_checkpoint_db(args.repo)
+        else:
+            checkpoint_db = Path(args.checkpoint_db or _default_checkpoint_db())
+        _print_json(inspect_thread(args.thread_id, checkpoint_db))
         return 0
 
     if args.command == "backup":
@@ -1386,7 +1817,13 @@ def main(argv: Optional[list[str]] = None) -> int:
         )
         return 0
 
-    checkpoint_db = Path(args.checkpoint_db)
+    if getattr(args, "repo", None):
+        os.environ["WS_REPO_ROOT"] = str(_resolve_registry_repo_root(args.repo))
+    checkpoint_db = Path(
+        args.checkpoint_db
+        or (_resolve_registry_checkpoint_db(args.repo) if getattr(args, "repo", None)
+            else _default_checkpoint_db())
+    )
     idempotency_db = (
         Path(args.idempotency_db)
         if args.idempotency_db

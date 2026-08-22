@@ -258,6 +258,26 @@ production query against data the requester isn't scoped to see: does the
 investigation stop here, or is there a narrower authorized query that still
 discriminates?
 
+### `alawas-research-produce-report`
+
+**Gates** — (1) Source and supersession integrity: confirm every claim traces
+to a sub-question outcome or accepted Decision, and that later evidence or
+History has not narrowed or overturned it. (2) Deliverable authority: confirm
+the write stays inside `.work-studio/deliverables/`; export, publication, and
+other external writes require explicit per-instance authority.
+
+**Escalation** — Default: classify the deliverable as report or plan, invoke
+`alawas-research-investigate-live-question` for each report sub-question, and
+synthesize only accepted Decisions for a plan. Information value overrides
+the default when a contradiction or supersession gap could change the final
+document — resolve and record that gap before presenting the synthesis. If a
+plan needs a new decision, stop and route it for decision pressure-testing.
+
+**Pressure scenario** — Later History narrows an earlier accepted Decision,
+but the earlier wording makes the plan sound more complete: does the report
+retain the stale wording, or drop it with an explicit supersession note and
+carry forward only what the final record supports?
+
 ### `alawas-operations-diagnose-production-incident`
 
 **Gates** — (1) Ongoing-harm containment: confirm the safest reversible
@@ -275,6 +295,248 @@ to confirming mechanism before treating it as the cause.
 **Pressure scenario** — The fastest containment also cuts off legitimate
 traffic for unaffected users: does the harm trajectory justify that trade, or
 is there a narrower containment that protects the same boundary?
+
+### `alawas-business-manage-commercial-pipeline`
+
+**Gates** — (1) Buying-evidence integrity: confirm stage movement is supported
+by customer need, decision-process, timing, and a dated mutual commitment, not
+activity volume or a label. (2) External commitment: confirm contact, CRM
+writes, pricing, terms, and promises have separate scoped authority.
+
+**Escalation** — Default: reconstruct opportunities from evidence, apply stage
+exit criteria, separate gross pipeline from an evidence-weighted forecast, and
+recommend advance, hold, requalify, or close. Escalate when concentration,
+staleness, or a missing decision actor could reverse the forecast.
+
+**Pressure scenario** — A large late-stage opportunity has frequent meetings
+but no identified economic decision-maker or dated customer commitment: does
+it remain in the forecast, move backward, or close as unqualified?
+
+### `alawas-business-assess-financial-decision`
+
+**Gates** — (1) Assumption integrity: confirm arithmetic, source facts,
+operational estimates, and judgment are visibly separate. (2) Money boundary:
+confirm analysis never becomes spend approval, money movement, filing, or
+professional advice without separately scoped authority.
+
+**Escalation** — Default: compare the status quo and credible alternatives,
+model cash timing and downside/base/upside cases, test reversal variables, and
+recommend proceed, revise, defer, or stop. Escalate when liquidity, an
+irreversible cost, or one weak assumption dominates the result.
+
+**Pressure scenario** — The base case clears the return threshold but the
+downside case creates a cash shortfall before benefits arrive: is expected
+profit enough, or must the decision change until liquidity is protected?
+
+### `alawas-business-plan-workforce-accountability`
+
+**Gates** — (1) Work-before-headcount: confirm required outcomes, capacity,
+skills, and decisions are defined before recommending roles or people changes.
+(2) People protection: confirm system and role gaps are not converted into
+unsupported individual judgments and personnel actions remain separately gated.
+
+**Escalation** — Default: map demand to required work, role-level coverage,
+overload, ownership, and single points of failure; compare redesign, stopping
+work, automation, development, contracting, and hiring. Escalate when private
+data or a consequential personnel action becomes necessary.
+
+**Pressure scenario** — A team misses a service target while every individual
+appears busy: is the gap capability, capacity, process design, unclear
+accountability, or demand volatility—and what evidence discriminates?
+
+### `alawas-business-improve-operating-process`
+
+**Gates** — (1) Map/reality integrity: confirm the current state reflects
+actual work and is marked provisional when observation is absent. (2) Whole-flow
+safety: confirm a local efficiency change does not damage customer outcome,
+quality, people, controls, or downstream flow.
+
+**Escalation** — Default: define the value stream, capture demand and actual
+flow, distinguish value/control/delay/failure demand, locate the constraint,
+and design one safeguarded experiment. Escalate when live observation, control
+changes, staffing, suppliers, or customer commitments require new authority.
+
+**Pressure scenario** — Removing a review step cuts cycle time but that review
+catches rare high-cost errors: should it be removed, redesigned at the
+constraint, or retained until error-risk evidence improves?
+
+### `alawas-business-formulate-strategy`
+
+**Gates** — (1) Choice-set integrity: confirm the strategy names objective,
+arena, advantage thesis, non-goals, assumptions, and review trigger rather than
+a slogan. (2) Commitment authority: confirm public commitments, material
+reallocation, and owner/board decisions are separately authorized.
+
+**Escalation** — Default: compare strategic alternatives, expose assumptions,
+route market, money, capacity, process, and delivery gaps, and recommend one
+choice set. Escalate when weak market evidence or an unowned resource movement
+could reverse the strategy.
+
+**Pressure scenario** — The strategy sounds compelling but cannot name what it
+will stop doing: is it a real strategic choice, or an aspiration that would let
+every downstream initiative claim fit?
+
+### `alawas-business-manage-market-intelligence`
+
+**Gates** — (1) Market-boundary integrity: confirm segment, geography, time
+window, source date, and decision impact are explicit. (2) Collection authority:
+confirm paid data, scraping, competitor/customer contact, personal data, and
+publication are separately authorized.
+
+**Escalation** — Default: classify demand, competitor, substitute, and source
+evidence, expose uncertainty, and state what changes in the decision. Escalate
+when a stale or indirect source is carrying the recommendation.
+
+**Pressure scenario** — A competitor appears in every secondary article but
+there is no evidence customers substitute it for this offer: is it a market
+threat, a category neighbor, or noise?
+
+### `alawas-business-build-driver-based-plan-and-forecast`
+
+**Gates** — (1) Driver integrity: confirm every number traces to a source,
+driver, or named assumption. (2) Forecast authority: confirm budgets, filings,
+financing, and publication are separately authorized and forecasts are not
+presented as assurance.
+
+**Escalation** — Default: build downside/base/upside scenarios, separate
+profit, cash, and balance-sheet effects, and expose reversal variables.
+Escalate when one weak driver or cash-timing assumption dominates the baseline.
+
+**Pressure scenario** — The base scenario looks healthy, but one unsupported
+volume driver creates most of the cash cushion: does the plan stand, or route
+to market or pipeline evidence before it is used?
+
+### `alawas-business-manage-enterprise-risk`
+
+**Gates** — (1) Residual-exposure integrity: confirm treatment leaves visible
+residual risk, owner, and monitoring evidence. (2) Acceptance authority: confirm
+risk acceptance, safety/privacy/security/money exposure, insurance, contract,
+and regulated matters are separately authorized.
+
+**Escalation** — Default: frame objective, cause, consequence, controls,
+treatment options, owner, and residual exposure. Escalate when a control design
+is being treated as operating evidence or acceptance is inferred from silence.
+
+**Pressure scenario** — A mitigation plan exists but no one can show it has
+operated under real conditions: is the residual risk actually reduced, or only
+documented?
+
+### `alawas-business-source-and-govern-suppliers`
+
+**Gates** — (1) Qualification integrity: confirm make/buy logic, criteria,
+supplier evidence, relationship model, and performance evidence are distinct.
+(2) Procurement authority: confirm supplier contact, RFPs, negotiation, award,
+purchase, contracts, shared data, and spend are separately authorized.
+
+**Escalation** — Default: compare make, buy, defer, and redesign paths against
+criteria, cost, service, risk, and governance. Escalate when a cheap supplier or
+favored vendor lacks performance evidence.
+
+**Pressure scenario** — The lowest-cost supplier meets the written feature list
+but creates dependency and service risk the criteria did not score: does the
+recommendation change or do the criteria need repair?
+
+### `alawas-business-direct-project-delivery`
+
+**Gates** — (1) Baseline integrity: confirm accepted scope, schedule,
+dependencies, change-control rule, and acceptance criteria are separate from
+requested scope. (2) Commitment authority: confirm baseline changes, resources,
+customer/vendor communications, spend, contracts, live-system changes, and
+implementation are separately authorized.
+
+**Escalation** — Default: inspect baseline, status, dependencies, risks, change
+requests, and recovery options, then recommend continue, recover, escalate,
+defer, or stop. Escalate when status labels hide unowned dependency or scope
+change.
+
+**Pressure scenario** — The project is green because the date moved and scope
+grew informally: is it controlled delivery, or baseline drift that needs a
+fresh owner decision?
+
+### `alawas-business-manage-customer-success`
+
+**Gates** — (1) Outcome integrity: confirm usage, sentiment, and relationship
+signals are not treated as proof of realized customer value. (2) Customer
+authority: confirm contact, CRM/CS writes, private-data expansion, concessions,
+refunds, renewal terms, promises, and escalations are separately authorized.
+
+**Escalation** — Default: assess onboarding, adoption, realized outcome, health,
+renewal risk, obligations, and intervention options. Escalate when an account
+intervention would become a concession, promise, or private-data expansion.
+
+**Pressure scenario** — Usage is high and the relationship is warm, but the
+customer cannot show the sold outcome improved: is the account healthy, or is
+renewal risk being hidden by activity?
+
+### `alawas-business-govern-initiative-portfolio`
+
+**Gates** — (1) Portfolio-choice integrity: confirm the recommendation compares
+strategy, benefit, cost, capacity, dependency, risk, reversibility, and evidence
+quality rather than ranking sponsor preferences. (2) Commitment authority:
+confirm funding, cancellation, staffing/resource movement, customer/vendor
+impact, executive/public commitments, and material reallocation are separately
+authorized.
+
+**Escalation** — Default: normalize initiatives into comparable evidence,
+test capacity and dependency conflicts, compare start/continue/pause/stop/
+defer/resequence options, and expose stop conditions. Escalate when one weak
+benefit estimate or one hidden capacity constraint carries the portfolio choice.
+
+**Pressure scenario** — A favored initiative has the loudest sponsor and best
+status color but consumes the only team needed by two better-evidenced bets: is
+it still the priority, or is the portfolio laundering attention through status?
+
+### `alawas-business-design-pricing-and-packaging`
+
+**Gates** — (1) Offer-architecture integrity: confirm value metric, package
+boundary, price/range, discount fence, and test condition are distinct from one
+deal's negotiation. (2) Publication authority: confirm published prices,
+customer quotes, discounts, regulated claims, protected-class-sensitive pricing,
+and live commerce/CRM changes are separately authorized.
+
+**Escalation** — Default: compare customer value, willingness-to-pay evidence,
+competitor/substitute references, economics, service burden, fairness, and
+operational feasibility. Escalate when competitor prices or desired margin are
+standing in for actual value evidence.
+
+**Pressure scenario** — The team copied a competitor's price and added a
+discount, but no one can name the value metric or package fence: is this an
+offer design, or a margin wish disguised as pricing?
+
+### `alawas-business-manage-liquidity-and-cash-runway`
+
+**Gates** — (1) Cash-timing integrity: confirm available cash, dated
+obligations, committed inflows, restrictions, and scenario timing are separated
+from profit, bookings, and receivables. (2) Treasury authority: confirm
+payments, transfers, borrowing, investments, collections, tax filings,
+covenant/insolvency matters, and external creditor/customer communications are
+separately authorized.
+
+**Escalation** — Default: build dated base/downside/upside cash views, identify
+earliest gap, runway range, reversal variables, safe options, and escalation
+triggers. Escalate when one optimistic collection or omitted obligation changes
+survival timing.
+
+**Pressure scenario** — The P&L is positive, but payroll is due before the
+largest receivable is collectible: does the business have runway, or only
+accounting comfort?
+
+### `alawas-business-balance-demand-supply-capacity`
+
+**Gates** — (1) Feasibility integrity: confirm forecast demand, committed
+demand, nominal capacity, usable capacity, supplier lead time, inventory, and
+quality constraints are separate. (2) Execution authority: confirm schedules,
+purchase orders, inventory moves, customer promises, supplier commitments,
+staffing changes, and live ERP/MRP/CRM writes are separately authorized.
+
+**Escalation** — Default: reconcile demand, supply, capacity, backlog,
+inventory, constraints, scenarios, and exception rules into a feasible plan.
+Escalate when a plan treats forecast demand as committed or nominal capacity as
+usable capacity.
+
+**Pressure scenario** — Sales can sell twice what operations can deliver, and
+supplier lead time is longer than the promised delivery date: is the plan
+feasible, or just demand wearing a calendar?
 
 ### `alawas-governance-maintain-working-method`
 

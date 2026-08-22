@@ -85,6 +85,7 @@ Apply the same continuity contract to all profiles:
 - `alawas-operations-deploy-with-recovery`
 - `alawas-governance-review-outcome-and-adapt`
 - `alawas-research-investigate-live-question`
+- `alawas-research-produce-report`
 - `alawas-operations-diagnose-production-incident`
 - `alawas-governance-maintain-working-method`
 - `alawas-governance-govern-scorecards`
@@ -203,3 +204,10 @@ or material new evidence. A high-consequence card offers hold or entry rather
 than a continue path. Once active, changed rank or confidence is named in a
 Changed since last turn line; when all credible options are low confidence, the
 recommendation is the smallest discriminating evidence move.
+
+Business-management profiles follow the same nomination boundary:
+`alawas-business-manage-commercial-pipeline`,
+`alawas-business-assess-financial-decision`,
+`alawas-business-plan-workforce-accountability`, and
+`alawas-business-improve-operating-process`. Each keeps external commercial,
+financial, personnel, and live-operational actions behind its own authority gate.

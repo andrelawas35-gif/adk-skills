@@ -5,6 +5,217 @@
 schema_version: 1
 
 skills:
+  - name: business-assess-financial-decision
+    responsibility: "Use when a business choice needs cash, cost, break-even, return, or scenario analysis; exposes assumptions and downside; never moves money, approves spend, files accounts, or presents estimates as accounting advice."
+    non_goals:
+      - "Move money, approve spend, open accounts, set payroll, file taxes, prepare statutory statements, value securities, or replace an accountant or adviser."
+      - "Invent prices, volumes, margins, discount rates, tax treatment, or financing."
+      - "Hide cash timing behind profit, average away downside, or report false precision."
+    requires_capabilities:
+      - file_read
+      - content_search
+      - file_write
+      - terminal_run
+      - user_confirmation
+      - structured_output
+
+  - name: business-balance-demand-supply-capacity
+    responsibility: "Use when demand, supply, capacity, inventory, constraints, and exception actions must become a feasible operating plan; never issues schedules, purchase orders, customer promises, staffing changes, or live-system writes without scoped authority."
+    non_goals:
+      - "Issue production schedules, purchase orders, customer promises, ERP/MRP/CRM changes, staffing changes, or inventory moves."
+      - "Redesign the recurring process, select suppliers, qualify opportunities, or approve money movement."
+      - "Treat forecast demand as committed demand or nominal capacity as usable capacity."
+    requires_capabilities:
+      - file_read
+      - content_search
+      - terminal_run
+      - file_write
+      - user_confirmation
+      - structured_output
+
+  - name: business-build-driver-based-plan-and-forecast
+    responsibility: "Use when operating drivers and scenarios must become an integrated profit, cash, and balance-sheet planning baseline; never approves budgets, moves money, files accounts, or presents forecasts as assurance."
+    non_goals:
+      - "Move money, approve budgets, file accounts, replace accounting advice, or decide one bounded investment by itself."
+      - "Invent prices, volume, costs, cash timing, tax treatment, financing, or accounting facts."
+      - "Present forecasts as assurance, accounting, tax, legal, or investment advice."
+    requires_capabilities:
+      - file_read
+      - content_search
+      - terminal_run
+      - file_write
+      - user_confirmation
+      - structured_output
+
+  - name: business-design-pricing-and-packaging
+    responsibility: "Use when value metric, package structure, prices or ranges, discount fences, offer terms, or pricing tests must be chosen; never publishes prices, quotes, discounts, or claims without scoped authority."
+    non_goals:
+      - "Publish prices, quote customers, grant discounts, edit commerce/CRM systems, or promise terms."
+      - "Replace market research, financial viability analysis, legal/compliance review, or commercial opportunity management."
+      - "Treat competitor prices, costs, or desired margin as sufficient by themselves."
+    requires_capabilities:
+      - file_read
+      - content_search
+      - web_fetch
+      - file_write
+      - user_confirmation
+      - structured_output
+
+  - name: business-direct-project-delivery
+    responsibility: "Use when delivery approach, scope, schedule, dependencies, change control, or continue/recover/escalate decisions must govern a bounded business initiative; never implements, funds, staffs, contracts, or promises delivery without scoped authority."
+    non_goals:
+      - "Implement code, allocate an initiative portfolio, approve budget, change contracts, promise customer delivery, or manage personnel actions."
+      - "Treat activity, status color, or plan existence as evidence of control."
+      - "Replace the conductor's Work Object lifecycle or release authority."
+    requires_capabilities:
+      - file_read
+      - content_search
+      - file_write
+      - terminal_run
+      - user_confirmation
+      - structured_output
+
+  - name: business-formulate-strategy
+    responsibility: "Use when strategic objectives, arenas, advantage thesis, non-goals, assumptions, and review triggers must be chosen; never allocates resources, publishes commitments, or substitutes for accountable owner approval."
+    non_goals:
+      - "Allocate initiatives, approve spend, set pricing, create marketing claims, redesign operations, or make public commitments."
+      - "Treat a preference, aspiration, or framework label as a strategic choice."
+      - "Replace owner, board, legal, regulatory, or public-commitment authority."
+    requires_capabilities:
+      - file_read
+      - content_search
+      - file_write
+      - web_fetch
+      - user_confirmation
+      - structured_output
+
+  - name: business-govern-initiative-portfolio
+    responsibility: "Use when multiple initiatives compete for start, sequence, fund, pause, stop, or attention decisions; never approves spend, staffing, cancellation, or public commitments without scoped authority."
+    non_goals:
+      - "Create strategy, approve funding, cancel work, staff teams, promise outcomes, or make executive/customer/vendor commitments."
+      - "Run one initiative's delivery baseline or change-control process."
+      - "Treat a priority label, sponsor preference, or status color as evidence."
+    requires_capabilities:
+      - file_read
+      - content_search
+      - file_write
+      - terminal_run
+      - user_confirmation
+      - structured_output
+
+  - name: business-improve-operating-process
+    responsibility: "Use when recurring business work must be mapped, stabilized, measured, or improved; designs an evidence-backed process experiment; never changes a live operation, staffing, supplier, or control without scoped authority."
+    non_goals:
+      - "Change a live process, schedule, staffing level, supplier, control, inventory, customer promise, or production system without explicit scoped authority."
+      - "Assume every wait is waste, optimize one step at the expense of the whole, or treat documentation as proof of actual work."
+      - "Replace incident response when harm is active or compliance review when required."
+    requires_capabilities:
+      - file_read
+      - directory_list
+      - content_search
+      - file_write
+      - terminal_run
+      - user_confirmation
+      - structured_output
+
+  - name: business-manage-commercial-pipeline
+    responsibility: "Use when a business must qualify, advance, forecast, or close sales opportunities; produces an evidence-based pipeline decision; never contacts prospects, edits a CRM, promises terms, or treats stage labels as proof."
+    non_goals:
+      - "Find prospects, send outreach, join calls, edit a CRM, quote prices, promise delivery, negotiate terms, or accept an order."
+      - "Invent customer need, budget, authority, timing, probability, or activity."
+      - "Turn a stage name, email count, or model score into proof of purchase intent."
+      - "Own pricing strategy, financial approval, delivery planning, or legal review."
+    requires_capabilities:
+      - file_read
+      - content_search
+      - file_write
+      - web_fetch
+      - user_confirmation
+      - structured_output
+
+  - name: business-manage-customer-success
+    responsibility: "Use when post-sale onboarding, adoption, realized outcomes, customer health, renewal risk, or intervention priority must be decided; never contacts customers, edits CRM or CS tools, grants concessions, or promises outcomes without scoped authority."
+    non_goals:
+      - "Qualify new opportunities, promise concessions, contact customers, edit CRM or customer-success tools, issue refunds, or decide product roadmap."
+      - "Treat usage volume, sentiment, or relationship warmth as proof of realized outcome."
+      - "Store unrestricted customer data or private usage exports in a Work Object."
+    requires_capabilities:
+      - file_read
+      - content_search
+      - file_write
+      - web_fetch
+      - user_confirmation
+      - structured_output
+
+  - name: business-manage-enterprise-risk
+    responsibility: "Use when risk appetite, tolerance, treatment, ownership, monitoring, and residual exposure must be decided across business objectives; never accepts risk or provides legal, actuarial, safety, audit, or insurance assurance."
+    non_goals:
+      - "Accept risk for humans or provide legal, actuarial, safety, insurance, audit, or compliance opinions."
+      - "Hide low-probability/high-impact exposure behind averages."
+      - "Treat a policy, control, or mitigation plan as proof of actual protection."
+    requires_capabilities:
+      - file_read
+      - content_search
+      - file_write
+      - web_fetch
+      - user_confirmation
+      - structured_output
+
+  - name: business-manage-liquidity-and-cash-runway
+    responsibility: "Use when cash timing, obligations, runway, liquidity gaps, or escalation options must be decided; never moves money, borrows, invests, pays, collects, or gives accounting/legal/insolvency advice."
+    non_goals:
+      - "Move money, borrow, invest, pay, collect, file taxes, negotiate creditors, or provide accounting, legal, tax, investment, covenant, or insolvency advice."
+      - "Replace integrated driver-based planning or one bounded financial decision."
+      - "Hide liquidity risk behind profit, revenue, bookings, or average scenarios."
+    requires_capabilities:
+      - file_read
+      - content_search
+      - terminal_run
+      - file_write
+      - user_confirmation
+      - structured_output
+
+  - name: business-manage-market-intelligence
+    responsibility: "Use when market boundaries, demand signals, competitors, substitutes, uncertainty, and refresh cadence must inform a business decision; never contacts people, buys data, scrapes, or publishes claims without scoped authority."
+    non_goals:
+      - "Qualify named opportunities, contact prospects, set strategy alone, create marketing claims, scrape restricted data, or buy data."
+      - "Treat a secondary summary, model output, or stale source as current market fact."
+      - "Replace customer research consent, legal review, or claim substantiation."
+    requires_capabilities:
+      - file_read
+      - content_search
+      - web_fetch
+      - file_write
+      - user_confirmation
+      - structured_output
+
+  - name: business-plan-workforce-accountability
+    responsibility: "Use when goals must be translated into roles, capacity, skills, ownership, or workforce gaps; recommends a people plan; never hires, evaluates an individual, changes employment terms, or infers personal capability without evidence."
+    non_goals:
+      - "Recruit, contact candidates, hire, fire, promote, discipline, set pay, change employment terms, or conduct performance evaluation."
+      - "Infer personality, loyalty, potential, health, identity, or capability from sparse activity data or protected characteristics."
+      - "Store personnel files or sensitive individual data in a Work Object."
+    requires_capabilities:
+      - file_read
+      - content_search
+      - file_write
+      - user_confirmation
+      - structured_output
+
+  - name: business-source-and-govern-suppliers
+    responsibility: "Use when make/buy, sourcing strategy, supplier selection, supplier governance, or supplier performance response must be decided; never contacts suppliers, negotiates, awards, purchases, or signs contracts without scoped authority."
+    non_goals:
+      - "Issue RFPs, contact suppliers, negotiate, award, purchase, sign contracts, or perform legal/sanctions determinations."
+      - "Treat lowest price as total value or a preferred supplier as proven fit."
+      - "Replace procurement, legal, compliance, or accountable owner approval."
+    requires_capabilities:
+      - file_read
+      - content_search
+      - web_fetch
+      - file_write
+      - user_confirmation
+      - structured_output
+
   - name: design-apply-design-direction
     responsibility: "Use when natural-language design direction needs interpretation and execution; proposes concrete changes, executes only after user confirmation, and does not modify code beyond confirmed scope."
     non_goals:
@@ -65,6 +276,22 @@ skills:
       - content_search
       - structured_output
       - user_confirmation
+
+  - name: design-manage-assets
+    responsibility: "Use when a reusable design asset needs identity, lifecycle status, provenance, impact, or routing; classifies the current asset frontier and routes to the owning design skill without creating, mutating, or approving assets."
+    non_goals:
+      - "Create, edit, approve, style, implement, verify, register, export, deploy, or retire assets by itself."
+      - "Choose creative direction or silently revise a theme, component, token, UX pattern, or implementation."
+      - "Mutate the component ledger, generate adapters, write to external design tools, or turn a workbench projection into source truth."
+      - "Replace the Work Object lifecycle, the component ledger, or the asset registry validator."
+    requires_capabilities:
+      - file_read
+      - content_search
+      - directory_list
+      - terminal_run
+      - file_write
+      - user_confirmation
+      - structured_output
 
   - name: design-track-components
     responsibility: "Use when durable components must be registered, swept, grilled, cascaded, or retired; returns ledger and inbox mutation proposals; never turns findings into Work Objects or commitments automatically."
@@ -237,6 +464,23 @@ skills:
       - web_fetch
       - web_search
       - user_confirmation
+      - structured_output
+
+  - name: research-produce-report
+    responsibility: "Use when a broad research question or an already-decided Work Object trail needs to become one standalone deliverable document; composes investigate-live-question per sub-question or synthesizes accepted Decisions/History; never authors prospective architecture, exports, or replaces human authority."
+    non_goals:
+      - "Author new speculative architecture, roadmap items, or unaccepted future decisions in a plan-type deliverable — a plan is a synthesis of what was already decided, never a forecast (bounded by the source Work Object's own Decision, e.g. `2026-08-21-008` Decision 1)."
+      - "Answer a sub-question itself — that discipline belongs entirely to `investigate-live-question`; this skill composes it, never duplicates or bypasses its evidence rules."
+      - "Export, publish, or write the deliverable anywhere outside `.work-studio/` without the explicit, per-instance confirmation `governance-conduct-work-object`'s authority rules already require for any write outside that boundary."
+      - "Contact people, production, or sensitive sources — any sub-question needing that stays inside `investigate-live-question`'s own authority gate, not loosened by being called from here."
+      - "Implement, deploy, or operate anything a plan-type deliverable describes."
+      - "Treat a deliverable as evidence in its own right — it is a compiled presentation of existing evidence, never a new source."
+    requires_capabilities:
+      - file_read
+      - file_write
+      - directory_list
+      - content_search
+      - subagent_spawn
       - structured_output
 
   - name: thinking-develop-idea

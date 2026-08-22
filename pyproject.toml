@@ -13,7 +13,22 @@ dependencies = [
 [dependency-groups]
 test = [
     "hypothesis>=6.100.0",
+    "mcp>=2.0.0",
+]
+# Editable sub-packages that make up the working install. Declaring them here
+# (as workspace members, below) lets `uv sync` reproduce the `ws` CLI and the
+# MCP server instead of relying on out-of-band `uv pip install -e` calls.
+dev = [
+    "work-studio-ws",
+    "work-studio-mcp",
 ]
 
 [tool.uv]
 package = false
+
+[tool.uv.workspace]
+members = ["tools", "mcp_server"]
+
+[tool.uv.sources]
+work-studio-ws = { workspace = true }
+work-studio-mcp = { workspace = true }

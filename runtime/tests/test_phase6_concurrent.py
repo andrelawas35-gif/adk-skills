@@ -23,7 +23,7 @@ from pathlib import Path
 from runtime.graph import inspect_phase6
 
 ROOT = Path(__file__).resolve().parents[2]
-TARGET_WO = "2026-07-27-001"
+TARGET_WO = "2026-08-22-011"
 GRAPH_MODULE = ["-m", "runtime.graph"]
 EXPECTED_PROPOSAL = "implement-bounded-change"  # state "build" routing
 

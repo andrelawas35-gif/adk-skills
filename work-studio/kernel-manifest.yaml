@@ -51,10 +51,26 @@ kernel:
       purpose: "Canonical skill definitions — single source of truth for all adapters"
       required_for_bootstrap: true
       skills:
+        - business-assess-financial-decision
+        - business-balance-demand-supply-capacity
+        - business-build-driver-based-plan-and-forecast
+        - business-design-pricing-and-packaging
+        - business-direct-project-delivery
+        - business-formulate-strategy
+        - business-govern-initiative-portfolio
+        - business-improve-operating-process
+        - business-manage-commercial-pipeline
+        - business-manage-customer-success
+        - business-manage-enterprise-risk
+        - business-manage-liquidity-and-cash-runway
+        - business-manage-market-intelligence
+        - business-plan-workforce-accountability
+        - business-source-and-govern-suppliers
         - design-apply-design-direction
         - design-audit-product-interface
         - design-build-design-foundation
         - design-design-tracer-bullet
+        - design-manage-assets
         - design-track-components
         - design-verify-design-implementation
         - engineering-implement-bounded-change
@@ -66,6 +82,7 @@ kernel:
         - operations-deploy-with-recovery
         - operations-diagnose-production-incident
         - research-investigate-live-question
+        - research-produce-report
         - thinking-develop-idea
         - thinking-diagnose-homogenization
         - thinking-grilling-session

@@ -26,7 +26,7 @@ from pathlib import Path
 from runtime.graph import build_checkpoint_serializer, recover_checkpoint_db
 
 ROOT = Path(__file__).resolve().parents[2]
-TARGET_WO = "2026-07-27-001"
+TARGET_WO = "2026-08-22-011"
 GRAPH_MODULE = ["-m", "runtime.graph"]
 
 

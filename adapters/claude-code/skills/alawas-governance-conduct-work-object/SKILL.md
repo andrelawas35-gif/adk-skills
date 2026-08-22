@@ -161,7 +161,12 @@ Stop at:
 - An explicit boundary marker (`.work-studio/BOUNDARY`)
 
 Never scan the home directory automatically. If no workspace is found, offer
-to create one at the current project root.
+to bootstrap one at the current project root using the deterministic CLI —
+see `references/CONDUCT-CLI-OPERATIONS.md` § Bootstrap workspace for the
+exact invocation and its preconditions. Do not hand-write `.work-studio/`
+files as a substitute; a target repository does not need its own copy of
+`tools/ws` for this to work — the CLI, once installed anywhere on the
+machine, resolves any current directory's `.work-studio/` on its own.
 
 Read `active.md` if it exists to identify current Primary and Supporting
 objects.
@@ -407,7 +412,8 @@ After each interaction, report:
 
 | Failure | Behavior |
 |---------|----------|
-| No `.work-studio/config.md` found | Offer to create at project root. If declined, report inability to proceed. |
+| No `.work-studio/config.md` found | Offer to bootstrap at project root via `references/CONDUCT-CLI-OPERATIONS.md` § Bootstrap workspace. If declined, report inability to proceed. |
+| `ws` / `python3 -m tools.ws` not reachable from any location | Report as a capability gap, not a workspace gap. Give the one manual install instruction (`pip install -e <path-to-andrelawas-work-studio>/tools`, or `uv sync` in that repo). Never hand-write `.work-studio/` files as a substitute. |
 | Work Object file not found by ID | Report the ID, suggest checking active.md, list recent objects. |
 | `updated_at` conflict on write | Report the conflict with both timestamps. Do not overwrite. Offer to re-read and retry. |
 | Invalid frontmatter | Report the specific validation error. Offer to repair if the fix is unambiguous. |

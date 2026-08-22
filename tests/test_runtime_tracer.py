@@ -10,8 +10,8 @@ for a `.work-studio/` directory, then subprocess-invokes
 be importable there. A synthetic sandboxed workspace would break that inner
 call. These tests instead run the tracer as a subprocess against the real
 repository (matching how it was manually verified twice in WO
-2026-08-14-008), targeting a stable, low-consequence, closed Work Object
-that predates this session (2026-07-27-001) so no other test or session
+2026-08-14-008), targeting a stable, low-consequence, dedicated build-state Work Object
+that is dedicated and low-consequence (2026-08-22-011) so no other test or session
 activity can race it. Read-only against `.work-studio/objects/`; the only
 side effect is a gitignored trace log under `runtime/traces/`, cleaned up
 after each test.
@@ -29,11 +29,11 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-TARGET_WO_GLOB = "2026-07-27-001-*.md"
+TARGET_WO_GLOB = "2026-08-22-011-*.md"
 
 
 def _find_target() -> Path:
-    matches = sorted(ROOT.glob(f".work-studio/objects/2026/07/{TARGET_WO_GLOB}"))
+    matches = sorted(ROOT.glob(f".work-studio/objects/*/*/{TARGET_WO_GLOB}"))
     if not matches:
         raise FileNotFoundError(f"Demo Work Object not found: {TARGET_WO_GLOB}")
     return matches[0]
@@ -47,7 +47,7 @@ def _read_updated_at(file_path: Path) -> str:
 
 def _run_tracer(answer: str) -> subprocess.CompletedProcess:
     return subprocess.run(
-        [sys.executable, "-m", "tools.runtime.tracer", "2026-07-27-001"],
+        [sys.executable, "-m", "tools.runtime.tracer", "2026-08-22-011"],
         cwd=ROOT, input=f"{answer}\n", capture_output=True, text=True, encoding="utf-8",
     )
 

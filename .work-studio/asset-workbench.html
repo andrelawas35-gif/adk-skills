@@ -1,0 +1,90 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Design Asset Workbench</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; max-width: 1040px; margin: 2rem auto; padding: 0 1rem; color: #1f2933; background: #fbfbfa; }
+h1 { font-size: 24px; margin: 0 0 6px; }
+h2 { font-size: 16px; margin: 0; }
+p { line-height: 1.45; }
+.meta { color: #667085; font-size: 13px; margin-bottom: 20px; }
+.notice { border: 1px solid #d8dee8; background: #fff; padding: 12px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 18px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.asset { background: #fff; border: 1px solid #d8dee8; border-radius: 8px; padding: 14px; }
+.asset-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.asset-head p { color: #667085; margin: 4px 0 0; font-size: 13px; }
+.summary { font-size: 13px; }
+.status { border-radius: 6px; padding: 3px 8px; font-size: 12px; }
+.ok { background: #ecfdf3; color: #027a48; }
+.bad { background: #fff1f3; color: #c01048; }
+dl { display: grid; grid-template-columns: 110px 1fr; gap: 6px 10px; font-size: 12px; }
+dt { color: #667085; }
+dd { margin: 0; overflow-wrap: anywhere; }
+table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #d8dee8; border-radius: 8px; overflow: hidden; font-size: 13px; }
+td, th { text-align: left; padding: 8px 10px; border-bottom: 1px solid #eaecf0; }
+code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 12px; }
+.gaps { margin-top: 18px; background: #fff; border: 1px solid #fecdd3; border-radius: 8px; padding: 14px; }
+</style></head>
+<body>
+<h1>Design Asset Workbench</h1>
+<div class="meta">Generated 2026-08-22T13:59:22Z from local asset records. Assets: 4. Validation gaps: 0.</div>
+<div class="notice">Read-only projection. Edit asset truth in <code>.work-studio/design-assets/*.asset.md</code> through the appropriate Work Object route, then regenerate this page.</div>
+<div class="grid"><section class="asset">
+  <div class="asset-head">
+    <div>
+      <h2>asset.design.create-review-approve-pattern</h2>
+      <p>ux-pattern · draft · Work Object 2026-08-22-017</p>
+    </div>
+    <span class="status ok">valid</span>
+  </div>
+  <p class="summary">Draft UX-pattern asset for the create-review-approve flow used to test ingest of reusable behavior, states, and interaction guidance separately from visual assets.</p>
+  <dl>
+    <dt>Source of truth</dt><dd>draft ingest proposal from explicit input: real-use ingest testing slice from accepted ReviewBadge tracer scope</dd>
+    <dt>Record</dt><dd>.work-studio/design-assets/create-review-approve-pattern.asset.md</dd>
+    <dt>Lifecycle owners</dt><dd>1</dd>
+  </dl>
+</section><section class="asset">
+  <div class="asset-head">
+    <div>
+      <h2>asset.design.reviewbadge-themes</h2>
+      <p>theme · draft · Work Object 2026-08-22-017</p>
+    </div>
+    <span class="status ok">valid</span>
+  </div>
+  <p class="summary">Draft theme asset representing the ReviewBadge tracer&#x27;s paired light and dark visual treatments for testing governed asset ingest across theme records.</p>
+  <dl>
+    <dt>Source of truth</dt><dd>draft ingest proposal from explicit input: real-use ingest testing slice from accepted ReviewBadge tracer scope</dd>
+    <dt>Record</dt><dd>.work-studio/design-assets/reviewbadge-themes.asset.md</dd>
+    <dt>Lifecycle owners</dt><dd>1</dd>
+  </dl>
+</section><section class="asset">
+  <div class="asset-head">
+    <div>
+      <h2>asset.design.reviewbadge</h2>
+      <p>component-family · tracer · Work Object 2026-08-22-017</p>
+    </div>
+    <span class="status ok">valid</span>
+  </div>
+  <p class="summary">`ReviewBadge` is a small reusable status badge for the recurring `create-review-approve` experience. It shows whether an item is `draft`, `in_review`, `approved`, or `blocked`. This record is a tracer asset, not a production asset. Its job is to test whether the design asset pipeline can represent identity, system composition, experience behavior, verification, component registration, and projection without owner ambiguity.</p>
+  <dl>
+    <dt>Source of truth</dt><dd>this tracer record, pending future asset registry shape</dd>
+    <dt>Record</dt><dd>.work-studio/design-assets/reviewbadge.asset.md</dd>
+    <dt>Lifecycle owners</dt><dd>10</dd>
+  </dl>
+</section><section class="asset">
+  <div class="asset-head">
+    <div>
+      <h2>asset.design.studio-status-tokens</h2>
+      <p>token-set · draft · Work Object 2026-08-22-017</p>
+    </div>
+    <span class="status ok">valid</span>
+  </div>
+  <p class="summary">Draft token-set asset for studio status colors used to test explicit asset ingest before canonization.</p>
+  <dl>
+    <dt>Source of truth</dt><dd>draft ingest proposal from explicit input: manual ingest slice from Work Object 2026-08-22-017</dd>
+    <dt>Record</dt><dd>.work-studio/design-assets/studio-status-tokens.asset.md</dd>
+    <dt>Lifecycle owners</dt><dd>1</dd>
+  </dl>
+</section></div>
+
+<h2 style="margin-top: 24px;">Frontier Ownership</h2>
+<table><thead><tr><th>Frontier</th><th>Owner</th></tr></thead><tbody><tr><td>component-family</td><td><code>design-compose-design-system</code></td></tr><tr><td>component-registration</td><td><code>design-track-components</code></td></tr><tr><td>creative-direction</td><td><code>design-apply-design-direction</code></td></tr><tr><td>flow</td><td><code>design-steward-experience-patterns</code></td></tr><tr><td>identity</td><td><code>design-manage-assets</code></td></tr><tr><td>implementation</td><td><code>alawas-engineering-implement-bounded-change</code></td></tr><tr><td>projection</td><td><code>design-project-asset-workbench</code></td></tr><tr><td>theme</td><td><code>design-compose-design-system</code></td></tr><tr><td>tokens</td><td><code>design-compose-design-system</code></td></tr><tr><td>ux-pattern</td><td><code>design-steward-experience-patterns</code></td></tr><tr><td>verification</td><td><code>design-verify-design-implementation</code></td></tr></tbody></table>
+</body></html>

@@ -7,11 +7,16 @@
   each grillable toward its best-case. Entries point at where the component lives;
   the component's truth stays in code/ADRs. See WO 2026-07-18-001 for the design.
 
-  Entry schema: status; location(s); built-by Work Object(s); declared edges;
+  Entry schema: status; component kind; governance domain; location(s);
+  built-by Work Object(s); declared edges;
   applicable dimensions; owning skill/profile; last-grilled-SHA;
   Option-B-refined best-case anchor; status rationale/findings.
   Status values: active | settled | needs-regrill | retired. Entries are
   pointers, not component copies; retired entries are preserved, never deleted.
+  Component kind values: skill | protocol | runtime | tooling | artifact-schema |
+  integration. Governance domain values: business | design | engineering |
+  governance | operations | research | thinking | cross-cutting. COMP-001 through
+  COMP-024 are grandfathered legacy records; all new entries require both fields.
 -->
 
 ## COMP-001 — Grilling engine (Agreement Loop)
@@ -20,12 +25,12 @@
 - **location(s):** `references/AGREEMENT-LOOP.md` (canonical; copied into every skill's `references/` by `tools/generate-adapters.py`)
 - **built-by Work Object(s):** pre-ledger backfill; recent shaping in WO `2026-07-16-004` (two-tier lenses); resolved in WO `2026-07-27-003`
 - **depends-on:** none declared
-- **depended-on-by:** COMP-002 through COMP-024 (every skill's Grilling Session; widest blast radius)
+- **depended-on-by:** COMP-002 through COMP-040 (every skill's Grilling Session plus the business operating pipeline; widest blast radius)
 - **applicable dimensions:** personal fit, artifact value, novelty yield (recovery quality deferred — engine-level, not outcome-level)
 - **owning skill/profile:** all skill profiles via `references/SKILL-AWARE-GRILLING.md`
-- **last-grilled-SHA:** `f4cddbf`
+- **last-grilled-SHA:** `0de476b`
 - **best-case anchor:** Option-B-refined (WO 2026-07-18-001, 2026-07-18T05:00:00Z) — settled = no surviving finding against the applicable dimensions; auto-reopen on git-drift since `last-grilled-SHA`, owning-skill version change, or contrary govern-scorecards outcome evidence. No standing scorecard artifact.
-- **status rationale / findings:** Re-stamped to HEAD (`f4cddbf`) on 2026-08-10 by WO 2026-08-09-009, acknowledging 2 commits of drift (`bcd20e6`, `e457678`) on `references/AGREEMENT-LOOP.md`. Full regrill pass remains a track-components follow-up.
+- **status rationale / findings:** Re-grilled and re-stamped to HEAD (`0de476b`) on 2026-08-22 under the repair authorized after WO 2026-08-22-010. Drift added director-owned convergence authority and plain-language requirements; these strengthen personal fit, artifact value, and novelty-yield safeguards. No surviving finding; no component contract removal or dependent cascade required.
 - **first grilled:** 2026-07-18 (tracer pass, WO 2026-07-18-001)
 - **open findings:** none — all 4 findings resolved in WO `2026-07-27-003`
 
@@ -58,7 +63,7 @@ source of truth; generated adapters are deliberately not listed.
 - **location(s):** `skills/core/governance-conduct-work-object/SKILL.md`
 - **built-by Work Object(s):** pre-ledger backfill
 - **depends-on:** COMP-001
-- **depended-on-by:** COMP-003 through COMP-024
+- **depended-on-by:** COMP-003 through COMP-040
 - **applicable dimensions:** recovery quality, artifact value, novelty yield
 - **owning skill/profile:** `governance-conduct-work-object`
 - **last-grilled-SHA:** not-yet-grilled
@@ -356,3 +361,248 @@ not yet implemented) and enter the ledger as `active` with `not-yet-grilled`.
 - **last-grilled-SHA:** not-yet-grilled
 - **best-case anchor:** Option-B-refined; no surviving finding against applicable dimensions and owning profile; reopen on git drift, owning-skill-version change, or contrary govern-scorecards outcome evidence
 - **status rationale / findings:** First divergent exploration capability in the system. Skill contract created from Idea Development Grilling Session (17 decisions). Pending first tracer bullet run and grilling pass.
+
+## Business management skills (governed components)
+
+These accepted business capabilities use the canonical component-governance
+taxonomy introduced by WO `2026-08-22-010`.
+
+## COMP-025 — Commercial pipeline management
+
+- **status:** active
+- **component kind:** skill
+- **governance domain:** business
+- **location(s):** `skills/core/business-manage-commercial-pipeline/SKILL.md`
+- **built-by Work Object(s):** `2026-08-22-004`, governed by `2026-08-22-010`
+- **depends-on:** COMP-001, COMP-002
+- **depended-on-by:** COMP-036
+- **applicable dimensions:** artifact value, novelty yield
+- **owning skill/profile:** `business-manage-commercial-pipeline`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** pending first governed grilling pass
+- **status rationale / findings:** Accepted business capability; registered with explicit business governance.
+
+## COMP-026 — Operating process improvement
+
+- **status:** active
+- **component kind:** skill
+- **governance domain:** business
+- **location(s):** `skills/core/business-improve-operating-process/SKILL.md`
+- **built-by Work Object(s):** `2026-08-22-004`, governed by `2026-08-22-010`
+- **depends-on:** COMP-001, COMP-002
+- **depended-on-by:** COMP-036
+- **applicable dimensions:** recovery quality, artifact value, novelty yield
+- **owning skill/profile:** `business-improve-operating-process`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** pending first governed grilling pass
+- **status rationale / findings:** Accepted business capability; registered with explicit business governance.
+
+## COMP-027 — Financial decision assessment
+
+- **status:** active
+- **component kind:** skill
+- **governance domain:** business
+- **location(s):** `skills/core/business-assess-financial-decision/SKILL.md`
+- **built-by Work Object(s):** `2026-08-22-004`, governed by `2026-08-22-010`
+- **depends-on:** COMP-001, COMP-002
+- **depended-on-by:** COMP-036
+- **applicable dimensions:** recovery quality, artifact value
+- **owning skill/profile:** `business-assess-financial-decision`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** pending first governed grilling pass
+- **status rationale / findings:** Accepted business capability; registered with explicit business governance.
+
+## COMP-028 — Workforce accountability planning
+
+- **status:** active
+- **component kind:** skill
+- **governance domain:** business
+- **location(s):** `skills/core/business-plan-workforce-accountability/SKILL.md`
+- **built-by Work Object(s):** `2026-08-22-004`, governed by `2026-08-22-010`
+- **depends-on:** COMP-001, COMP-002
+- **depended-on-by:** COMP-036
+- **applicable dimensions:** personal fit, artifact value, novelty yield
+- **owning skill/profile:** `business-plan-workforce-accountability`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** pending first governed grilling pass
+- **status rationale / findings:** Accepted business capability; registered with explicit business governance.
+
+## COMP-029 — Strategy formulation
+
+- **status:** active
+- **component kind:** skill
+- **governance domain:** business
+- **location(s):** `skills/core/business-formulate-strategy/SKILL.md`
+- **built-by Work Object(s):** `2026-08-22-008`
+- **depends-on:** COMP-001, COMP-002
+- **depended-on-by:** COMP-036
+- **applicable dimensions:** personal fit, artifact value, novelty yield
+- **owning skill/profile:** `business-formulate-strategy`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** pending first governed grilling pass
+- **status rationale / findings:** Accepted seven-skill business tranche capability; registered with explicit business governance.
+
+## COMP-030 — Market intelligence management
+
+- **status:** active
+- **component kind:** skill
+- **governance domain:** business
+- **location(s):** `skills/core/business-manage-market-intelligence/SKILL.md`
+- **built-by Work Object(s):** `2026-08-22-008`
+- **depends-on:** COMP-001, COMP-002
+- **depended-on-by:** COMP-036
+- **applicable dimensions:** artifact value, novelty yield
+- **owning skill/profile:** `business-manage-market-intelligence`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** pending first governed grilling pass
+- **status rationale / findings:** Accepted seven-skill business tranche capability; registered with explicit business governance.
+
+## COMP-031 — Driver-based planning and forecast
+
+- **status:** active
+- **component kind:** skill
+- **governance domain:** business
+- **location(s):** `skills/core/business-build-driver-based-plan-and-forecast/SKILL.md`
+- **built-by Work Object(s):** `2026-08-22-008`
+- **depends-on:** COMP-001, COMP-002
+- **depended-on-by:** COMP-036
+- **applicable dimensions:** recovery quality, artifact value
+- **owning skill/profile:** `business-build-driver-based-plan-and-forecast`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** pending first governed grilling pass
+- **status rationale / findings:** Accepted seven-skill business tranche capability; registered with explicit business governance.
+
+## COMP-032 — Enterprise risk management
+
+- **status:** active
+- **component kind:** skill
+- **governance domain:** business
+- **location(s):** `skills/core/business-manage-enterprise-risk/SKILL.md`
+- **built-by Work Object(s):** `2026-08-22-008`
+- **depends-on:** COMP-001, COMP-002
+- **depended-on-by:** COMP-036
+- **applicable dimensions:** recovery quality, artifact value, novelty yield
+- **owning skill/profile:** `business-manage-enterprise-risk`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** pending first governed grilling pass
+- **status rationale / findings:** Accepted seven-skill business tranche capability; registered with explicit business governance.
+
+## COMP-033 — Supplier sourcing and governance
+
+- **status:** active
+- **component kind:** skill
+- **governance domain:** business
+- **location(s):** `skills/core/business-source-and-govern-suppliers/SKILL.md`
+- **built-by Work Object(s):** `2026-08-22-008`
+- **depends-on:** COMP-001, COMP-002
+- **depended-on-by:** COMP-036
+- **applicable dimensions:** artifact value, novelty yield
+- **owning skill/profile:** `business-source-and-govern-suppliers`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** pending first governed grilling pass
+- **status rationale / findings:** Accepted seven-skill business tranche capability; registered with explicit business governance.
+
+## COMP-034 — Project delivery direction
+
+- **status:** active
+- **component kind:** skill
+- **governance domain:** business
+- **location(s):** `skills/core/business-direct-project-delivery/SKILL.md`
+- **built-by Work Object(s):** `2026-08-22-008`
+- **depends-on:** COMP-001, COMP-002
+- **depended-on-by:** COMP-036
+- **applicable dimensions:** recovery quality, artifact value, novelty yield
+- **owning skill/profile:** `business-direct-project-delivery`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** pending first governed grilling pass
+- **status rationale / findings:** Accepted seven-skill business tranche capability; registered with explicit business governance.
+
+## COMP-035 — Customer success management
+
+- **status:** active
+- **component kind:** skill
+- **governance domain:** business
+- **location(s):** `skills/core/business-manage-customer-success/SKILL.md`
+- **built-by Work Object(s):** `2026-08-22-008`
+- **depends-on:** COMP-001, COMP-002
+- **depended-on-by:** COMP-036
+- **applicable dimensions:** personal fit, artifact value, novelty yield
+- **owning skill/profile:** `business-manage-customer-success`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** pending first governed grilling pass
+- **status rationale / findings:** Accepted seven-skill business tranche capability; registered with explicit business governance.
+
+## COMP-036 — Business operating pipeline
+
+- **status:** active
+- **component kind:** protocol
+- **governance domain:** business
+- **location(s):** `references/BUSINESS-OPERATING-PIPELINE.md`
+- **built-by Work Object(s):** `2026-08-22-014`
+- **depends-on:** COMP-001, COMP-002, COMP-025 through COMP-035, COMP-037 through COMP-040
+- **depended-on-by:** none declared
+- **applicable dimensions:** artifact value, novelty yield
+- **owning skill/profile:** business skill suite via `references/BUSINESS-OPERATING-PIPELINE.md`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** pending first governed grilling pass
+- **status rationale / findings:** Accepted business routing protocol that distinguishes the Work Object lifecycle, commercial pipeline, and cross-business operating pipeline while preserving each business skill's authority boundary.
+
+## COMP-037 — Initiative portfolio governance
+
+- **status:** active
+- **component kind:** skill
+- **governance domain:** business
+- **location(s):** `skills/core/business-govern-initiative-portfolio/SKILL.md`
+- **built-by Work Object(s):** `2026-08-22-015`
+- **depends-on:** COMP-001, COMP-002
+- **depended-on-by:** COMP-036
+- **applicable dimensions:** artifact value, novelty yield
+- **owning skill/profile:** `business-govern-initiative-portfolio`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** pending first governed grilling pass
+- **status rationale / findings:** Accepted next-slice business capability; registered with explicit business governance.
+
+## COMP-038 — Pricing and packaging design
+
+- **status:** active
+- **component kind:** skill
+- **governance domain:** business
+- **location(s):** `skills/core/business-design-pricing-and-packaging/SKILL.md`
+- **built-by Work Object(s):** `2026-08-22-015`
+- **depends-on:** COMP-001, COMP-002
+- **depended-on-by:** COMP-036
+- **applicable dimensions:** artifact value, novelty yield
+- **owning skill/profile:** `business-design-pricing-and-packaging`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** pending first governed grilling pass
+- **status rationale / findings:** Accepted next-slice business capability; registered with explicit business governance.
+
+## COMP-039 — Liquidity and cash runway management
+
+- **status:** active
+- **component kind:** skill
+- **governance domain:** business
+- **location(s):** `skills/core/business-manage-liquidity-and-cash-runway/SKILL.md`
+- **built-by Work Object(s):** `2026-08-22-015`
+- **depends-on:** COMP-001, COMP-002
+- **depended-on-by:** COMP-036
+- **applicable dimensions:** recovery quality, artifact value
+- **owning skill/profile:** `business-manage-liquidity-and-cash-runway`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** pending first governed grilling pass
+- **status rationale / findings:** Accepted next-slice business capability; registered with explicit business governance.
+
+## COMP-040 — Demand, supply, and capacity balancing
+
+- **status:** active
+- **component kind:** skill
+- **governance domain:** business
+- **location(s):** `skills/core/business-balance-demand-supply-capacity/SKILL.md`
+- **built-by Work Object(s):** `2026-08-22-015`
+- **depends-on:** COMP-001, COMP-002
+- **depended-on-by:** COMP-036
+- **applicable dimensions:** recovery quality, artifact value, novelty yield
+- **owning skill/profile:** `business-balance-demand-supply-capacity`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** pending first governed grilling pass
+- **status rationale / findings:** Accepted next-slice business capability; registered with explicit business governance.

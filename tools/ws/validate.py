@@ -26,6 +26,7 @@ Checks:
   structure                — Composite: schema + sections
   contract-drift           — schema.py VALID_* enums vs __main__.py CLI choices
   outcome-review           — Advisory observe/close outcome-review coverage
+  routing-consistency      — Advisory next_action vs. state's canonical route
   evidence-freshness       — Advisory [system] source locator resolution
   evidence-relations       — Advisory candidate supports/counters relations
   verification-freshness   — Advisory re-run of re-runnable verification commands
@@ -2200,7 +2201,8 @@ def _parse_component_ledger(
             continue
         cid = header.group(1)
         rec: Dict[str, str] = {"id": cid}
-        for key in ("status", "location(s)", "depends-on", "depended-on-by",
+        for key in ("status", "component kind", "governance domain",
+                    "location(s)", "depends-on", "depended-on-by",
                     "last-grilled-SHA"):
             m = re.search(
                 r"- \*\*" + re.escape(key) + r":\*\*\s*(.*)", block
@@ -2295,6 +2297,24 @@ def check_ledger(objects_dir: Optional[Path] = None) -> List[str]:
     by_id = {r["id"]: r for r in records}
 
     errors: List[str] = []
+
+    # 0) Component governance taxonomy. Legacy entries remain readable, but
+    # every newly registered component (COMP-025+) must declare both fields.
+    from tools.ws.component_governance import (
+        VALID_COMPONENT_KINDS, VALID_GOVERNANCE_DOMAINS,
+    )
+    for rec in records:
+        number = int(rec["id"].split("-")[1])
+        kind = rec["component kind"]
+        domain = rec["governance domain"]
+        if number >= 25 and not kind:
+            errors.append(f"ledger component governance: {rec['id']} missing component kind")
+        elif kind and kind not in VALID_COMPONENT_KINDS:
+            errors.append(f"ledger component governance: {rec['id']} invalid component kind {kind}")
+        if number >= 25 and not domain:
+            errors.append(f"ledger component governance: {rec['id']} missing governance domain")
+        elif domain and domain not in VALID_GOVERNANCE_DOMAINS:
+            errors.append(f"ledger component governance: {rec['id']} invalid governance domain {domain}")
 
     # Precompute each component's forward (depends-on) and reverse
     # (depended-on-by) sets, keeping the raw reverse text for classification.
@@ -2518,6 +2538,79 @@ def _cohort_total(objects_dir: Path, cohort: str) -> int:
     return total
 
 
+_ROUTING_TABLE_STATES = (
+    "notice", "explore", "design", "build",
+    "verify", "release", "observe", "close",
+)
+
+
+def _load_conductor_routing_table(ws_root: Path) -> Dict[str, str]:
+    """Parse the conductor's canonical state -> skill routing table.
+
+    Mirrors runtime/tests/test_handoff_graph.py's own parse of the same
+    source (routing audit WO 2026-08-22-009, G2). Returns {} if the
+    conductor's SKILL.md is unavailable rather than raising -- this check is
+    advisory and must degrade quietly.
+    """
+    skill_path = (
+        ws_root / "skills" / "core"
+        / "governance-conduct-work-object" / "SKILL.md"
+    )
+    if not skill_path.exists():
+        return {}
+    text = skill_path.read_text(encoding="utf-8")
+    table: Dict[str, str] = {}
+    for line in text.splitlines():
+        m = re.match(
+            r"^\|\s*(%s)\s*\|\s*([a-z0-9-]+)" % "|".join(_ROUTING_TABLE_STATES),
+            line,
+        )
+        if m:
+            table[m.group(1)] = m.group(2)
+    return table
+
+
+def check_routing_consistency(file_paths: List[Path], objects_dir: Path) -> List[str]:
+    """Workspace-level advisory check: does next_action name its state's route?
+
+    Read-only and advisory (not in DEFAULT_CHECKS) -- routing audit WO
+    2026-08-22-009, G2. The conductor's routing is keyed by state alone
+    (SKILL.md '### 6. Route to specialist'), but next_action is unconstrained
+    free text; nothing previously cross-checked the two. A closed Work Object
+    legitimately has no further route, so status: closed is skipped. This is
+    a warning, never a failure: next_action may correctly name a more
+    specific downstream skill (e.g. investigate-live-question reached via
+    develop-idea) that does not literally contain the state's canonical
+    routing-table name.
+    """
+    ws_root = objects_dir.parent.parent
+    table = _load_conductor_routing_table(ws_root)
+    if not table:
+        return ["routing-consistency: could not read the conductor's routing table -- skipped"]
+
+    warnings: List[str] = []
+    for path in file_paths:
+        try:
+            content = path.read_text(encoding="utf-8")
+        except Exception:
+            continue
+        fm = parse_frontmatter(content)
+        state = str(fm.get("state", "")).strip()
+        status = str(fm.get("status", "")).strip()
+        next_action = str(fm.get("next_action", "")).strip()
+        if status == "closed" or state not in table:
+            continue
+        canonical_skill = table[state]
+        haystack = next_action.lower().replace("alawas-", "")
+        if canonical_skill not in haystack:
+            warnings.append(
+                f"routing-consistency: {path.stem}: state '{state}' routes to "
+                f"'{canonical_skill}' but next_action does not mention it -- "
+                f"verify this is an intentional deviation, not drift"
+            )
+    return warnings
+
+
 _OUTCOME_VERDICT_PATTERN = re.compile(
     r"\b(disconfirmed|refuted|not confirmed|inconclusive|confirmed)\b", re.I
 )
@@ -2723,6 +2816,18 @@ def check_contract_drift(main_py_path: Optional[Path] = None) -> List[str]:
     return errors
 
 
+def check_design_assets(objects_dir: Optional[Path] = None) -> List[str]:
+    """Workspace-level check over local design asset registry records."""
+    if objects_dir is None:
+        return ["Design asset check requires the objects/ directory path"]
+    try:
+        from .design_assets import validate_asset_registry
+
+        return validate_asset_registry(objects_dir.parent.parent)
+    except Exception as e:
+        return [f"design-assets check failed: {e}"]
+
+
 # ── Check registry ────────────────────────────────────────────────────────────
 
 CHECK_REGISTRY: Dict[str, callable] = {
@@ -2748,11 +2853,13 @@ CHECK_REGISTRY: Dict[str, callable] = {
     "interrupted-mutations": check_interrupted_mutations,
     "structure": check_structure,
     "outcome-review": None,  # Special: workspace-level advisory check (not in defaults)
+    "routing-consistency": None,  # Special: workspace-level advisory check (not in defaults)
     "evidence-freshness": None,  # Special: workspace-level advisory check (not in defaults)
     "evidence-relations": None,  # Special: workspace-level advisory check (not in defaults)
     "verification-freshness": None,  # Special: workspace-level advisory check (not in defaults)
     "next-action": check_next_action_presence,  # Hard: forward-motion objects need next_action
     "contract-drift": None,  # Special: workspace-level check, no per-object path
+    "design-assets": None,  # Special: workspace-level design asset registry check
 }
 
 # Per-check advisory warnings: surfaced explicitly but non-blocking. Run for
@@ -2867,6 +2974,18 @@ def run_checks(
             all_errors.extend(check_contract_drift())
             continue
 
+        if name == "design-assets":
+            # Workspace-level check over .work-studio/design-assets/*.asset.md.
+            # Excluded from DEFAULT_CHECKS because asset records are not Work
+            # Objects; run explicitly via `ws validate design-assets`.
+            if objects_dir:
+                all_errors.extend(check_design_assets(objects_dir))
+            else:
+                all_errors.append(
+                    "Design asset check requires the objects/ directory path"
+                )
+            continue
+
         if name == "outcome-review":
             # Workspace-level advisory check over outcome-review coverage.
             # Excluded from DEFAULT_CHECKS; run explicitly via `ws validate
@@ -2877,6 +2996,22 @@ def run_checks(
             else:
                 all_errors.append(
                     "Outcome-review check requires the objects/ directory path"
+                )
+            continue
+
+        if name == "routing-consistency":
+            # Workspace-level advisory check cross-referencing next_action
+            # against the conductor's state-keyed routing table. Excluded
+            # from DEFAULT_CHECKS; run explicitly via `ws validate
+            # routing-consistency`. Read-only and warning-only: next_action
+            # may legitimately name a more specific downstream skill.
+            if objects_dir:
+                all_warnings.extend(
+                    check_routing_consistency(file_paths, objects_dir)
+                )
+            else:
+                all_errors.append(
+                    "Routing-consistency check requires the objects/ directory path"
                 )
             continue
 

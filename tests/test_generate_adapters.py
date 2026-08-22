@@ -282,8 +282,8 @@ class GeneratorContract(unittest.TestCase):
 
     def test_installed_skills_include_their_declared_references(self):
         """Each generated skill receives exactly the reference files the
-        generator computes (Decision 88 + preamble-injected refs + kernel/
-        overlay split). Delegates the expected set to the generator's own
+        generator computes (Decision 88 + preamble-injected refs). Delegates
+        the expected set to the generator's own
         build_reference_entries so the test can never drift from generation."""
         ga = _generator()
         for platform in PLATFORMS:
@@ -329,6 +329,17 @@ class GeneratorContract(unittest.TestCase):
                 else:
                     self.assertFalse(refs_dir.exists(),
                                      f"{platform}/{skill}: unexpected references dir")
+
+    def test_declared_grilling_references_ship_with_specialists(self):
+        """A generated specialist must not point at an omitted governing file."""
+        skill = adapter_skill_name("research-investigate-live-question")
+        for platform in PLATFORMS:
+            refs_dir = ADAPTERS_DIR / platform / "skills" / skill / "references"
+            for filename in ("AGREEMENT-LOOP.md", "SKILL-AWARE-GRILLING.md"):
+                self.assertTrue(
+                    (refs_dir / filename).is_file(),
+                    f"{platform}/{skill}: missing declared {filename}",
+                )
 
     def test_conductor_evidence_rules_are_owned_by_shipped_evidence_model(self):
         conductor = (CORE_DIR / "governance-conduct-work-object" / "SKILL.md").read_text(encoding="utf-8")

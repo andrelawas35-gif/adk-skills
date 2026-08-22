@@ -22,7 +22,7 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-TARGET_WO = "2026-07-27-001"
+TARGET_WO = "2026-08-22-011"
 GRAPH_MODULE = ["-m", "runtime.graph"]
 
 

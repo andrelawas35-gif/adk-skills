@@ -1080,6 +1080,81 @@ def cmd_outcomes(args: argparse.Namespace) -> int:
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
+# ws command-center
+# ═══════════════════════════════════════════════════════════════════════════════
+
+
+def cmd_command_center(args: argparse.Namespace) -> int:
+    """Read-only projection: render current Work Object state as static HTML.
+
+    WO 2026-08-22-006. Writes only .work-studio/command-center.html;
+    never touches objects/, active.md, or config.md.
+    """
+    try:
+        ws_root = _find_work_studio_root()
+    except FileNotFoundError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+
+    from .command_center import generate
+
+    summary = generate(ws_root)
+    print(f"Wrote {summary['out_path']}")
+    print(f"Active: {summary['active']}, Closed: {summary['closed']}, Failed: {summary['failed']}")
+    print(f"Primary: {summary['primary']}, Supporting: {summary['supporting']}")
+    return 0
+
+
+def cmd_asset_workbench(args: argparse.Namespace) -> int:
+    """Read-only projection: render local design asset registry as static HTML."""
+    try:
+        ws_root = _find_work_studio_root()
+    except FileNotFoundError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+
+    from .asset_workbench import generate
+
+    summary = generate(ws_root)
+    print(f"Wrote {summary['out_path']}")
+    print(f"Assets: {summary['assets']}, Validation gaps: {summary['gaps']}")
+    return 0
+
+
+def cmd_asset_ingest(args: argparse.Namespace) -> int:
+    """Create one draft design asset record from explicit local inputs."""
+    try:
+        ws_root = _find_work_studio_root()
+    except FileNotFoundError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+
+    from .asset_ingest import ingest_asset
+
+    try:
+        result = ingest_asset(
+            ws_root,
+            asset_id=args.asset_id,
+            asset_kind=args.asset_kind,
+            work_object=args.work_object,
+            summary=args.summary,
+            source_note=args.source_note,
+            frontier=args.frontier,
+        )
+    except (ValueError, FileExistsError) as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+
+    print(f"Wrote draft asset record: {result['path']}")
+    if result["errors"]:
+        for err in result["errors"]:
+            print(err, file=sys.stderr)
+        return 1
+    print("Validation: passed")
+    return 0
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
 # ws init
 # ═══════════════════════════════════════════════════════════════════════════════
 
@@ -1651,6 +1726,35 @@ def build_parser() -> argparse.ArgumentParser:
         help="Advisory: outcome-review coverage and best-effort verdict per object",
     )
 
+    # ── ws command-center ───────────────────────────────────────────────
+    subparsers.add_parser(
+        "command-center",
+        help="Read-only: render current Work Object state as a static HTML file",
+    )
+
+    subparsers.add_parser(
+        "asset-workbench",
+        help="Read-only: render local design asset registry as a static HTML file",
+    )
+
+    asset_ingest_parser = subparsers.add_parser(
+        "asset-ingest",
+        help="Create one draft design asset record from explicit local inputs",
+    )
+    asset_ingest_parser.add_argument("--asset-id", required=True)
+    asset_ingest_parser.add_argument(
+        "--asset-kind",
+        required=True,
+        choices=[
+            "foundation", "token-set", "theme", "component-family",
+            "ux-pattern", "flow", "projection",
+        ],
+    )
+    asset_ingest_parser.add_argument("--work-object", required=True)
+    asset_ingest_parser.add_argument("--summary", required=True)
+    asset_ingest_parser.add_argument("--source-note", required=True)
+    asset_ingest_parser.add_argument("--frontier", default="identity")
+
     # ── ws backup / ws restore ──────────────────────────────────────────
     subparsers.add_parser(
         "backup",
@@ -1703,6 +1807,9 @@ def main() -> int:
         "append-artifact": cmd_append_artifact,
         "validate": cmd_validate,
         "outcomes": cmd_outcomes,
+        "command-center": cmd_command_center,
+        "asset-workbench": cmd_asset_workbench,
+        "asset-ingest": cmd_asset_ingest,
         "backup": cmd_backup,
         "restore": cmd_restore,
     }

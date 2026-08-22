@@ -3347,9 +3347,9 @@ class TestCheckRegistry(unittest.TestCase):
                      "authority", "protected-fields", "history-integrity",
                      "file-integrity", "incident-routing", "prerequisites",
                      "unsupported-capabilities", "interrupted-mutations",
-                     "structure", "outcome-review", "evidence-freshness",
-                     "evidence-relations", "verification-freshness",
-                     "contract-drift"}
+                     "structure", "outcome-review", "routing-consistency",
+                     "evidence-freshness", "evidence-relations",
+                     "verification-freshness", "contract-drift"}
         self.assertEqual(set(CHECK_REGISTRY.keys()), expected)
 
     def test_contract_drift_is_default(self):
@@ -4441,10 +4441,12 @@ class TestSkillMapCommand(unittest.TestCase):
             env=env,
         )
 
-    def test_build_generates_all_22_with_three_fields(self):
+    def test_build_generates_full_corpus_with_three_fields(self):
+        core_skills = self.REPO_ROOT / "skills" / "core"
+        expected_count = len(list(core_skills.glob("*/SKILL.md")))
         result = self._run_ws(self.REPO_ROOT, "skill-map", "build")
         self.assertEqual(result.returncode, 0)
-        self.assertIn("22 skills", result.stdout)
+        self.assertIn(f"{expected_count} skills", result.stdout)
         out = self.REPO_ROOT / "work-studio" / "skill-map.yaml"
         self.assertTrue(out.exists())
         text = out.read_text(encoding="utf-8")
@@ -4453,7 +4455,7 @@ class TestSkillMapCommand(unittest.TestCase):
         # Both formerly non-conforming skills are repaired and present.
         self.assertIn("thinking-grilling-session", text)
         self.assertIn("thinking-diagnose-homogenization", text)
-        self.assertEqual(text.count("  - name:"), 22)
+        self.assertEqual(text.count("  - name:"), expected_count)
 
     def test_regeneration_is_byte_identical(self):
         out = self.REPO_ROOT / "work-studio" / "skill-map.yaml"

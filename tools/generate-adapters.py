@@ -42,6 +42,8 @@ SHARED_REFERENCES = [
     "CONSEQUENCE-AUTHORITY.md",
     "EVIDENCE-MODEL.md",
     "DIRECTOR-LANGUAGE.md",
+    "CONDUCT-CLI-OPERATIONS.md",
+    "BUSINESS-OPERATING-PIPELINE.md",
 ]
 
 # Capability primitives (capabilities/*.md) — small, stable, composable
@@ -55,9 +57,10 @@ SHARED_CAPABILITY_PRIMITIVES = [
     "generate.md",
 ]
 
-# Kernel/overlay split: AGREEMENT-LOOP.md and SKILL-AWARE-GRILLING.md form the
-# grilling overlay. They ship only with the grilling-session skill; all other
-# skills get kernel-only output (Decision 3, WO 2026-07-26-004).
+# AGREEMENT-LOOP.md and SKILL-AWARE-GRILLING.md are large, but a generated
+# skill that tells the runtime to follow either file must ship that file. The
+# reference scanner below preserves the payload boundary for skills that do
+# not declare those dependencies while keeping installed skills self-contained.
 GRILLING_OVERLAY_REFS = {"AGREEMENT-LOOP.md", "SKILL-AWARE-GRILLING.md"}
 GRILLING_CORE_NAME = "thinking-grilling-session"
 
@@ -765,9 +768,8 @@ def build_reference_entries(skill_name, output_dir, core_skill_dir=None, write=F
     only copies files the skill explicitly references (Decision 88, Session 11).
     When core_skill_dir is None (legacy path), includes all references.
 
-    Kernel/overlay split (Decision 3, WO 2026-07-26-004): grilling overlay
-    references (AGREEMENT-LOOP.md, SKILL-AWARE-GRILLING.md) are filtered out
-    for all skills except grilling-session, which gets the full overlay.
+    Grilling references remain payload-sensitive: they are copied only when
+    the skill body or an injected shared preamble explicitly mentions them.
 
     Tier-scaled epistemic rules (WO 2026-07-26-006): the correct epistemic
     reference variant is included based on the skill's default_tier.
@@ -791,11 +793,6 @@ def build_reference_entries(skill_name, output_dir, core_skill_dir=None, write=F
                             active_refs.append(ref)
     else:
         active_refs = SHARED_REFERENCES
-
-    # Kernel/overlay split: grilling overlay references only ship with the
-    # grilling-session skill. All other skills get kernel-only output.
-    if not is_grilling_skill(skill_name):
-        active_refs = [f for f in active_refs if f not in GRILLING_OVERLAY_REFS]
 
     if write:
         if active_refs:

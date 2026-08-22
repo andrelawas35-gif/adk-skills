@@ -3,13 +3,18 @@ schema_version: 1
 id: 2026-08-21-003
 title: Full one-system-any-repo feature: package tools/ws, checkpoint-DB policy, multi-repo orchestration
 type: project
-status: active
-state: verify
+status: closed
+state: close
 consequence: meaningful
 sensitivity: ordinary
 created_at: 2026-08-21T13:02:59Z
-updated_at: 2026-08-21T13:23:54Z
-next_action: Director decision to commit
+updated_at: 2026-08-21T19:18:35Z
+next_action: Director decision: close this Work Object, or hold open pending anything further
+
+
+
+
+
 
 
 
@@ -93,6 +98,7 @@ were its explicit Non-goals, now brought into scope by director decision).
 | [decision] | director, this session | Director: 'Just one repo at a time for now.' Resolves the multi-simultaneous-repo open question -- rules out Direction 2 (registry). Directions 1 (minimal trio) and 3 (package first, defer rest) remain live. |
 | [system] | this session, scratch venv + pip install -e | Packaging tracer bullet run. Scratch copy of tools/ws under C:\Users\Andre\AppData\Local\Temp\ws-packaging-tracer\src\tools\ws, scratch pyproject.toml ([project.scripts] ws = tools.ws.__main__:main, dependencies=[], setuptools build backend), pip install -e into a disposable venv. Result: (a) installed ws console script ran standalone from an arbitrary directory with no repo checkout present, producing the correct existing error ('.work-studio/ not found ... Run ws init first') rather than crashing; (b) from tools.ws import schema and from tools.ws.sections import VALID_EVIDENCE_TAGS both resolved correctly to the installed package location (confirmed via __file__, not falling back to the real repo); (c) pip list --format=freeze showed only pip and the package itself -- zero new runtime dependency. Real repo's tools/ws and python -m tools.ws invocation were never touched (git status confirms only the two WO files changed). Scratch venv and copy deleted after the test. |
 | [system] | this session, uv run --python 3.11 + disposable venv, implement-bounded-change | implement-bounded-change, all three patches: (1) Packaging: added tools/pyproject.toml (package-dir mapping tools.ws -> ws, no duplication/symlink -- single source of truth). Verified against the real repo (not scratch): pip install -e ./tools into a disposable venv; ws.exe validate ran standalone from an arbitrary directory with the correct existing error; tools.ws.__file__ resolved to the real tools/ws/__init__.py; pip list showed only pip + the package itself. Cleaned up a leftover *.egg-info build artifact and added it to .gitignore. (2) Checkpoint-DB default: added _default_checkpoint_db() to runtime/graph.py, threaded into all 8 argparse defaults. Verified directly: WS_REPO_ROOT unset returns the unchanged repo-relative default; set returns a platform-appropriate user-data directory (LOCALAPPDATA on this machine). Known, recorded gap: doesn't key by which repo WS_REPO_ROOT pointed at -- explicit --checkpoint-db avoids collision; left for a future revision. (3) Multi-repo: no code change, verified by inspection -- WS_REPO_ROOT already supports exactly one target per invocation as designed. runtime/tests (99 tests) and the full tools test suite (439 tests) both matched their established pre-existing baselines exactly (12 failures/32 errors; 2 failures/3 errors) -- zero regression. generate-adapters.py --check stayed clean (no drift from the new tools/pyproject.toml). No deviation from the accepted boundary. Not yet committed. |
+| [system] | this session, independent verification against committed HEAD, two live sandbox repos | Release-evidence verification (independent re-run against committed ef1c4cc, not just the implementer's own check). Packaging: verified -- fresh venv, ws console script standalone, tools.ws.__file__ resolved to real source, zero new dependency. Checkpoint-DB default: verified both branches directly, plus a live end-to-end graph run (WS_REPO_ROOT set, no --checkpoint-db flag) that correctly created the checkpoint DB at the new computed default location -- proves the argparse wiring is real, not just the helper function in isolation. Multi-repo: not applicable, confirmed by inspection. Operational check beyond what implementation covered: ran the graph against two different sandbox repos in sequence -- both used the identical checkpoint/idempotency DB path, confirming the recorded 'known gap' (no per-repo keying) is real and observable, not theoretical. No error resulted (thread IDs differed) but idempotency-receipt state is shared across sequential targets. No privacy/security boundary applies -- everything local and disposable. No deployment or release claim made. |
 ## Open questions
 
 - **Answered.** Director: "Just one repo at a time for now." Rules out
@@ -105,10 +111,11 @@ were its explicit Non-goals, now brought into scope by director decision).
 
 ## Next move
 
-All three patches implemented and verified: `tools/pyproject.toml` (packaging),
-`runtime/graph.py::_default_checkpoint_db()` (checkpoint-DB default),
-multi-repo left as-is (no code change). Not yet committed. Awaiting director
-decision to commit.
+All three patches implemented, independently verified against committed
+`ef1c4cc`, and committed. Release-evidence verification found no failed
+criteria; the one confirmed gap (checkpoint/idempotency DB shared across
+sequential targets, no per-repo keying) was already an accepted non-fix, now
+observed rather than theoretical. Awaiting director decision to close.
 
 ### Direction 1: Minimal trio — three small, independent patches
 
@@ -195,3 +202,28 @@ decision to commit.
 - **Status:** active
 - **Actor:** director
 - **Rationale:** All three of Direction 1's patches implemented and verified: tools/pyproject.toml (packaging), runtime/graph.py computed checkpoint-DB default, multi-repo left as-is (no code change needed). Zero regression: runtime/tests and the full tools test suite both matched their established pre-existing baselines exactly. No deviation from the accepted boundary. Not yet committed.
+### 2026-08-21T13:25:33Z — committed
+
+- **State:** verify
+- **Status:** active
+- **Actor:** director
+- **Rationale:** Director committed all three patches (ef1c4cc).
+- **Commit:** ef1c4cc
+### 2026-08-21T13:28:27Z — release-evidence-verified
+
+- **State:** verify
+- **Status:** active
+- **Actor:** director
+- **Rationale:** Independent release-evidence verification against committed ef1c4cc: all three accepted criteria verified (packaging, checkpoint-DB default, multi-repo no-op). No release/deployment claim. One confirmed operational gap: checkpoint/idempotency DB shared across sequential target repos -- already an accepted non-fix, now observed directly rather than theoretical.
+### 2026-08-21T13:29:14Z — Closed: All three patches (packaging, computed checkpoint-DB default, multi-repo no-op) implemented, independently verified against committed ef1c4cc, and committed (ef1c4cc). One confirmed, accepted-as-non-fix gap: checkpoint/idempotency DB is shared across sequential target repos (no per-repo keying) -- observed directly during verification, not just theorized. No deployment/release involved; this was local dev tooling.
+
+- **State:** close
+- **Status:** closed
+- **Actor:** director
+- **Rationale:** All three patches (packaging, computed checkpoint-DB default, multi-repo no-op) implemented, independently verified against committed ef1c4cc, and committed (ef1c4cc). One confirmed, accepted-as-non-fix gap: checkpoint/idempotency DB is shared across sequential target repos (no per-repo keying) -- observed directly during verification, not just theorized. No deployment/release involved; this was local dev tooling.
+### 2026-08-21T19:18:35Z — Reconciled pyproject.toml with the working editable install
+
+- **State:** close
+- **Status:** closed
+- **Actor:** claude-code
+- **Rationale:** Post-close follow-up: the packaging patch's working install (tools.ws / work-studio-ws, work-studio-mcp) was editable-installed out-of-band and not captured by uv.lock -- a uv sync would have silently dropped the ws console script. Declared a uv workspace (root pyproject.toml: [tool.uv.workspace] members = ["tools", "mcp_server"]; mcp_server/pyproject.toml switched its work-studio-ws source from a raw path to {workspace = true}), regenerated uv.lock, and verified: uv sync reproduces the install, ws --version resolves from an unrelated cwd, uv run ws works via the workspace entrypoint, and the opt-in test group (hypothesis, mcp) still resolves on demand. Not committed.

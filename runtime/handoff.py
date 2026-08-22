@@ -11,9 +11,28 @@ so the runtime contract and any future consumer cannot silently disagree.
 from __future__ import annotations
 
 from datetime import datetime
-from typing import List
+from typing import List, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
+
+from tools.ws.component_governance import (
+    VALID_COMPONENT_KINDS,
+    VALID_GOVERNANCE_DOMAINS,
+    validate_skill_governance_domain,
+)
+
+ComponentKind = Literal[
+    "skill", "protocol", "runtime", "tooling", "artifact-schema", "integration"
+]
+GovernanceDomain = Literal[
+    "business", "design", "engineering", "governance", "operations",
+    "research", "thinking", "cross-cutting",
+]
+
+if set(ComponentKind.__args__) != set(VALID_COMPONENT_KINDS):
+    raise RuntimeError("runtime ComponentKind drifted from deterministic taxonomy")
+if set(GovernanceDomain.__args__) != set(VALID_GOVERNANCE_DOMAINS):
+    raise RuntimeError("runtime GovernanceDomain drifted from deterministic taxonomy")
 
 
 class HandoffEnvelope(BaseModel):
@@ -24,10 +43,19 @@ class HandoffEnvelope(BaseModel):
     handoff_id: str
     from_role: str
     to_skill: str
+    component_kind: ComponentKind
+    governance_domain: GovernanceDomain
     task: str
     input_refs: List[str] = Field(default_factory=list)
     expected_output: str
     authority_scope: str
+
+    @model_validator(mode="after")
+    def validate_governed_route(self) -> "HandoffEnvelope":
+        if self.component_kind != "skill":
+            raise ValueError("runtime specialist handoffs must target component_kind=skill")
+        validate_skill_governance_domain(self.to_skill, self.governance_domain)
+        return self
 
 
 class HandoffReceipt(BaseModel):
@@ -46,8 +74,12 @@ class HandoffReceipt(BaseModel):
 # Mirrors the canonical state->skill routing table in
 # skills/core/governance-conduct-work-object/SKILL.md ("### 6. Route to
 # specialist"). Kept as a manually-synced copy (WO 2026-08-17-001 Decision 6):
-# if the conductor's table changes, this dict must be updated to match --
-# no automatic sync exists.
+# if the conductor's table changes, this dict must be updated to match by
+# hand -- there is no automatic sync. There IS automatic drift detection,
+# though: runtime/tests/test_handoff_graph.py's
+# test_state_routing_table_stays_in_sync_with_conductor parses the
+# conductor's table directly and fails if this dict disagrees (routing
+# audit WO 2026-08-22-009, G3).
 _STATE_ROUTING_TABLE = {
     "notice": "turn-signal-into-work",
     "explore": "develop-idea",

@@ -1,0 +1,169 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Work Studio command center</title>
+<style>
+body { font-family: -apple-system, sans-serif; max-width: 900px; margin: 2rem auto; padding: 0 1rem; color: #1a1a1a; background: #fff; }
+h1 { font-size: 20px; font-weight: 500; }
+.section-label { font-size: 13px; font-weight: 500; color: #666; margin: 1.25rem 0 8px; }
+.row { display: flex; align-items: center; gap: 10px; padding: 8px 4px; border-bottom: 0.5px solid #ddd; font-size: 13px; }
+.pill { font-size: 11px; padding: 2px 8px; border-radius: 6px; flex-shrink: 0; background: #eee; }
+.id { font-family: monospace; font-size: 12px; color: #888; flex-shrink: 0; width: 112px; }
+.title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cons { font-size: 11px; flex-shrink: 0; width: 70px; color: #888; }
+.cons-high { color: #b91c1c; }
+.stale { font-size: 11px; color: #888; flex-shrink: 0; width: 56px; }
+.attn { font-size: 11px; color: #888; flex-shrink: 0; width: 64px; text-align: right; }
+.banner { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: #fff7ed; border-radius: 8px; margin-bottom: 1rem; font-size: 13px; color: #92400e; }
+.banner.danger { background: #fef2f2; color: #991b1b; }
+button { margin-top: 1rem; font-size: 12px; padding: 4px 10px; }
+#closed-wrap { display: none; margin-top: 8px; }
+</style></head>
+<body>
+<h1>Work Studio command center</h1>
+<div class="banner"><i class="ti ti-alert-triangle" aria-hidden="true"></i> No primary work object set — 7 supporting, 0 primary</div>
+
+<div class="section-label">Active — 12</div>
+<div class="row" style="">
+  <span class="pill c-teal">verify</span>
+  <span class="id">2026-08-21-001</span>
+  <span class="title">Make tools/ws and runtime/ portable across repos</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">22h ago</span>
+  <span class="attn">supporting</span>
+</div><div class="row" style="">
+  <span class="pill c-teal">verify</span>
+  <span class="id">2026-08-21-005</span>
+  <span class="title">Multi-repo registry: Direction 2 successor to 2026-08-21-003</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">21h ago</span>
+  <span class="attn">supporting</span>
+</div><div class="row" style="">
+  <span class="pill c-blue">explore</span>
+  <span class="id">2026-08-21-006</span>
+  <span class="title">Utilize the runtime with the alawas skills -- does the runtime invoke skills, or is HandoffEnvelope.to_skill only a proposal?</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">20h ago</span>
+  <span class="attn">supporting</span>
+</div><div class="row" style="">
+  <span class="pill c-purple">design</span>
+  <span class="id">2026-08-21-009</span>
+  <span class="title">Refine each alawas skill&#x27;s docs and structure to represent the current system</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">16h ago</span>
+  <span class="attn"></span>
+</div><div class="row" style="">
+  <span class="pill c-teal">verify</span>
+  <span class="id">2026-08-21-010</span>
+  <span class="title">Give this Work Studio its own MCP server -- feasibility and shape</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">16h ago</span>
+  <span class="attn"></span>
+</div><div class="row" style="">
+  <span class="pill c-purple">design</span>
+  <span class="id">2026-08-21-011</span>
+  <span class="title">MCP agency mode -- can a tool call spawn real skill reasoning on another repo</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">16h ago</span>
+  <span class="attn"></span>
+</div><div class="row" style="">
+  <span class="pill c-blue">explore</span>
+  <span class="id">2026-08-22-002</span>
+  <span class="title">Skill-existence test and Role/Skill/Capability taxonomy -- resolve &#x27;capability&#x27; term collision</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">1h ago</span>
+  <span class="attn">supporting</span>
+</div><div class="row" style="">
+  <span class="pill c-amber">build</span>
+  <span class="id">2026-08-22-003</span>
+  <span class="title">Refine alawas-research-produce-report toward a Deep-Research-style dynamic workflow</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">7m ago</span>
+  <span class="attn">supporting</span>
+</div><div class="row" style="">
+  <span class="pill c-blue">explore</span>
+  <span class="id">2026-08-22-005</span>
+  <span class="title">Determine whether validator failures reveal canonical skill defects or contract incompatibilities</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">10m ago</span>
+  <span class="attn">supporting</span>
+</div><div class="row" style="">
+  <span class="pill c-teal">verify</span>
+  <span class="id">2026-08-22-006</span>
+  <span class="title">Build a visual central command center for Work Studio</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">5m ago</span>
+  <span class="attn">supporting</span>
+</div><div class="row" style="">
+  <span class="pill c-teal">verify</span>
+  <span class="id">2026-08-22-007</span>
+  <span class="title">Repair stale skill corpus verification expectations</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">7m ago</span>
+  <span class="attn"></span>
+</div><div class="row" style="">
+  <span class="pill c-blue">explore</span>
+  <span class="id">2026-08-22-008</span>
+  <span class="title">Research comprehensive next business-management skills for Work Studio</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">0m ago</span>
+  <span class="attn"></span>
+</div>
+<button id="toggle">Show closed (7)</button>
+<div id="closed-wrap"><div class="row" style="opacity:0.55;">
+  <span class="pill c-gray">close</span>
+  <span class="id">2026-08-21-002</span>
+  <span class="title">Cross-platform (Windows/Mac/Linux) compatibility for tools/ws and install tooling</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">1d ago</span>
+  <span class="attn"></span>
+</div><div class="row" style="opacity:0.55;">
+  <span class="pill c-gray">close</span>
+  <span class="id">2026-08-21-003</span>
+  <span class="title">Full one-system-any-repo feature: package tools/ws, checkpoint-DB policy, multi-repo orchestration</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">16h ago</span>
+  <span class="attn"></span>
+</div><div class="row" style="opacity:0.55;">
+  <span class="pill c-gray">close</span>
+  <span class="id">2026-08-21-004</span>
+  <span class="title">Phase 7: retry, compensation, and director gates (successor to lost 2026-08-17-015/016)</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">21h ago</span>
+  <span class="attn"></span>
+</div><div class="row" style="opacity:0.55;">
+  <span class="pill c-gray">close</span>
+  <span class="id">2026-08-21-007</span>
+  <span class="title">Expose --approve-direction on the run-phase6 CLI subcommand</span>
+  <span class="cons cons-low">low</span>
+  <span class="stale">20h ago</span>
+  <span class="attn"></span>
+</div><div class="row" style="opacity:0.55;">
+  <span class="pill c-gray">close</span>
+  <span class="id">2026-08-21-008</span>
+  <span class="title">Add a deep-research/plan skill, heavier than investigate-live-question</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">16h ago</span>
+  <span class="attn"></span>
+</div><div class="row" style="opacity:0.55;">
+  <span class="pill c-gray">close</span>
+  <span class="id">2026-08-22-001</span>
+  <span class="title">Add epistemic loop (Hypothesis/Prediction/Test/Judgment) as a formal Work Object mechanism</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">1h ago</span>
+  <span class="attn"></span>
+</div><div class="row" style="opacity:0.55;">
+  <span class="pill c-gray">close</span>
+  <span class="id">2026-08-22-004</span>
+  <span class="title">Which business management skills belong in Work Studio from sales through operations</span>
+  <span class="cons cons-med">meaningful</span>
+  <span class="stale">14m ago</span>
+  <span class="attn"></span>
+</div></div>
+<script>
+document.getElementById('toggle').addEventListener('click', function() {
+  const w = document.getElementById('closed-wrap');
+  const hidden = w.style.display === 'none' || !w.style.display;
+  w.style.display = hidden ? 'block' : 'none';
+  this.textContent = hidden ? 'Hide closed (7)' : 'Show closed (7)';
+});
+</script>
+</body></html>

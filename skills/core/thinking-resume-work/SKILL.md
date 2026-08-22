@@ -37,7 +37,7 @@ picks; the skill recommends.
 - Return exactly one candidate: its ID, state, and recorded `next_action`
 - Name the state-to-skill routing table as belonging to the conductor; this
   skill does not copy it
-- Route the candidate to `alawas-governance-conduct-work-object` with the ID
+- Route the candidate to `governance-conduct-work-object` with the ID
   and destination already named
 
 **This skill does NOT:**
@@ -141,7 +141,7 @@ next_action before routing.
 
 ## Next move
 
-Route to `alawas-governance-conduct-work-object` with the candidate ID and
+Route to `governance-conduct-work-object` with the candidate ID and
 destination named. Or: no candidate — director selects.
 ```
 

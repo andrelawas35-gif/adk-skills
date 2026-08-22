@@ -36,7 +36,7 @@ from runtime.graph import (
 from runtime.graph import main as graph_main
 
 ROOT = Path(__file__).resolve().parents[2]
-TARGET_WO = "2026-07-27-001"
+TARGET_WO = "2026-08-22-011"
 
 
 def _digest_work_studio() -> str:
@@ -493,6 +493,10 @@ class Phase6HandoffTests(unittest.TestCase):
                 with tempfile.TemporaryDirectory() as tmp:
                     tmp = Path(tmp)
                     result = run_phase6(wo_id, f"state-{state}", tmp / "t.sqlite")
+                    if result.get("business_handoff_envelope"):
+                        expected_proposal = (
+                            result["business_handoff_envelope"]["to_skill"]
+                        )
                     self.assertEqual(expected_proposal, result["join_proposal"], state)
                     self.assertEqual(
                         expected_authority,

@@ -1,0 +1,22 @@
+[project]
+name = "work-studio-mcp"
+version = "0.1.0"
+description = "MCP server exposing Work Studio's tools/ws operations to MCP clients (WO 2026-08-21-010)."
+requires-python = ">=3.11"
+dependencies = [
+    "mcp>=2.0.0",
+    "work-studio-ws",
+]
+
+[project.scripts]
+work-studio-mcp = "mcp_server.server:run"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.uv.sources]
+work-studio-ws = { workspace = true }
