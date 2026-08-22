@@ -733,3 +733,25 @@ the surface has a stewarded pattern stating a stricter project-specific
 minimum: does the audit report against the generic pass, or does it apply the
 stricter stewarded expectation and report a fail the generic check would have
 missed?
+
+### `alawas-design-critique-usability`
+
+**Gates** — (1) Evidence-linking: confirm every finding cites the specific
+element and heuristic it violates, never a bare taste judgment with nothing
+to point at. (2) Scope honesty: confirm heuristics requiring live
+interaction (error recovery, undo, help/documentation) are named as out of
+scope for a given pass, never weakly proxied by static inspection and
+reported as checked.
+
+**Escalation** — Default: evaluate the real rendered surface against a
+named, fixed set of statically-checkable heuristics and produce ranked,
+evidence-linked findings. Information value overrides the default when a
+finding could be read as either a heuristic violation or an intentional
+design choice — escalate to naming that ambiguity explicitly rather than
+asserting the violation as settled.
+
+**Pressure scenario** — Two elements on the same surface violate the same
+heuristic in different ways (one is unlabeled, the other mislabeled): does
+the critique report them as one aggregated finding, or as two distinct
+findings, and does aggregating risk understating how widespread the pattern
+is?

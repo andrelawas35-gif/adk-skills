@@ -14,3 +14,5 @@
 - `2026-08-22-027` — Recommend additional skills to enhance the design pipeline (supporting)
 - `2026-08-22-028` — Build design-audit-accessibility skill (supporting)
 - `2026-08-22-029` — Manage liquidity and cash runway (supporting)
+- `2026-08-22-030` — Build design-critique-usability skill (supporting)
+- `2026-08-22-031` — Add domain axis to Work Object frontmatter (supporting)

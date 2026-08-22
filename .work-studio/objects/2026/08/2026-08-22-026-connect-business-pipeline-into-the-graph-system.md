@@ -8,8 +8,10 @@ state: design
 consequence: meaningful
 sensitivity: ordinary
 created_at: 2026-08-22T14:45:15Z
-updated_at: 2026-08-22T15:06:13Z
-next_action: Open a genuine business-manage-liquidity-and-cash-runway Work Object with a real decision, so the deferred 4th exit-criteria item (a real business edge, per WO 2026-08-22-026 Decision 1) can finally be written and traced -- the model and tooling are both ready. Alternatively, continue extending section 9 to more business skills, or begin Direction 2 (loop reducer).
+updated_at: 2026-08-22T15:13:02Z
+next_action: Extend section 9 with more business skills using the now-proven pattern, or begin Direction 2 (loop reducer) to close the empirical loop on WO 2026-08-22-029's revisit trigger (confirm 08-30 receivable / 09-01 rent land as predicted).
+
+
 
 
 
@@ -43,7 +45,7 @@ which blocks every downstream connective step.
 - [x] `ws relation add <from> --type <type> --to <to> --basis <ref>` appends a schema-valid, append-only REL record to a Work Object's `## Relationships` section
 - [x] `ws graph trace <ref>` reads `## Relationships` across the corpus and prints edges touching `<ref>` (upstream/downstream)
 - [x] Demo edge `2026-08-22-026 responds_to 2026-08-21-006` is written and printed by trace (executed, not planned)
-- [ ] One real business edge from `business-manage-liquidity-and-cash-runway` is written and traced — **blocked**: no business-decision Work Object exists in the corpus yet; not fabricated (see [gap] evidence entry)
+- [x] One real business edge from `business-manage-liquidity-and-cash-runway` is written and traced — WO `2026-08-22-029` Decision 1 (real rent/receivable liquidity call), edge confirmed via `ws graph trace`
 
 
 ## Constraints and non-goals
@@ -100,6 +102,7 @@ which blocks every downstream connective step.
 | [system] | ws relation add 2026-08-22-026 --type responds_to --to 2026-08-21-006; ws graph trace 2026-08-22-026; ws graph trace 2026-08-21-006 --direction upstream; ws validate | Live demo executed (not just tested): edge 2026-08-22-026 responds_to 2026-08-21-006 written via ws relation add and confirmed via ws graph trace from both directions. ws validate shows no new errors on the object. Repository inspection preserved all pre-existing dirty work untouched (git diff --stat clean, only intended files changed). |
 | [gap] | grep -rli liquidity/runway/business-manage over .work-studio/objects -> no matches | Exit criteria item 'one real business edge from business-manage-liquidity-and-cash-runway' NOT met: no business-decision Work Object exists anywhere in the corpus to attach it to. implement-bounded-change correctly declined to fabricate one -- inventing a business decision would exceed its authority. This is the one remaining unresolved item before the tracer's exit criteria are fully satisfied. |
 | [decision] | director confirmation 'write it'; edit to references/architecture/epistemic-graph-loop-system-improvement-architecture.md section 9 | Director confirmed and wrote the section-9 model extension: one new row for business-manage-liquidity-and-cash-runway added to references/architecture/epistemic-graph-loop-system-improvement-architecture.md section 9 table (first business-family entry). Recommended change names ws relation add as the real available mechanism, not the aspirational ws decision/verification/outcome commands the rest of the table assumes. Disposition: Amend now, pilot business skill. |
+| [system] | WO 2026-08-22-029 Decision 1; ws graph trace 2026-08-22-026 | 4th exit-criteria item now MET: WO 2026-08-22-029 (business-manage-liquidity-and-cash-runway) reached a real Decision 1 (pay rent on schedule; $30,000 rent clears against $100k-150k cash in both scenarios). It carries a real responds_to edge to this WO, written before the decision existed and now backed by it -- confirmed via ws graph trace. Tracer bullet exit criteria fully satisfied: all 4 items done. |
 ## Open questions
 
 <!-- Unresolved questions that block progress or require a decision. -->
@@ -164,6 +167,12 @@ business edge from `business-manage-liquidity-and-cash-runway`.
 - **Status:** active
 - **Actor:** governance-conduct-work-object
 - **Rationale:** Precondition (section-9 coverage for the business family) is now started with one real, tooling-grounded entry rather than a speculative 15-skill draft. Business's first typed-edge path (ws relation add via observes/hands_off_to) is now modeled and documented, closing the original gap: business had zero representation in the graph/loop architecture.
+### 2026-08-22T15:13:02Z — Tracer bullet exit criteria fully satisfied (4/4): tooling built and tested, demo WO-to-WO edge traced, and now a real business edge from WO 2026-08-22-029 (business-manage-liquidity-and-cash-runway, a real $100k cash / $50k receivable / $30k rent decision). Direction 1 (conform to typed-edge vocabulary) is proven end to end for one business skill.
+
+- **State:** design
+- **Status:** active
+- **Actor:** governance-conduct-work-object
+- **Rationale:** The whole point of Option B was to prove the tooling could carry a real business decision, not just a demo. It now has, with a genuine decision behind it rather than a fabricated one.
 ## Relationships
 
   REL-2026_08_22_026-001:

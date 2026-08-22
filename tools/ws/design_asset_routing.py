@@ -21,6 +21,7 @@ FRONTIER_OWNERS = {
     "implementation": "alawas-engineering-implement-bounded-change",
     "verification": "design-verify-design-implementation",
     "accessibility": "design-audit-accessibility",
+    "critique": "design-critique-usability",
     "component-registration": "design-track-components",
     "projection": "design-project-asset-workbench",
 }

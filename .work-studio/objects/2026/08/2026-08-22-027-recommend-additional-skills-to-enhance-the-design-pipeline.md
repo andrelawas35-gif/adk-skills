@@ -8,8 +8,9 @@ state: verify
 consequence: meaningful
 sensitivity: ordinary
 created_at: 2026-08-22T14:50:22Z
-updated_at: 2026-08-22T14:53:28Z
+updated_at: 2026-08-22T15:11:16Z
 next_action: Director selects which recommendation(s), if any, to advance into their own Work Object. Highest-confidence candidate: design-audit-accessibility.
+
 
 
 
@@ -81,6 +82,7 @@ report-type deliverable.
 | [system] | .work-studio/deliverables/2026-08-22-027-design-pipeline-enhancement-skills.md | Full report deliverable (linked via Artifacts). |
 | [gap] | ws transition audit (verify) | No decision record with result: pass and populated scope found. Requirement coverage evidence is expected before verify transition. |
 | [decision] | director | Advanced design-audit-accessibility into its own Work Object: 2026-08-22-028. The other two recommendations (design-critique-usability, design-govern-interaction-motion) remain un-advanced. |
+| [decision] | director | Advanced the second recommendation, design-critique-usability, into its own Work Object: 2026-08-22-030. design-govern-interaction-motion remains the last un-advanced recommendation. |
 ## Open questions
 
 - Which recommendation(s), if any, does the director advance into their own

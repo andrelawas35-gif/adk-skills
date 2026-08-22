@@ -10,7 +10,6 @@ p { line-height: 1.45; }
 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
 .asset { background: #fff; border: 1px solid #d8dee8; border-radius: 8px; padding: 14px; }
 .asset-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-.asset-head p { color: #667085; margin: 4px 0 0; font-size: 13px; }
 .summary { font-size: 13px; }
 .status { border-radius: 6px; padding: 3px 8px; font-size: 12px; }
 .ok { background: #ecfdf3; color: #027a48; }
@@ -25,66 +24,74 @@ code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size
 </style></head>
 <body>
 <h1>Design Asset Workbench</h1>
-<div class="meta">Generated 2026-08-22T14:45:08Z from local asset records. Assets: 4. Validation gaps: 0.</div>
+<div class="meta">Generated 2026-08-22T15:17:24Z from local asset records. Assets: 4. Validation gaps: 0.</div>
 <div class="notice">Read-only projection. Edit asset truth in <code>.work-studio/design-assets/*.asset.md</code> through the appropriate Work Object route, then regenerate this page.</div>
 <div class="grid"><section class="asset">
   <div class="asset-head">
     <div>
       <h2>asset.design.create-review-approve-pattern</h2>
-      <p>ux-pattern · draft · Work Object 2026-08-22-017</p>
     </div>
     <span class="status ok">valid</span>
   </div>
   <p class="summary">Draft UX-pattern asset for the create-review-approve flow used to test ingest of reusable behavior, states, and interaction guidance separately from visual assets.</p>
   <dl>
+    <dt>Asset kind</dt><dd>ux-pattern</dd>
+    <dt>Status</dt><dd>draft</dd>
+    <dt>Work Object</dt><dd>2026-08-22-017</dd>
     <dt>Source of truth</dt><dd>draft ingest proposal from explicit input: real-use ingest testing slice from accepted ReviewBadge tracer scope</dd>
     <dt>Record</dt><dd>.work-studio/design-assets/create-review-approve-pattern.asset.md</dd>
-    <dt>Lifecycle owners</dt><dd>1</dd>
+    <dt>Lifecycle owners (1)</dt><dd><code>design-manage-assets</code></dd>
   </dl>
 </section><section class="asset">
   <div class="asset-head">
     <div>
       <h2>asset.design.reviewbadge-themes</h2>
-      <p>theme · draft · Work Object 2026-08-22-017</p>
     </div>
     <span class="status ok">valid</span>
   </div>
   <p class="summary">Draft theme asset representing the ReviewBadge tracer&#x27;s paired light and dark visual treatments for testing governed asset ingest across theme records.</p>
   <dl>
+    <dt>Asset kind</dt><dd>theme</dd>
+    <dt>Status</dt><dd>draft</dd>
+    <dt>Work Object</dt><dd>2026-08-22-017</dd>
     <dt>Source of truth</dt><dd>draft ingest proposal from explicit input: real-use ingest testing slice from accepted ReviewBadge tracer scope</dd>
     <dt>Record</dt><dd>.work-studio/design-assets/reviewbadge-themes.asset.md</dd>
-    <dt>Lifecycle owners</dt><dd>1</dd>
+    <dt>Lifecycle owners (1)</dt><dd><code>design-manage-assets</code></dd>
   </dl>
 </section><section class="asset">
   <div class="asset-head">
     <div>
       <h2>asset.design.reviewbadge</h2>
-      <p>component-family · active · Work Object 2026-08-22-017</p>
     </div>
     <span class="status ok">valid</span>
   </div>
   <p class="summary">`ReviewBadge` is a small reusable status badge for the recurring `create-review-approve` experience. It shows whether an item is `draft`, `in_review`, `approved`, or `blocked`. This record is an accepted studio asset. It began as the ReviewBadge tracer and was accepted to `active` by the director on 2026-08-22 in the creative-use slice of Work Object `2026-08-22-017`. Its job is to test whether the design asset pipeline can represent identity, system composition, experience behavior, verification, component registration, and projection without owner ambiguity.</p>
   <dl>
+    <dt>Asset kind</dt><dd>component-family</dd>
+    <dt>Status</dt><dd>active</dd>
+    <dt>Work Object</dt><dd>2026-08-22-017</dd>
     <dt>Source of truth</dt><dd>this tracer record, pending future asset registry shape</dd>
     <dt>Record</dt><dd>.work-studio/design-assets/reviewbadge.asset.md</dd>
-    <dt>Lifecycle owners</dt><dd>10</dd>
+    <dt>Lifecycle owners (10)</dt><dd><code>design-manage-assets</code>, <code>design-audit-product-interface</code>, <code>design-build-design-foundation</code>, <code>design-compose-design-system</code>, <code>design-steward-experience-patterns</code>, <code>design-apply-design-direction</code>, <code>alawas-engineering-implement-bounded-change</code>, <code>design-verify-design-implementation</code>, <code>design-track-components</code>, <code>design-project-asset-workbench</code></dd>
   </dl>
 </section><section class="asset">
   <div class="asset-head">
     <div>
       <h2>asset.design.studio-status-tokens</h2>
-      <p>token-set · draft · Work Object 2026-08-22-017</p>
     </div>
     <span class="status ok">valid</span>
   </div>
   <p class="summary">Draft token-set asset for studio status colors used to test explicit asset ingest before canonization.</p>
   <dl>
+    <dt>Asset kind</dt><dd>token-set</dd>
+    <dt>Status</dt><dd>draft</dd>
+    <dt>Work Object</dt><dd>2026-08-22-017</dd>
     <dt>Source of truth</dt><dd>draft ingest proposal from explicit input: manual ingest slice from Work Object 2026-08-22-017</dd>
     <dt>Record</dt><dd>.work-studio/design-assets/studio-status-tokens.asset.md</dd>
-    <dt>Lifecycle owners</dt><dd>1</dd>
+    <dt>Lifecycle owners (1)</dt><dd><code>design-manage-assets</code></dd>
   </dl>
 </section></div>
 
 <h2 style="margin-top: 24px;">Frontier Ownership</h2>
-<table><thead><tr><th>Frontier</th><th>Owner</th></tr></thead><tbody><tr><td>component-family</td><td><code>design-compose-design-system</code></td></tr><tr><td>component-registration</td><td><code>design-track-components</code></td></tr><tr><td>creative-direction</td><td><code>design-apply-design-direction</code></td></tr><tr><td>flow</td><td><code>design-steward-experience-patterns</code></td></tr><tr><td>foundation</td><td><code>design-compose-design-system</code></td></tr><tr><td>identity</td><td><code>design-manage-assets</code></td></tr><tr><td>implementation</td><td><code>alawas-engineering-implement-bounded-change</code></td></tr><tr><td>projection</td><td><code>design-project-asset-workbench</code></td></tr><tr><td>theme</td><td><code>design-compose-design-system</code></td></tr><tr><td>tokens</td><td><code>design-compose-design-system</code></td></tr><tr><td>ux-pattern</td><td><code>design-steward-experience-patterns</code></td></tr><tr><td>variant</td><td><code>design-compose-design-system</code></td></tr><tr><td>verification</td><td><code>design-verify-design-implementation</code></td></tr></tbody></table>
+<table><thead><tr><th>Frontier</th><th>What it covers</th><th>Owner</th></tr></thead><tbody><tr><td>accessibility</td><td>WCAG conformance against a stewarded or generic baseline</td><td><code>design-audit-accessibility</code></td></tr><tr><td>component-family</td><td>related component groupings</td><td><code>design-compose-design-system</code></td></tr><tr><td>component-registration</td><td>durable shipped-component tracking and governance</td><td><code>design-track-components</code></td></tr><tr><td>creative-direction</td><td>confirmed creative interpretation and execution</td><td><code>design-apply-design-direction</code></td></tr><tr><td>critique</td><td>usability-heuristic evaluation independent of a confirmed direction</td><td><code>design-critique-usability</code></td></tr><tr><td>flow</td><td>multi-step user flows</td><td><code>design-steward-experience-patterns</code></td></tr><tr><td>foundation</td><td>base design-system tokens and structure</td><td><code>design-compose-design-system</code></td></tr><tr><td>identity</td><td>asset intake, lifecycle status, and provenance</td><td><code>design-manage-assets</code></td></tr><tr><td>implementation</td><td>reversible code implementation of an accepted change</td><td><code>alawas-engineering-implement-bounded-change</code></td></tr><tr><td>projection</td><td>read-only catalog, graph, or comparison views</td><td><code>design-project-asset-workbench</code></td></tr><tr><td>theme</td><td>theme recipes built on tokens</td><td><code>design-compose-design-system</code></td></tr><tr><td>tokens</td><td>semantic token definitions</td><td><code>design-compose-design-system</code></td></tr><tr><td>ux-pattern</td><td>reusable user goals, flows, and states</td><td><code>design-steward-experience-patterns</code></td></tr><tr><td>variant</td><td>component variant relationships</td><td><code>design-compose-design-system</code></td></tr><tr><td>verification</td><td>browser-visible parity against a confirmed direction</td><td><code>design-verify-design-implementation</code></td></tr></tbody></table>
 </body></html>

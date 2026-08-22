@@ -10,6 +10,27 @@ from pathlib import Path
 from .design_assets import asset_record_paths, parse_asset_fields, validate_asset_record
 from .design_asset_routing import FRONTIER_OWNERS
 
+# Short, plain-language descriptions so the Frontier Ownership table is
+# readable without already knowing the pipeline's internal vocabulary
+# (design-critique-usability tracer finding, WO 2026-08-22-030).
+FRONTIER_DESCRIPTIONS = {
+    "identity": "asset intake, lifecycle status, and provenance",
+    "foundation": "base design-system tokens and structure",
+    "tokens": "semantic token definitions",
+    "theme": "theme recipes built on tokens",
+    "variant": "component variant relationships",
+    "component-family": "related component groupings",
+    "ux-pattern": "reusable user goals, flows, and states",
+    "flow": "multi-step user flows",
+    "creative-direction": "confirmed creative interpretation and execution",
+    "implementation": "reversible code implementation of an accepted change",
+    "verification": "browser-visible parity against a confirmed direction",
+    "accessibility": "WCAG conformance against a stewarded or generic baseline",
+    "critique": "usability-heuristic evaluation independent of a confirmed direction",
+    "component-registration": "durable shipped-component tracking and governance",
+    "projection": "read-only catalog, graph, or comparison views",
+}
+
 
 def _section_body(text: str, section: str) -> str:
     pattern = re.compile(
@@ -41,7 +62,14 @@ def _asset_card(path: Path, ws_root: Path) -> tuple[str, list[str]]:
     summary = _section_body(text, "Asset Summary")
     summary = re.sub(r"\s+", " ", summary).strip()
     lifecycle = _section_body(text, "Lifecycle")
-    owner_count = sum(1 for line in lifecycle.splitlines() if line.startswith("|") and "`" in line and "Owning skill" not in line)
+    owner_names = []
+    for line in lifecycle.splitlines():
+        if not (line.startswith("|") and "`" in line and "Owning skill" not in line):
+            continue
+        match = re.search(r"`([^`]+)`", line)
+        if match:
+            owner_names.append(match.group(1))
+    owners_display = ", ".join(f"<code>{html.escape(name)}</code>" for name in owner_names) if owner_names else "none"
     validation_class = "ok" if not errors else "bad"
     validation_text = "valid" if not errors else f"{len(errors)} gap(s)"
 
@@ -49,15 +77,17 @@ def _asset_card(path: Path, ws_root: Path) -> tuple[str, list[str]]:
   <div class="asset-head">
     <div>
       <h2>{html.escape(asset_id)}</h2>
-      <p>{html.escape(kind)} · {html.escape(status)} · Work Object {html.escape(work_object)}</p>
     </div>
     <span class="status {validation_class}">{html.escape(validation_text)}</span>
   </div>
   <p class="summary">{html.escape(summary)}</p>
   <dl>
+    <dt>Asset kind</dt><dd>{html.escape(kind)}</dd>
+    <dt>Status</dt><dd>{html.escape(status)}</dd>
+    <dt>Work Object</dt><dd>{html.escape(work_object)}</dd>
     <dt>Source of truth</dt><dd>{html.escape(source)}</dd>
     <dt>Record</dt><dd>{html.escape(rel)}</dd>
-    <dt>Lifecycle owners</dt><dd>{owner_count}</dd>
+    <dt>Lifecycle owners ({len(owner_names)})</dt><dd>{owners_display}</dd>
   </dl>
 </section>"""
     return card, errors
@@ -76,7 +106,9 @@ def generate(ws_root: Path) -> dict:
         all_errors.extend(f"{path.relative_to(ws_root).as_posix()}: {err}" for err in errors)
 
     owner_rows = "".join(
-        f"<tr><td>{html.escape(frontier)}</td><td><code>{html.escape(owner)}</code></td></tr>"
+        f"<tr><td>{html.escape(frontier)}</td>"
+        f"<td>{html.escape(FRONTIER_DESCRIPTIONS.get(frontier, 'no description recorded'))}</td>"
+        f"<td><code>{html.escape(owner)}</code></td></tr>"
         for frontier, owner in sorted(FRONTIER_OWNERS.items())
     )
     error_html = ""
@@ -97,7 +129,6 @@ p {{ line-height: 1.45; }}
 .grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }}
 .asset {{ background: #fff; border: 1px solid #d8dee8; border-radius: 8px; padding: 14px; }}
 .asset-head {{ display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }}
-.asset-head p {{ color: #667085; margin: 4px 0 0; font-size: 13px; }}
 .summary {{ font-size: 13px; }}
 .status {{ border-radius: 6px; padding: 3px 8px; font-size: 12px; }}
 .ok {{ background: #ecfdf3; color: #027a48; }}
@@ -117,7 +148,7 @@ code {{ font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-siz
 <div class="grid">{''.join(cards)}</div>
 {error_html}
 <h2 style="margin-top: 24px;">Frontier Ownership</h2>
-<table><thead><tr><th>Frontier</th><th>Owner</th></tr></thead><tbody>{owner_rows}</tbody></table>
+<table><thead><tr><th>Frontier</th><th>What it covers</th><th>Owner</th></tr></thead><tbody>{owner_rows}</tbody></table>
 </body></html>"""
 
     out_path.write_text(html_doc, encoding="utf-8")
