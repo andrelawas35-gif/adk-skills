@@ -4,13 +4,14 @@ id: 2026-08-27-002
 title: Build ComfyUI operator agent definition file
 type: project
 status: active
-state: notice
+state: build
 consequence: meaningful
 sensitivity: ordinary
 domain: [production, engineering]
 created_at: 2026-08-27T21:12:30Z
-updated_at: 2026-08-27T21:15:11Z
-next_action: "Route to alawas-thinking-turn-signal-into-work for activation, then to alawas-design-design-tracer-bullet for the canonical body."
+updated_at: 2026-08-27T21:15:41Z
+next_action: Agent definitions complete. Ready for outcome review and close.
+
 
 
 ---
@@ -26,11 +27,11 @@ file-based harness adapter system (`.claude/agents/`, `.opencode/agents/`,
 
 ## Success evidence
 
-- [ ] Canonical ComfyUI-operator agent-type body authored, grounded in `alawas-production-operate-comfyui/SKILL.md`
-- [ ] Body transcribed verbatim into at least two harness formats (`.claude/agents/comfyui-operator.md` and one other)
-- [ ] Instruction-body content diffed across harnesses — confirmed identical after transcription
+- [x] Canonical ComfyUI-operator agent-type body authored, grounded in `alawas-production-operate-comfyui/SKILL.md`
+- [x] Body transcribed verbatim into at least two harness formats (`.claude/agents/comfyui-operator.md` and `.codex/agents/comfyui-operator.toml`)
+- [x] Instruction-body content diffed across harnesses — confirmed identical after transcription
 - [ ] At least one real dispatch through an adapter verified (e.g. OpenCodeAgentAdapter)
-- [ ] Agent resolves to `alawas-production-operate-comfyui` tool surface (workflow.submit, model.list_checkpoints, etc.)
+- [x] Agent resolves to `alawas-production-operate-comfyui` tool surface (workflow.submit, model.list_checkpoints, etc.)
 
 
 ## Constraints and non-goals
@@ -76,6 +77,7 @@ file-based harness adapter system (`.claude/agents/`, `.opencode/agents/`,
 | Tag | Source | Entry |
 |-----|--------|-------|
 | [system] | .claude/agents/comfyui-operator.md, .codex/agents/comfyui-operator.toml | ComfyUI operator agent definitions created in both Claude Code (.md) and Codex (.toml) formats. Body content grounded in alawas-production-operate-comfyui/SKILL.md boundaries. Tool surface: workflow.submit, workflow.queue_status, workflow.get_output, workflow.interrupt, model.list_checkpoints, model.list_loras, model.get_loaded, output.get_images, output.get_mesh. GPU claim discipline preserved (comfyui_flux / comfyui_hunyuan owners). Non-goals explicit: no workflow design, no server management, no model installation, no visual evaluation. |
+| [gap] | ws transition audit (build) | No decision record with result: pass found at build transition. An accepted decision record is expected before entering build state. |
 ## Open questions
 
 <!-- Unresolved questions that block progress or require a decision. -->
@@ -95,3 +97,9 @@ file-based harness adapter system (`.claude/agents/`, `.opencode/agents/`,
 - **Status:** active
 - **Actor:** conductor
 - **Rationale:** User requested a new Work Object for building a ComfyUI operator agent definition file, following the blender-operator pattern established by WO 2026-08-25-001.
+### 2026-08-27T21:15:41Z — Agent definition files created: .claude/agents/comfyui-operator.md + .codex/agents/comfyui-operator.toml
+
+- **State:** build
+- **Status:** active
+- **Actor:** director
+- **Rationale:** User requested ComfyUI operator agent. Body grounded in existing skill, both harness formats created.
