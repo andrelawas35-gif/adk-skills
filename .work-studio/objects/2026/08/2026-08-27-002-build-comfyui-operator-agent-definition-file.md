@@ -9,8 +9,9 @@ consequence: meaningful
 sensitivity: ordinary
 domain: [production, engineering]
 created_at: 2026-08-27T21:12:30Z
-updated_at: 2026-08-27T21:12:41Z
+updated_at: 2026-08-27T21:15:11Z
 next_action: "Route to alawas-thinking-turn-signal-into-work for activation, then to alawas-design-design-tracer-bullet for the canonical body."
+
 
 ---
 ## Intent
@@ -74,8 +75,7 @@ file-based harness adapter system (`.claude/agents/`, `.opencode/agents/`,
 
 | Tag | Source | Entry |
 |-----|--------|-------|
-
-
+| [system] | .claude/agents/comfyui-operator.md, .codex/agents/comfyui-operator.toml | ComfyUI operator agent definitions created in both Claude Code (.md) and Codex (.toml) formats. Body content grounded in alawas-production-operate-comfyui/SKILL.md boundaries. Tool surface: workflow.submit, workflow.queue_status, workflow.get_output, workflow.interrupt, model.list_checkpoints, model.list_loras, model.get_loaded, output.get_images, output.get_mesh. GPU claim discipline preserved (comfyui_flux / comfyui_hunyuan owners). Non-goals explicit: no workflow design, no server management, no model installation, no visual evaluation. |
 ## Open questions
 
 <!-- Unresolved questions that block progress or require a decision. -->
