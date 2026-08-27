@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-b1fbfa4f-0001",
+  "op": "object.set_transform",
+  "params": {
+    "name": "Camera",
+    "location": [
+      0.0,
+      -6.3,
+      1.7
+    ],
+    "rotation_deg": [
+      92.0,
+      0.0,
+      0.0
+    ]
+  },
+  "created_at": "2026-08-26T07:32:02Z",
+  "delay_ms": 0
+}

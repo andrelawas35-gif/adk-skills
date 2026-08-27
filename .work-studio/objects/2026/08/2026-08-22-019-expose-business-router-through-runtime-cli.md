@@ -7,6 +7,7 @@ status: active
 state: verify
 consequence: meaningful
 sensitivity: ordinary
+domain: [business, engineering]
 created_at: 2026-08-22T13:15:15Z
 updated_at: 2026-08-22T13:17:10Z
 next_action: Route to alawas-engineering-verify-release-evidence for release-evidence review of the module-local business-router CLI; broader runtime.graph command integration and Phase 6 integration remain separate future slices.

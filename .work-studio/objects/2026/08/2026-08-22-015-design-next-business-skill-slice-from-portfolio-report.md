@@ -7,6 +7,7 @@ status: active
 state: verify
 consequence: meaningful
 sensitivity: ordinary
+domain: [business, governance]
 created_at: 2026-08-22T12:49:15Z
 updated_at: 2026-08-22T13:00:19Z
 revisit_trigger: Director accepts, rejects, or changes the four-skill next-slice boundary.

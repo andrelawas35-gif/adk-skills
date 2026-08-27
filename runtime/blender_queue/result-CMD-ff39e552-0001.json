@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-ff39e552-0001",
+  "status": "ok",
+  "data": {
+    "name": "unit_cube"
+  },
+  "error": null,
+  "started_at": "2026-08-26T07:18:45Z",
+  "completed_at": "2026-08-26T07:18:45Z"
+}

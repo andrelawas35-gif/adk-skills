@@ -1,0 +1,260 @@
+:root {
+  color-scheme: light;
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #f5f6f4;
+  color: #202322;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+button,
+textarea {
+  font: inherit;
+}
+
+button {
+  border: 1px solid #c9ceca;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #202322;
+  cursor: pointer;
+  min-height: 34px;
+  padding: 6px 10px;
+}
+
+button:hover {
+  border-color: #7f8a83;
+}
+
+.shell {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  border-right: 1px solid #d7dbd5;
+  background: #ecefea;
+  padding: 18px 14px;
+}
+
+.brand-title {
+  font-size: 18px;
+  font-weight: 650;
+}
+
+.brand-subtitle {
+  margin-top: 4px;
+  color: #66706a;
+  font-size: 12px;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.toolbar {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 18px 0;
+}
+
+.scene-list {
+  display: grid;
+  gap: 8px;
+}
+
+.scene-button {
+  display: grid;
+  gap: 3px;
+  width: 100%;
+  text-align: left;
+  min-height: 58px;
+}
+
+.scene-button.active {
+  border-color: #205a75;
+  background: #eef8fb;
+}
+
+.scene-button span:first-child {
+  font-weight: 600;
+}
+
+.scene-button span:last-child {
+  color: #66706a;
+  font-size: 12px;
+}
+
+.content {
+  padding: 22px;
+}
+
+.scene-header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.scene-id {
+  color: #66706a;
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 12px;
+}
+
+h1 {
+  font-size: 24px;
+  line-height: 1.2;
+  margin: 3px 0 0;
+}
+
+.status-pill {
+  border: 1px solid #c9ceca;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #4d5751;
+  font-size: 12px;
+  padding: 5px 9px;
+}
+
+.workspace-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(320px, 0.7fr);
+  gap: 14px;
+}
+
+.panel {
+  border: 1px solid #d7dbd5;
+  border-radius: 8px;
+  background: #ffffff;
+  min-height: 240px;
+  padding: 16px;
+}
+
+.panel-title {
+  color: #66706a;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.thesis {
+  display: grid;
+  gap: 7px;
+  margin-bottom: 14px;
+}
+
+.thesis-row {
+  border-left: 3px solid #46846f;
+  padding-left: 9px;
+}
+
+.thesis-key {
+  color: #59635d;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.layers {
+  display: grid;
+  gap: 10px;
+}
+
+.layer {
+  border-top: 1px solid #edf0eb;
+  padding-top: 10px;
+}
+
+.layer h2 {
+  font-size: 15px;
+  margin: 0 0 5px;
+}
+
+.layer pre {
+  font-family: inherit;
+  line-height: 1.5;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.beats table {
+  border-collapse: collapse;
+  font-size: 12px;
+  margin-top: 14px;
+  width: 100%;
+}
+
+.beats th,
+.beats td {
+  border-bottom: 1px solid #edf0eb;
+  padding: 7px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.beats th {
+  color: #59635d;
+  font-weight: 700;
+}
+
+.direction-panel {
+  display: grid;
+  grid-template-rows: auto minmax(170px, auto) auto 1fr;
+}
+
+textarea {
+  border: 1px solid #c9ceca;
+  border-radius: 6px;
+  line-height: 1.45;
+  min-height: 170px;
+  padding: 10px;
+  resize: vertical;
+  width: 100%;
+}
+
+.direction-actions {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  margin: 10px 0 14px;
+}
+
+.write-state {
+  color: #59635d;
+  font-size: 12px;
+}
+
+.evidence-list {
+  display: grid;
+  gap: 8px;
+}
+
+.evidence-item {
+  border-top: 1px solid #edf0eb;
+  color: #3d4540;
+  font-size: 12px;
+  line-height: 1.45;
+  padding-top: 8px;
+}
+
+@media (max-width: 980px) {
+  .shell,
+  .workspace-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    border-bottom: 1px solid #d7dbd5;
+    border-right: none;
+  }
+}

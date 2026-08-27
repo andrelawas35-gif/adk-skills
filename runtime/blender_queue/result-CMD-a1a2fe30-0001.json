@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-a1a2fe30-0001",
+  "status": "ok",
+  "data": {
+    "name": "Camera"
+  },
+  "error": null,
+  "started_at": "2026-08-26T07:20:02Z",
+  "completed_at": "2026-08-26T07:20:02Z"
+}

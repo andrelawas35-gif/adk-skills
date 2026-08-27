@@ -266,9 +266,13 @@ def generate_evidence_entry(
             f"SHA is only allowed on [system] evidence entries, not '{tag}'."
         )
 
+    # Table cells cannot span lines. Normalize newlines so multi-line evidence
+    # text cannot break the Evidence ledger table (Incident WO 2026-08-23-005).
+    cell_text = text.replace("\r\n", "\n").replace("\n", "<br>")
+
     if sha:
-        return f"| {tag} | {source} | {text} | {sha} |"
-    return f"| {tag} | {source} | {text} |"
+        return f"| {tag} | {source} | {cell_text} | {sha} |"
+    return f"| {tag} | {source} | {cell_text} |"
 
 
 # ── Object text composition ───────────────────────────────────────────────────

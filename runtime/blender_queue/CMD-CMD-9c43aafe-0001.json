@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-9c43aafe-0001",
+  "op": "object.delete",
+  "params": {
+    "name": "unit_cube.010"
+  },
+  "created_at": "2026-08-26T06:52:28Z",
+  "delay_ms": 0
+}

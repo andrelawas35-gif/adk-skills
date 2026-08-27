@@ -233,6 +233,20 @@ skills:
       - user_confirmation
       - claude_design
 
+  - name: design-audit-accessibility
+    responsibility: "Use when a rendered interface's accessibility conformance needs checking; audits contrast, semantic structure, and accessible names against WCAG baselines or stewarded expectations; never fixes findings or claims compliance."
+    non_goals:
+      - "Fix, patch, or otherwise mutate any code, style, or markup — findings route to `apply-design-direction` as candidate direction changes."
+      - "Claim legal, regulatory, or certified accessibility compliance from its findings — it reports conformance against declared or generic thresholds, never a certification."
+      - "Author or approve an accessibility-expectations pattern — that remains `steward-experience-patterns`'s domain; this skill only tests against whatever pattern already exists (or the WCAG generic baseline)."
+      - "Perform dynamic checks needing live interaction (keyboard traversal, focus order, screen-reader announcement behavior) in this version — those are named as deferred, not attempted with a weaker proxy."
+      - "Modify the frontier-ownership map or pipeline documentation on its own — registering a new frontier is a routing change the conductor and pipeline reference own."
+    requires_capabilities:
+      - file_read
+      - browser_automation
+      - content_search
+      - structured_output
+
   - name: design-audit-product-interface
     responsibility: "Use when a target project's interface structure needs discovery; inspects codebase for routes, components, layouts, and framework conventions; does not modify any project files."
     non_goals:
@@ -264,7 +278,7 @@ skills:
       - structured_output
 
   - name: design-compose-design-system
-    responsibility: "Use when a governed foundation, semantic token set, theme recipe, variant, or component-family relationship must be created or revised; composes design-system properties and preserves director authority over creative choices without mutating canonical assets."
+    responsibility: "Use when design-system tokens, themes, variants, or component families must be composed; preserves director authority and never mutates canonical assets."
     non_goals:
       - "Discover existing UI structure; route to `design-audit-product-interface`."
       - "Audit existing tokens or themes as a separate discovery pass; route to `design-build-design-foundation`."
@@ -278,6 +292,20 @@ skills:
       - terminal_run
       - file_write
       - user_confirmation
+      - structured_output
+
+  - name: design-critique-usability
+    responsibility: "Use when a rendered interface's usability needs independent evaluation; checks it against named heuristics (visibility of status, consistency, recognition over recall) with evidence-linked findings; never fixes findings or overrides confirmed creative direction."
+    non_goals:
+      - "Fix, patch, or otherwise mutate any code, style, or markup — findings route to `apply-design-direction` as candidate direction changes."
+      - "Override or invalidate a confirmed creative decision — a finding is evidence for the director to weigh, not an automatic correction."
+      - "Check parity against a confirmed proposal — that remains `verify-design-implementation`'s job; this skill evaluates the design's quality on its own terms, confirmed or not."
+      - "Perform heuristics that require live interaction (error recovery, undo, help/documentation, multi-step task completion) in this version — these are named as out of scope, not attempted with a weaker static proxy."
+      - "Conduct real user testing, A/B testing, or gather behavioral analytics — this is heuristic evaluation by inspection, not empirical user research."
+      - "Modify the frontier-ownership map or pipeline documentation on its own — registering a new frontier is a routing change the conductor and pipeline reference own."
+    requires_capabilities:
+      - file_read
+      - browser_automation
       - structured_output
 
   - name: design-design-tracer-bullet
@@ -294,8 +322,25 @@ skills:
       - structured_output
       - user_confirmation
 
+  - name: design-govern-interaction-motion
+    responsibility: "Use when governed motion or interaction behavior needs timing, easing, or state rules; records direction and never implements code or mutates canonical assets."
+    non_goals:
+      - "Discover existing animation/transition tokens from code; route to `design-build-design-foundation`."
+      - "Check whether an interaction fires correctly in a running application; route to `design-verify-design-implementation`."
+      - "Silently choose a motion/timing decision or approve a motion recipe on the director's behalf."
+      - "Mutate canonical asset records, the component ledger, code, or external design tools by itself."
+      - "Implement any motion or interaction in code — composition produces a governed asset record; implementation routes through `alawas-engineering-implement-bounded-change`."
+    requires_capabilities:
+      - file_read
+      - content_search
+      - directory_list
+      - terminal_run
+      - file_write
+      - user_confirmation
+      - structured_output
+
   - name: design-manage-assets
-    responsibility: "Use when a reusable design asset needs identity, lifecycle status, provenance, impact, or routing; classifies the current asset frontier and routes to the owning design skill without creating, mutating, or approving assets."
+    responsibility: "Use when a design asset needs identity, status, provenance, impact, or routing; classifies the frontier and never creates, mutates, or approves assets."
     non_goals:
       - "Choose creative direction or silently revise a theme, component, token, UX pattern, or implementation."
       - "Mutate the component ledger, generate adapters, write to external design tools, or turn a workbench projection into source truth. It does not become the source of truth."
@@ -310,7 +355,7 @@ skills:
       - structured_output
 
   - name: design-project-asset-workbench
-    responsibility: "Use when a person needs to browse, compare, trace, or inspect relationships among assets, Work Objects, evidence, themes, components, patterns, and implementations; produces read-only catalog, graph, comparison, or trace projections from canonical records without creating or editing assets or becoming a source of truth."
+    responsibility: "Use when assets, Work Objects, evidence, themes, components, or patterns need read-only inspection; projects catalog views and never edits assets or source truth."
     non_goals:
       - "Create or edit assets, Work Objects, or component-ledger records."
       - "Become the source of truth for asset, theme, UX-pattern, or component knowledge."
@@ -327,7 +372,7 @@ skills:
       - structured_output
 
   - name: design-steward-experience-patterns
-    responsibility: "Use when a reusable user goal, flow, state model, accessibility expectation, content behavior, or failure/recovery behavior needs stewardship; governs reusable UX patterns and their evidence links without styling or implementing them or mutating canonical assets."
+    responsibility: "Use when reusable UX goals, flows, states, accessibility, content, or recovery patterns need stewardship; governs evidence links and never styles or implements them."
     non_goals:
       - "Style the pattern or choose visual themes for it."
       - "Implement code or verify browser parity against a rendered direction."
@@ -498,6 +543,112 @@ skills:
       - secret_access
       - web_fetch
       - user_confirmation
+      - structured_output
+
+  - name: orchestrate
+    responsibility: "Use when a request needs default domain or skill routing; returns routing decisions and never invokes target skills directly."
+    non_goals:
+      - "Invoke target skills directly — returns `RoutingDecision` for platform adapter to handle invocation with cycle detection (OQ9 resolution, see spec doc above)"
+      - "Dispatch to separate model process for fallback (Decision 6 — session reasons directly)"
+      - "Assess or enforce consequence beyond reporting WO's existing field (Decision 3)"
+    requires_capabilities:
+      - file_read
+      - structured_output
+
+  - name: production-operate-asset-pipeline
+    responsibility: "Use when a 3D asset pipeline must progress from concept to canonical .blend; orchestrates operators and never makes creative decisions."
+    non_goals:
+      - "Make creative decisions (asset design, style, composition)."
+      - "Call Blender or ComfyUI directly — always uses Layer 1 operators."
+      - "Register assets in the registry — that is a separate step after pipeline completion."
+      - "Manage GPU claims — that flows through operators via COMP-041."
+    requires_capabilities:
+      - file_read
+      - file_write
+      - terminal_run
+      - structured_output
+
+  - name: production-operate-blender
+    responsibility: "Use when a bounded Blender operation must execute against a local scene; rejects arbitrary Python and never bypasses protect or GPU gates."
+    non_goals:
+      - "Make creative decisions, choose camera angles, select assets, or evaluate composition."
+      - "Execute arbitrary Blender Python (`execute_blender_python`) without an explicit director authority record (`authority.granted_by: 'director'` + `work_object`) — a high-consequence escalation (WO `2026-08-23-001` §4.2)."
+      - "Skip the `protect` check, claim the GPU concurrently with another operator, schedule or prioritize work, or decide what to render."
+      - "Sculpt, groom hair, simulate cloth, or perform other unlisted operations."
+      - "Operate standalone — it is always called by Layer 2/3 production skills through the conductor."
+    requires_capabilities:
+      - terminal_run
+      - file_read
+      - file_write
+      - background_processes
+      - user_confirmation
+      - structured_output
+
+  - name: production-operate-comfyui
+    responsibility: "Use when bounded ComfyUI workflow or model operations must run through the local API; claims GPU work and never designs workflows or manages the server."
+    non_goals:
+      - "Choose styles, evaluate visual quality, select models, or design workflows."
+      - "Start, stop, install, update, or repair the ComfyUI server."
+      - "Download, move, delete, or install model files."
+      - "Save outputs to an unspecified destination or silently mutate caller-owned production artifacts."
+    requires_capabilities:
+      - web_fetch
+      - file_read
+      - file_write
+      - gpu_claim
+      - structured_output
+      - user_confirmation
+
+  - name: production-operate-shot-pipeline
+    responsibility: "Use when a shot must be created from screenplay breakdown through final render; orchestrates scene planner, Blender operator, and visual critic through a tiered state machine with retry and resume capability."
+    non_goals:
+      - "Make editorial decisions about shot selection or sequencing."
+      - "Execute tools directly — always uses Layer 1/2 operators."
+      - "Skip director approval gates for tier escalation."
+      - "Manage GPU claims — that flows through operators via COMP-041."
+    requires_capabilities:
+      - file_read
+      - file_write
+      - terminal_run
+      - structured_output
+
+  - name: production-operate-tts
+    responsibility: "Use when structured local TTS generation must produce audio takes and metadata from caller-supplied text, voice_id, and performance parameters; starts with the Tier 1 local_piper tracer and never judges performance or selects takes."
+    non_goals:
+      - "Use `System.Speech`."
+      - "Call cloud TTS tiers."
+      - "Translate performance direction into parameters."
+      - "Select, rank, score, or judge generated takes."
+      - "Maintain a voice bible, perform lip-sync, or assemble audio into shots."
+      - "Require GPU claims; TTS is CPU/local-process work in this tracer."
+    requires_capabilities:
+      - terminal_run
+      - file_read
+      - file_write
+      - structured_output
+      - user_confirmation
+
+  - name: production-operate-visual-critic
+    responsibility: "Use when a rendered image needs evaluation against directorial intent; produces structured critique using vision-capable models and feeds adjustments back to scene planner."
+    non_goals:
+      - "Modify scenes (belongs to scene planner)"
+      - "Render images (belongs to Blender/ComfyUI operators)"
+      - "Make final quality approval decisions (director's authority)"
+      - "Call tools or mutate files"
+    requires_capabilities:
+      - file_read
+      - terminal_run
+      - structured_output
+
+  - name: production-plan-scene
+    responsibility: "Use when directorial intent must become a structured scene specification; plans bounded Blender commands and never executes tools or fabricates assets."
+    non_goals:
+      - "Execute Blender or ComfyUI operations — produces command plans for operators to queue"
+      - "Call tools or invoke subprocesses — reads registries locally and emits YAML only"
+      - "Create assets or modify canonical registries — fixture registry is caller-owned input"
+      - "Fabricate missing assets or fill gaps with hallucinated content"
+    requires_capabilities:
+      - file_read
       - structured_output
 
   - name: research-investigate-live-question

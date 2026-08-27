@@ -1,6 +1,6 @@
 ---
 name: alawas-design-compose-design-system
-description: "Use when a governed foundation, semantic token set, theme recipe, variant, or component-family relationship must be created or revised; composes design-system properties and preserves director authority over creative choices without mutating canonical assets."
+description: "Use when design-system tokens, themes, variants, or component families must be composed; preserves director authority and never mutates canonical assets."
 default_tier: high
 platform: github-copilot
 ---
@@ -81,9 +81,15 @@ Follow `references/AGREEMENT-LOOP.md` in full; this skill contributes only its s
 
 Outside an explicit grilling request, nominate a Grilling Candidate only under the Agreement Loop's three-part threshold. Show its Candidate Card and wait for explicit entry; do not silently start a continuous session.
 
-Follow `references/AGREEMENT-LOOP.md` in full. Outside explicit grilling,
-nominate a Candidate only when a creative-direction conflict, inheritance
-ambiguity, or proposed external effect would materially change the composition.
+Follow `references/AGREEMENT-LOOP.md` in full, with one explicit override
+for this skill (WO `2026-08-22-038` Decision 1): every token, semantic
+value, variant, or component-family property proposed for composition is
+always nominated as a Grilling Candidate — the standing three-part
+threshold does not gate nomination here. All artifacts proposed in one
+composition pass are grilled as a single continuous `breadth-sweep`-mode
+session (`AGREEMENT-LOOP.md`'s existing mode), one branch per artifact, one
+multiple-choice question per turn. Every grill question must offer
+explicit options — never an open-ended prompt.
 
 ## Skill Grilling Profile
 
@@ -208,6 +214,10 @@ the epistemic tier is upgraded to at least `medium` (essential 3‑tag).
 When `consequence: high`, the epistemic tier is upgraded to the strongest
 available tier (full 6‑tag).
 `actual_epistemic_tier = max(skill.default_tier, consequence_escalation(wo.consequence))`.
+
+For a high-consequence Work Object, confirmation must name the exact
+proposed mutation. Do not stage, annotate, change status, append History,
+or make any other mutation before receiving that scoped confirmation.
 
 ### Model tier
 

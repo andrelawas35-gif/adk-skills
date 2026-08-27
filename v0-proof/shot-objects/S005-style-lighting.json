@@ -1,0 +1,21 @@
+{
+  "shot_id": "S005",
+  "intent": "A turnaround reference set needs one coherent rendering style and neutral, consistent lighting across every view so image-to-3D generation reads material and form consistently; the current mixed rendering breaks that.",
+  "subject": "The market lamp prop, rendered consistently across its full reference set.",
+  "camera": "Stable reference framing; lighting motivated by one neutral, even source across all views.",
+  "mood": "Uniform, neutral, reference-grade.",
+  "avoid": [
+    "style mixing between views",
+    "dramatic or directional lighting that shifts between views",
+    "half-rendered or inconsistent material response across the set"
+  ],
+  "preserve": [
+    "the object's material identity",
+    "consistent scale across views"
+  ],
+  "change": [
+    "split photoreal/illustrative rendering between views",
+    "contradictory cool/warm lighting with no single source",
+    "inconsistent surface detail between views"
+  ]
+}

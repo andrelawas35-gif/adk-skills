@@ -7,6 +7,7 @@ status: active
 state: verify
 consequence: meaningful
 sensitivity: ordinary
+domain: [business, engineering, governance]
 created_at: 2026-08-22T11:29:59Z
 updated_at: 2026-08-22T11:40:52Z
 responds_to: 2026-08-22-008

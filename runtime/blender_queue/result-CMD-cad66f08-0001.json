@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-cad66f08-0001",
+  "status": "ok",
+  "data": {
+    "name": "unit_cube.009",
+    "material": "stone"
+  },
+  "error": null,
+  "started_at": "2026-08-26T07:00:03Z",
+  "completed_at": "2026-08-26T07:00:03Z"
+}

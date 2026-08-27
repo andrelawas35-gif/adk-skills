@@ -26,7 +26,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 CORE_DIR = ROOT / "skills" / "core"
 ADAPTERS_DIR = ROOT / "adapters"
-PLATFORMS = ["codex", "claude-code", "github-copilot"]
+PLATFORMS = ["codex", "claude-code", "github-copilot", "lm-studio-bionic", "opencode"]
 SKILLS = sorted(path.name for path in CORE_DIR.iterdir() if path.is_dir())
 SKILL_NAMESPACE = "alawas"
 
@@ -186,6 +186,8 @@ def verify_matrix(fixture_files):
                 "codex": "Codex",
                 "claude-code": "Claude Code",
                 "github-copilot": "GitHub Copilot",
+                "lm-studio-bionic": "LM Studio Bionic",
+                "opencode": "OpenCode",
             }
             for platform, label in platform_labels.items():
                 count = content.count(label)

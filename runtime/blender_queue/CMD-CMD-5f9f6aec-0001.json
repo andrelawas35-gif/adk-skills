@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-5f9f6aec-0001",
+  "op": "object.set_transform",
+  "params": {
+    "name": "unit_cube.002",
+    "location": [
+      1.6,
+      0.0,
+      1.8
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "created_at": "2026-08-26T06:59:33Z",
+  "delay_ms": 0
+}

@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-75de471f-0001",
+  "status": "ok",
+  "data": {
+    "name": "terracotta"
+  },
+  "error": null,
+  "started_at": "2026-08-26T06:52:32Z",
+  "completed_at": "2026-08-26T06:52:32Z"
+}

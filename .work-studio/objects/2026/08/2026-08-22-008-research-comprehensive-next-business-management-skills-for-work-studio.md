@@ -7,6 +7,7 @@ status: active
 state: observe
 consequence: meaningful
 sensitivity: ordinary
+domain: [business, research]
 created_at: 2026-08-22T11:18:43Z
 updated_at: 2026-08-22T12:36:44Z
 next_action: Open a fresh Codex/Copilot/Claude Code session or reload the host to confirm the global business skills are visible; then route any discovery/runtime issue to alawas-governance-review-outcome-and-adapt or alawas-engineering-verify-release-evidence.

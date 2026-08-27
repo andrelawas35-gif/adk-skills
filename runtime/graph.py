@@ -48,6 +48,14 @@ from runtime.handoff import (
 )
 from tools.ws.component_governance import governance_domain_for_skill
 from runtime.research import ResearchReceipt, build_receipt, fetch_url
+from runtime.agents import (
+    AgentRequest,
+    AgentResolver,
+    CodexAgentAdapter,
+    OpenCodeAgentAdapter,
+    codex_available,
+    opencode_available,
+)
 
 _REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -655,6 +663,7 @@ class Phase6State(TypedDict, total=False):
     join_fired: bool
     join_proposal: str
     direction_approved: bool
+    agent_result: dict
 
 
 def _phase6_is_business_scoped(frontmatter: dict, body_text: str) -> bool:
@@ -878,6 +887,77 @@ def phase6_dispatch(state: Phase6State) -> dict:
     return {"handoff_envelope": envelope.model_dump()}
 
 
+def _build_agent_resolver() -> AgentResolver:
+    """Build the agent resolver with available adapters (Decision 18)."""
+    adapters = []
+    if opencode_available():
+        adapters.append(OpenCodeAgentAdapter())
+    if codex_available():
+        adapters.append(CodexAgentAdapter())
+    return AgentResolver(adapters)
+
+
+def phase6_execute_specialist(state: Phase6State) -> dict:
+    """Dispatch to a real agent via AgentResolver (Decision 18).
+
+    Reads the HandoffEnvelope from dispatch, resolves an adapter by
+    governance_domain + capabilities, calls adapter.run(), and stores
+    AgentResult in state. Deterministic routing — no LLM classification.
+    """
+    envelope_data = state.get("handoff_envelope")
+    if not envelope_data:
+        return {"agent_result": {"status": "failed", "summary": "no handoff_envelope in state"}}
+
+    envelope = HandoffEnvelope(**envelope_data)
+    resolver = _build_agent_resolver()
+
+    # Map governance_domain to adapter type for resolution
+    domain_type_map = {
+        "engineering": "coding",
+        "design": "coding",
+        "operations": "coding",
+        "research": "coding",
+        "thinking": "coding",
+        "business": "coding",
+        "governance": "coding",
+        "production": "coding",
+        "cross-cutting": "coding",
+    }
+    required_type = domain_type_map.get(envelope.governance_domain, "coding")
+    required_capabilities = {"retrieve", "inspect_code", "hypothesize"}
+
+    adapter = resolver.resolve(required_type, required_capabilities)
+    if adapter is None:
+        return {
+            "agent_result": {
+                "status": "failed",
+                "summary": f"no adapter found for type={required_type}, capabilities={required_capabilities}",
+            }
+        }
+
+    request = AgentRequest(
+        task=envelope.task,
+        skill=envelope.to_skill,
+        work_object_id=state.get("work_object_id"),
+        context_refs=envelope.input_refs,
+        expected_output=envelope.expected_output,
+        consequence="meaningful",
+    )
+
+    import asyncio
+    try:
+        result = asyncio.run(adapter.run(request))
+    except Exception as exc:
+        return {
+            "agent_result": {
+                "status": "failed",
+                "summary": f"adapter.run() raised {type(exc).__name__}: {exc}",
+            }
+        }
+
+    return {"agent_result": result.model_dump()}
+
+
 def _phase6_dispatch_routed_skill(state: Phase6State) -> Optional[str]:
     """Return a dispatch-level routed skill when Phase 6 has one."""
     business_envelope = state.get("business_handoff_envelope") or {}
@@ -1011,13 +1091,15 @@ def build_phase6_graph(checkpoint_db: Path):
     recover_checkpoint_db(checkpoint_db)
     builder = StateGraph(Phase6State)
     builder.add_node("dispatch", phase6_dispatch)
+    builder.add_node("execute_specialist", phase6_execute_specialist)
     builder.add_node("branch_a", phase6_branch_a)
     builder.add_node("branch_b", phase6_branch_b)
     builder.add_node("join", phase6_join)
     builder.add_node("direction_gate", phase6_direction_gate)
     builder.add_edge(START, "dispatch")
-    builder.add_edge("dispatch", "branch_a")
-    builder.add_edge("dispatch", "branch_b")
+    builder.add_edge("dispatch", "execute_specialist")
+    builder.add_edge("execute_specialist", "branch_a")
+    builder.add_edge("execute_specialist", "branch_b")
     builder.add_edge("branch_a", "join")
     builder.add_edge("branch_b", "join")
     builder.add_edge("join", "direction_gate")

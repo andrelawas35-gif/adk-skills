@@ -1,6 +1,6 @@
 ---
 name: alawas-design-manage-assets
-description: "Use when a reusable design asset needs identity, lifecycle status, provenance, impact, or routing; classifies the current asset frontier and routes to the owning design skill without creating, mutating, or approving assets."
+description: "Use when a design asset needs identity, status, provenance, impact, or routing; classifies the frontier and never creates, mutates, or approves assets."
 default_tier: high
 platform: github-copilot
 ---
@@ -205,6 +205,10 @@ the epistemic tier is upgraded to at least `medium` (essential 3‑tag).
 When `consequence: high`, the epistemic tier is upgraded to the strongest
 available tier (full 6‑tag).
 `actual_epistemic_tier = max(skill.default_tier, consequence_escalation(wo.consequence))`.
+
+For a high-consequence Work Object, confirmation must name the exact
+proposed mutation. Do not stage, annotate, change status, append History,
+or make any other mutation before receiving that scoped confirmation.
 
 ### Model tier
 

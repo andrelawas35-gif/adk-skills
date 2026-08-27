@@ -7,6 +7,7 @@ status: active
 state: observe
 consequence: meaningful
 sensitivity: ordinary
+domain: [business, architecture]
 created_at: 2026-08-22T12:41:14Z
 updated_at: 2026-08-22T12:47:27Z
 next_action: Observe real business Work Object use for routing ambiguity; if global installation is desired, route to alawas-engineering-verify-release-evidence before install.

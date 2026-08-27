@@ -1,7 +1,7 @@
 ---
 name: design-steward-experience-patterns
 default_tier: high
-description: "Use when a reusable user goal, flow, state model, accessibility expectation, content behavior, or failure/recovery behavior needs stewardship; governs reusable UX patterns and their evidence links without styling or implementing them or mutating canonical assets."
+description: "Use when reusable UX goals, flows, states, accessibility, content, or recovery patterns need stewardship; governs evidence links and never styles or implements them."
 ---
 # Steward Experience Patterns
 
@@ -76,13 +76,19 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
 
 ## Grilling entry and stage lens
 
-Follow `references/AGREEMENT-LOOP.md` in full. Outside explicit grilling,
-nominate a Candidate only when an accessibility claim, evidence gap, or
-proposed external effect would materially change the pattern record.
+Follow `references/AGREEMENT-LOOP.md` in full, with one explicit override
+for this skill (WO `2026-08-22-038` Decision 1): every user goal, flow
+state, accessibility expectation, or content behavior proposed for a
+pattern record is always nominated as a Grilling Candidate — the standing
+three-part threshold does not gate nomination here. All properties
+proposed for one pattern are grilled as a single continuous
+`breadth-sweep`-mode session (`AGREEMENT-LOOP.md`'s existing mode), one
+branch per property, one multiple-choice question per turn. Every grill
+question must offer explicit options — never an open-ended prompt.
 
 ## Skill Grilling Profile
 
-Apply the `design-steward-experience-patterns` profile in
+Apply the `alawas-design-steward-experience-patterns` profile in
 `references/SKILL-AWARE-GRILLING.md`. Challenge whether each state and recovery
 behavior is grounded in evidence, whether accessibility expectations are
 claims rather than compliance proof, and whether the pattern stays in one

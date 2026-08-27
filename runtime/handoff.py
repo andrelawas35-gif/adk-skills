@@ -26,7 +26,7 @@ ComponentKind = Literal[
 ]
 GovernanceDomain = Literal[
     "business", "design", "engineering", "governance", "operations",
-    "research", "thinking", "cross-cutting",
+    "production", "research", "thinking", "cross-cutting",
 ]
 
 if set(ComponentKind.__args__) != set(VALID_COMPONENT_KINDS):

@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-ddb420d0-0001",
+  "status": "ok",
+  "data": {
+    "name": "unit_cube.002"
+  },
+  "error": null,
+  "started_at": "2026-08-26T07:50:38Z",
+  "completed_at": "2026-08-26T07:50:38Z"
+}

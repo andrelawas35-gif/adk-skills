@@ -1,7 +1,7 @@
 ---
 name: design-project-asset-workbench
 default_tier: high
-description: "Use when a person needs to browse, compare, trace, or inspect relationships among assets, Work Objects, evidence, themes, components, patterns, and implementations; produces read-only catalog, graph, comparison, or trace projections from canonical records without creating or editing assets or becoming a source of truth."
+description: "Use when assets, Work Objects, evidence, themes, components, or patterns need read-only inspection; projects catalog views and never edits assets or source truth."
 ---
 # Project Asset Workbench
 

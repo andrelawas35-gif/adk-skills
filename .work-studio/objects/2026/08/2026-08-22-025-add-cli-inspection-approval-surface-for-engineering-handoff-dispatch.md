@@ -7,6 +7,7 @@ status: closed
 state: close
 consequence: meaningful
 sensitivity: ordinary
+domain: [engineering, governance]
 created_at: 2026-08-22T14:12:08Z
 updated_at: 2026-08-22T14:30:42Z
 next_action: Review the verified local CLI engineering-handoff tracer outcome via review-outcome-and-adapt: decide close versus next slice; do not deploy.

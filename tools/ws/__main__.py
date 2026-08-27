@@ -32,6 +32,7 @@ from .schema import (
     parse_frontmatter,
     validate_campaign,
     validate_consequence,
+    validate_domain,
     validate_sensitivity,
     validate_type,
 )
@@ -52,6 +53,7 @@ from .backup import cmd_backup, cmd_restore
 from .claim import cmd_claim_inspect, cmd_claim_register
 from .relation import cmd_relation_add
 from .graph import cmd_graph_trace
+from .domain import cmd_domain_sync, cmd_list
 from .engineering_handoff import cmd_engineering_handoff
 from .conflict import cmd_conflict_register, cmd_conflict_resolve
 from .epistemic import cmd_epistemic_lint
@@ -101,6 +103,31 @@ def _get_updated_at(file_path: Path) -> str:
     return str(fm.get("updated_at", ""))
 
 
+def cmd_get_updated_at(args: argparse.Namespace) -> int:
+    """Print the current updated_at timestamp for a Work Object."""
+    try:
+        ws_root = _find_work_studio_root()
+    except FileNotFoundError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+
+    objects_dir = ws_root / ".work-studio" / "objects"
+
+    try:
+        obj_file = _resolve_object_file(objects_dir, args.id)
+    except FileNotFoundError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+
+    updated_at = _get_updated_at(obj_file)
+    if not updated_at:
+        print(f"Error: No updated_at found in {obj_file}", file=sys.stderr)
+        return 1
+
+    print(updated_at)
+    return 0
+
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # ws create
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -115,6 +142,12 @@ def cmd_create(args: argparse.Namespace) -> int:
         (validate_sensitivity, args.sensitivity, "sensitivity"),
     ]:
         err = validator(value)
+        if err:
+            errors.append(err)
+
+    domain = list(args.domain) if getattr(args, "domain", None) else None
+    if domain is not None:
+        err = validate_domain(domain)
         if err:
             errors.append(err)
 
@@ -149,6 +182,7 @@ def cmd_create(args: argparse.Namespace) -> int:
         obj_type=args.type,
         consequence=args.consequence,
         sensitivity=args.sensitivity,
+        domain=domain,
     )
     body = generate_body_template(
         title=args.title,
@@ -185,6 +219,12 @@ def cmd_start(args: argparse.Namespace) -> int:
         (validate_sensitivity, args.sensitivity, "sensitivity"),
     ]:
         err = validator(value)
+        if err:
+            errors.append(err)
+
+    domain = list(args.domain) if getattr(args, "domain", None) else None
+    if domain is not None:
+        err = validate_domain(domain)
         if err:
             errors.append(err)
 
@@ -237,6 +277,7 @@ def cmd_start(args: argparse.Namespace) -> int:
         obj_type=args.type,
         consequence=args.consequence,
         sensitivity=args.sensitivity,
+        domain=domain,
     )
     body = generate_body_template(
         title=args.title,
@@ -1109,6 +1150,135 @@ def cmd_command_center(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_scene_board(args: argparse.Namespace) -> int:
+    """Read-only projection: render Scene Work Objects as Scene Board HTML."""
+    try:
+        ws_root = _find_work_studio_root()
+    except FileNotFoundError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+
+    from .scene_board import generate
+
+    summary = generate(ws_root)
+    print(f"Wrote {summary['out_path']}")
+    print(f"Scenes: {summary['scenes']}")
+    return 0
+
+
+def cmd_direction(args: argparse.Namespace) -> int:
+    """Parse a director's natural-language direction into a structured object.
+
+    Optionally records it as [testimony] evidence on a target Work Object.
+    """
+    from .direction import (
+        parse_direction, format_direction, format_direction_yaml,
+        format_direction_single_line,
+    )
+
+    d = parse_direction(args.text)
+    print(format_direction(d))
+    print()
+    print(format_direction_yaml(d))
+
+    if args.record:
+        try:
+            ws_root = _find_work_studio_root()
+        except FileNotFoundError as e:
+            print(f"\nError: {e}", file=sys.stderr)
+            return 1
+
+        objects_dir = ws_root / ".work-studio" / "objects"
+        try:
+            obj_file = _resolve_object_file(objects_dir, args.record)
+        except FileNotFoundError as e:
+            print(f"\nError: {e}", file=sys.stderr)
+            return 1
+
+        err = check_concurrency(obj_file, args.expect_updated,
+                                force=getattr(args, 'force', False))
+        if err:
+            print(f"\nError: {err}", file=sys.stderr)
+            return 1
+
+        evidence_text = format_direction_single_line(d)
+        content = obj_file.read_text(encoding="utf-8")
+        body = content[content.find("---", 3) + 3:].strip() if content.startswith("---") else content
+
+        entry = generate_evidence_entry("[testimony]", "director", evidence_text)
+        new_body = append_to_section(body, "evidence ledger", entry)
+
+        now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        new_fm = _update_frontmatter_fields(content, {"updated_at": now})
+        atomic_write_text(obj_file, compose_object_text(new_fm, new_body))
+        print(f"\nRecorded as [testimony] evidence on {args.record}")
+
+    return 0
+
+
+def cmd_preserved_changed(args: argparse.Namespace) -> int:
+    """Read-only: emit a PRESERVED/CHANGED report for a Work Object.
+
+    WO 2026-08-24-005 (accepted tracer-bullet design, Decision 2). Reads the
+    Work Object's frontmatter + append-only History; never writes.
+    """
+    try:
+        ws_root = _find_work_studio_root()
+    except FileNotFoundError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+
+    objects_dir = ws_root / ".work-studio" / "objects"
+    try:
+        obj_file = _resolve_object_file(objects_dir, args.id)
+    except FileNotFoundError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+
+    from .preserved_changed import generate
+
+    result = generate(obj_file)
+    print(result["out_text"])
+    return 0
+
+
+def cmd_shot_status(args: argparse.Namespace) -> int:
+    """V1 shot state machine: transition a Shot Work Object's production status.
+
+    WO 2026-08-24-006. Updates the shot_status frontmatter field + History;
+    never touches the lifecycle state/status.
+    """
+    try:
+        ws_root = _find_work_studio_root()
+    except FileNotFoundError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+
+    objects_dir = ws_root / ".work-studio" / "objects"
+    try:
+        obj_file = _resolve_object_file(objects_dir, args.id)
+    except FileNotFoundError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+
+    err = check_concurrency(obj_file, args.expect_updated, force=getattr(args, "force", False))
+    if err:
+        print(f"Error: {err}", file=sys.stderr)
+        return 1
+
+    from .shot_status import transition
+
+    result = transition(obj_file, args.shot_status, actor=getattr(args, "actor", "system"))
+    if not result["ok"]:
+        print(f"Error: {result['error']}", file=sys.stderr)
+        return 1
+    print(
+        f"Shot {args.id}: {result['old_status']} → {result['new_status']} "
+        f"(updated_at {result['updated_at']})"
+    )
+    return 0
+
+
 def cmd_asset_workbench(args: argparse.Namespace) -> int:
     """Read-only projection: render local design asset registry as static HTML."""
     try:
@@ -1284,6 +1454,13 @@ def build_parser() -> argparse.ArgumentParser:
         choices=["ordinary", "private", "restricted"],
         help="Sensitivity classification",
     )
+    create_parser.add_argument(
+        "--domain", action="append", default=None,
+        help="Discipline value (repeatable, primary first): business, "
+             "architecture, asset, design, governance, engineering, "
+             "research, ideation, operations, production. Optional "
+             "second axis, independent of --type.",
+    )
 
     # ── ws start ──────────────────────────────────────────────────────────
     start_parser = subparsers.add_parser(
@@ -1305,6 +1482,13 @@ def build_parser() -> argparse.ArgumentParser:
         "--sensitivity", required=True,
         choices=["ordinary", "private", "restricted"],
         help="Sensitivity classification",
+    )
+    start_parser.add_argument(
+        "--domain", action="append", default=None,
+        help="Discipline value (repeatable, primary first): business, "
+             "architecture, asset, design, governance, engineering, "
+             "research, ideation, operations. Optional second axis, "
+             "independent of --type.",
     )
     start_parser.add_argument(
         "--evidence", required=True,
@@ -1414,6 +1598,13 @@ def build_parser() -> argparse.ArgumentParser:
     close_parser.add_argument("--actor", default="system", help="Actor identifier")
     close_parser.add_argument("--force", action="store_true",
                               help="Bypass optimistic concurrency and close gate (grandfathering)")
+
+    # ── ws get-updated-at ─────────────────────────────────────────────────
+    get_updated_at_parser = subparsers.add_parser(
+        "get-updated-at",
+        help="Print the current updated_at timestamp for a Work Object",
+    )
+    get_updated_at_parser.add_argument("id", help="Work Object ID")
 
     # ── ws activate ───────────────────────────────────────────────────────
     activate_parser = subparsers.add_parser("activate", help="Update active.md entry")
@@ -1625,6 +1816,27 @@ def build_parser() -> argparse.ArgumentParser:
         help="Edge direction to show (default: both)",
     )
 
+    # ── ws domain ─────────────────────────────────────────────────────────
+    domain_parser = subparsers.add_parser(
+        "domain", help="Derived domain-folder mirror (regenerable, not authoritative)"
+    )
+    domain_sub = domain_parser.add_subparsers(dest="domain_command")
+
+    domain_sub.add_parser(
+        "sync",
+        help="Regenerate .work-studio/domain/<value>.md index files from frontmatter",
+    )
+
+    # ── ws list ───────────────────────────────────────────────────────────
+    list_parser = subparsers.add_parser(
+        "list", help="List Work Objects, optionally filtered by domain (live frontmatter query)"
+    )
+    list_parser.add_argument(
+        "--domain", action="append", default=None,
+        help="Filter to objects whose domain list includes this value "
+             "(repeatable; matches any of the given values)",
+    )
+
     # ── ws engineering-handoff ────────────────────────────────────────────
     def _add_handoff_common(p):
         p.add_argument("id", help="Work Object ID")
@@ -1822,6 +2034,60 @@ def build_parser() -> argparse.ArgumentParser:
     )
 
     subparsers.add_parser(
+        "scene-board",
+        help="Read-only: render Scene Work Objects as Scene Board HTML",
+    )
+
+    direction_parser = subparsers.add_parser(
+        "direction",
+        help="Parse a natural-language direction into a structured Direction object",
+    )
+    direction_parser.add_argument(
+        "--text", required=True,
+        help="The director's natural-language direction",
+    )
+    direction_parser.add_argument(
+        "--record",
+        help="Work Object ID to record the direction as [testimony] evidence",
+    )
+    direction_parser.add_argument(
+        "--expect-updated",
+        help="Optimistic concurrency: expected updated_at value",
+    )
+
+    preserved_parser = subparsers.add_parser(
+        "preserved-changed",
+        help="Read-only: emit a PRESERVED/CHANGED report for a Work Object",
+    )
+    preserved_parser.add_argument(
+        "id",
+        help="Work Object ID",
+    )
+
+    shot_status_parser = subparsers.add_parser(
+        "shot-status",
+        help="V1: transition a Shot Work Object's production status",
+    )
+    shot_status_parser.add_argument("id", help="Shot Work Object ID")
+    shot_status_parser.add_argument(
+        "--shot-status", required=True,
+        choices=["blocking", "animation", "render", "review", "approved"],
+        help="Target shot production status",
+    )
+    shot_status_parser.add_argument(
+        "--expect-updated",
+        help="Optimistic concurrency: expected updated_at value",
+    )
+    shot_status_parser.add_argument(
+        "--actor", default="system",
+        help="Actor identifier for the History entry",
+    )
+    shot_status_parser.add_argument(
+        "--force", action="store_true",
+        help="Bypass optimistic concurrency check",
+    )
+
+    subparsers.add_parser(
         "asset-workbench",
         help="Read-only: render local design asset registry as a static HTML file",
     )
@@ -1836,7 +2102,7 @@ def build_parser() -> argparse.ArgumentParser:
         required=True,
         choices=[
             "foundation", "token-set", "theme", "component-family",
-            "ux-pattern", "flow", "projection",
+            "ux-pattern", "flow", "projection", "motion",
         ],
     )
     asset_ingest_parser.add_argument("--work-object", required=True)
@@ -1897,10 +2163,15 @@ def main() -> int:
         "validate": cmd_validate,
         "outcomes": cmd_outcomes,
         "command-center": cmd_command_center,
+        "scene-board": cmd_scene_board,
+        "direction": cmd_direction,
+        "preserved-changed": cmd_preserved_changed,
+        "shot-status": cmd_shot_status,
         "asset-workbench": cmd_asset_workbench,
         "asset-ingest": cmd_asset_ingest,
         "backup": cmd_backup,
         "restore": cmd_restore,
+        "get-updated-at": cmd_get_updated_at,
     }
 
     if args.command in commands:
@@ -1929,6 +2200,16 @@ def main() -> int:
         print("Error: Unknown graph command. Use 'ws graph trace'.",
               file=sys.stderr)
         return 1
+
+    if args.command == "domain":
+        if args.domain_command == "sync":
+            return cmd_domain_sync(args)
+        print("Error: Unknown domain command. Use 'ws domain sync'.",
+              file=sys.stderr)
+        return 1
+
+    if args.command == "list":
+        return cmd_list(args)
 
     if args.command == "engineering-handoff":
         if args.handoff_command in ("inspect", "approve", "reject"):

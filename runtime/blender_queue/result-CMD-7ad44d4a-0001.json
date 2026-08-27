@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-7ad44d4a-0001",
+  "status": "ok",
+  "data": {
+    "deleted": "unit_cube.018"
+  },
+  "error": null,
+  "started_at": "2026-08-26T07:18:37Z",
+  "completed_at": "2026-08-26T07:18:37Z"
+}

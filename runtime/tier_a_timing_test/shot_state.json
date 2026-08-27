@@ -1,0 +1,29 @@
+{
+  "shot_id": "SH001-TIER-A-TEST",
+  "prompt": "Minimal test scene for Tier-A timing",
+  "state": "breakdown",
+  "status": "running",
+  "retries": {},
+  "history": [
+    {
+      "from": null,
+      "to": "breakdown",
+      "at": "2026-08-27T20:30:40Z",
+      "note": "breakdown"
+    },
+    {
+      "from": "tier_a",
+      "to": "tier_a",
+      "at": "2026-08-27T20:30:41Z",
+      "note": "executed:tier_a wall_clock=0.96s"
+    }
+  ],
+  "artifacts": [
+    {
+      "tier": "tier_a",
+      "path": "C:\\Users\\Andre\\Documents\\Work_Studio\\andrelawas-work-studio\\runtime\\tier_a_timing_test\\outputs\\tier_a_render.png",
+      "kind": "render",
+      "at": "2026-08-27T20:30:41Z"
+    }
+  ]
+}

@@ -7,6 +7,7 @@ status: active
 state: explore
 consequence: meaningful
 sensitivity: ordinary
+domain: [business, asset]
 created_at: 2026-08-22T11:50:31Z
 updated_at: 2026-08-22T13:02:19Z
 next_action: Director selects a direction among Round 2 5/6/7 or Round 1 1/2/3; Direction 4 is moot (backing store resolved).

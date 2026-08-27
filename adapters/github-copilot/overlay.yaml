@@ -28,6 +28,7 @@ capability_mappings:
   terminal_run: "run_in_terminal"
   git_operations: "run_in_terminal (git commands)"
   web_fetch: "open_browser_page / mcp tools"
+  gpu_claim: "file_write (COMP-041 file-backed registry)"
   subagent_spawn: "runSubagent"
   subagent_isolation: "—"
   background_processes: "—"
@@ -49,6 +50,7 @@ capabilities:
   terminal_run: native
   git_operations: native
   web_fetch: native
+  gpu_claim: native
   subagent_spawn: native
   subagent_isolation: manual-fallback
   structured_output: native

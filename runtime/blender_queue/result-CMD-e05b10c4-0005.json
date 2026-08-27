@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-e05b10c4-0005",
+  "status": "ok",
+  "data": {
+    "name": "env_ground"
+  },
+  "error": null,
+  "started_at": "2026-08-26T02:36:20Z",
+  "completed_at": "2026-08-26T02:36:20Z"
+}

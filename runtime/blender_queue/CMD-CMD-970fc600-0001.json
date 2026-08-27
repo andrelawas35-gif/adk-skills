@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-970fc600-0001",
+  "op": "mesh.set_dimensions",
+  "params": {
+    "name": "unit_cube.003",
+    "dimensions": [
+      0.06,
+      1.0,
+      2.2
+    ]
+  },
+  "created_at": "2026-08-26T06:59:38Z",
+  "delay_ms": 0
+}

@@ -7,6 +7,7 @@ status: active
 state: explore
 consequence: meaningful
 sensitivity: ordinary
+domain: [architecture, governance]
 created_at: 2026-08-21T13:46:44Z
 updated_at: 2026-08-21T14:41:30Z
 next_action: None required -- Inquiry remains answered. The two noted gaps (missing --approve-direction CLI flag; Git Bash /tmp path-translation pitfall) are operational notes, not blocking findings; either could become its own small Work Object if the director wants them fixed, but neither is implied by this Inquiry's scope.

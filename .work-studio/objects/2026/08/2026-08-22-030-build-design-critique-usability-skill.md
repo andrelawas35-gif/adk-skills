@@ -7,6 +7,7 @@ status: active
 state: verify
 consequence: meaningful
 sensitivity: ordinary
+domain: [design, governance]
 created_at: 2026-08-22T15:10:15Z
 updated_at: 2026-08-22T15:18:02Z
 next_action: Director decision: commit these changes, or continue working uncommitted. design-govern-interaction-motion remains the only un-advanced recommendation from WO 2026-08-22-027.

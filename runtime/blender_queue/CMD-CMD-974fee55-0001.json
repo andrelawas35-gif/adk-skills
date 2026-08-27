@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-974fee55-0001",
+  "op": "light.set",
+  "params": {
+    "name": "Light",
+    "energy": 60000.0,
+    "color": [
+      1.0,
+      0.97,
+      0.9
+    ]
+  },
+  "created_at": "2026-08-26T07:55:22Z",
+  "delay_ms": 0
+}

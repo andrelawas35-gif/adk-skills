@@ -6,8 +6,7 @@
 **Asset ID:** `asset.design.example`  
 **Asset kind:** component-family  
 **Source of truth:** this asset record  
-**Projection status:** projections may read this record; projections are
-read-only and must not be edited as asset truth.
+**Projection status:** projections may read this record; they are read-only and must not be edited as asset truth.
 
 ## Asset Summary
 

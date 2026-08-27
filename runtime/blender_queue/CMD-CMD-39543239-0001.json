@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-39543239-0001",
+  "op": "object.import_mesh",
+  "params": {
+    "path": "C:\\Users\\Andre\\AppData\\Local\\Temp\\opencode\\ws-env-tracer\\assets\\unit_cube.obj"
+  },
+  "created_at": "2026-08-26T07:11:05Z",
+  "delay_ms": 0
+}

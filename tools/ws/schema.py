@@ -6,13 +6,23 @@ and validates enum membership and required fields.
 
 from datetime import datetime, timezone
 from pathlib import PurePosixPath
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 # ── Enums ─────────────────────────────────────────────────────────────────────
 
 VALID_TYPES = frozenset({"change", "inquiry", "project", "incident"})
 VALID_CONSEQUENCES = frozenset({"low", "meaningful", "high"})
 VALID_SENSITIVITIES = frozenset({"ordinary", "private", "restricted"})
+# Domain is a SECOND axis independent of `type` (WO 2026-08-22-031 Decision 1):
+# `type` describes the shape of work (change/inquiry/project/incident), while
+# `domain` describes its discipline. List-shaped, not scalar (Decision 3):
+# the corpus test found most recent objects genuinely span more than one
+# domain (e.g. a business decision exposed through engineering dispatch).
+VALID_DOMAINS = frozenset({
+    "business", "architecture", "asset", "design",
+    "governance", "engineering", "research", "ideation", "operations",
+    "production",
+})
 VALID_STATES = frozenset({
     "notice", "explore", "design", "build",
     "verify", "release", "observe", "close",
@@ -41,6 +51,51 @@ def validate_sensitivity(value: str) -> Optional[str]:
     if value not in VALID_SENSITIVITIES:
         return f"Invalid sensitivity '{value}'. Must be one of: {', '.join(sorted(VALID_SENSITIVITIES))}"
     return None
+
+
+def validate_domain(values: List[str]) -> Optional[str]:
+    """Return error message if the domain list is invalid, or None.
+
+    The field itself is optional (legacy objects may omit it entirely --
+    no retro-migration required, WO 2026-08-22-031 Decision 1 non-goals).
+    When present, it must be a non-empty list of values drawn from
+    VALID_DOMAINS; an unknown value is rejected, not silently accepted.
+    """
+    if not values:
+        return "Domain list, if present, must contain at least one value."
+    unknown = [v for v in values if v not in VALID_DOMAINS]
+    if unknown:
+        return (
+            f"Invalid domain value(s): {', '.join(unknown)}. "
+            f"Must be one of: {', '.join(sorted(VALID_DOMAINS))}"
+        )
+    return None
+
+
+def format_domain_field(values: List[str]) -> str:
+    """Format a domain list as an inline flow list for frontmatter.
+
+    e.g. ["business", "architecture"] -> "[business, architecture]"
+    Order is preserved (primary domain first, per Decision 3) -- not sorted.
+    """
+    return "[" + ", ".join(values) + "]"
+
+
+def parse_domain_field(raw_value: str) -> List[str]:
+    """Parse a domain frontmatter value back into an ordered list of strings.
+
+    `parse_frontmatter`'s generic scalar parser does not handle bracketed
+    flow lists (see its docstring: "scalar key: value pairs only"), so
+    `domain` is parsed with this dedicated helper wherever it is read,
+    rather than by extending the shared generic parser for one field.
+    Returns an empty list for an empty/missing value.
+    """
+    raw_value = raw_value.strip()
+    if not raw_value:
+        return []
+    if raw_value.startswith("[") and raw_value.endswith("]"):
+        raw_value = raw_value[1:-1]
+    return [part.strip() for part in raw_value.split(",") if part.strip()]
 
 
 def validate_campaign(value: object) -> Optional[str]:
@@ -91,6 +146,7 @@ def generate_frontmatter(
     consequence: str,
     sensitivity: str,
     campaign: Optional[str] = None,
+    domain: Optional[List[str]] = None,
 ) -> str:
     """Generate YAML frontmatter for a new Work Object.
 
@@ -100,6 +156,9 @@ def generate_frontmatter(
         obj_type: One of change, inquiry, project, incident
         consequence: One of low, meaningful, high
         sensitivity: One of ordinary, restricted
+        domain: Optional list of discipline values (a SECOND axis independent
+            of obj_type, e.g. ["business", "architecture"]) -- omitted
+            entirely on legacy/unclassified objects, no retro-migration.
 
     Returns:
         YAML frontmatter string (including --- delimiters)
@@ -119,6 +178,8 @@ def generate_frontmatter(
     ]
     if campaign is not None:
         lines.append(f"campaign: {campaign}")
+    if domain:
+        lines.append(f"domain: {format_domain_field(domain)}")
     lines.extend([
         f"created_at: {now}",
         f"updated_at: {now}",

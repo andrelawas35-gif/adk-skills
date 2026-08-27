@@ -7,6 +7,7 @@ status: active
 state: verify
 consequence: meaningful
 sensitivity: ordinary
+domain: [design, governance]
 created_at: 2026-08-22T14:52:10Z
 updated_at: 2026-08-22T15:05:57Z
 next_action: Director decision: commit these changes (SKILL.md, routing map, pipeline doc, adapters, generated command-center.html fixes), or continue working uncommitted.

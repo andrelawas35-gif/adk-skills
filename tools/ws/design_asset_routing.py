@@ -22,6 +22,7 @@ FRONTIER_OWNERS = {
     "verification": "design-verify-design-implementation",
     "accessibility": "design-audit-accessibility",
     "critique": "design-critique-usability",
+    "interaction-motion": "design-govern-interaction-motion",
     "component-registration": "design-track-components",
     "projection": "design-project-asset-workbench",
 }

@@ -7,6 +7,7 @@ status: active
 state: design
 consequence: meaningful
 sensitivity: ordinary
+domain: [business, architecture]
 created_at: 2026-08-22T14:45:15Z
 updated_at: 2026-08-22T15:13:02Z
 next_action: Extend section 9 with more business skills using the now-proven pattern, or begin Direction 2 (loop reducer) to close the empirical loop on WO 2026-08-22-029's revisit trigger (confirm 08-30 receivable / 09-01 rent land as predicted).

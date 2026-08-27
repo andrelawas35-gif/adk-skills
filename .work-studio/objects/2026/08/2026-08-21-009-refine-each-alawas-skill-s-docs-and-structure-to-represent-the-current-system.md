@@ -3,13 +3,15 @@ schema_version: 1
 id: 2026-08-21-009
 title: Refine each alawas skill's docs and structure to represent the current system
 type: inquiry
-status: active
-state: design
+status: closed
+state: close
 consequence: meaningful
 sensitivity: ordinary
+domain: [governance]
 created_at: 2026-08-21T14:52:22Z
-updated_at: 2026-08-21T18:42:21Z
+updated_at: 2026-08-25T23:28:18Z
 next_action: Route to design-tracer-bullet: pilot the strip on one skill (delete grilling entry/profile sections, relocate the doc-discovery instruction, delete grilling-session itself), confirm no functional loss, before touching the remaining 21
+
 
 
 
@@ -134,3 +136,9 @@ loss of real capability, before touching the remaining 21.
 - **Status:** active
 - **Actor:** director
 - **Rationale:** Resolved the two open questions blocking implementation scope: (1) alawas-thinking-grilling-session should be deleted, not repurposed -- direct corollary of Decision 1, its full SKILL.md is 100% apparatus machinery; (2) AGREEMENT-LOOP.md's Workspace documentation discovery section is not redundant with conduct-work-object's own Stage 1 -- it addresses a different audience (the other 21 skills) and needs relocating, not just deleting. Both resolved by direct content comparison, not requiring separate pressure-test-decision authority beyond what Decision 1 already granted.
+### 2026-08-25T23:28:18Z — Closed: Superseded by broader agent architecture and skill debloating work — doc refinement is now a subset of the full migration plan
+
+- **State:** close
+- **Status:** closed
+- **Actor:** system
+- **Rationale:** Superseded by broader agent architecture and skill debloating work — doc refinement is now a subset of the full migration plan

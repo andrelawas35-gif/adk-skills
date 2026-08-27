@@ -7,6 +7,7 @@ status: active
 state: verify
 consequence: meaningful
 sensitivity: ordinary
+domain: [engineering, design]
 created_at: 2026-08-22T11:08:08Z
 updated_at: 2026-08-22T11:22:09Z
 next_action: Director decision: commit these changes, or continue working uncommitted. Work Object is otherwise complete -- both success-evidence criteria met, plus the CLI-wiring deviation.

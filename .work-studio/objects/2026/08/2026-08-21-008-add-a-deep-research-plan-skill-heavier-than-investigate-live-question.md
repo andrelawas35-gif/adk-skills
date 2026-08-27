@@ -7,6 +7,7 @@ status: closed
 state: close
 consequence: meaningful
 sensitivity: ordinary
+domain: [governance, research]
 created_at: 2026-08-21T14:47:57Z
 updated_at: 2026-08-21T18:44:14Z
 next_action: Route to alawas-engineering-implement-bounded-change (or director may want a further design-tracer-bullet pass specifically for the sub-question composition loop -- how many investigate-live-question calls, how they're sequenced/parallelized -- before the full skill file is authored) to write the actual research-produce-report SKILL.md

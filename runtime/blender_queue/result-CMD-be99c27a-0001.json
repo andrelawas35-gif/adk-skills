@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-be99c27a-0001",
+  "status": "error",
+  "data": null,
+  "error": {
+    "code": "gpu_occupied",
+    "message": "GPU slot held by blender/ws-env-tracer-022"
+  },
+  "started_at": "2026-08-26T06:52:34Z",
+  "completed_at": "2026-08-26T06:52:34Z"
+}

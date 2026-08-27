@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-bbfe69cc-0001",
+  "status": "ok",
+  "data": {
+    "deleted": "unit_cube.004"
+  },
+  "error": null,
+  "started_at": "2026-08-26T07:08:12Z",
+  "completed_at": "2026-08-26T07:08:12Z"
+}

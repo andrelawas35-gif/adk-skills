@@ -10,7 +10,7 @@
     adapters/<platform>/SHA256SUMS files and enforce the same precedence rule.
 
 .PARAMETER Platform
-    codex | claude-code | github-copilot
+    codex | claude-code | github-copilot | lm-studio-bionic | opencode
 
 .PARAMETER Global
     Install the global bootstrap adapter for -Platform.
@@ -45,7 +45,7 @@
 [CmdletBinding(DefaultParameterSetName = 'Global')]
 param(
     [Parameter(Mandatory = $true)]
-    [ValidateSet('codex', 'claude-code', 'github-copilot')]
+    [ValidateSet('codex', 'claude-code', 'github-copilot', 'lm-studio-bionic', 'opencode')]
     [string]$Platform,
 
     [Parameter(ParameterSetName = 'Global', Mandatory = $true)]
@@ -91,6 +91,14 @@ function Get-GlobalDir {
             if ($env:COPILOT_HOME) { Join-Path $env:COPILOT_HOME 'skills' }
             else { Join-Path $env:USERPROFILE '.copilot\skills' }
         }
+        'lm-studio-bionic' {
+            if ($env:LMSTUDIO_HOME) { Join-Path $env:LMSTUDIO_HOME 'skills' }
+            else { Join-Path $env:USERPROFILE '.lmstudio\skills' }
+        }
+        'opencode' {
+            if ($env:OPENCODE_HOME) { Join-Path $env:OPENCODE_HOME 'skills' }
+            else { Join-Path $env:USERPROFILE '.config\opencode\skills' }
+        }
         default { Die "unknown platform: $Platform" }
     }
 }
@@ -101,6 +109,8 @@ function Get-ProjectSubdir {
         'claude-code' { '.claude\skills' }
         'codex' { '.agents\skills' }
         'github-copilot' { '.github\skills' }
+        'lm-studio-bionic' { '.lmstudio\skills' }
+        'opencode' { '.opencode\skills' }
         default { Die "unknown platform: $Platform" }
     }
 }

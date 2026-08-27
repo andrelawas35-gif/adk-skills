@@ -84,6 +84,9 @@ kernel:
         - governance-review-outcome-and-adapt
         - operations-deploy-with-recovery
         - operations-diagnose-production-incident
+        - production-operate-blender
+        - production-operate-comfyui
+        - production-operate-tts
         - research-investigate-live-question
         - research-produce-report
         - thinking-develop-idea
@@ -117,6 +120,8 @@ kernel:
         - codex
         - claude-code
         - github-copilot
+        - lm-studio-bionic
+        - opencode
 
     - path: adapters/*/manifest.json
       purpose: "Platform adapter manifest — tracks installed skill versions and checksums"
@@ -125,6 +130,8 @@ kernel:
         - codex
         - claude-code
         - github-copilot
+        - lm-studio-bionic
+        - opencode
 
     - path: fixtures/
       purpose: "Behavioral fixtures consumed by verify-conformance.py — kernel inputs for testing"
@@ -159,6 +166,7 @@ platforms:
       terminal_run: native
       git_operations: native
       web_fetch: native
+      gpu_claim: native
       subagent_spawn: native
       structured_output: native
       user_confirmation: native
@@ -181,6 +189,7 @@ platforms:
       terminal_run: native
       git_operations: native
       web_fetch: native
+      gpu_claim: native
       subagent_spawn: native
       structured_output: native
       user_confirmation: native
@@ -203,10 +212,57 @@ platforms:
       terminal_run: native
       git_operations: native
       web_fetch: native
+      gpu_claim: native
       subagent_spawn: native
       structured_output: native
       user_confirmation: native
       browser_automation: native
+      web_search: native
+      deployment: manual-fallback
+      secret_access: manual-fallback
+
+  lm-studio-bionic:
+    label: "LM Studio Bionic"
+    adapter_dir: adapters/lm-studio-bionic/
+    overlay: adapters/lm-studio-bionic/overlay.yaml
+    install_target: ".lmstudio/skills/"
+    capability_mappings:
+      file_read: native
+      file_write: native
+      directory_list: native
+      glob_search: native
+      content_search: native
+      terminal_run: native
+      git_operations: native
+      web_fetch: native
+      gpu_claim: native
+      subagent_spawn: native
+      structured_output: native
+      user_confirmation: native
+      browser_automation: manual-fallback
+      web_search: manual-fallback
+      deployment: manual-fallback
+      secret_access: manual-fallback
+
+  opencode:
+    label: "OpenCode"
+    adapter_dir: adapters/opencode/
+    overlay: adapters/opencode/overlay.yaml
+    install_target: ".opencode/skills/"
+    capability_mappings:
+      file_read: native
+      file_write: native
+      directory_list: native
+      glob_search: native
+      content_search: native
+      terminal_run: native
+      git_operations: native
+      web_fetch: native
+      gpu_claim: native
+      subagent_spawn: native
+      structured_output: native
+      user_confirmation: native
+      browser_automation: manual-fallback
       web_search: native
       deployment: manual-fallback
       secret_access: manual-fallback

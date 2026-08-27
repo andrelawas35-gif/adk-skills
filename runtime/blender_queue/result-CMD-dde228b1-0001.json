@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-dde228b1-0001",
+  "status": "ok",
+  "data": {
+    "dimensions": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "error": null,
+  "started_at": "2026-08-26T07:50:47Z",
+  "completed_at": "2026-08-26T07:50:47Z"
+}

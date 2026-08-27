@@ -243,7 +243,14 @@ rules, and schema validation. Every write command except `ws create` and
 
 On any meaningful transition:
 
-1. Read the current file to get `updated_at` from the YAML frontmatter.
+1. **FIRST: Read the current `updated_at` timestamp using the CLI:**
+   ```sh
+   python3 -m tools.ws get-updated-at <id>
+   ```
+   This prints the current timestamp to stdout. Capture it and use it in
+   the next command's `--expect-updated` parameter. **Never estimate, guess,
+   or reuse a stale timestamp.**
+
 2. Choose the appropriate CLI command for the change — state/status
    transitions, closing a Work Object, appending History without a state
    change, or appending Evidence. See `references/CONDUCT-CLI-OPERATIONS.md`
@@ -271,6 +278,12 @@ On any meaningful transition:
 4. The CLI handles `updated_at` updates, History appends, and concurrency
    checks automatically. If the CLI rejects with a concurrency error, re-read
    the file to get the new `updated_at` and retry.
+
+   **Before any mutating command**, always read the current timestamp:
+   ```sh
+   python3 -m tools.ws get-updated-at <id>
+   ```
+   Then use that value in `--expect-updated`. Never estimate or reuse stale values.
 
 ### 6. Route to specialist
 

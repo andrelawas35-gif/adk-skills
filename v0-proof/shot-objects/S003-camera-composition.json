@@ -1,0 +1,22 @@
+{
+  "shot_id": "S003",
+  "intent": "A turnaround reference set requires the same object identity across views; the current back view must match the front view's proportions, materials, and details for image-to-3D generation to succeed.",
+  "subject": "The market lamp prop, front view and back view intended as a matched turnaround pair.",
+  "camera": "Front view: straight-on reference framing. Back view: 180-degree rotation, same distance and framing.",
+  "mood": "Clean, legible, reference-grade -- identity-locked across views.",
+  "preserve": [
+    "brass housing proportions",
+    "chain attachment point",
+    "overall scale and silhouette"
+  ],
+  "change": [
+    "back view proportions drift from the front view",
+    "back view introduces details absent from the front (mismatched identity)",
+    "inconsistent scale between the two views"
+  ],
+  "avoid": [
+    "any front/back mismatch that would break image-to-3D reconstruction",
+    "new invented geometry not implied by the front view",
+    "a back view that reads as a different object"
+  ]
+}

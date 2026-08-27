@@ -15,7 +15,7 @@
   pointers, not component copies; retired entries are preserved, never deleted.
   Component kind values: skill | protocol | runtime | tooling | artifact-schema |
   integration. Governance domain values: business | design | engineering |
-  governance | operations | research | thinking | cross-cutting. COMP-001 through
+  governance | operations | production | research | thinking | cross-cutting. COMP-001 through
   COMP-024 are grandfathered legacy records; all new entries require both fields.
 -->
 
@@ -25,7 +25,7 @@
 - **location(s):** `references/AGREEMENT-LOOP.md` (canonical; copied into every skill's `references/` by `tools/generate-adapters.py`)
 - **built-by Work Object(s):** pre-ledger backfill; recent shaping in WO `2026-07-16-004` (two-tier lenses); resolved in WO `2026-07-27-003`
 - **depends-on:** none declared
-- **depended-on-by:** COMP-002 through COMP-040 (every skill's Grilling Session plus the business operating pipeline; widest blast radius)
+- **depended-on-by:** COMP-002 through COMP-044 (every skill's Grilling Session plus the business operating pipeline; widest blast radius)
 - **applicable dimensions:** personal fit, artifact value, novelty yield (recovery quality deferred — engine-level, not outcome-level)
 - **owning skill/profile:** all skill profiles via `references/SKILL-AWARE-GRILLING.md`
 - **last-grilled-SHA:** `0de476b`
@@ -63,7 +63,7 @@ source of truth; generated adapters are deliberately not listed.
 - **location(s):** `skills/core/governance-conduct-work-object/SKILL.md`
 - **built-by Work Object(s):** pre-ledger backfill
 - **depends-on:** COMP-001
-- **depended-on-by:** COMP-003 through COMP-040
+- **depended-on-by:** COMP-003 through COMP-044
 - **applicable dimensions:** recovery quality, artifact value, novelty yield
 - **owning skill/profile:** `governance-conduct-work-object`
 - **last-grilled-SHA:** not-yet-grilled
@@ -606,3 +606,63 @@ taxonomy introduced by WO `2026-08-22-010`.
 - **last-grilled-SHA:** not-yet-grilled
 - **best-case anchor:** pending first governed grilling pass
 - **status rationale / findings:** Accepted next-slice business capability; registered with explicit business governance.
+
+## COMP-041 — Production GPU orchestrator
+
+- **status:** active
+- **component kind:** runtime
+- **governance domain:** production
+- **location(s):** `tools/production/gpu_orchestrator/`
+- **built-by Work Object(s):** `2026-08-24-013`
+- **depends-on:** COMP-001, COMP-002
+- **depended-on-by:** COMP-042, COMP-043
+- **applicable dimensions:** recovery quality, artifact value
+- **owning skill/profile:** `production-orchestrate-gpu`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** pending first governed grilling pass
+- **status rationale / findings:** Accepted production runtime for sequential VRAM discipline: file-backed GPU claim registry, at-most-one owner, stale-owner recovery, wrong-owner release protection, and downstream Blender/ComfyUI claim integration.
+
+## COMP-042 — Production Blender operator
+
+- **status:** active
+- **component kind:** skill
+- **governance domain:** production
+- **location(s):** `skills/core/production-operate-blender/SKILL.md`; `tools/production/blender_operator/`
+- **built-by Work Object(s):** `2026-08-24-014`
+- **depends-on:** COMP-001, COMP-002, COMP-041
+- **depended-on-by:** COMP-048, COMP-049, COMP-050
+- **applicable dimensions:** artifact value, recovery quality
+- **owning skill/profile:** `production-operate-blender`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** pending first governed grilling pass
+- **status rationale / findings:** Accepted production capability for bounded Blender execution: crash-durable command queue, governed §4.2 operation surface, protect-field enforcement, arbitrary-Python escalation gate, and COMP-041 GPU claim discipline.
+
+## COMP-043 — Production ComfyUI operator
+
+- **status:** active
+- **component kind:** skill
+- **governance domain:** production
+- **location(s):** `skills/core/production-operate-comfyui/SKILL.md`; `tools/production/comfyui_operator/`
+- **built-by Work Object(s):** `2026-08-24-015`
+- **depends-on:** COMP-001, COMP-002, COMP-041
+- **depended-on-by:** COMP-048, COMP-049, COMP-050
+- **applicable dimensions:** artifact value, recovery quality
+- **owning skill/profile:** `production-operate-comfyui`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** pending first governed grilling pass
+- **status rationale / findings:** Accepted production capability for bounded ComfyUI API execution: localhost workflow submission/polling surface, read-only model listing, and COMP-041 GPU claim discipline for Flux/Hunyuan queued work.
+
+## COMP-044 — Production TTS operator
+
+- **status:** active
+- **component kind:** skill
+- **governance domain:** production
+- **location(s):** `skills/core/production-operate-tts/SKILL.md`; `tools/production/tts_operator/`
+- **built-by Work Object(s):** `2026-08-24-016`
+- **depends-on:** COMP-001, COMP-002
+- **depended-on-by:** COMP-052, COMP-053
+- **applicable dimensions:** artifact value, recovery quality
+- **owning skill/profile:** `production-operate-tts`
+- **last-grilled-SHA:** not-yet-grilled
+- **best-case anchor:** pending first governed grilling pass
+- **status rationale / findings:** Accepted production capability for Tier 1 local TTS execution: Piper-backed WAV take generation, deterministic A/B/C/D variation, structured take metadata, and explicit exclusion of performance judgment, take selection, cloud tiers, System.Speech, and GPU contention.

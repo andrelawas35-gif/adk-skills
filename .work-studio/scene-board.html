@@ -1,0 +1,93 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Scene Board</title>
+<style>
+body { font-family: -apple-system, sans-serif; max-width: 1100px;
+       margin: 2rem auto; padding: 0 1rem; color: #1a1a1a; background: #fff; }
+h1 { font-size: 20px; font-weight: 500; margin-bottom: 1.5rem; }
+.scene-card { border: 1px solid #e5e5e5; border-radius: 10px;
+              padding: 16px 20px; margin-bottom: 16px; }
+.scene-header { display: flex; align-items: center; gap: 10px;
+                margin-bottom: 12px; }
+.state-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.scene-id { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 12px; color: #666; }
+.scene-title { font-size: 15px; font-weight: 500; flex: 1; }
+.scene-state { font-size: 11px; padding: 2px 8px; border-radius: 6px;
+               background: #f3f4f6; color: #666; }
+.thesis { margin-bottom: 12px; padding: 10px 12px; background: #f9fafb;
+          border-radius: 6px; }
+.thesis-item { font-size: 13px; margin-bottom: 4px; }
+.thesis-key { font-weight: 600; text-transform: capitalize; margin-right: 4px; }
+.layers { margin-bottom: 14px; }
+.layer-tabs { display: flex; gap: 0; border-bottom: 1px solid #e5e5e5;
+              margin-bottom: 10px; }
+.layer-tab { font-size: 12px; padding: 6px 14px; border: none;
+             background: none; cursor: pointer; color: #666;
+             border-bottom: 2px solid transparent; }
+.layer-tab.active { color: #1a1a1a; border-bottom-color: #1a1a1a; }
+.layer-panel { font-size: 13px; line-height: 1.6; white-space: pre-wrap;
+               padding: 0 4px; }
+.beats { overflow-x: auto; }
+.beats table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.beats th { text-align: left; padding: 6px 8px; border-bottom: 2px solid #e5e5e5;
+            font-weight: 500; font-size: 11px; color: #666;
+            text-transform: uppercase; letter-spacing: 0.5px; }
+.beats td { padding: 8px; border-bottom: 1px solid #f3f4f6;
+            vertical-align: top; line-height: 1.5; }
+.beat-num { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-weight: 600; width: 32px; text-align: center; }
+.intent { color: #6d28d9; }
+.perf { color: #0369a1; font-style: italic; }
+.prod { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 11px; color: #666; }
+.empty { text-align: center; padding: 3rem; color: #666; font-size: 14px; }
+</style></head>
+<body>
+<h1>Scene Board</h1>
+<div class="scene-card">
+<div class="scene-header">
+  <span class="state-dot" style="background:#3b82f6"></span>
+  <span class="scene-id">2026-08-23-004</span>
+  <span class="scene-title">SC030 — Mara and Leo market conversation</span>
+  <span class="scene-state">explore</span>
+</div>
+<div class="thesis"><div class="thesis-item"><span class="thesis-key">thesis</span> Mara tries to hide recognition.</div><div class="thesis-item"><span class="thesis-key">turn</span> Leo reveals he may already know.</div><div class="thesis-item"><span class="thesis-key">character state</span> Mara: controlled → threatened</div><div class="thesis-item"><span class="thesis-key">audience state</span> Leo seems unaware → Leo probably knows</div><div class="thesis-item"><span class="thesis-key">directorial rules</span> restraint, no melodrama, stillness &gt; gesturing</div></div>
+<div class="layers"><div class="layer-tabs"><button class="layer-tab active" data-panel="panel-2026-08-23-004-0" id="tab-2026-08-23-004-0">Layer A — Story</button><button class="layer-tab" data-panel="panel-2026-08-23-004-1" id="tab-2026-08-23-004-1">Layer B — Drama</button><button class="layer-tab" data-panel="panel-2026-08-23-004-2" id="tab-2026-08-23-004-2">Layer C — Direction</button><button class="layer-tab" data-panel="panel-2026-08-23-004-3" id="tab-2026-08-23-004-3">Layer D — Realization</button></div><div class="layer-panel" id="panel-2026-08-23-004-0" style="display:block">A crowded outdoor market. Mara buys fruit from a vendor. Leo approaches
+casually, as if they&#x27;re acquaintances. They exchange pleasantries. Leo
+mentions a name — Mara&#x27;s hand stops. She recovers. Leo watches her recover.
+He leaves. Mara stays, pretending to browse.</div><div class="layer-panel" id="panel-2026-08-23-004-1" style="display:none">Leo is testing whether Mara reacts to the name. Mara&#x27;s reaction confirms
+his suspicion but she doesn&#x27;t know that. The audience should realize by the
+end of the scene that Leo came here specifically to test her — the casual
+encounter was staged. The dramatic tension is in what Leo already knows vs.
+what Mara thinks he knows.</div><div class="layer-panel" id="panel-2026-08-23-004-2" style="display:none">The audience should feel the shift from ordinary to dangerous without any
+character announcing it. The scene should feel like a normal market
+conversation until beat 03, when the name lands. After that, the audience
+should notice Mara&#x27;s control — her effort to seem normal becomes visible.
+Leo&#x27;s ease should feel increasingly deliberate. By beat 06, the audience
+should suspect Leo planned this.</div><div class="layer-panel" id="panel-2026-08-23-004-3" style="display:none">- **Location:** outdoor market, midday, warm light, crowd noise
+- **Camera language:** starts wide (market context), tightens as tension
+  rises, ends on Mara alone
+- **Sound:** market ambience (constant), no score until beat 05 (low drone),
+  dialogue always mixed under ambience level
+- **Performance register:** naturalistic, understated, physical stillness as
+  emotional signal
+- **Key prop:** glass of tea (Mara&#x27;s hands tell the story)</div></div>
+<div class="beats">
+<table>
+<thead><tr><th>Beat</th><th>Screenplay</th><th>Director Intent</th>
+<th>Performance</th><th>Production</th></tr></thead>
+<tbody><tr><td class="beat-num">01</td><td>Market establishing. Mara at vendor stall.</td><td class="intent">Ordinary day. Audience settles into the world.</td><td class="perf">Mara relaxed, browsing fruit</td><td class="prod">camera: WS establishing, lens: 35mm, audio: market full</td></tr><tr><td class="beat-num">02</td><td>Leo approaches. &quot;Didn&#x27;t expect to see you here.&quot;</td><td class="intent">Casual encounter. Nothing alarming yet.</td><td class="perf">Both relaxed, social distance</td><td class="prod">camera: 2-shot MS, lens: 50mm, audio: market + dialogue</td></tr><tr><td class="beat-num">03</td><td>Leo: &quot;I ran into Karim yesterday.&quot; Mara&#x27;s hand stops on the glass.</td><td class="intent">The name lands. Mara&#x27;s body betrays her before she can control it.</td><td class="perf">hand freeze: 0.4s, then controlled recovery, eyes stay on fruit</td><td class="prod">camera: MCU Mara, lens: 85mm, audio: market drops 3dB</td></tr><tr><td class="beat-num">04</td><td>LEO: &quot;You tell me.&quot; / Mara looks down.</td><td class="intent">Leo tests Mara. Audience realizes he suspects her.</td><td class="perf">gaze delayed, restrained voice, hand remains still</td><td class="prod">camera: MC Leo, lens: compressed, audio: market ambience</td></tr><tr><td class="beat-num">05</td><td>Mara: &quot;Karim. Which Karim?&quot; She picks up an apple.</td><td class="intent">Mara deflects. The deflection is too controlled — audience sees it.</td><td class="perf">forced casual, picks up apple as prop business</td><td class="prod">camera: OTS Leo→Mara, lens: 85mm, audio: low drone begins</td></tr><tr><td class="beat-num">06</td><td>Leo smiles. &quot;The one you don&#x27;t remember.&quot; He leaves.</td><td class="intent">Leo confirms his suspicion. He planned this.</td><td class="perf">Leo&#x27;s smile: knowing, not cruel. Turns and walks.</td><td class="prod">camera: MS Leo exit, lens: 50mm, audio: drone + market</td></tr><tr><td class="beat-num">07</td><td>Mara alone. Hand on the glass. Vendor speaks. She doesn&#x27;t hear.</td><td class="intent">Aftermath. Mara realizes Leo knows.</td><td class="perf">frozen stillness, vendor voice inaudible to her</td><td class="prod">camera: CU Mara&#x27;s hand on glass, lens: 100mm macro, audio: market fades to room tone</td></tr></tbody>
+</table></div>
+</div>
+<script>
+document.querySelectorAll('.layer-tab').forEach(function(tab) {
+  tab.addEventListener('click', function() {
+    var card = this.closest('.scene-card');
+    card.querySelectorAll('.layer-tab').forEach(function(t) { t.classList.remove('active'); });
+    card.querySelectorAll('.layer-panel').forEach(function(p) { p.style.display = 'none'; });
+    this.classList.add('active');
+    document.getElementById(this.dataset.panel).style.display = 'block';
+  });
+});
+</script>
+</body></html>

@@ -7,6 +7,7 @@ status: active
 state: verify
 consequence: meaningful
 sensitivity: ordinary
+domain: [business, engineering]
 created_at: 2026-08-22T13:23:21Z
 updated_at: 2026-08-22T13:28:33Z
 next_action: Recommended next slice: decide whether to add explicit business_scope metadata to Work Objects.

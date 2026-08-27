@@ -7,6 +7,7 @@ status: active
 state: build
 consequence: meaningful
 sensitivity: ordinary
+domain: [governance, architecture]
 created_at: 2026-08-22T11:26:51Z
 updated_at: 2026-08-22T11:40:12Z
 next_action: All four gaps (G1-G4) fixed and verified. Ready to close, or director may want to commit these changes first.

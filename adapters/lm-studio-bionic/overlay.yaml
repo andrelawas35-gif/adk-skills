@@ -1,0 +1,136 @@
+# LM Studio Bionic Platform Overlay
+# This file defines only what differs from the canonical core.
+# Core decision logic, authority boundaries, and schema semantics MUST NOT be changed here.
+#
+# Bionic skills use the standard Agent Skills format (a SKILL.md file with
+# YAML frontmatter + Markdown body, plus optional references/ directories —
+# see https://agentskills.io/specification). Skills are registered in the
+# Bionic app via Settings → Skills (or @Install Skill). Bionic can also reuse
+# compatible skills from Codex (~/.agents/skills) and Claude Code
+# (~/.claude/skills) via Settings → Skills → "Use skills found in other apps".
+# The global install path below follows the LM Studio config root
+# (~/.lmstudio) convention; add the SKILL.md through the Settings UI if Bionic
+# does not auto-discover the directory on the running version.
+
+platform: lm-studio-bionic
+platform_label: "LM Studio Bionic"
+skill_install_dir: "~/.lmstudio/skills/"
+project_install_dir: ".lmstudio/skills/"
+skill_file_extension: ".md"
+manifest_path: "adapters/lm-studio-bionic/manifest.json"
+
+# Discovery — how the adapter finds the workspace
+discovery:
+  config_path: ".work-studio/config.md"
+  boundary_markers:
+    - ".git"
+  stop_conditions:
+    - "repository root (presence of .git)"
+    - "filesystem boundary"
+
+# Capability mappings — abstract capability → platform-native tool or instruction
+capability_mappings:
+  file_read: "native project file access (Read file)"
+  file_write: "Edit / write file (native coding tools)"
+  directory_list: "Files panel / file list (native)"
+  glob_search: "Project file search (native index)"
+  content_search: "Search (native project index)"
+  terminal_run: "Shell tool (native, coding projects)"
+  git_operations: "Shell tool (git) / Files panel repository view"
+  web_fetch: "Web access (native document project)"
+  gpu_claim: "file_write (COMP-041 file-backed registry)"
+  subagent_spawn: "Sub-session (native)"
+  subagent_isolation: "—"
+  structured_output: "Structured output (native, per-session schema)"
+  user_confirmation: "conversation turn"
+  browser_automation: "—"
+  claude_design: "MCP tool discovery (runtime)"
+  parallel_tool_execution: "—"
+  web_search: "—"
+  deployment: "—"
+  secret_access: "—"
+  background_processes: "Shell tool (background) / background sessions"
+  persistent_session_state: "Projects & sessions (native)"
+  file_uploads: "Document/file attach (native in-project); external deployment upload via user instruction"
+  artifact_rendering: "—"
+
+# Capability classifications
+capabilities:
+  file_read: native
+  file_write: native
+  directory_list: native
+  glob_search: native
+  content_search: native
+  terminal_run: native
+  git_operations: native
+  web_fetch: native
+  gpu_claim: native
+  subagent_spawn: native
+  subagent_isolation: manual-fallback
+  structured_output: native
+  user_confirmation: native
+  browser_automation: manual-fallback
+  claude_design: native
+  parallel_tool_execution: manual-fallback
+  web_search: manual-fallback
+  deployment: manual-fallback
+  secret_access: manual-fallback
+  background_processes: manual-fallback
+  persistent_session_state: native
+  file_uploads: manual-fallback
+  artifact_rendering: manual-fallback
+
+# Declared limitations — these appear in the generated adapter
+declared_limitations:
+  - capability: browser_automation
+    classification: manual-fallback
+    description: "LM Studio Bionic has no documented native browser-automation tool. Complex multi-page flows require manual steps."
+  - capability: web_search
+    classification: manual-fallback
+    description: "Live web search is not a documented native Bionic capability. The agent can fetch known URLs but cannot perform open-ended web searches without a configured tool."
+  - capability: deployment
+    classification: manual-fallback
+    description: "No platform has first-class deployment tooling. Deployment commands execute through the shell. The skill's authority gate provides the authorization ceremony; the capability layer provides the execution instruction."
+  - capability: secret_access
+    classification: manual-fallback
+    description: "No platform has first-class vault or secret-store access. Credentials are provided by the user or environment. The skill must not invent, infer, or cache credentials."
+  - capability: background_processes
+    classification: manual-fallback
+    description: "Bionic supports background sessions, but persistent daemon processes are not a documented first-class capability. Start long-running services manually or verify they remain running."
+  - capability: subagent_isolation
+    classification: manual-fallback
+    description: "Bionic sub-sessions may share execution context. For sensitive multi-agent workflows, verify isolation boundaries manually."
+  - capability: parallel_tool_execution
+    classification: manual-fallback
+    description: "Bionic may serialize some parallel tool calls. For performance-critical multi-step workflows, verify execution order manually."
+  - capability: artifact_rendering
+    classification: manual-fallback
+    description: "Bionic does not expose a dedicated artifact-rendering surface for generated skill output. Render deliverables via the document/file workflow or manual steps."
+  - capability: file_uploads
+    classification: manual-fallback
+    description: "Bionic can attach documents and files within a project, but uploading deployment artifacts to an external target platform is not a documented native capability. Give the user the exact upload instruction."
+  - capability: claude_design
+    classification: native
+    description: "Claude Design requires pre-invocation authentication via MCP. When unauthenticated, the runtime degrades to manual-fallback with instruction to authenticate before invoking Claude Design."
+
+# Model tier resolution — abstract tiers → provider-specific models.
+# Bionic lets the operator choose the model per session (local, cloud, or
+# remote via LM Link). These names are the resolution defaults for this
+# workstation (local open models, GPU-shared — see WO 2026-08-23-002).
+model_tiers:
+  high: "Qwen3.5-9B Q4"
+  medium: "Qwen3.5-9B Q4"
+  low: "Gemma 3 12B Q4"
+
+# Prompt budget warnings per tier (advisory, not blocking).
+# Local open models carry limited context; coding tool use needs generous
+# context (Bionic docs recommend >25k tokens for tool-heavy sessions).
+prompt_budgets:
+  high: 32000
+  medium: 16000
+  low: 8000
+
+# Frontmatter overrides — merged into the core frontmatter
+frontmatter:
+  add:
+    platform: lm-studio-bionic

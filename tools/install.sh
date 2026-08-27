@@ -14,7 +14,7 @@
 #
 #   --dry-run   Show what would happen without writing.
 #
-# Platforms: codex, claude-code, github-copilot
+# Platforms: codex, claude-code, github-copilot, lm-studio-bionic, opencode
 #
 # Precedence: a project-pinned adapter always takes precedence over the global
 # bootstrap install. `--resolve` reports the effective adapter for a directory.
@@ -50,6 +50,8 @@ global_dir() {
     claude-code)    echo "${CLAUDE_HOME:-$HOME/.claude}/skills" ;;
     codex)          echo "$HOME/.agents/skills" ;;
     github-copilot) echo "${COPILOT_HOME:-$HOME/.copilot}/skills" ;;
+    lm-studio-bionic) echo "${LMSTUDIO_HOME:-$HOME/.lmstudio}/skills" ;;
+    opencode)       echo "${OPENCODE_HOME:-$HOME/.config/opencode}/skills" ;;
     *) die "unknown platform: $1" ;;
   esac
 }
@@ -59,6 +61,8 @@ project_subdir() {
     claude-code)    echo ".claude/skills" ;;
     codex)          echo ".agents/skills" ;;
     github-copilot) echo ".github/skills" ;;
+    lm-studio-bionic) echo ".lmstudio/skills" ;;
+    opencode)       echo ".opencode/skills" ;;
     *) die "unknown platform: $1" ;;
   esac
 }
@@ -80,7 +84,7 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-[ -n "$PLATFORM" ] || die "missing --platform (codex|claude-code|github-copilot)"
+[ -n "$PLATFORM" ] || die "missing --platform (codex|claude-code|github-copilot|lm-studio-bionic|opencode)"
 [ -n "$MODE" ] || die "missing mode (--global | --project | --verify | --resolve)"
 
 SRC="$REPO_ROOT/adapters/$PLATFORM"

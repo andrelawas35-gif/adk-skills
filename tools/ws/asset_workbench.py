@@ -20,6 +20,7 @@ FRONTIER_DESCRIPTIONS = {
     "theme": "theme recipes built on tokens",
     "variant": "component variant relationships",
     "component-family": "related component groupings",
+    "interaction-motion": "motion recipes, timing/easing, per-state interaction behavior",
     "ux-pattern": "reusable user goals, flows, and states",
     "flow": "multi-step user flows",
     "creative-direction": "confirmed creative interpretation and execution",

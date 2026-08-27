@@ -7,6 +7,7 @@ status: closed
 state: close
 consequence: meaningful
 sensitivity: ordinary
+domain: [business, governance]
 created_at: 2026-08-22T10:56:28Z
 updated_at: 2026-08-22T11:07:14Z
 next_action: Verify the four-skill package and classify unrelated repository-wide failures

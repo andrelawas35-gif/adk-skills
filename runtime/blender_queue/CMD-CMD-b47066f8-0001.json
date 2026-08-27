@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-b47066f8-0001",
+  "op": "object.duplicate",
+  "params": {
+    "name": "unit_cube"
+  },
+  "created_at": "2026-08-26T06:59:56Z",
+  "delay_ms": 0
+}

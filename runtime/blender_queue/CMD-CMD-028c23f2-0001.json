@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-028c23f2-0001",
+  "op": "execute_blender_python",
+  "params": {
+    "authority": {
+      "granted_by": "director",
+      "work_object": "2026-08-24-022",
+      "scope": "sun-lamp massing light one-liner, 2026-08-26 conversation"
+    },
+    "code": "light = bpy.data.lights['Light']\nlight.type = 'SUN'\nlight.energy = 3.0\nlight.angle = 0.2\nobj = bpy.data.objects['Light']\nobj.rotation_euler = (0.34906585, 0.0, 0.52359878)\n"
+  },
+  "created_at": "2026-08-26T07:25:35Z",
+  "delay_ms": 0
+}

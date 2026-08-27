@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parent.parent
 GENERATOR = ROOT / "tools" / "generate-adapters.py"
 CORE_DIR = ROOT / "skills" / "core"
 ADAPTERS_DIR = ROOT / "adapters"
-PLATFORMS = ["codex", "claude-code", "github-copilot"]
+PLATFORMS = ["codex", "claude-code", "github-copilot", "lm-studio-bionic", "opencode"]
 SKILL_NAMESPACE = "alawas"
 
 
@@ -330,6 +330,27 @@ class GeneratorContract(unittest.TestCase):
                     self.assertFalse(refs_dir.exists(),
                                      f"{platform}/{skill}: unexpected references dir")
 
+    def test_pressure_test_decision_uses_one_shared_reference_pointer(self):
+        """WO 2026-08-25-005 pilot: one generated reference path resolves to
+        the canonical shared reference instead of duplicating its body."""
+        canonical = (ROOT / "references" / "CONSEQUENCE-AUTHORITY.md").read_text(encoding="utf-8")
+        pilot = (
+            ADAPTERS_DIR / "codex" / "skills"
+            / adapter_skill_name("thinking-pressure-test-decision")
+            / "references" / "CONSEQUENCE-AUTHORITY.md"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn("# Shared Reference Pointer", pilot)
+        self.assertIn("references/CONSEQUENCE-AUTHORITY.md", pilot)
+        self.assertNotEqual(pilot, canonical)
+
+        non_pilot = (
+            ADAPTERS_DIR / "codex" / "skills"
+            / adapter_skill_name("governance-conduct-work-object")
+            / "references" / "CONSEQUENCE-AUTHORITY.md"
+        ).read_text(encoding="utf-8")
+        self.assertEqual(non_pilot, canonical)
+
     def test_declared_grilling_references_ship_with_specialists(self):
         """A generated specialist must not point at an omitted governing file."""
         skill = adapter_skill_name("research-investigate-live-question")
@@ -364,6 +385,18 @@ class GeneratorContract(unittest.TestCase):
             self.assertTrue(installed_model.is_file(),
                             f"{platform}: conductor evidence model not shipped")
             self.assertEqual(installed_model.read_text(encoding="utf-8"), canonical_model)
+
+    def test_pressure_test_decision_core_assembly_contract_matches_live_skill(self):
+        """WO 2026-08-25-005: pressure-test contract reassembles losslessly."""
+        ga = _generator()
+        skill_dir = CORE_DIR / "thinking-pressure-test-decision"
+        assembled = ga.assemble_core_from_contract(skill_dir)
+        live = (skill_dir / "SKILL.md").read_text(encoding="utf-8")
+        self.assertEqual(assembled, live)
+        pressure = ga.assemble_core_from_contract(
+            CORE_DIR / "thinking-pressure-test-decision"
+        )
+        self.assertIn("\n## Evidence rules\n", pressure)
 
     def test_generated_adapters_include_local_grilling_profile_summary(self):
         for platform in PLATFORMS:

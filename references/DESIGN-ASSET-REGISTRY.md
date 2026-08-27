@@ -33,7 +33,7 @@ Each asset record must include these exact bold labels near the top:
 | `Pipeline` | Backtick-wrapped path to a pipeline reference. |
 | `Status` | One of `tracer`, `draft`, `active`, `deprecated`, `retired`. |
 | `Asset ID` | Dot-separated lowercase identifier beginning with `asset.design.`. |
-| `Asset kind` | One of `foundation`, `token-set`, `theme`, `component-family`, `ux-pattern`, `flow`, `projection`. |
+| `Asset kind` | One of `foundation`, `token-set`, `theme`, `component-family`, `ux-pattern`, `flow`, `projection`, `motion`. |
 | `Source of truth` | Plain statement naming the canonical record or accepted successor. |
 | `Projection status` | Plain statement that projections are read-only and must not be edited as truth. |
 

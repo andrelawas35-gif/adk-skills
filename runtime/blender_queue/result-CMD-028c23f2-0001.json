@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-028c23f2-0001",
+  "status": "error",
+  "data": null,
+  "error": {
+    "code": "blender_error",
+    "message": "'PointLight' object has no attribute 'angle'"
+  },
+  "started_at": "2026-08-26T07:25:35Z",
+  "completed_at": "2026-08-26T07:25:35Z"
+}

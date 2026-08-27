@@ -7,6 +7,7 @@ status: closed
 state: close
 consequence: meaningful
 sensitivity: ordinary
+domain: [engineering, architecture]
 created_at: 2026-08-21T13:23:46Z
 updated_at: 2026-08-21T13:41:10Z
 next_action: Director decision needed: close this Work Object now with the Phase 8 blocker and the untested-rejection-path gap recorded as accepted open items, or route to implement-bounded-change once more for a small test proving Command(resume=False) against research_fetch_source never calls fetch_url

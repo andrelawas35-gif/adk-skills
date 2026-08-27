@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-24de6de1-0001",
+  "status": "ok",
+  "data": {
+    "objects": [
+      "Camera",
+      "Light",
+      "unit_cube"
+    ]
+  },
+  "error": null,
+  "started_at": "2026-08-26T07:11:06Z",
+  "completed_at": "2026-08-26T07:11:06Z"
+}

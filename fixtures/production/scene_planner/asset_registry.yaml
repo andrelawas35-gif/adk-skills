@@ -1,0 +1,5 @@
+# Fixture only. This is not the canonical production asset registry.
+assets:
+  - asset_id: protagonist-hero
+    path: fixtures/production/scene_planner/assets/protagonist.glb
+    tags: [character, protagonist, hero]

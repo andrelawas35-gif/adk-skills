@@ -4,12 +4,14 @@ id: 2026-08-22-017
 title: Create a studio-native design asset management system
 type: inquiry
 status: active
-state: observe
+state: build
 consequence: meaningful
 sensitivity: ordinary
+domain: [design, asset]
 created_at: 2026-08-22T13:06:59Z
-updated_at: 2026-08-22T14:45:02Z
-next_action: Route to alawas-governance-review-outcome-and-adapt with the creative-use evidence; the editorial-contrast composition record is ready for the director's review, and the open decision is whether to proceed to a bounded implementation of the composed theme (design-apply-design-direction -> alawas-engineering-implement-bounded-change -> design-verify-design-implementation) or to stop.
+updated_at: 2026-08-22T20:05:44Z
+next_action: Route to alawas-design-apply-design-direction: propose the concrete code-facing implementation of the confirmed editorial-contrast direction for ReviewBadge, grounded in .work-studio/deliverables/2026-08-22-017-reviewbadge-editorial-contrast-composition.md, then confirm before implementation.
+
 
 
 
@@ -674,6 +676,12 @@ Experience-pattern stewardship:
 - **Status:** active
 - **Actor:** github-copilot
 - **Rationale:** Human-readable Next move now matches the verified creative-use composition state and frontmatter next_action, routing the creative-use evidence to outcome review for the composed-theme implementation decision.
+### 2026-08-22T20:05:44Z — Director selected: proceed to implement the editorial-contrast theme
+
+- **State:** build
+- **Status:** active
+- **Actor:** director
+- **Rationale:** Outcome-review decision made directly by the director: implement the editorial-contrast composition for real rather than stopping the Inquiry here. Routes through the accepted chain: design-apply-design-direction (confirm the code-facing implementation of the already-confirmed editorial-contrast creative direction) -> alawas-engineering-implement-bounded-change -> design-verify-design-implementation.
 ## artifacts
 
 - `references/DESIGN-ASSET-PIPELINE.md` (fingerprint: `350065cc424b`, commit: uncommitted at record time) — Design asset pipeline routing reference created by ReviewBadge tracer

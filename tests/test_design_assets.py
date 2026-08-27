@@ -28,6 +28,7 @@ class DesignAssetRegistryTests(unittest.TestCase):
                 "ux-pattern",
                 "flow",
                 "projection",
+                "motion",
             },
             VALID_ASSET_KINDS,
         )

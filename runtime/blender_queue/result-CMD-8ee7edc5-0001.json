@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-8ee7edc5-0001",
+  "status": "ok",
+  "data": {
+    "name": "unit_cube.004",
+    "material": "blue"
+  },
+  "error": null,
+  "started_at": "2026-08-26T07:50:48Z",
+  "completed_at": "2026-08-26T07:50:48Z"
+}

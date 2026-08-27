@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-6b167728-0001",
+  "status": "error",
+  "data": null,
+  "error": {
+    "code": "blender_error",
+    "message": "__import__ not found"
+  },
+  "started_at": "2026-08-26T07:24:57Z",
+  "completed_at": "2026-08-26T07:24:57Z"
+}

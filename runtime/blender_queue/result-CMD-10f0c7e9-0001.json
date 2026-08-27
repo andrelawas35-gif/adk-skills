@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-10f0c7e9-0001",
+  "status": "ok",
+  "data": {
+    "dimensions": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "error": null,
+  "started_at": "2026-08-26T07:50:43Z",
+  "completed_at": "2026-08-26T07:50:43Z"
+}

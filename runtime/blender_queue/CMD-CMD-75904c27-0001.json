@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-75904c27-0001",
+  "op": "material.set",
+  "params": {
+    "name": "blue",
+    "base_color": [
+      0.1,
+      0.25,
+      0.6
+    ]
+  },
+  "created_at": "2026-08-26T06:52:31Z",
+  "delay_ms": 0
+}

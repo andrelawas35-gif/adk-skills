@@ -22,13 +22,17 @@ class ComponentGovernanceTests(unittest.TestCase):
             set(VALID_COMPONENT_KINDS),
         )
         self.assertEqual(
-            {"business", "design", "engineering", "governance", "operations", "research", "thinking", "cross-cutting"},
+            {"business", "design", "engineering", "governance", "operations",
+             "production", "research", "thinking", "cross-cutting"},
             set(VALID_GOVERNANCE_DOMAINS),
         )
 
     def test_routed_skill_domain_is_declared_and_mismatch_fails(self):
         self.assertEqual("engineering", governance_domain_for_skill("implement-bounded-change"))
         self.assertEqual("business", governance_domain_for_skill("business-formulate-strategy"))
+        self.assertEqual("production", governance_domain_for_skill("production-operate-blender"))
+        self.assertEqual("production", governance_domain_for_skill("production-operate-comfyui"))
+        self.assertEqual("production", governance_domain_for_skill("production-operate-tts"))
         with self.assertRaisesRegex(ValueError, "mismatch"):
             validate_skill_governance_domain("implement-bounded-change", "business")
         with self.assertRaisesRegex(ValueError, "no governance domain declared"):
@@ -55,6 +59,9 @@ class ComponentGovernanceTests(unittest.TestCase):
         ):
             self.assertIn(f"`{name}`", text)
         self.assertIn("COMP-036 — Business operating pipeline", text)
+        self.assertIn("COMP-042 — Production Blender operator", text)
+        self.assertIn("COMP-043 — Production ComfyUI operator", text)
+        self.assertIn("COMP-044 — Production TTS operator", text)
         self.assertIn("`references/BUSINESS-OPERATING-PIPELINE.md`", text)
         self.assertEqual(16, text.count("- **governance domain:** business"))
         errors = check_ledger(ROOT / ".work-studio" / "objects")

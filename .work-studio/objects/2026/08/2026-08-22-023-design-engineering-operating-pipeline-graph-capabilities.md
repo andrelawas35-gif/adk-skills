@@ -7,6 +7,7 @@ status: active
 state: observe
 consequence: meaningful
 sensitivity: ordinary
+domain: [design, engineering, architecture]
 created_at: 2026-08-22T13:35:42Z
 updated_at: 2026-08-22T13:52:32Z
 next_action: Successor Work Object 2026-08-22-024 owns the next slice; predecessor can be closed after outcome review if no further predecessor-specific decision is needed.

@@ -7,6 +7,7 @@ status: active
 state: build
 consequence: low
 sensitivity: ordinary
+domain: [engineering]
 created_at: 2026-08-22T11:38:29Z
 updated_at: 2026-08-22T11:40:05Z
 next_action: Remain unchanged as the shared read-only runtime test target

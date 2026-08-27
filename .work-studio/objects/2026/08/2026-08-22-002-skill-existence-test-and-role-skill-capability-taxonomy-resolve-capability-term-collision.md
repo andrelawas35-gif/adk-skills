@@ -7,6 +7,7 @@ status: active
 state: explore
 consequence: meaningful
 sensitivity: ordinary
+domain: [governance]
 created_at: 2026-08-22T09:56:28Z
 updated_at: 2026-08-22T09:57:41Z
 next_action: Route to alawas-thinking-pressure-test-decision: pick the highest-leverage decision between (1) skill-existence rule adoption and (2) the capability naming collision, and test it

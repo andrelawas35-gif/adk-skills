@@ -1,7 +1,7 @@
 ---
 name: design-compose-design-system
 default_tier: high
-description: "Use when a governed foundation, semantic token set, theme recipe, variant, or component-family relationship must be created or revised; composes design-system properties and preserves director authority over creative choices without mutating canonical assets."
+description: "Use when design-system tokens, themes, variants, or component families must be composed; preserves director authority and never mutates canonical assets."
 ---
 # Compose Design Systems
 
@@ -76,13 +76,19 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
 
 ## Grilling entry and stage lens
 
-Follow `references/AGREEMENT-LOOP.md` in full. Outside explicit grilling,
-nominate a Candidate only when a creative-direction conflict, inheritance
-ambiguity, or proposed external effect would materially change the composition.
+Follow `references/AGREEMENT-LOOP.md` in full, with one explicit override
+for this skill (WO `2026-08-22-038` Decision 1): every token, semantic
+value, variant, or component-family property proposed for composition is
+always nominated as a Grilling Candidate — the standing three-part
+threshold does not gate nomination here. All artifacts proposed in one
+composition pass are grilled as a single continuous `breadth-sweep`-mode
+session (`AGREEMENT-LOOP.md`'s existing mode), one branch per artifact, one
+multiple-choice question per turn. Every grill question must offer
+explicit options — never an open-ended prompt.
 
 ## Skill Grilling Profile
 
-Apply the `design-compose-design-system` profile in
+Apply the `alawas-design-compose-design-system` profile in
 `references/SKILL-AWARE-GRILLING.md`. Challenge whether each property is truly
 inherited, overridden, or prohibited, whether creative authority was confirmed
 for every non-trivial choice, and whether composition stays in one owning

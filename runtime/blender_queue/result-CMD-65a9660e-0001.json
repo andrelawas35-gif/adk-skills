@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-65a9660e-0001",
+  "status": "ok",
+  "data": {
+    "name": "whitewash"
+  },
+  "error": null,
+  "started_at": "2026-08-26T07:50:23Z",
+  "completed_at": "2026-08-26T07:50:23Z"
+}

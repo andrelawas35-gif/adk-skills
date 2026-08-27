@@ -1,0 +1,9 @@
+{
+  "claimed_at_s": null,
+  "heartbeat_at_s": null,
+  "owner": null,
+  "owner_id": null,
+  "released_at_s": 1787730930.145094,
+  "schema_version": 1,
+  "state": "idle"
+}

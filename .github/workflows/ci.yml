@@ -38,7 +38,7 @@ jobs:
       # ── Gate 4: Manifest and checksum integrity ────────────────────────
       - name: Verify manifests and SHA256SUMS
         run: |
-          for platform in codex claude-code github-copilot; do
+          for platform in codex claude-code github-copilot lm-studio-bionic opencode; do
             echo "=== $platform ==="
             python3 -c "
 import json, hashlib
@@ -66,7 +66,7 @@ print('Manifest OK')
           for f in skills/core/*/SKILL.md; do
             [ -f "$f" ] && echo "  OK: $f" || { echo "  MISSING: $f"; errors=1; }
           done
-          for platform in codex claude-code github-copilot; do
+          for platform in codex claude-code github-copilot lm-studio-bionic opencode; do
             for f in adapters/$platform/skills/*/SKILL.md; do
               [ -f "$f" ] && echo "  OK: $f" || { echo "  MISSING: $f"; errors=1; }
             done
@@ -132,7 +132,7 @@ print('Manifest OK')
       - name: Verify manifests and SHA256SUMS
         shell: bash
         run: |
-          for platform in codex claude-code github-copilot; do
+          for platform in codex claude-code github-copilot lm-studio-bionic opencode; do
             echo "=== $platform ==="
             python -c "
 import json, hashlib
@@ -161,7 +161,7 @@ print('Manifest OK')
           for f in skills/core/*/SKILL.md; do
             [ -f "$f" ] && echo "  OK: $f" || { echo "  MISSING: $f"; errors=1; }
           done
-          for platform in codex claude-code github-copilot; do
+          for platform in codex claude-code github-copilot lm-studio-bionic opencode; do
             for f in adapters/$platform/skills/*/SKILL.md; do
               [ -f "$f" ] && echo "  OK: $f" || { echo "  MISSING: $f"; errors=1; }
             done

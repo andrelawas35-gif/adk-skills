@@ -16,6 +16,20 @@ way either form does: it walks upward from the current working directory for
 does not, and never needs to, vendor a copy of `tools/ws` itself. Both forms
 are interchangeable below; examples use `python3 -m tools.ws`.
 
+## Critical: Always read `updated_at` before mutating
+
+**Before running ANY mutating command** (transition, close, activate,
+append-history, append-evidence, append-artifact, etc.), you MUST first
+read the current `updated_at` timestamp:
+
+```sh
+UPDATED_AT=$(python3 -m tools.ws get-updated-at <id>)
+```
+
+Then use that exact value in `--expect-updated`. Never estimate, guess, or
+reuse a stale timestamp. The CLI uses optimistic concurrency control and
+will reject writes with mismatched timestamps.
+
 ## Bootstrap workspace (Stage workflow, step 1)
 
 **Only after the workspace-discovery search in `SKILL.md` step 1 finds no
@@ -100,6 +114,14 @@ python3 -m tools.ws activate <id> \
 
 ## Update Work Object (Stage workflow, step 5)
 
+**IMPORTANT: Before ANY mutating command, read the current timestamp first:**
+
+```sh
+UPDATED_AT=$(python3 -m tools.ws get-updated-at <id>)
+```
+
+Then use `$UPDATED_AT` in the `--expect-updated` parameter. Never estimate or guess.
+
 **State/status transitions:**
 
 ```sh
@@ -152,3 +174,33 @@ python3 -m tools.ws activate <id> \
 
 The CLI cross-checks that the object exists and is not closed before
 updating `active.md`.
+
+## Get current updated_at (concurrency helper)
+
+**Before any mutating command**, read the current `updated_at` value:
+
+```sh
+python3 -m tools.ws get-updated-at <id>
+```
+
+This prints the current `updated_at` timestamp to stdout. Use it in
+subsequent commands:
+
+```sh
+# 1. Get current timestamp
+UPDATED_AT=$(python3 -m tools.ws get-updated-at <id>)
+
+# 2. Use it in a mutating command
+python3 -m tools.ws append-history <id> \
+  --action "..." \
+  --state <state> \
+  --status <status> \
+  --expect-updated "$UPDATED_AT" \
+  ...
+```
+
+**Why this matters:** The CLI uses optimistic concurrency control. Every
+mutating command (except `create` and `init`) requires `--expect-updated`
+to match the file's current `updated_at`. If you pass a stale value, the
+CLI rejects the write with a "Concurrent write detected" error. Always
+read the current value immediately before the mutating command.

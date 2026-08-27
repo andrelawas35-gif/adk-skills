@@ -59,7 +59,8 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
 - Customer, supplier, workforce, inventory, and operational data may be private;
   store only minimum necessary summaries.
 - For a high-consequence Work Object, confirmation must name the exact proposed
-  mutation before any durable update.
+  mutation. Do not stage, annotate, change status, append History, or make any
+  other mutation before receiving that scoped confirmation.
 
 ## Grilling entry and stage lens
 
@@ -170,6 +171,10 @@ the epistemic tier is upgraded to at least `medium` (essential 3‑tag).
 When `consequence: high`, the epistemic tier is upgraded to the strongest
 available tier (full 6‑tag).
 `actual_epistemic_tier = max(skill.default_tier, consequence_escalation(wo.consequence))`.
+
+For a high-consequence Work Object, confirmation must name the exact
+proposed mutation. Do not stage, annotate, change status, append History,
+or make any other mutation before receiving that scoped confirmation.
 
 
 ### Runtime pin resolution

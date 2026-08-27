@@ -1,0 +1,125 @@
+# OpenCode Platform Overlay
+# This file defines only what differs from the canonical core.
+# Core decision logic, authority boundaries, and schema semantics MUST NOT be changed here.
+#
+# OpenCode (opencode.ai) uses the standard Agent Skills format (a SKILL.md
+# file with YAML frontmatter + Markdown body, plus optional references/ — see
+# https://agentskills.io/specification). It discovers skills from the project
+# config dir (.opencode/skills/), the global config dir
+# (~/.config/opencode/skills/), and — compatibly — from Claude Code and Codex
+# skill dirs (~/.claude/skills/ and ~/.agents/skills/). The install paths
+# below use the canonical OpenCode locations.
+
+platform: opencode
+platform_label: "OpenCode"
+skill_install_dir: "~/.config/opencode/skills/"
+project_install_dir: ".opencode/skills/"
+skill_file_extension: ".md"
+manifest_path: "adapters/opencode/manifest.json"
+
+# Discovery — how the adapter finds the workspace
+discovery:
+  config_path: ".work-studio/config.md"
+  boundary_markers:
+    - ".git"
+  stop_conditions:
+    - "repository root (presence of .git)"
+    - "filesystem boundary"
+
+# Capability mappings — abstract capability → platform-native tool or instruction
+capability_mappings:
+  file_read: "read"
+  file_write: "edit / write / apply_patch"
+  directory_list: "list"
+  glob_search: "glob"
+  content_search: "grep"
+  terminal_run: "bash"
+  git_operations: "bash (git commands)"
+  web_fetch: "webfetch"
+  gpu_claim: "edit (COMP-041 file-backed registry)"
+  subagent_spawn: "task"
+  subagent_isolation: "—"
+  structured_output: "—"
+  user_confirmation: "question / permission ask"
+  browser_automation: "—"
+  claude_design: "MCP tool discovery (runtime)"
+  parallel_tool_execution: "—"
+  web_search: "websearch"
+  deployment: "—"
+  secret_access: "—"
+  background_processes: "bash (background)"
+  persistent_session_state: "sessions (opencode.json / --continue)"
+  file_uploads: "—"
+  artifact_rendering: "—"
+
+# Capability classifications
+capabilities:
+  file_read: native
+  file_write: native
+  directory_list: native
+  glob_search: native
+  content_search: native
+  terminal_run: native
+  git_operations: native
+  web_fetch: native
+  gpu_claim: native
+  subagent_spawn: native
+  subagent_isolation: manual-fallback
+  structured_output: native
+  user_confirmation: native
+  browser_automation: manual-fallback
+  claude_design: native
+  parallel_tool_execution: manual-fallback
+  web_search: native
+  deployment: manual-fallback
+  secret_access: manual-fallback
+  background_processes: native
+  persistent_session_state: native
+  file_uploads: manual-fallback
+  artifact_rendering: manual-fallback
+
+# Declared limitations — these appear in the generated adapter
+declared_limitations:
+  - capability: browser_automation
+    classification: manual-fallback
+    description: "OpenCode is a terminal/IDE agent with no documented native browser-automation tool. Complex multi-page browser flows require manual steps."
+  - capability: subagent_isolation
+    classification: manual-fallback
+    description: "OpenCode subagents (task tool) may share execution context. For sensitive multi-agent workflows, verify isolation boundaries manually."
+  - capability: parallel_tool_execution
+    classification: manual-fallback
+    description: "OpenCode may serialize some parallel tool calls. For performance-critical multi-step workflows, verify execution order manually."
+  - capability: deployment
+    classification: manual-fallback
+    description: "No platform has first-class deployment tooling. Deployment commands execute through the shell. The skill's authority gate provides the authorization ceremony; the capability layer provides the execution instruction."
+  - capability: secret_access
+    classification: manual-fallback
+    description: "No platform has first-class vault or secret-store access. Credentials are provided by the user or environment. The skill must not invent, infer, or cache credentials."
+  - capability: file_uploads
+    classification: manual-fallback
+    description: "OpenCode has no documented native upload tool for external deployment targets. Give the user the exact upload instruction."
+  - capability: artifact_rendering
+    classification: manual-fallback
+    description: "OpenCode does not expose a dedicated artifact-rendering surface for generated skill output. Render deliverables via the document/file workflow or manual steps."
+  - capability: claude_design
+    classification: native
+    description: "Claude Design requires pre-invocation authentication via MCP. When unauthenticated, the runtime degrades to manual-fallback with instruction to authenticate before invoking Claude Design."
+
+# Model tier resolution — abstract tiers → provider-specific models.
+# OpenCode model IDs use the `provider/model-id` format (e.g. `anthropic/...`,
+# `opencode/gpt-5.1-codex`). These are the resolution defaults.
+model_tiers:
+  high: "anthropic/claude-sonnet-4-20250514"
+  medium: "anthropic/claude-sonnet-4-20250514"
+  low: "anthropic/claude-haiku-4-20250514"
+
+# Prompt budget warnings per tier (advisory, not blocking)
+prompt_budgets:
+  high: 80000
+  medium: 40000
+  low: 15000
+
+# Frontmatter overrides — merged into the core frontmatter
+frontmatter:
+  add:
+    platform: opencode

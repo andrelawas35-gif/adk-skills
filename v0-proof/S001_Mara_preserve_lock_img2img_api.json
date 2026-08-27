@@ -1,0 +1,142 @@
+{
+  "1": {
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load S001 Before Image"
+    },
+    "inputs": {
+      "image": "s001_before_flux_krea_00002.png"
+    }
+  },
+  "2": {
+    "class_type": "DualCLIPLoader",
+    "_meta": {
+      "title": "Load CLIP - Flux"
+    },
+    "inputs": {
+      "clip_name1": "clip_l.safetensors",
+      "clip_name2": "t5xxl_fp16.safetensors",
+      "type": "flux",
+      "device": "default"
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE - Flux AE"
+    },
+    "inputs": {
+      "vae_name": "ae.safetensors"
+    }
+  },
+  "4": {
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Load Flux Krea FP8"
+    },
+    "inputs": {
+      "unet_name": "flux1-krea-dev_fp8_scaled.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "5": {
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "S001 Preserve-Lock Revision Prompt"
+    },
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "text": "Same image composition and same hooded sci-fi courier Mara in the rain-slick industrial alley at night. Preserve her dark practical hooded jacket, compact sealed metal case held at chest, small amber shoulder light, body pose, alley pressure, wet concrete, restrained low-key cinematic realism. Improve only character readability: add a subtle cool rim along the hood and right shoulder, a very narrow soft fill on cheek and nose bridge inside the hood shadow, slightly cleaner silhouette separation from the wall, local midtone contrast on jacket folds. Face remains mysterious but not completely black. Do not change identity, costume, props, pose, framing, location, or the sealed case. Do not replace the shoulder light with a large wall light. Do not make it glossy, superheroic, fashion portrait, bright, clean studio lighting, unhooded, missing case, missing shoulder light, different woman, different camera angle, or different scene."
+    }
+  },
+  "6": {
+    "class_type": "ConditioningZeroOut",
+    "_meta": {
+      "title": "Flux Negative Conditioning"
+    },
+    "inputs": {
+      "conditioning": [
+        "5",
+        0
+      ]
+    }
+  },
+  "7": {
+    "class_type": "VAEEncode",
+    "_meta": {
+      "title": "Encode Before Image"
+    },
+    "inputs": {
+      "pixels": [
+        "1",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "8": {
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "Low-Denoise Preserve-Lock Sampler"
+    },
+    "inputs": {
+      "seed": 1059329708698196,
+      "steps": 24,
+      "cfg": 1.0,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "denoise": 0.35,
+      "model": [
+        "4",
+        0
+      ],
+      "positive": [
+        "5",
+        0
+      ],
+      "negative": [
+        "6",
+        0
+      ],
+      "latent_image": [
+        "7",
+        0
+      ]
+    }
+  },
+  "9": {
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "Decode Revision"
+    },
+    "inputs": {
+      "samples": [
+        "8",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "10": {
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save S001 Revision"
+    },
+    "inputs": {
+      "filename_prefix": "s001_preserve_lock_revision",
+      "images": [
+        "9",
+        0
+      ]
+    }
+  }
+}

@@ -1,7 +1,7 @@
 ---
 name: design-manage-assets
 default_tier: high
-description: "Use when a reusable design asset needs identity, lifecycle status, provenance, impact, or routing; classifies the current asset frontier and routes to the owning design skill without creating, mutating, or approving assets."
+description: "Use when a design asset needs identity, status, provenance, impact, or routing; classifies the frontier and never creates, mutates, or approves assets."
 ---
 # Manage Design Assets
 

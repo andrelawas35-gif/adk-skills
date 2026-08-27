@@ -1,0 +1,22 @@
+{
+  "shot_id": "S002",
+  "intent": "The asset must match the environment's established material and style language (Lower Market: dark stone, oxidized brass, wet wood); the current bright generic-sci-fi rendering breaks that language.",
+  "subject": "The same market lamp prop, rendered as a concept reference for the Lower Market environment kit.",
+  "camera": "Straight-on reference framing, neutral three-quarter angle.",
+  "mood": "Grounded, weathered, lived-in -- matching the environment's design rules.",
+  "preserve": [
+    "lamp proportions and hanging-chain silhouette",
+    "cracked glass panes",
+    "intended real-world scale"
+  ],
+  "change": [
+    "bright glossy sci-fi chrome finish",
+    "clean unweathered plastic-looking surface",
+    "saturated neon accent lighting with no environment grounding"
+  ],
+  "avoid": [
+    "glossy or futuristic material treatment",
+    "colors outside the environment's dark-stone/oxidized-brass/wet-wood palette",
+    "a finish too clean to belong in a weathered market"
+  ]
+}

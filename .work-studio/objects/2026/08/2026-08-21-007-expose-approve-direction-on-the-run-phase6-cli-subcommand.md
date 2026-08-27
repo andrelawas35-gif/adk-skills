@@ -7,6 +7,7 @@ status: closed
 state: close
 consequence: low
 sensitivity: ordinary
+domain: [engineering]
 created_at: 2026-08-21T14:42:11Z
 updated_at: 2026-08-21T14:45:58Z
 next_action: Add --approve-direction to the run-phase6 argparse subcommand in runtime/graph.py, wire it into the existing run_phase6 call in main(), verify end-to-end via CLI only

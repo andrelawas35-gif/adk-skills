@@ -7,6 +7,7 @@ status: active
 state: verify
 consequence: meaningful
 sensitivity: ordinary
+domain: [architecture, engineering]
 created_at: 2026-08-21T18:45:47Z
 updated_at: 2026-08-21T19:02:11Z
 next_action: Director decision needed: close this Work Object now (mcp_server/ stands as a minimal, deliberately single-tool proof, with the exposure-scope/authority decision explicitly deferred), or continue design work on which further ws commands to expose and how authority gating should work for a mutating one

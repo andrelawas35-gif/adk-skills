@@ -7,6 +7,7 @@ status: active
 state: verify
 consequence: meaningful
 sensitivity: ordinary
+domain: [engineering, architecture]
 created_at: 2026-08-21T08:28:24Z
 updated_at: 2026-08-21T13:03:32Z
 next_action: None further for this object -- successor 2026-08-21-003 carries the fuller feature forward

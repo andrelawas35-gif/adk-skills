@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-67c8a0b6-0001",
+  "status": "ok",
+  "data": {
+    "name": "unit_cube.012",
+    "material": "stone"
+  },
+  "error": null,
+  "started_at": "2026-08-26T07:19:35Z",
+  "completed_at": "2026-08-26T07:19:35Z"
+}

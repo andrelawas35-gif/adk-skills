@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-fd5450ae-0001",
+  "status": "ok",
+  "data": {
+    "name": "Light"
+  },
+  "error": null,
+  "started_at": "2026-08-26T07:00:41Z",
+  "completed_at": "2026-08-26T07:00:41Z"
+}

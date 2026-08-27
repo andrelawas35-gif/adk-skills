@@ -7,6 +7,7 @@ status: closed
 state: close
 consequence: meaningful
 sensitivity: ordinary
+domain: [engineering, architecture]
 created_at: 2026-08-22T13:51:11Z
 updated_at: 2026-08-22T14:12:57Z
 next_action: alawas-governance-review-outcome-and-adapt: review the verified local Phase 6 engineering dispatch tracer outcome and decide close versus next slice; do not deploy.

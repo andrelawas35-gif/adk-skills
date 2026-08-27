@@ -6,7 +6,7 @@
     {
       "name": "alawas-business-assess-financial-decision",
       "path": "adapters/github-copilot/skills/alawas-business-assess-financial-decision/SKILL.md",
-      "sha256": "e8f7df615b8b800182174a322faf99d7209c38eb275582c463a0de6ed3d5ca89"
+      "sha256": "5a898f21625ac387ec6e31d5b5c3d35f7290da4e4f8358a95f8d8e12eb0aa037"
     },
     {
       "name": "alawas-business-assess-financial-decision/references/AGREEMENT-LOOP.md",
@@ -16,7 +16,7 @@
     {
       "name": "alawas-business-assess-financial-decision/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-business-assess-financial-decision/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-business-assess-financial-decision/references/CONSEQUENCE-AUTHORITY.md",
@@ -51,7 +51,7 @@
     {
       "name": "alawas-business-balance-demand-supply-capacity",
       "path": "adapters/github-copilot/skills/alawas-business-balance-demand-supply-capacity/SKILL.md",
-      "sha256": "3297bfe670168b97804a7d2c705a4b9ca373175badfb08b471bb17c1034882be"
+      "sha256": "09fed71e16a99512bf6e0c1574a9cb365338309c6ab9acb27d319f0c14e0af02"
     },
     {
       "name": "alawas-business-balance-demand-supply-capacity/references/AGREEMENT-LOOP.md",
@@ -61,7 +61,7 @@
     {
       "name": "alawas-business-balance-demand-supply-capacity/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-business-balance-demand-supply-capacity/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-business-balance-demand-supply-capacity/references/CONSEQUENCE-AUTHORITY.md",
@@ -96,7 +96,7 @@
     {
       "name": "alawas-business-build-driver-based-plan-and-forecast",
       "path": "adapters/github-copilot/skills/alawas-business-build-driver-based-plan-and-forecast/SKILL.md",
-      "sha256": "5d967613c7ed0ce139d493f3c3fd524554f4bfabe45322b352766bfd9d837bd9"
+      "sha256": "843f465f2033062246afc1f79aa6f5399833ce45d42544bb490c4beb8f314541"
     },
     {
       "name": "alawas-business-build-driver-based-plan-and-forecast/references/AGREEMENT-LOOP.md",
@@ -106,7 +106,7 @@
     {
       "name": "alawas-business-build-driver-based-plan-and-forecast/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-business-build-driver-based-plan-and-forecast/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-business-build-driver-based-plan-and-forecast/references/CONSEQUENCE-AUTHORITY.md",
@@ -141,7 +141,7 @@
     {
       "name": "alawas-business-design-pricing-and-packaging",
       "path": "adapters/github-copilot/skills/alawas-business-design-pricing-and-packaging/SKILL.md",
-      "sha256": "28b212e3f5ce2036864ad665d2504f1bf761cd0c25708da2945d4677aaa3ec2d"
+      "sha256": "f7d733d2644e11774d3c71c43ab44674d2566c02478502087c77cf9cc2e04944"
     },
     {
       "name": "alawas-business-design-pricing-and-packaging/references/AGREEMENT-LOOP.md",
@@ -151,7 +151,7 @@
     {
       "name": "alawas-business-design-pricing-and-packaging/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-business-design-pricing-and-packaging/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-business-design-pricing-and-packaging/references/CONSEQUENCE-AUTHORITY.md",
@@ -186,7 +186,7 @@
     {
       "name": "alawas-business-direct-project-delivery",
       "path": "adapters/github-copilot/skills/alawas-business-direct-project-delivery/SKILL.md",
-      "sha256": "89abbffc5d5ecb1dbbc378378f53ed09ead8c5d1d05936de89a0c1d27a5ab127"
+      "sha256": "0ae9d28164ce5d09f580969308482e9f910321c513aaa83a6c5d902ef119e4c9"
     },
     {
       "name": "alawas-business-direct-project-delivery/references/AGREEMENT-LOOP.md",
@@ -196,7 +196,7 @@
     {
       "name": "alawas-business-direct-project-delivery/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-business-direct-project-delivery/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-business-direct-project-delivery/references/CONSEQUENCE-AUTHORITY.md",
@@ -231,7 +231,7 @@
     {
       "name": "alawas-business-formulate-strategy",
       "path": "adapters/github-copilot/skills/alawas-business-formulate-strategy/SKILL.md",
-      "sha256": "c0b1e09c6af6901fcdc04cba8ad836a70c7cc894e94737ad811c44d0a3af9b2c"
+      "sha256": "0aed3a723f55ccc44e2f40beb47b9ffab983fd21b6476a868a44ff2772cbfc66"
     },
     {
       "name": "alawas-business-formulate-strategy/references/AGREEMENT-LOOP.md",
@@ -241,7 +241,7 @@
     {
       "name": "alawas-business-formulate-strategy/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-business-formulate-strategy/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-business-formulate-strategy/references/CONSEQUENCE-AUTHORITY.md",
@@ -276,7 +276,7 @@
     {
       "name": "alawas-business-govern-initiative-portfolio",
       "path": "adapters/github-copilot/skills/alawas-business-govern-initiative-portfolio/SKILL.md",
-      "sha256": "c368c32db3a47f9d1b044725e10fa0ab086f50253e8691f9a31558d09921cea4"
+      "sha256": "92cbd93ce1c5afece910b379357061b550fad96610d6c5ff0bf3ffc2f6ea3369"
     },
     {
       "name": "alawas-business-govern-initiative-portfolio/references/AGREEMENT-LOOP.md",
@@ -286,7 +286,7 @@
     {
       "name": "alawas-business-govern-initiative-portfolio/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-business-govern-initiative-portfolio/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-business-govern-initiative-portfolio/references/CONSEQUENCE-AUTHORITY.md",
@@ -321,7 +321,7 @@
     {
       "name": "alawas-business-improve-operating-process",
       "path": "adapters/github-copilot/skills/alawas-business-improve-operating-process/SKILL.md",
-      "sha256": "b2a70644dc29dc1939281e03f305a8709021796605ce880b9aab47b7ef9bab49"
+      "sha256": "4aaaa71a5e54b0d0c0d173f1f1ddd16f7246c58123738751453ba8ad4a344753"
     },
     {
       "name": "alawas-business-improve-operating-process/references/AGREEMENT-LOOP.md",
@@ -331,7 +331,7 @@
     {
       "name": "alawas-business-improve-operating-process/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-business-improve-operating-process/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-business-improve-operating-process/references/CONSEQUENCE-AUTHORITY.md",
@@ -366,7 +366,7 @@
     {
       "name": "alawas-business-manage-commercial-pipeline",
       "path": "adapters/github-copilot/skills/alawas-business-manage-commercial-pipeline/SKILL.md",
-      "sha256": "8e5dddf5256a94dacaf0a483872e827a3d5b6a4f172580b047d7adfd88e15e99"
+      "sha256": "cc0487530915a3d5a3214840625f77187252b8af09522479fead31039d423cfb"
     },
     {
       "name": "alawas-business-manage-commercial-pipeline/references/AGREEMENT-LOOP.md",
@@ -376,7 +376,7 @@
     {
       "name": "alawas-business-manage-commercial-pipeline/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-business-manage-commercial-pipeline/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-business-manage-commercial-pipeline/references/CONSEQUENCE-AUTHORITY.md",
@@ -411,7 +411,7 @@
     {
       "name": "alawas-business-manage-customer-success",
       "path": "adapters/github-copilot/skills/alawas-business-manage-customer-success/SKILL.md",
-      "sha256": "9576d6b0e2a184ba8d2e5e83c87cd70faa93343eba7ed137726e20e971b20a8e"
+      "sha256": "ea6795f41d3247fc2416788d97d391adc67b26e11a060a77fd73d373c2090865"
     },
     {
       "name": "alawas-business-manage-customer-success/references/AGREEMENT-LOOP.md",
@@ -421,7 +421,7 @@
     {
       "name": "alawas-business-manage-customer-success/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-business-manage-customer-success/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-business-manage-customer-success/references/CONSEQUENCE-AUTHORITY.md",
@@ -456,7 +456,7 @@
     {
       "name": "alawas-business-manage-enterprise-risk",
       "path": "adapters/github-copilot/skills/alawas-business-manage-enterprise-risk/SKILL.md",
-      "sha256": "3069df6549409c2d16d0535954232762ae40cd94370155634160d44488a988c7"
+      "sha256": "30d9b4522dc1d39a171e179041fa2f7cb386834184fb59b66e42103aef86daad"
     },
     {
       "name": "alawas-business-manage-enterprise-risk/references/AGREEMENT-LOOP.md",
@@ -466,7 +466,7 @@
     {
       "name": "alawas-business-manage-enterprise-risk/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-business-manage-enterprise-risk/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-business-manage-enterprise-risk/references/CONSEQUENCE-AUTHORITY.md",
@@ -501,7 +501,7 @@
     {
       "name": "alawas-business-manage-liquidity-and-cash-runway",
       "path": "adapters/github-copilot/skills/alawas-business-manage-liquidity-and-cash-runway/SKILL.md",
-      "sha256": "f642859262fb160e6d45f4635346e2ca237d580c9d39a27ec56dcff74620c484"
+      "sha256": "01478c7a2165fdea89c23ec81f4514c2978d817cb879adde258732ba34fe9279"
     },
     {
       "name": "alawas-business-manage-liquidity-and-cash-runway/references/AGREEMENT-LOOP.md",
@@ -511,7 +511,7 @@
     {
       "name": "alawas-business-manage-liquidity-and-cash-runway/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-business-manage-liquidity-and-cash-runway/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-business-manage-liquidity-and-cash-runway/references/CONSEQUENCE-AUTHORITY.md",
@@ -546,7 +546,7 @@
     {
       "name": "alawas-business-manage-market-intelligence",
       "path": "adapters/github-copilot/skills/alawas-business-manage-market-intelligence/SKILL.md",
-      "sha256": "7cb1b304ecb3aac18c92a51a671a0e3073cf8db44cdc12828753828277cf3677"
+      "sha256": "d284f2a632021b13a8007766e2540836f5c47dbe38d83b8ce58c1ab54e972fa9"
     },
     {
       "name": "alawas-business-manage-market-intelligence/references/AGREEMENT-LOOP.md",
@@ -556,7 +556,7 @@
     {
       "name": "alawas-business-manage-market-intelligence/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-business-manage-market-intelligence/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-business-manage-market-intelligence/references/CONSEQUENCE-AUTHORITY.md",
@@ -591,7 +591,7 @@
     {
       "name": "alawas-business-plan-workforce-accountability",
       "path": "adapters/github-copilot/skills/alawas-business-plan-workforce-accountability/SKILL.md",
-      "sha256": "2edb0ac2a51a69a25f9a9bd41ce9b0db577800a86e2a0f520830bf123dce053e"
+      "sha256": "4c99310de702930f71abd1fca796f9c3ea7f80046296dc91d62703461524617f"
     },
     {
       "name": "alawas-business-plan-workforce-accountability/references/AGREEMENT-LOOP.md",
@@ -601,7 +601,7 @@
     {
       "name": "alawas-business-plan-workforce-accountability/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-business-plan-workforce-accountability/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-business-plan-workforce-accountability/references/CONSEQUENCE-AUTHORITY.md",
@@ -636,7 +636,7 @@
     {
       "name": "alawas-business-source-and-govern-suppliers",
       "path": "adapters/github-copilot/skills/alawas-business-source-and-govern-suppliers/SKILL.md",
-      "sha256": "2eb3fcb65648a1dd450c06993b6ff58b967206fe6118da3a02e096fcf4578296"
+      "sha256": "99be3ad53702f5ebd4c2e34c989c5907dc08dadf6aadd1ee6cf9f66b62c73790"
     },
     {
       "name": "alawas-business-source-and-govern-suppliers/references/AGREEMENT-LOOP.md",
@@ -646,7 +646,7 @@
     {
       "name": "alawas-business-source-and-govern-suppliers/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-business-source-and-govern-suppliers/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-business-source-and-govern-suppliers/references/CONSEQUENCE-AUTHORITY.md",
@@ -681,12 +681,12 @@
     {
       "name": "alawas-design-apply-design-direction",
       "path": "adapters/github-copilot/skills/alawas-design-apply-design-direction/SKILL.md",
-      "sha256": "e9bcb5d344634645e4959b50492f0025e6e18e2f9acdec9a2792168bef330c49"
+      "sha256": "19fe193b87cb00393286bc66d4d7022478f377ea52a2c8f310368acbb1ea466a"
     },
     {
       "name": "alawas-design-apply-design-direction/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-design-apply-design-direction/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-design-apply-design-direction/references/CONSEQUENCE-AUTHORITY.md",
@@ -706,7 +706,7 @@
     {
       "name": "alawas-design-audit-accessibility",
       "path": "adapters/github-copilot/skills/alawas-design-audit-accessibility/SKILL.md",
-      "sha256": "35e1f33ffd4cc7e101f7ecbd953fd54f9be2d344203c809825fc2fff1e3925da"
+      "sha256": "a2222af05dc3c5c2da010bdc0c7125ef1d02a5d44c5e1777c57785a429c639b2"
     },
     {
       "name": "alawas-design-audit-accessibility/references/AGREEMENT-LOOP.md",
@@ -716,7 +716,7 @@
     {
       "name": "alawas-design-audit-accessibility/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-design-audit-accessibility/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-design-audit-accessibility/references/CAPABILITY-DEGRADATION.md",
@@ -736,12 +736,12 @@
     {
       "name": "alawas-design-audit-product-interface",
       "path": "adapters/github-copilot/skills/alawas-design-audit-product-interface/SKILL.md",
-      "sha256": "07da7e30311ab0eb2d0ec02c03d3855320095560d4f22ff4d9b77e598f23cdba"
+      "sha256": "801d2eec86dae7336741bd4b17410ac33063ab56b8d71d6823885b20a45688df"
     },
     {
       "name": "alawas-design-audit-product-interface/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-design-audit-product-interface/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-design-audit-product-interface/references/CONSEQUENCE-AUTHORITY.md",
@@ -761,12 +761,12 @@
     {
       "name": "alawas-design-build-design-foundation",
       "path": "adapters/github-copilot/skills/alawas-design-build-design-foundation/SKILL.md",
-      "sha256": "3129ea7a90c5c8131116722ea3e0cc2408e210252e757ce2a77c9908382ce239"
+      "sha256": "51979655ad752c335dcd5c2ae6519047d6277e083ae87b91dc2259d38df03aa2"
     },
     {
       "name": "alawas-design-build-design-foundation/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-design-build-design-foundation/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-design-build-design-foundation/references/CONSEQUENCE-AUTHORITY.md",
@@ -786,7 +786,7 @@
     {
       "name": "alawas-design-compose-design-system",
       "path": "adapters/github-copilot/skills/alawas-design-compose-design-system/SKILL.md",
-      "sha256": "b198121eb571445506921f2a6422f859668aa9ddaa84b9ff9330e967140c0464"
+      "sha256": "d3cd8c022300730263c6d3630a7e2b9e6f1644f58a02424f6d93a7f2929bfc10"
     },
     {
       "name": "alawas-design-compose-design-system/references/AGREEMENT-LOOP.md",
@@ -796,7 +796,7 @@
     {
       "name": "alawas-design-compose-design-system/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-design-compose-design-system/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-design-compose-design-system/references/CONSEQUENCE-AUTHORITY.md",
@@ -826,7 +826,7 @@
     {
       "name": "alawas-design-critique-usability",
       "path": "adapters/github-copilot/skills/alawas-design-critique-usability/SKILL.md",
-      "sha256": "94fcb7d10d6e4c0edd0ffdb8866effcb9a736aab368bffb3a8843b6212fdf236"
+      "sha256": "cfd510d32c9f1b3961e99a1a0c59f83dab04ad544a8af3a00d6526e7010fc4ca"
     },
     {
       "name": "alawas-design-critique-usability/references/AGREEMENT-LOOP.md",
@@ -836,7 +836,7 @@
     {
       "name": "alawas-design-critique-usability/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-design-critique-usability/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-design-critique-usability/references/CAPABILITY-DEGRADATION.md",
@@ -856,12 +856,12 @@
     {
       "name": "alawas-design-design-tracer-bullet",
       "path": "adapters/github-copilot/skills/alawas-design-design-tracer-bullet/SKILL.md",
-      "sha256": "f6a139e5a3f3b7215ecb68b519700b65f94f285ec7cd99e2e86f3287332ea59b"
+      "sha256": "8cbbcbdd3665f0c180265943583fe9bc098366f3af8ac47ca49ae1b1c318c87f"
     },
     {
       "name": "alawas-design-design-tracer-bullet/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-design-design-tracer-bullet/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-design-design-tracer-bullet/references/CAPABILITY-DEGRADATION.md",
@@ -899,9 +899,54 @@
       "sha256": "15e0b0bfdc4638c94f5dde38b09fd4dfd4b346950afa241a35cbc419c4b6b8a8"
     },
     {
+      "name": "alawas-design-govern-interaction-motion",
+      "path": "adapters/github-copilot/skills/alawas-design-govern-interaction-motion/SKILL.md",
+      "sha256": "e69ae65858e40ebc7a26a40c6e2be63efc03e23db6a83d944d0d9e1fa7e9613a"
+    },
+    {
+      "name": "alawas-design-govern-interaction-motion/references/AGREEMENT-LOOP.md",
+      "path": "adapters/github-copilot/skills/alawas-design-govern-interaction-motion/references/AGREEMENT-LOOP.md",
+      "sha256": "35b0a081267e5c4d3db150d7acc62161cf19a6566c5a5ff3c1b3d7377f4e7210"
+    },
+    {
+      "name": "alawas-design-govern-interaction-motion/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/github-copilot/skills/alawas-design-govern-interaction-motion/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
+    },
+    {
+      "name": "alawas-design-govern-interaction-motion/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/github-copilot/skills/alawas-design-govern-interaction-motion/references/CAPABILITY-DEGRADATION.md",
+      "sha256": "ae7e228cf66bbb1b00ba6b67edc6cfe0fbc2eb26cca2717123923dddba3e3be7"
+    },
+    {
+      "name": "alawas-design-govern-interaction-motion/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/github-copilot/skills/alawas-design-govern-interaction-motion/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
+    },
+    {
+      "name": "alawas-design-govern-interaction-motion/references/EVIDENCE-MODEL.md",
+      "path": "adapters/github-copilot/skills/alawas-design-govern-interaction-motion/references/EVIDENCE-MODEL.md",
+      "sha256": "409f3ebe84208f2e440b475de7b9c7359ab641523e5d39e41f8ee2c81bd7c526"
+    },
+    {
+      "name": "alawas-design-govern-interaction-motion/references/DIRECTOR-LANGUAGE.md",
+      "path": "adapters/github-copilot/skills/alawas-design-govern-interaction-motion/references/DIRECTOR-LANGUAGE.md",
+      "sha256": "74753e8e90962526fe9f9cde49ce6efec82f51e281700266edfca3f554e6a856"
+    },
+    {
+      "name": "alawas-design-govern-interaction-motion/references/epistemic/epistemic-rules-full.md",
+      "path": "adapters/github-copilot/skills/alawas-design-govern-interaction-motion/references/epistemic/epistemic-rules-full.md",
+      "sha256": "8d6a8f7a863f86d4ad5540606d9ee20c203bcc204f3b7c508d73d90fb663b3ab"
+    },
+    {
+      "name": "alawas-design-govern-interaction-motion/references/epistemic/agreement-loop-tag-table-excerpt.md",
+      "path": "adapters/github-copilot/skills/alawas-design-govern-interaction-motion/references/epistemic/agreement-loop-tag-table-excerpt.md",
+      "sha256": "15e0b0bfdc4638c94f5dde38b09fd4dfd4b346950afa241a35cbc419c4b6b8a8"
+    },
+    {
       "name": "alawas-design-manage-assets",
       "path": "adapters/github-copilot/skills/alawas-design-manage-assets/SKILL.md",
-      "sha256": "3d0259355300e15e69b9db1c5ca1c762caaa15053b3d81c48f241edca001a0d4"
+      "sha256": "24a24f24f6d9a923b84740bdcd36aa93e131e398dd54ee8b6e8d6f7da32a050e"
     },
     {
       "name": "alawas-design-manage-assets/references/AGREEMENT-LOOP.md",
@@ -911,7 +956,7 @@
     {
       "name": "alawas-design-manage-assets/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-design-manage-assets/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-design-manage-assets/references/CONSEQUENCE-AUTHORITY.md",
@@ -941,7 +986,7 @@
     {
       "name": "alawas-design-project-asset-workbench",
       "path": "adapters/github-copilot/skills/alawas-design-project-asset-workbench/SKILL.md",
-      "sha256": "d704f06ddc41dc00ff69e651e1566ab3d0a154553288cc923c6197b24ec11e37"
+      "sha256": "160a33fe1390560bf789e697457b38282499e82cee46863dbb7bd56804581f63"
     },
     {
       "name": "alawas-design-project-asset-workbench/references/AGREEMENT-LOOP.md",
@@ -951,7 +996,7 @@
     {
       "name": "alawas-design-project-asset-workbench/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-design-project-asset-workbench/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-design-project-asset-workbench/references/CONSEQUENCE-AUTHORITY.md",
@@ -981,7 +1026,7 @@
     {
       "name": "alawas-design-steward-experience-patterns",
       "path": "adapters/github-copilot/skills/alawas-design-steward-experience-patterns/SKILL.md",
-      "sha256": "7196560e310f83cf6234467b97a3458b190b6f9fd4900c8613accea2fec0b655"
+      "sha256": "88948147eb87d41ff25c591da9649143061f04cd14bb29d76f575e1426306241"
     },
     {
       "name": "alawas-design-steward-experience-patterns/references/AGREEMENT-LOOP.md",
@@ -991,7 +1036,7 @@
     {
       "name": "alawas-design-steward-experience-patterns/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-design-steward-experience-patterns/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-design-steward-experience-patterns/references/CONSEQUENCE-AUTHORITY.md",
@@ -1021,7 +1066,7 @@
     {
       "name": "alawas-design-track-components",
       "path": "adapters/github-copilot/skills/alawas-design-track-components/SKILL.md",
-      "sha256": "a16ec3a8cd1df3d3d1b4edc9a228c15a860fd06dfdefc281ede0a6e9646206c5"
+      "sha256": "2b9db4fe618a329605abb556d0abbf0fba1c569ec3e59197b18be2d9ccc7f9c4"
     },
     {
       "name": "alawas-design-track-components/references/MISSING-ARTIFACT-GAP.md",
@@ -1036,7 +1081,7 @@
     {
       "name": "alawas-design-track-components/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-design-track-components/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-design-track-components/references/CONSEQUENCE-AUTHORITY.md",
@@ -1061,12 +1106,12 @@
     {
       "name": "alawas-design-verify-design-implementation",
       "path": "adapters/github-copilot/skills/alawas-design-verify-design-implementation/SKILL.md",
-      "sha256": "1fce461f4db995ec2944884343e190b77ef0470684793c6ad59c22459483c3a2"
+      "sha256": "e32c46c6d121b5681b73db79cb510815cefdcd3b4e2a07f36fe9f800905a3042"
     },
     {
       "name": "alawas-design-verify-design-implementation/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-design-verify-design-implementation/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-design-verify-design-implementation/references/CONSEQUENCE-AUTHORITY.md",
@@ -1086,12 +1131,12 @@
     {
       "name": "alawas-engineering-implement-bounded-change",
       "path": "adapters/github-copilot/skills/alawas-engineering-implement-bounded-change/SKILL.md",
-      "sha256": "8112176a2ab1a98a957272c3f91e7fc26acd4a6f26845f97743bb4d15aa558a8"
+      "sha256": "e2192b7962abd06523b6a3ccbe45a0d8f441552dac984f6360c12969c179a35e"
     },
     {
       "name": "alawas-engineering-implement-bounded-change/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-engineering-implement-bounded-change/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-engineering-implement-bounded-change/references/CAPABILITY-DEGRADATION.md",
@@ -1126,12 +1171,12 @@
     {
       "name": "alawas-engineering-verify-release-evidence",
       "path": "adapters/github-copilot/skills/alawas-engineering-verify-release-evidence/SKILL.md",
-      "sha256": "019d367812076bac3ebd91630ecdff7bb958425a38943c2029bc27aab0f72e7d"
+      "sha256": "db222572e046bf4e430a29268879c9ba99c5c15f4332c250a23189793dff8365"
     },
     {
       "name": "alawas-engineering-verify-release-evidence/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-engineering-verify-release-evidence/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-engineering-verify-release-evidence/references/CAPABILITY-DEGRADATION.md",
@@ -1166,22 +1211,22 @@
     {
       "name": "alawas-governance-conduct-work-object",
       "path": "adapters/github-copilot/skills/alawas-governance-conduct-work-object/SKILL.md",
-      "sha256": "446cf02c4442487a65f3b96d0377ec3ef68fed6fee3f956940bee5d648c9a42b"
+      "sha256": "e0008267b445f1b551d3c22c1cbd262c9d74f048f02b1c3c2dcc656e84e5f5a2"
     },
     {
       "name": "alawas-governance-conduct-work-object/references/MISSING-ARTIFACT-GAP.md",
       "path": "adapters/github-copilot/skills/alawas-governance-conduct-work-object/references/MISSING-ARTIFACT-GAP.md",
-      "sha256": "d0bdc0cecb0db5b39c68ebf2ecb9a58c66423849f2b57b34c55b5a71faa93781"
+      "sha256": "a3ae81f5558b439d52c1914727917d43180f38f295675cf4896ce546ca6b3a17"
     },
     {
       "name": "alawas-governance-conduct-work-object/references/AGREEMENT-LOOP.md",
       "path": "adapters/github-copilot/skills/alawas-governance-conduct-work-object/references/AGREEMENT-LOOP.md",
-      "sha256": "35b0a081267e5c4d3db150d7acc62161cf19a6566c5a5ff3c1b3d7377f4e7210"
+      "sha256": "a94a68200250974ec6305043348c0ae38aa8605771de5cfede4368d88d8a2246"
     },
     {
       "name": "alawas-governance-conduct-work-object/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-governance-conduct-work-object/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "727fdf80afce8e677390f55d75b39f6b0da584d55d103edc5946988af204cc68"
     },
     {
       "name": "alawas-governance-conduct-work-object/references/CAPABILITY-DEGRADATION.md",
@@ -1191,22 +1236,22 @@
     {
       "name": "alawas-governance-conduct-work-object/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/github-copilot/skills/alawas-governance-conduct-work-object/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
+      "sha256": "0eb3403975eecf9db0fb76123e9e55bb8a14aec3dfd06a9fb84b3360d6d08d28"
     },
     {
       "name": "alawas-governance-conduct-work-object/references/EVIDENCE-MODEL.md",
       "path": "adapters/github-copilot/skills/alawas-governance-conduct-work-object/references/EVIDENCE-MODEL.md",
-      "sha256": "409f3ebe84208f2e440b475de7b9c7359ab641523e5d39e41f8ee2c81bd7c526"
+      "sha256": "0349be9b26f03d8943f833ec4f02c42e6a1d1541c35c18f12214b4f606c9ee96"
     },
     {
       "name": "alawas-governance-conduct-work-object/references/CONDUCT-CLI-OPERATIONS.md",
       "path": "adapters/github-copilot/skills/alawas-governance-conduct-work-object/references/CONDUCT-CLI-OPERATIONS.md",
-      "sha256": "63ee5e0a3360e7e6e244c3bbcef92984ef32c4dc56756f9887c9c5f7dd8eda4f"
+      "sha256": "ed7d2a386818a5ff1e79c709839e18a53054ecd29c195cdde30afdfd65d64763"
     },
     {
       "name": "alawas-governance-conduct-work-object/references/DIRECTOR-LANGUAGE.md",
       "path": "adapters/github-copilot/skills/alawas-governance-conduct-work-object/references/DIRECTOR-LANGUAGE.md",
-      "sha256": "74753e8e90962526fe9f9cde49ce6efec82f51e281700266edfca3f554e6a856"
+      "sha256": "53b7e464217ee577a621cd9c61cbf2345f336ab1dd10b76e4a324d55f188c4ec"
     },
     {
       "name": "alawas-governance-conduct-work-object/references/epistemic/epistemic-rules-essential.md",
@@ -1216,12 +1261,12 @@
     {
       "name": "alawas-governance-govern-scorecards",
       "path": "adapters/github-copilot/skills/alawas-governance-govern-scorecards/SKILL.md",
-      "sha256": "b1c38102664cb4ad32006c0d66ce64ab3685bd1021a8c61c49d449e76c4448fa"
+      "sha256": "d7938d7b7ca4447247b3ccefc3c8f4e5cbba1901a67ce519e1be01e446ed6557"
     },
     {
       "name": "alawas-governance-govern-scorecards/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-governance-govern-scorecards/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-governance-govern-scorecards/references/CAPABILITY-DEGRADATION.md",
@@ -1261,7 +1306,7 @@
     {
       "name": "alawas-governance-maintain-working-method",
       "path": "adapters/github-copilot/skills/alawas-governance-maintain-working-method/SKILL.md",
-      "sha256": "9510803ebb1e1fa987bcecac26a5a68e18f720d200caa2dd15b664210cb904f8"
+      "sha256": "e4d40d29ebae5130f487e0430fd8fefae079e38b6908af1141767a26e2a9490c"
     },
     {
       "name": "alawas-governance-maintain-working-method/references/AGREEMENT-LOOP.md",
@@ -1271,7 +1316,7 @@
     {
       "name": "alawas-governance-maintain-working-method/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-governance-maintain-working-method/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-governance-maintain-working-method/references/CAPABILITY-DEGRADATION.md",
@@ -1306,12 +1351,12 @@
     {
       "name": "alawas-governance-review-outcome-and-adapt",
       "path": "adapters/github-copilot/skills/alawas-governance-review-outcome-and-adapt/SKILL.md",
-      "sha256": "45e7df0538210fa5c4eb30a8c6defdd49736a0a1cb2b9204f0e64fe8ac8ee31b"
+      "sha256": "426e666b7686f26572d1b1e58a5056b981f2e501359f28b82ded63e0d2661957"
     },
     {
       "name": "alawas-governance-review-outcome-and-adapt/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-governance-review-outcome-and-adapt/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-governance-review-outcome-and-adapt/references/CAPABILITY-DEGRADATION.md",
@@ -1351,12 +1396,12 @@
     {
       "name": "alawas-operations-deploy-with-recovery",
       "path": "adapters/github-copilot/skills/alawas-operations-deploy-with-recovery/SKILL.md",
-      "sha256": "9cc5207ed7014474d88beba6458bdf769060061c09a8bd5cc998d2c3d9aa7c57"
+      "sha256": "b77ed47cd1fbbe946852f39cb09a18a0e413e19686966751306365a7335107c9"
     },
     {
       "name": "alawas-operations-deploy-with-recovery/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-operations-deploy-with-recovery/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-operations-deploy-with-recovery/references/CAPABILITY-DEGRADATION.md",
@@ -1391,12 +1436,12 @@
     {
       "name": "alawas-operations-diagnose-production-incident",
       "path": "adapters/github-copilot/skills/alawas-operations-diagnose-production-incident/SKILL.md",
-      "sha256": "eb13e40df6bb902b47acac2520345149059bc061fa894c6f34884bbeb469dc65"
+      "sha256": "82515748118e89615508098e9639428e5148773b5f6a1b9d9bc2ec7980e01a47"
     },
     {
       "name": "alawas-operations-diagnose-production-incident/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-operations-diagnose-production-incident/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-operations-diagnose-production-incident/references/CAPABILITY-DEGRADATION.md",
@@ -1434,14 +1479,204 @@
       "sha256": "cc2798e2e0411840c0c878dd19e4c487c7a18b1397bd94a3ad2d4e6b52307ac7"
     },
     {
+      "name": "alawas-orchestrate",
+      "path": "adapters/github-copilot/skills/alawas-orchestrate/SKILL.md",
+      "sha256": "756ed5d1d468ef2fb0d9b12bb9160e76551cfa2f30239e607e457795cefc9de1"
+    },
+    {
+      "name": "alawas-orchestrate/references/AGREEMENT-LOOP.md",
+      "path": "adapters/github-copilot/skills/alawas-orchestrate/references/AGREEMENT-LOOP.md",
+      "sha256": "35b0a081267e5c4d3db150d7acc62161cf19a6566c5a5ff3c1b3d7377f4e7210"
+    },
+    {
+      "name": "alawas-orchestrate/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/github-copilot/skills/alawas-orchestrate/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
+    },
+    {
+      "name": "alawas-orchestrate/references/CAPABILITY-DEGRADATION.md",
+      "path": "adapters/github-copilot/skills/alawas-orchestrate/references/CAPABILITY-DEGRADATION.md",
+      "sha256": "ae7e228cf66bbb1b00ba6b67edc6cfe0fbc2eb26cca2717123923dddba3e3be7"
+    },
+    {
+      "name": "alawas-orchestrate/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/github-copilot/skills/alawas-orchestrate/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
+    },
+    {
+      "name": "alawas-orchestrate/references/epistemic/epistemic-rules-essential.md",
+      "path": "adapters/github-copilot/skills/alawas-orchestrate/references/epistemic/epistemic-rules-essential.md",
+      "sha256": "7692ebf99ef04444dc7eed398c345c6a7df9e6f172f03f97de5453e10cff6a7f"
+    },
+    {
+      "name": "alawas-production-operate-asset-pipeline",
+      "path": "adapters/github-copilot/skills/alawas-production-operate-asset-pipeline/SKILL.md",
+      "sha256": "d0ed1090d4913db25405baf3fe37e6e88c8a4316277beb5763957d018f64a158"
+    },
+    {
+      "name": "alawas-production-operate-asset-pipeline/references/AGREEMENT-LOOP.md",
+      "path": "adapters/github-copilot/skills/alawas-production-operate-asset-pipeline/references/AGREEMENT-LOOP.md",
+      "sha256": "35b0a081267e5c4d3db150d7acc62161cf19a6566c5a5ff3c1b3d7377f4e7210"
+    },
+    {
+      "name": "alawas-production-operate-asset-pipeline/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/github-copilot/skills/alawas-production-operate-asset-pipeline/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
+    },
+    {
+      "name": "alawas-production-operate-asset-pipeline/references/epistemic/epistemic-rules-essential.md",
+      "path": "adapters/github-copilot/skills/alawas-production-operate-asset-pipeline/references/epistemic/epistemic-rules-essential.md",
+      "sha256": "7692ebf99ef04444dc7eed398c345c6a7df9e6f172f03f97de5453e10cff6a7f"
+    },
+    {
+      "name": "alawas-production-operate-blender",
+      "path": "adapters/github-copilot/skills/alawas-production-operate-blender/SKILL.md",
+      "sha256": "d2e8205d23f4ea93dd329991fa15f0e66ba5b53ba34d030d5ccaf44509d91c62"
+    },
+    {
+      "name": "alawas-production-operate-blender/references/AGREEMENT-LOOP.md",
+      "path": "adapters/github-copilot/skills/alawas-production-operate-blender/references/AGREEMENT-LOOP.md",
+      "sha256": "35b0a081267e5c4d3db150d7acc62161cf19a6566c5a5ff3c1b3d7377f4e7210"
+    },
+    {
+      "name": "alawas-production-operate-blender/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/github-copilot/skills/alawas-production-operate-blender/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
+    },
+    {
+      "name": "alawas-production-operate-blender/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/github-copilot/skills/alawas-production-operate-blender/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
+    },
+    {
+      "name": "alawas-production-operate-blender/references/EVIDENCE-MODEL.md",
+      "path": "adapters/github-copilot/skills/alawas-production-operate-blender/references/EVIDENCE-MODEL.md",
+      "sha256": "409f3ebe84208f2e440b475de7b9c7359ab641523e5d39e41f8ee2c81bd7c526"
+    },
+    {
+      "name": "alawas-production-operate-blender/references/epistemic/epistemic-rules-full.md",
+      "path": "adapters/github-copilot/skills/alawas-production-operate-blender/references/epistemic/epistemic-rules-full.md",
+      "sha256": "8d6a8f7a863f86d4ad5540606d9ee20c203bcc204f3b7c508d73d90fb663b3ab"
+    },
+    {
+      "name": "alawas-production-operate-blender/references/epistemic/agreement-loop-tag-table-excerpt.md",
+      "path": "adapters/github-copilot/skills/alawas-production-operate-blender/references/epistemic/agreement-loop-tag-table-excerpt.md",
+      "sha256": "15e0b0bfdc4638c94f5dde38b09fd4dfd4b346950afa241a35cbc419c4b6b8a8"
+    },
+    {
+      "name": "alawas-production-operate-comfyui",
+      "path": "adapters/github-copilot/skills/alawas-production-operate-comfyui/SKILL.md",
+      "sha256": "6979a1828a0bd6251b9d0dc7ebda2ce16a123b6a7ad6919e38c55a61cbcd6013"
+    },
+    {
+      "name": "alawas-production-operate-comfyui/references/AGREEMENT-LOOP.md",
+      "path": "adapters/github-copilot/skills/alawas-production-operate-comfyui/references/AGREEMENT-LOOP.md",
+      "sha256": "35b0a081267e5c4d3db150d7acc62161cf19a6566c5a5ff3c1b3d7377f4e7210"
+    },
+    {
+      "name": "alawas-production-operate-comfyui/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/github-copilot/skills/alawas-production-operate-comfyui/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
+    },
+    {
+      "name": "alawas-production-operate-comfyui/references/epistemic/epistemic-rules-full.md",
+      "path": "adapters/github-copilot/skills/alawas-production-operate-comfyui/references/epistemic/epistemic-rules-full.md",
+      "sha256": "8d6a8f7a863f86d4ad5540606d9ee20c203bcc204f3b7c508d73d90fb663b3ab"
+    },
+    {
+      "name": "alawas-production-operate-comfyui/references/epistemic/agreement-loop-tag-table-excerpt.md",
+      "path": "adapters/github-copilot/skills/alawas-production-operate-comfyui/references/epistemic/agreement-loop-tag-table-excerpt.md",
+      "sha256": "15e0b0bfdc4638c94f5dde38b09fd4dfd4b346950afa241a35cbc419c4b6b8a8"
+    },
+    {
+      "name": "alawas-production-operate-shot-pipeline",
+      "path": "adapters/github-copilot/skills/alawas-production-operate-shot-pipeline/SKILL.md",
+      "sha256": "dac450c0da429ffe670e5f30fee4378bed5635a331b10e2820c4588fd15a0a09"
+    },
+    {
+      "name": "alawas-production-operate-shot-pipeline/references/epistemic/epistemic-rules-essential.md",
+      "path": "adapters/github-copilot/skills/alawas-production-operate-shot-pipeline/references/epistemic/epistemic-rules-essential.md",
+      "sha256": "7692ebf99ef04444dc7eed398c345c6a7df9e6f172f03f97de5453e10cff6a7f"
+    },
+    {
+      "name": "alawas-production-operate-tts",
+      "path": "adapters/github-copilot/skills/alawas-production-operate-tts/SKILL.md",
+      "sha256": "bc9aaf95f9c0ed79b53505e666c051ecfa58c4752c82750f957396a1d652b7ab"
+    },
+    {
+      "name": "alawas-production-operate-tts/references/AGREEMENT-LOOP.md",
+      "path": "adapters/github-copilot/skills/alawas-production-operate-tts/references/AGREEMENT-LOOP.md",
+      "sha256": "35b0a081267e5c4d3db150d7acc62161cf19a6566c5a5ff3c1b3d7377f4e7210"
+    },
+    {
+      "name": "alawas-production-operate-tts/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/github-copilot/skills/alawas-production-operate-tts/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
+    },
+    {
+      "name": "alawas-production-operate-tts/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/github-copilot/skills/alawas-production-operate-tts/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
+    },
+    {
+      "name": "alawas-production-operate-tts/references/epistemic/epistemic-rules-full.md",
+      "path": "adapters/github-copilot/skills/alawas-production-operate-tts/references/epistemic/epistemic-rules-full.md",
+      "sha256": "8d6a8f7a863f86d4ad5540606d9ee20c203bcc204f3b7c508d73d90fb663b3ab"
+    },
+    {
+      "name": "alawas-production-operate-tts/references/epistemic/agreement-loop-tag-table-excerpt.md",
+      "path": "adapters/github-copilot/skills/alawas-production-operate-tts/references/epistemic/agreement-loop-tag-table-excerpt.md",
+      "sha256": "15e0b0bfdc4638c94f5dde38b09fd4dfd4b346950afa241a35cbc419c4b6b8a8"
+    },
+    {
+      "name": "alawas-production-operate-visual-critic",
+      "path": "adapters/github-copilot/skills/alawas-production-operate-visual-critic/SKILL.md",
+      "sha256": "d9bdbc0fa10e9197526e73c1cfed8bb810194e32a0d0a69445daec3dd54e8ba1"
+    },
+    {
+      "name": "alawas-production-operate-visual-critic/references/epistemic/epistemic-rules-essential.md",
+      "path": "adapters/github-copilot/skills/alawas-production-operate-visual-critic/references/epistemic/epistemic-rules-essential.md",
+      "sha256": "7692ebf99ef04444dc7eed398c345c6a7df9e6f172f03f97de5453e10cff6a7f"
+    },
+    {
+      "name": "alawas-production-plan-scene",
+      "path": "adapters/github-copilot/skills/alawas-production-plan-scene/SKILL.md",
+      "sha256": "ac286eed4bedb1b3511072bff624251d78d10a2a61e49036f4d16136a0b9fa62"
+    },
+    {
+      "name": "alawas-production-plan-scene/references/AGREEMENT-LOOP.md",
+      "path": "adapters/github-copilot/skills/alawas-production-plan-scene/references/AGREEMENT-LOOP.md",
+      "sha256": "35b0a081267e5c4d3db150d7acc62161cf19a6566c5a5ff3c1b3d7377f4e7210"
+    },
+    {
+      "name": "alawas-production-plan-scene/references/SKILL-AWARE-GRILLING.md",
+      "path": "adapters/github-copilot/skills/alawas-production-plan-scene/references/SKILL-AWARE-GRILLING.md",
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
+    },
+    {
+      "name": "alawas-production-plan-scene/references/CONSEQUENCE-AUTHORITY.md",
+      "path": "adapters/github-copilot/skills/alawas-production-plan-scene/references/CONSEQUENCE-AUTHORITY.md",
+      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
+    },
+    {
+      "name": "alawas-production-plan-scene/references/DIRECTOR-LANGUAGE.md",
+      "path": "adapters/github-copilot/skills/alawas-production-plan-scene/references/DIRECTOR-LANGUAGE.md",
+      "sha256": "74753e8e90962526fe9f9cde49ce6efec82f51e281700266edfca3f554e6a856"
+    },
+    {
+      "name": "alawas-production-plan-scene/references/epistemic/epistemic-rules-essential.md",
+      "path": "adapters/github-copilot/skills/alawas-production-plan-scene/references/epistemic/epistemic-rules-essential.md",
+      "sha256": "7692ebf99ef04444dc7eed398c345c6a7df9e6f172f03f97de5453e10cff6a7f"
+    },
+    {
       "name": "alawas-research-investigate-live-question",
       "path": "adapters/github-copilot/skills/alawas-research-investigate-live-question/SKILL.md",
-      "sha256": "f6eed5a38f7ed100768e6e22f6b2354c96bdaebc9203bbe42184e863665585df"
+      "sha256": "ffb8ce50c9773bf3a1ef18552effee8cac37ba53eecc7ddaa86f22d40f5e4ef6"
     },
     {
       "name": "alawas-research-investigate-live-question/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-research-investigate-live-question/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-research-investigate-live-question/references/CAPABILITY-DEGRADATION.md",
@@ -1476,7 +1711,7 @@
     {
       "name": "alawas-research-produce-report",
       "path": "adapters/github-copilot/skills/alawas-research-produce-report/SKILL.md",
-      "sha256": "61c459a0479fedc8e2cfe16fdd84d519caefb078087f576acb7e34d1ead5842a"
+      "sha256": "01f8985947181ed916d604e8a79f019ce19a15f923c4decb1731dd4510bbfff0"
     },
     {
       "name": "alawas-research-produce-report/references/AGREEMENT-LOOP.md",
@@ -1486,7 +1721,7 @@
     {
       "name": "alawas-research-produce-report/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-research-produce-report/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-research-produce-report/references/CAPABILITY-DEGRADATION.md",
@@ -1516,12 +1751,12 @@
     {
       "name": "alawas-thinking-develop-idea",
       "path": "adapters/github-copilot/skills/alawas-thinking-develop-idea/SKILL.md",
-      "sha256": "b9d0ef92192d718bdbf3fa77da4ab521b7319bc07bb6fe188ee01db75952d827"
+      "sha256": "6de4563fc0424f941b246aaf26cb08c70fba00830cca4773d55e4006abd860d4"
     },
     {
       "name": "alawas-thinking-develop-idea/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-thinking-develop-idea/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-thinking-develop-idea/references/CAPABILITY-DEGRADATION.md",
@@ -1556,12 +1791,12 @@
     {
       "name": "alawas-thinking-diagnose-homogenization",
       "path": "adapters/github-copilot/skills/alawas-thinking-diagnose-homogenization/SKILL.md",
-      "sha256": "aa4159c78b77b8bb1a8c956885de0b2eb537ca2ac4929ff895aca0efaa96643e"
+      "sha256": "394046247f37b5d4bb3e96146464b5a6a2a8a224532fe27e079592c8d887184f"
     },
     {
       "name": "alawas-thinking-diagnose-homogenization/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-thinking-diagnose-homogenization/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-thinking-diagnose-homogenization/references/CAPABILITY-DEGRADATION.md",
@@ -1586,7 +1821,7 @@
     {
       "name": "alawas-thinking-grilling-session",
       "path": "adapters/github-copilot/skills/alawas-thinking-grilling-session/SKILL.md",
-      "sha256": "389fd6ff560ed8a79be4687721bf53b4e7a3dc8d2d2b777c11b92301e4709fde"
+      "sha256": "a226e2ebd6e46a38ce57c9427d798211219db0fb2c97de638617e99932b16f79"
     },
     {
       "name": "alawas-thinking-grilling-session/references/AGREEMENT-LOOP.md",
@@ -1596,7 +1831,7 @@
     {
       "name": "alawas-thinking-grilling-session/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-thinking-grilling-session/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-thinking-grilling-session/references/epistemic/epistemic-rules-full.md",
@@ -1611,12 +1846,12 @@
     {
       "name": "alawas-thinking-inquire-system",
       "path": "adapters/github-copilot/skills/alawas-thinking-inquire-system/SKILL.md",
-      "sha256": "0d5144614d5be699299fcae7f8f1801cb0f82d1cf8dccc44516e4b2e61afc410"
+      "sha256": "2f50a8a73b46a07768dd732f5b6c653082056d60ddebc98fe1d50e9b914b8b03"
     },
     {
       "name": "alawas-thinking-inquire-system/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-thinking-inquire-system/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-thinking-inquire-system/references/CAPABILITY-DEGRADATION.md",
@@ -1651,12 +1886,12 @@
     {
       "name": "alawas-thinking-pressure-test-decision",
       "path": "adapters/github-copilot/skills/alawas-thinking-pressure-test-decision/SKILL.md",
-      "sha256": "1514bdfc3a4940c79c00b065ba909adcb6b30b310b7ac988b4735d4775590be4"
+      "sha256": "c06e85164784b0377aa15799aa167dd72212eebedf5872ab15ab16d5df086249"
     },
     {
       "name": "alawas-thinking-pressure-test-decision/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-thinking-pressure-test-decision/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-thinking-pressure-test-decision/references/CAPABILITY-DEGRADATION.md",
@@ -1666,7 +1901,7 @@
     {
       "name": "alawas-thinking-pressure-test-decision/references/CONSEQUENCE-AUTHORITY.md",
       "path": "adapters/github-copilot/skills/alawas-thinking-pressure-test-decision/references/CONSEQUENCE-AUTHORITY.md",
-      "sha256": "8d0152b17b29886d22a2c1336cb09c721c0e3922036e8df7914a6ff6e0a987fb"
+      "sha256": "0eb3403975eecf9db0fb76123e9e55bb8a14aec3dfd06a9fb84b3360d6d08d28"
     },
     {
       "name": "alawas-thinking-pressure-test-decision/references/AGREEMENT-LOOP.md",
@@ -1701,12 +1936,12 @@
     {
       "name": "alawas-thinking-resume-work",
       "path": "adapters/github-copilot/skills/alawas-thinking-resume-work/SKILL.md",
-      "sha256": "24015fe2ce7995c89e4222fcd84fb0d23624af20beb2671c74501593515e9c6e"
+      "sha256": "d26c1b978c20da39bc9394a56062763a5f6227bf97c34bd254582ce2769afa24"
     },
     {
       "name": "alawas-thinking-resume-work/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-thinking-resume-work/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-thinking-resume-work/references/CAPABILITY-DEGRADATION.md",
@@ -1736,12 +1971,12 @@
     {
       "name": "alawas-thinking-turn-signal-into-work",
       "path": "adapters/github-copilot/skills/alawas-thinking-turn-signal-into-work/SKILL.md",
-      "sha256": "20e5a66ccc11254ffee14f85c9f311cb7d9aa8350fbaccea34ff68ba412e9e7b"
+      "sha256": "d517c144691b836ca973e10177ce6857b6748cc77f6bab35a681e0cb9ca14eaa"
     },
     {
       "name": "alawas-thinking-turn-signal-into-work/references/SKILL-AWARE-GRILLING.md",
       "path": "adapters/github-copilot/skills/alawas-thinking-turn-signal-into-work/references/SKILL-AWARE-GRILLING.md",
-      "sha256": "bb0eeb496a50b0d826180af3c32a78f2a41b8c9ecac8c08d38740219a373ea8c"
+      "sha256": "9454f70cbeff782a751adbae8776a8163792a4b891189996f0f07d09e8dfe083"
     },
     {
       "name": "alawas-thinking-turn-signal-into-work/references/CAPABILITY-DEGRADATION.md",

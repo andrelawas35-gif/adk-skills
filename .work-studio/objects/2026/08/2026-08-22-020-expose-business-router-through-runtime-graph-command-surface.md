@@ -7,6 +7,7 @@ status: active
 state: verify
 consequence: meaningful
 sensitivity: ordinary
+domain: [business, engineering]
 created_at: 2026-08-22T13:19:31Z
 updated_at: 2026-08-22T13:22:19Z
 next_action: Recommended next slice: decide whether to integrate the business router into Phase 6 dispatch.

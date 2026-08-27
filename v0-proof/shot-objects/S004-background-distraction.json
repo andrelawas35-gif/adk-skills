@@ -1,0 +1,21 @@
+{
+  "shot_id": "S004",
+  "intent": "A reference image intended for image-to-3D generation must isolate the asset cleanly; the current cluttered background competes with the object and will confuse mesh reconstruction.",
+  "subject": "The market lamp prop, intended as a clean isolated reference plate.",
+  "camera": "Straight-on reference framing, plain background, even studio-style coverage.",
+  "mood": "Clean, isolated, reference-grade.",
+  "preserve": [
+    "the prop itself, fully in frame",
+    "consistent scale and lighting on the object"
+  ],
+  "change": [
+    "cluttered background props competing for attention",
+    "busy patterned backdrop",
+    "overlapping foreground elements obscuring the object's edges"
+  ],
+  "avoid": [
+    "any background element brighter or busier than the asset",
+    "occlusion of the object's silhouette",
+    "a frame too cluttered for clean 3D reconstruction"
+  ]
+}

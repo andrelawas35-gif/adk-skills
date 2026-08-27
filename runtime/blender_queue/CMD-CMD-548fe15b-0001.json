@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-548fe15b-0001",
+  "op": "camera.set",
+  "params": {
+    "name": "Camera",
+    "lens_mm": 28
+  },
+  "created_at": "2026-08-26T07:00:42Z",
+  "delay_ms": 0
+}

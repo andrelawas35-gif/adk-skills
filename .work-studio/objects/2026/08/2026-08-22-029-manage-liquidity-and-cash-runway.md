@@ -7,6 +7,7 @@ status: active
 state: observe
 consequence: meaningful
 sensitivity: private
+domain: [business]
 created_at: 2026-08-22T15:07:45Z
 updated_at: 2026-08-22T15:13:15Z
 next_action: Monitor: confirm the $50,000 receivable lands ~2026-08-30 and rent clears ~2026-09-01 as predicted. Revisit only if the receivable amount/timing, rent amount, or cash position changes materially before then.

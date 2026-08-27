@@ -9,7 +9,7 @@ VALID_COMPONENT_KINDS: FrozenSet[str] = frozenset({
 
 VALID_GOVERNANCE_DOMAINS: FrozenSet[str] = frozenset({
     "business", "design", "engineering", "governance", "operations",
-    "research", "thinking", "cross-cutting",
+    "production", "research", "thinking", "cross-cutting",
 })
 
 _ROUTED_SKILL_DOMAINS = {
@@ -42,6 +42,9 @@ _ROUTED_SKILL_DOMAINS = {
     "deploy-with-recovery": "operations",
     "operations-deploy-with-recovery": "operations",
     "operations-diagnose-production-incident": "operations",
+    "production-operate-blender": "production",
+    "production-operate-comfyui": "production",
+    "production-operate-tts": "production",
     "governance-govern-scorecards": "governance",
     "governance-review-outcome-and-adapt": "governance",
     "review-outcome-and-adapt": "governance",

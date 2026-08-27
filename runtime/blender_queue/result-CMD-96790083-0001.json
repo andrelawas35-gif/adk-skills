@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-96790083-0001",
+  "status": "ok",
+  "data": {
+    "name": "stone"
+  },
+  "error": null,
+  "started_at": "2026-08-26T06:59:19Z",
+  "completed_at": "2026-08-26T06:59:19Z"
+}

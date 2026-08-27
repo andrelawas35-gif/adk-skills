@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-e05b10c4-0043",
+  "op": "render.final",
+  "params": {
+    "filepath": "C:\\Users\\Andre\\AppData\\Local\\Temp\\opencode\\wo-2026-08-24-022\\renders/cam_a_backlit_alley.png",
+    "format": "PNG"
+  },
+  "created_at": "2026-08-26T02:51:00Z",
+  "delay_ms": 0
+}

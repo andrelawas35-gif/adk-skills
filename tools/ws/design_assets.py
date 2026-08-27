@@ -15,6 +15,7 @@ VALID_ASSET_KINDS = {
     "ux-pattern",
     "flow",
     "projection",
+    "motion",
 }
 
 REQUIRED_FIELDS = (

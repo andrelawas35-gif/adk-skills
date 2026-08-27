@@ -58,7 +58,8 @@ Apply `references/CONSEQUENCE-AUTHORITY.md`.
 - Customer, supplier, workforce, inventory, and operational data may be private;
   store only minimum necessary summaries.
 - For a high-consequence Work Object, confirmation must name the exact proposed
-  mutation before any durable update.
+  mutation. Do not stage, annotate, change status, append History, or make any
+  other mutation before receiving that scoped confirmation.
 
 ## Grilling entry and stage lens
 

@@ -7,6 +7,7 @@ status: closed
 state: close
 consequence: meaningful
 sensitivity: ordinary
+domain: [architecture, engineering]
 created_at: 2026-08-21T13:02:59Z
 updated_at: 2026-08-21T19:18:35Z
 next_action: Director decision: close this Work Object, or hold open pending anything further

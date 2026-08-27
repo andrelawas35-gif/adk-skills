@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-56801ea3-0001",
+  "op": "material.assign",
+  "params": {
+    "name": "unit_cube.007",
+    "material": "blue"
+  },
+  "created_at": "2026-08-26T06:59:55Z",
+  "delay_ms": 0
+}

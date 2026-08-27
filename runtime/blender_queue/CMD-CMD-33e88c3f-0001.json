@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-33e88c3f-0001",
+  "op": "material.set",
+  "params": {
+    "name": "stone",
+    "base_color": [
+      0.55,
+      0.53,
+      0.5
+    ]
+  },
+  "created_at": "2026-08-26T07:11:01Z",
+  "delay_ms": 0
+}

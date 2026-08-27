@@ -7,6 +7,7 @@ status: closed
 state: close
 consequence: high
 sensitivity: ordinary
+domain: [engineering, architecture]
 created_at: 2026-08-22T11:43:13Z
 updated_at: 2026-08-22T12:59:16Z
 next_action: Director completes the hand-test judgment on fixtures/pipeline-tracer.xlsx (3 sheets, 4 hypothetical deals): record where the spreadsheet stays clean and where it strains, as evidence; clean test closes/advances the inquiry, awkward test reopens Directions 7/8 via pressure-test-decision.

@@ -27,6 +27,7 @@ design-manage-assets
 -> design-audit-product-interface when current UI structure is unknown
 -> design-build-design-foundation when current tokens/themes are unknown
 -> design-compose-design-system
+-> design-govern-interaction-motion when motion/interaction behavior needs composing
 -> design-steward-experience-patterns
 -> design-apply-design-direction
 -> alawas-engineering-implement-bounded-change
@@ -46,6 +47,7 @@ design-manage-assets
 | Existing route, layout, component, and interface discovery | `design-audit-product-interface` |
 | Existing token, typography, color, spacing, and theme discovery | `design-build-design-foundation` |
 | Foundation, semantic tokens, theme recipes, variants, component-family relationships, inherited/overridden/prohibited properties | `design-compose-design-system` |
+| Motion/interaction recipes, timing and easing semantics, per-state interaction behavior, reduced-motion handling | `design-govern-interaction-motion` |
 | Reusable user goals, flows, states, accessibility expectations, content behavior, failure/recovery behavior, and evidence links | `design-steward-experience-patterns` |
 | Confirmed creative interpretation and execution boundary | `design-apply-design-direction` |
 | Reversible implementation of an accepted tracer or bounded change | `alawas-engineering-implement-bounded-change` |

@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-78499d22-0001",
+  "status": "ok",
+  "data": {
+    "executed": true
+  },
+  "error": null,
+  "started_at": "2026-08-26T07:32:44Z",
+  "completed_at": "2026-08-26T07:32:44Z"
+}

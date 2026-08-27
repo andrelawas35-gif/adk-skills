@@ -7,6 +7,7 @@ status: active
 state: verify
 consequence: meaningful
 sensitivity: ordinary
+domain: [governance, engineering]
 created_at: 2026-08-22T11:11:54Z
 updated_at: 2026-08-22T11:14:10Z
 next_action: Review the verified test repair; resolve the unrelated empty Claude adapter reference in its owning workstream before checkout-wide adapter verification

@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-adcc5ca2-0001",
+  "status": "ok",
+  "data": {
+    "name": "unit_cube.009"
+  },
+  "error": null,
+  "started_at": "2026-08-26T07:54:42Z",
+  "completed_at": "2026-08-26T07:54:42Z"
+}

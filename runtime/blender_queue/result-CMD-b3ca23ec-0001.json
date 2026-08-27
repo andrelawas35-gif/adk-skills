@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-b3ca23ec-0001",
+  "status": "ok",
+  "data": {
+    "name": "stone"
+  },
+  "error": null,
+  "started_at": "2026-08-26T06:52:30Z",
+  "completed_at": "2026-08-26T06:52:30Z"
+}

@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-c396d9ab-0001",
+  "status": "ok",
+  "data": {
+    "rendered": "C:\\Users\\Andre\\AppData\\Local\\Temp\\opencode\\ws-env-tracer\\renders\\cam_b_high.png"
+  },
+  "error": null,
+  "started_at": "2026-08-26T07:55:29Z",
+  "completed_at": "2026-08-26T07:55:30Z"
+}

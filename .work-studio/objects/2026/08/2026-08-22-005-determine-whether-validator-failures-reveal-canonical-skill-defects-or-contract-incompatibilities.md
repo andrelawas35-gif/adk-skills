@@ -7,6 +7,7 @@ status: active
 state: explore
 consequence: meaningful
 sensitivity: ordinary
+domain: [governance, engineering]
 created_at: 2026-08-22T11:07:50Z
 updated_at: 2026-08-22T11:10:53Z
 next_action: Await authorization for a bounded repair of the stale skill-count test and missing research-produce-report kernel registration; make no changes to the four business skills

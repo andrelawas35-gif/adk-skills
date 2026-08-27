@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-0650a90f-0001",
+  "status": "ok",
+  "data": {
+    "name": "unit_cube.016",
+    "material": "terracotta"
+  },
+  "error": null,
+  "started_at": "2026-08-26T07:19:51Z",
+  "completed_at": "2026-08-26T07:19:51Z"
+}

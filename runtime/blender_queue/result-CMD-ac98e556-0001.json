@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-ac98e556-0001",
+  "status": "ok",
+  "data": {
+    "objects": [
+      "Camera",
+      "Light",
+      "unit_cube"
+    ]
+  },
+  "error": null,
+  "started_at": "2026-08-26T06:59:24Z",
+  "completed_at": "2026-08-26T06:59:24Z"
+}

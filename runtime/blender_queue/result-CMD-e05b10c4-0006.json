@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-e05b10c4-0006",
+  "status": "ok",
+  "data": {
+    "name": "unit_cube",
+    "material": "env_ground"
+  },
+  "error": null,
+  "started_at": "2026-08-26T02:36:21Z",
+  "completed_at": "2026-08-26T02:36:21Z"
+}

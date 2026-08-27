@@ -7,6 +7,7 @@ status: closed
 state: close
 consequence: meaningful
 sensitivity: ordinary
+domain: [engineering]
 created_at: 2026-08-21T08:32:44Z
 updated_at: 2026-08-21T09:24:35Z
 next_action: Resolve remaining Open question: whether a Mac/Linux native run is needed before closing, or whether Windows-side verification plus CI coverage is sufficient to close this Work Object

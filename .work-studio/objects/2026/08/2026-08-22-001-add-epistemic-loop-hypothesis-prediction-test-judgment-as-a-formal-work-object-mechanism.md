@@ -7,6 +7,7 @@ status: closed
 state: close
 consequence: meaningful
 sensitivity: ordinary
+domain: [governance, architecture]
 created_at: 2026-08-22T09:45:45Z
 updated_at: 2026-08-22T09:54:08Z
 next_action: None -- closed. Cross-reference doc at references/EPISTEMIC-LOOP-MAPPING.md; revisit only if a concrete need to query/group Work Objects by loop-stage arises (Decision 1 revisit trigger).

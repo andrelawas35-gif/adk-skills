@@ -1,0 +1,94 @@
+---
+schema_version: 1
+id: 2026-08-24-008
+title: SQ001 — Market sequence (V1 tracer)
+type: project
+status: active
+state: design
+consequence: low
+sensitivity: ordinary
+domain: [architecture]
+created_at: 2026-08-25T00:10:58Z
+updated_at: 2026-08-25T01:39:51Z
+next_action: SQ001 links P001 to Scene SC030; shots build under the sequence (WO 2026-08-24-010).
+
+
+
+---
+## Intent
+
+Seed Sequence node for the V1 Production Objects tracer (WO 2026-08-24-006
+Decision 2). Middle of the Project → Sequence → Scene → Shot hierarchy.
+
+## Success evidence
+
+<!-- Checklist of observable outcomes that indicate completion. -->
+- [ ] SQ001 is the Market Short's first sequence, linking Project P001 to Scene SC030
+- [ ] SQ001 is a real production record with a meaningful lifecycle state
+
+
+## Constraints and non-goals
+
+**Constraints:**
+<!-- Boundaries the implementation must respect. -->
+
+**Non-goals:**
+<!-- Explicitly excluded work. -->
+
+## Decisions and revisit triggers
+
+<!-- Structured decision records for lifecycle gate enforcement.
+     Each major decision gets its own record with the fields below.
+     The build, release, close, and observe gates read this section
+     structurally — keep field names exactly as shown. -->
+
+### Decision 1 — <summary>
+
+| Field | Value |
+|-------|-------|
+| **Decision type** | decision / authority / delegation |
+| **Result** | pass / fail / pending |
+| **Scope** | <!-- what this decision applies to --> |
+| **Authorization** | <!-- who or what authorized this --> |
+| **Confidence** | <!-- high / medium / low, plus basis. Scope-qualify when the decision's parts differ: 'high for <X>; low for <Y> — basis: <why>' --> |
+| **Actor** | <!-- who made the decision --> |
+| **Revisit trigger** | <!-- condition that would cause reconsideration --> |
+| **Rationale** | <!-- why this decision was made --> |
+
+## Evidence ledger
+
+<!-- Tagged evidence entries. See references/AGREEMENT-LOOP.md for
+     canonical tags: [system], [decision], [inference],
+     [gap], [testimony], [memory]. -->
+
+| Tag | Source | Entry |
+|-----|--------|-------|
+| [system] | V1 build-out (WO 2026-08-24-010), ws relation + ws graph trace | SQ001 links Project P001 to Scene SC030 — depends_on from Scene SC030 2026-08-23-004 and to Project P001 2026-08-24-007; traversable via ws graph trace. |
+## Open questions
+
+<!-- Unresolved questions that block progress or require a decision. -->
+
+## Next move
+
+Continue the Market Short build-out (WO 2026-08-24-010): the sequence's
+scene (SC030) and shots produce under it.
+
+## History
+
+<!-- Append-only chronological record of state transitions,
+     decisions, and material changes. Each entry is a timestamped
+     subsection. -->
+### 2026-08-25T01:39:16Z — Build-out: SQ001 promoted to a real production sequence record
+
+- **State:** design
+- **Status:** active
+- **Actor:** system
+- **Rationale:** V1 build-out (WO 2026-08-24-010): the seed Sequence SQ001 is promoted out of notice to design, linking Project P001 to Scene SC030.
+## Relationships
+
+  REL-2026_08_24_008-001:
+    type: depends_on
+    from: wo:2026-08-24-008
+    to: wo:2026-08-24-007
+    basis: "V1 tracer Decision 2"
+    created_at: 2026-08-25T00:11:20Z

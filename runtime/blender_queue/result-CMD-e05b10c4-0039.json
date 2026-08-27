@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-e05b10c4-0039",
+  "status": "ok",
+  "data": {
+    "name": "Light"
+  },
+  "error": null,
+  "started_at": "2026-08-26T02:36:37Z",
+  "completed_at": "2026-08-26T02:36:37Z"
+}

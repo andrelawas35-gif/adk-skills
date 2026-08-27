@@ -125,7 +125,7 @@ Every meaningful transition appends a History entry. Format:
 - **State**: <resulting state>
 - **Status**: <resulting status>
 - **Actor**: human | agent
-- **Platform**: codex | claude-code | github-copilot
+- **Platform**: codex | claude-code | github-copilot | lm-studio-bionic | opencode
 - **Rationale**: Concise evidence-based reason for the transition
 ```
 

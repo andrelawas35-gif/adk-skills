@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-e97c60bc-0001",
+  "op": "material.assign",
+  "params": {
+    "name": "unit_cube",
+    "material": "stone"
+  },
+  "created_at": "2026-08-26T07:08:36Z",
+  "delay_ms": 0
+}

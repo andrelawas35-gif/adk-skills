@@ -20,6 +20,8 @@ skills/core/                     ← Canonical source (edit here)
 adapters/codex/                  ← Generated: Codex (VS Code)
 adapters/claude-code/            ← Generated: Claude Code
 adapters/github-copilot/         ← Generated: GitHub Copilot
+adapters/lm-studio-bionic/       ← Generated: LM Studio Bionic
+adapters/opencode/               ← Generated: OpenCode
 tools/generate-adapters.py       ← Dependency-free generator
 ```
 
@@ -42,6 +44,8 @@ tools/install.sh --platform codex --project .
 | Codex | `~/.agents/skills/` | `.agents/skills/` |
 | Claude Code | `~/.claude/skills/` | `.claude/skills/` |
 | GitHub Copilot | `~/.copilot/skills/` | `.github/skills/` |
+| LM Studio Bionic | `~/.lmstudio/skills/` | `.lmstudio/skills/` |
+| OpenCode | `~/.config/opencode/skills/` | `.opencode/skills/` |
 
 Each adapter ships a `manifest.json` and a `SHA256SUMS` file with SHA-256
 checksums; the installer refuses to install artifacts that do not match. A
@@ -94,6 +98,8 @@ python3 tools/generate-adapters.py --check   # verify no drift
 | Codex | Namespace-prefixed generated skills | [manifest.json](adapters/codex/manifest.json) |
 | Claude Code | Namespace-prefixed generated skills | [manifest.json](adapters/claude-code/manifest.json) |
 | GitHub Copilot | Namespace-prefixed generated skills | [manifest.json](adapters/github-copilot/manifest.json) |
+| LM Studio Bionic | Namespace-prefixed generated skills | [manifest.json](adapters/lm-studio-bionic/manifest.json) |
+| OpenCode | Namespace-prefixed generated skills | [manifest.json](adapters/opencode/manifest.json) |
 
 ## Conformance Gate
 

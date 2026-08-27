@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-b5358c01-0001",
+  "status": "ok",
+  "data": {
+    "name": "unit_cube",
+    "location": [
+      0.0,
+      0.0,
+      -0.10000000149011612
+    ],
+    "rotation": [
+      1.570796251296997,
+      -0.0,
+      0.0
+    ],
+    "scale": [
+      3.0,
+      14.0,
+      0.20000000298023224
+    ],
+    "parent": null
+  },
+  "error": null,
+  "started_at": "2026-08-26T07:27:53Z",
+  "completed_at": "2026-08-26T07:27:53Z"
+}

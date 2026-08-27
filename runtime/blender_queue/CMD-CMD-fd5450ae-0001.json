@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-fd5450ae-0001",
+  "op": "object.set_transform",
+  "params": {
+    "name": "Light",
+    "location": [
+      2.0,
+      2.0,
+      8.0
+    ]
+  },
+  "created_at": "2026-08-26T07:00:41Z",
+  "delay_ms": 0
+}

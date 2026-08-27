@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-21ab8eac-0001",
+  "status": "ok",
+  "data": {
+    "imported": "unit_cube.obj"
+  },
+  "error": null,
+  "started_at": "2026-08-26T06:59:23Z",
+  "completed_at": "2026-08-26T06:59:23Z"
+}

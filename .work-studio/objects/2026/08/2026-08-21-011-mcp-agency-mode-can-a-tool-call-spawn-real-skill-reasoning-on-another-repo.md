@@ -3,13 +3,15 @@ schema_version: 1
 id: 2026-08-21-011
 title: MCP agency mode -- can a tool call spawn real skill reasoning on another repo
 type: inquiry
-status: active
-state: design
+status: closed
+state: close
 consequence: meaningful
 sensitivity: ordinary
+domain: [architecture, research]
 created_at: 2026-08-21T19:08:37Z
-updated_at: 2026-08-21T19:15:33Z
-next_action: Route to alawas-design-design-tracer-bullet: design the smallest slice adding a deepseek adapter target (zero model-tier binding, like codex) plus a minimal loop that feeds one skill's SKILL.md to DeepSeek's API and checks for real adherence
+updated_at: 2026-08-25T22:48:17Z
+next_action: Closed. DeepSeek adapter path superseded by WO 2026-08-25-001 Decision 15 (OpenCodeAgentAdapter). MCP agency-mode question remains open as successor inquiry.
+
 
 
 
@@ -65,18 +67,18 @@ serving another repo via MCP), not the local runtime/skill relationship
      The build, release, close, and observe gates read this section
      structurally — keep field names exactly as shown. -->
 
-### Decision 1 — <summary>
+### Decision 1 — DeepSeek adapter path superseded by OpenCodeAgentAdapter
 
 | Field | Value |
 |-------|-------|
-| **Decision type** | decision / authority / delegation |
-| **Result** | pass / fail / pending |
-| **Scope** | <!-- what this decision applies to --> |
-| **Authorization** | <!-- who or what authorized this --> |
-| **Confidence** | <!-- high / medium / low, plus basis. Scope-qualify when the decision's parts differ: 'high for <X>; low for <Y> — basis: <why>' --> |
-| **Actor** | <!-- who made the decision --> |
-| **Revisit trigger** | <!-- condition that would cause reconsideration --> |
-| **Rationale** | <!-- why this decision was made --> |
+| **Decision type** | decision |
+| **Result** | pass |
+| **Scope** | The proposed DeepSeek-specific adapter target (zero model-tier binding, like codex) is superseded by WO 2026-08-25-001 Decision 15, which built an OpenCodeAgentAdapter with zero model-tier binding supporting 75+ providers through Models.dev. A dedicated DeepSeek adapter is no longer necessary. |
+| **Authorization** | Director accepted, chat 2026-08-25: "close it with that outcome." |
+| **Confidence** | high — OpenCodeAgentAdapter verified with two real dispatches (PONG test and blocked-classification test); zero model-tier binding confirmed. |
+| **Actor** | conductor |
+| **Revisit trigger** | If OpenCode's provider model proves insufficient for a specific use case that DeepSeek's native API handles better, the dedicated adapter question may reopen. |
+| **Rationale** | OpenCode already provides the model-agnostic dispatch layer this WO proposed building from scratch for DeepSeek. The broader MCP agency-mode question (can a tool call invoke real skill reasoning on another repo) remains open as a potential successor inquiry. |
 
 ## Evidence ledger
 
@@ -127,3 +129,21 @@ serving another repo via MCP), not the local runtime/skill relationship
 - **Status:** active
 - **Actor:** director
 - **Rationale:** Checked director's claim (skills not Claude-specific) against real files: confirmed. skills/core/*/SKILL.md canonical content is genuinely provider-agnostic; adapters/codex/'s existing Platform Adapter tail has zero hardcoded model binding, real precedent for a fourth adapter target with the same shape. github-copilot's adapter, by contrast, still hardcodes a Claude model -- not every existing adapter is agnostic, only codex's demonstrably is. Path forward: a new deepseek adapter target mirroring codex's pattern, plus the smallest loop proving DeepSeek actually follows one skill. Routing to design-tracer-bullet.
+### 2026-08-25T22:20:00Z — Decision 1 recorded: DeepSeek adapter path superseded by OpenCodeAgentAdapter
+
+- **State:** design
+- **Status:** active
+- **Actor:** conductor
+- **Rationale:** WO 2026-08-25-001 Decision 15 built an OpenCodeAgentAdapter with zero model-tier binding supporting 75+ providers through Models.dev — exactly what this WO proposed building from scratch for DeepSeek alone. Decision 1 recorded as pass. Closing with this outcome.
+### 2026-08-25T22:20:00Z — closed
+
+- **State:** close
+- **Status:** closed
+- **Actor:** conductor
+- **Rationale:** DeepSeek-specific adapter path superseded by WO 2026-08-25-001 Decision 15 (OpenCodeAgentAdapter). MCP agency-mode question (can a tool call invoke real skill reasoning on another repo) remains open as a potential successor inquiry.
+### 2026-08-25T22:48:17Z — Closed: DeepSeek-specific adapter path superseded by OpenCodeAgentAdapter (WO 2026-08-25-001 Decision 15). OpenCode supports 75+ providers with zero model-tier binding, making a dedicated DeepSeek adapter unnecessary. MCP agency-mode question remains open as a potential successor inquiry.
+
+- **State:** close
+- **Status:** closed
+- **Actor:** conductor
+- **Rationale:** DeepSeek-specific adapter path superseded by OpenCodeAgentAdapter (WO 2026-08-25-001 Decision 15). OpenCode supports 75+ providers with zero model-tier binding, making a dedicated DeepSeek adapter unnecessary. MCP agency-mode question remains open as a potential successor inquiry.

@@ -7,6 +7,7 @@ status: active
 state: verify
 consequence: meaningful
 sensitivity: ordinary
+domain: [business, engineering]
 created_at: 2026-08-22T13:10:40Z
 updated_at: 2026-08-22T13:13:42Z
 next_action: Route to alawas-engineering-verify-release-evidence for release-evidence review of the checkpointed business router; CLI command-surface wiring and Phase 6 integration remain separate future slices.

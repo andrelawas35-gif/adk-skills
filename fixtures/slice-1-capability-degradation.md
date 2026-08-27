@@ -7,7 +7,7 @@ export, or deployment succeeded when the required capability was unavailable.
 
 ## Prerequisites
 
-- Platform adapters are generated for codex, claude-code, and github-copilot
+- Platform adapters are generated for codex, claude-code, github-copilot, lm-studio-bionic, and opencode
 - The `conduct-work-object` skill has a `Required capabilities` section
 - The `pressure-test-decision` skill has a `Required capabilities` section
 - Each adapter's Platform Adapter section includes a Capability Degradation
@@ -44,8 +44,8 @@ terms, not platform-specific tool names.
 
 ### Scenario 3 — Platform adapter documents all classifications
 
-**Given**: Any generated platform adapter (codex, claude-code, or
-github-copilot).  
+**Given**: Any generated platform adapter (codex, claude-code,
+github-copilot, or opencode).  
 **When**: Read the Platform Adapter → Capability Mappings table.  
 **Then**:
 1. Every capability from the overlay is listed with its platform tool and

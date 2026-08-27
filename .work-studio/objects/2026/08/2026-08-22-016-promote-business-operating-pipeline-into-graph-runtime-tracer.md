@@ -7,6 +7,7 @@ status: active
 state: verify
 consequence: meaningful
 sensitivity: ordinary
+domain: [business, architecture, engineering]
 created_at: 2026-08-22T13:05:34Z
 updated_at: 2026-08-22T13:09:03Z
 next_action: Route to alawas-engineering-verify-release-evidence for review of the business graph runtime tracer; later LangGraph business-router promotion remains a separate slice.

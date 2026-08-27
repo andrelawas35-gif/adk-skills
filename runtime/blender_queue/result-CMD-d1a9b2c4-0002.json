@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-d1a9b2c4-0002",
+  "status": "ok",
+  "data": {
+    "lights": [
+      "Light"
+    ]
+  },
+  "error": null,
+  "started_at": "2026-08-26T02:53:22Z",
+  "completed_at": "2026-08-26T02:53:22Z"
+}

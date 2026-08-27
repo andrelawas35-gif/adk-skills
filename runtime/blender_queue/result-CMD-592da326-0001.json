@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-592da326-0001",
+  "status": "ok",
+  "data": {
+    "name": "blue"
+  },
+  "error": null,
+  "started_at": "2026-08-26T07:30:39Z",
+  "completed_at": "2026-08-26T07:30:39Z"
+}

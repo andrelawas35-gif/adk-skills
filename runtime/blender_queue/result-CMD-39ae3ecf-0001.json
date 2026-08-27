@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-39ae3ecf-0001",
+  "status": "ok",
+  "data": {
+    "name": "Camera",
+    "location": [
+      0.8999999761581421,
+      -3.200000047683716,
+      2.799999952316284
+    ],
+    "rotation": [
+      1.3962633609771729,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "parent": null
+  },
+  "error": null,
+  "started_at": "2026-08-26T07:14:07Z",
+  "completed_at": "2026-08-26T07:14:07Z"
+}

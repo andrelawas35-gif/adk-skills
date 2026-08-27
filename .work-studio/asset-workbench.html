@@ -24,9 +24,41 @@ code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size
 </style></head>
 <body>
 <h1>Design Asset Workbench</h1>
-<div class="meta">Generated 2026-08-22T15:17:24Z from local asset records. Assets: 4. Validation gaps: 0.</div>
+<div class="meta">Generated 2026-08-27T21:11:43Z from local asset records. Assets: 7. Validation gaps: 2.</div>
 <div class="notice">Read-only projection. Edit asset truth in <code>.work-studio/design-assets/*.asset.md</code> through the appropriate Work Object route, then regenerate this page.</div>
 <div class="grid"><section class="asset">
+  <div class="asset-head">
+    <div>
+      <h2>asset.design.aesthetic-canon</h2>
+    </div>
+    <span class="status bad">2 gap(s)</span>
+  </div>
+  <p class="summary">An explicit, reusable vocabulary of aesthetic taste for the Director Console&#x27;s creative work — composition, camera, light, color, texture, performance, environment, motion, narrative, and finish — stated as concrete prefer/avoid criteria per dimension rather than adjectives like &quot;cinematic&quot; or &quot;moody&quot; that every model and every specialist would interpret differently. This is the **Aesthetic Canon** layer adopted in Decision 4 of Work Object `2026-08-23-001`: the only layer of the submitted three-layer taste system (canon / evaluator / learned adapters) adopted so far. The Taste Evaluator (VLM/API-LLM critique, pairwise ranking, an Aesthetic Critic specialist) and any learned adapter (LoRA, reward model) remain explicitly deferred — see that Decision&#x27;s revisit trigger — because they depend on the variant generation pipeline in `2026-08-23-007` producing reliably distinguishable outputs, which is not yet demonstrated. Any specialist skill (Story Editor, Character/Performance Director, Animation Director, Cinematographer, Art/Asset Director, Sound Director, Critic/Continuity — per the Director Console implementation plan §4) may read this record to ground its own judgment. It is a reference document, not an automated gate: nothing in the current system enforces these criteria against generated output. That enforcement is exactly what the deferred Taste Evaluator would add later.</p>
+  <dl>
+    <dt>Asset kind</dt><dd>creative-canon (novel kind — not a UI token-set or</dd>
+    <dt>Status</dt><dd>draft</dd>
+    <dt>Work Object</dt><dd>2026-08-23-001</dd>
+    <dt>Source of truth</dt><dd>this asset record</dd>
+    <dt>Record</dt><dd>.work-studio/design-assets/aesthetic-canon.asset.md</dd>
+    <dt>Lifecycle owners (3)</dt><dd><code>design-manage-assets</code>, <code>design-manage-assets</code>, <code>design-compose-design-system</code></dd>
+  </dl>
+</section><section class="asset">
+  <div class="asset-head">
+    <div>
+      <h2>asset.design.command-center-foundation</h2>
+    </div>
+    <span class="status ok">valid</span>
+  </div>
+  <p class="summary">The first governed design foundation in this repo, naming every raw CSS value discovered in `tools/ws/command_center.py`&#x27;s inline `&lt;style&gt;` block as a semantic token. Greenfield composition — no prior foundation existed to inherit from. This record organizes and names existing values; it does not yet change any code. Two consolidations were confirmed by the director during composition (see Decisions below) as intentional forward-looking choices, each creating a small, explicitly tracked divergence between this record and the current code until implementation reconciles them.</p>
+  <dl>
+    <dt>Asset kind</dt><dd>foundation</dd>
+    <dt>Status</dt><dd>draft</dd>
+    <dt>Work Object</dt><dd>2026-08-22-037</dd>
+    <dt>Source of truth</dt><dd>this asset record, composed from a token-inventory discovery of tools/ws/command_center.py&#x27;s inline styles, with three naming decisions confirmed by the director on 2026-08-22</dd>
+    <dt>Record</dt><dd>.work-studio/design-assets/command-center-foundation.asset.md</dd>
+    <dt>Lifecycle owners (3)</dt><dd><code>design-manage-assets</code>, <code>design-compose-design-system</code>, <code>design-compose-design-system</code></dd>
+  </dl>
+</section><section class="asset">
   <div class="asset-head">
     <div>
       <h2>asset.design.create-review-approve-pattern</h2>
@@ -90,8 +122,24 @@ code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size
     <dt>Record</dt><dd>.work-studio/design-assets/studio-status-tokens.asset.md</dd>
     <dt>Lifecycle owners (1)</dt><dd><code>design-manage-assets</code></dd>
   </dl>
+</section><section class="asset">
+  <div class="asset-head">
+    <div>
+      <h2>asset.design.toggle-expand-collapse-motion</h2>
+    </div>
+    <span class="status ok">valid</span>
+  </div>
+  <p class="summary">Governed motion recipe for the &quot;Show closed&quot; / &quot;Hide closed&quot; toggle in `.work-studio/command-center.html`. Currently the closed-Work-Objects section snaps open/closed instantly via `display: none` / `display: block` (see `tools/ws/command_center.py`) — this record proposes replacing that with an eased transition, without committing to any code change yet. This is the first real (non-tempfile) use of the `motion` asset kind added to `VALID_ASSET_KINDS` during WO `2026-08-22-032`&#x27;s schema-capacity tracer. **Confirmed recipe** (via live breadth-sweep Grilling Session, WO `2026-08-22-038`, all three questions posed as multiple-choice, no open-ended prompts): - **Duration:** 150ms - **Easing:** `ease-in-out` - **Reduced-motion behavior:** when `prefers-reduced-motion` is set, shorten to 50ms rather than removing the transition entirely — motion is minimized, not eliminated.</p>
+  <dl>
+    <dt>Asset kind</dt><dd>motion</dd>
+    <dt>Status</dt><dd>draft</dd>
+    <dt>Work Object</dt><dd>2026-08-22-032</dd>
+    <dt>Source of truth</dt><dd>hand-authored draft; timing/easing/reduced-motion confirmed via a live breadth-sweep Grilling Session on WO `2026-08-22-038`, 2026-08-22; not yet a real implemented motion behavior</dd>
+    <dt>Record</dt><dd>.work-studio/design-assets/toggle-expand-collapse-motion.asset.md</dd>
+    <dt>Lifecycle owners (2)</dt><dd><code>design-manage-assets</code>, <code>design-govern-interaction-motion</code></dd>
+  </dl>
 </section></div>
-
+<section class="gaps"><h2>Validation Gaps</h2><ul><li>.work-studio/design-assets/aesthetic-canon.asset.md: C:\Users\Andre\Documents\Work_Studio\andrelawas-work-studio\.work-studio\design-assets\aesthetic-canon.asset.md: Asset kind &#x27;creative-canon (novel kind — not a UI token-set or&#x27; must be one of [&#x27;component-family&#x27;, &#x27;flow&#x27;, &#x27;foundation&#x27;, &#x27;motion&#x27;, &#x27;projection&#x27;, &#x27;theme&#x27;, &#x27;token-set&#x27;, &#x27;ux-pattern&#x27;]</li><li>.work-studio/design-assets/aesthetic-canon.asset.md: C:\Users\Andre\Documents\Work_Studio\andrelawas-work-studio\.work-studio\design-assets\aesthetic-canon.asset.md: Projection status must state that projections are read-only and not asset truth</li></ul></section>
 <h2 style="margin-top: 24px;">Frontier Ownership</h2>
-<table><thead><tr><th>Frontier</th><th>What it covers</th><th>Owner</th></tr></thead><tbody><tr><td>accessibility</td><td>WCAG conformance against a stewarded or generic baseline</td><td><code>design-audit-accessibility</code></td></tr><tr><td>component-family</td><td>related component groupings</td><td><code>design-compose-design-system</code></td></tr><tr><td>component-registration</td><td>durable shipped-component tracking and governance</td><td><code>design-track-components</code></td></tr><tr><td>creative-direction</td><td>confirmed creative interpretation and execution</td><td><code>design-apply-design-direction</code></td></tr><tr><td>critique</td><td>usability-heuristic evaluation independent of a confirmed direction</td><td><code>design-critique-usability</code></td></tr><tr><td>flow</td><td>multi-step user flows</td><td><code>design-steward-experience-patterns</code></td></tr><tr><td>foundation</td><td>base design-system tokens and structure</td><td><code>design-compose-design-system</code></td></tr><tr><td>identity</td><td>asset intake, lifecycle status, and provenance</td><td><code>design-manage-assets</code></td></tr><tr><td>implementation</td><td>reversible code implementation of an accepted change</td><td><code>alawas-engineering-implement-bounded-change</code></td></tr><tr><td>projection</td><td>read-only catalog, graph, or comparison views</td><td><code>design-project-asset-workbench</code></td></tr><tr><td>theme</td><td>theme recipes built on tokens</td><td><code>design-compose-design-system</code></td></tr><tr><td>tokens</td><td>semantic token definitions</td><td><code>design-compose-design-system</code></td></tr><tr><td>ux-pattern</td><td>reusable user goals, flows, and states</td><td><code>design-steward-experience-patterns</code></td></tr><tr><td>variant</td><td>component variant relationships</td><td><code>design-compose-design-system</code></td></tr><tr><td>verification</td><td>browser-visible parity against a confirmed direction</td><td><code>design-verify-design-implementation</code></td></tr></tbody></table>
+<table><thead><tr><th>Frontier</th><th>What it covers</th><th>Owner</th></tr></thead><tbody><tr><td>accessibility</td><td>WCAG conformance against a stewarded or generic baseline</td><td><code>design-audit-accessibility</code></td></tr><tr><td>component-family</td><td>related component groupings</td><td><code>design-compose-design-system</code></td></tr><tr><td>component-registration</td><td>durable shipped-component tracking and governance</td><td><code>design-track-components</code></td></tr><tr><td>creative-direction</td><td>confirmed creative interpretation and execution</td><td><code>design-apply-design-direction</code></td></tr><tr><td>critique</td><td>usability-heuristic evaluation independent of a confirmed direction</td><td><code>design-critique-usability</code></td></tr><tr><td>flow</td><td>multi-step user flows</td><td><code>design-steward-experience-patterns</code></td></tr><tr><td>foundation</td><td>base design-system tokens and structure</td><td><code>design-compose-design-system</code></td></tr><tr><td>identity</td><td>asset intake, lifecycle status, and provenance</td><td><code>design-manage-assets</code></td></tr><tr><td>implementation</td><td>reversible code implementation of an accepted change</td><td><code>alawas-engineering-implement-bounded-change</code></td></tr><tr><td>interaction-motion</td><td>motion recipes, timing/easing, per-state interaction behavior</td><td><code>design-govern-interaction-motion</code></td></tr><tr><td>projection</td><td>read-only catalog, graph, or comparison views</td><td><code>design-project-asset-workbench</code></td></tr><tr><td>theme</td><td>theme recipes built on tokens</td><td><code>design-compose-design-system</code></td></tr><tr><td>tokens</td><td>semantic token definitions</td><td><code>design-compose-design-system</code></td></tr><tr><td>ux-pattern</td><td>reusable user goals, flows, and states</td><td><code>design-steward-experience-patterns</code></td></tr><tr><td>variant</td><td>component variant relationships</td><td><code>design-compose-design-system</code></td></tr><tr><td>verification</td><td>browser-visible parity against a confirmed direction</td><td><code>design-verify-design-implementation</code></td></tr></tbody></table>
 </body></html>

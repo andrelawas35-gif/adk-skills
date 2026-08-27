@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-5a5e70b1-0001",
+  "status": "ok",
+  "data": {
+    "name": "whitewash"
+  },
+  "error": null,
+  "started_at": "2026-08-26T07:30:36Z",
+  "completed_at": "2026-08-26T07:30:36Z"
+}

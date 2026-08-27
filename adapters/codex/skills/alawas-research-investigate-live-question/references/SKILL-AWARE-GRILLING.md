@@ -755,3 +755,120 @@ heuristic in different ways (one is unlabeled, the other mislabeled): does
 the critique report them as one aggregated finding, or as two distinct
 findings, and does aggregating risk understating how widespread the pattern
 is?
+
+### `alawas-design-govern-interaction-motion`
+
+**Mandatory nomination override (WO `2026-08-22-038` Decision 1):** every
+motion/interaction property proposed for a motion asset is always
+nominated — the standing three-part threshold does not gate entry here.
+All properties for one asset are grilled as a single `breadth-sweep`
+session, one branch per property (e.g. duration, easing, trigger,
+reduced-motion behavior), one multiple-choice question per turn. No
+open-ended grill question is permitted; if a property genuinely has no
+clean small option set, name that as a gap rather than asking open-ended.
+
+**Gates** — (1) Creative-authority preservation: confirm every non-trivial
+timing, easing, or choreography choice is confirmed by the director, never
+silently selected by the composition step. (2) Reduced-motion honesty:
+confirm `prefers-reduced-motion` handling is recorded as addressed or an
+explicit gap, never assumed as handled by default. (3) Option-only
+honesty: confirm every branch's question was posed as multiple-choice: if
+a branch's real answer doesn't fit the offered options, that is recorded
+as an explicit "something else" option, never silently forced into the
+nearest listed choice.
+
+**Escalation** — Default: nominate every property mandatorily, resolve
+each branch of the breadth-sweep session, then compose the motion/
+interaction asset record, classifying properties as inherited, overridden,
+prohibited, or awaiting confirmation, and route the confirmed composition
+forward. Information value overrides the default when a motion property
+genuinely can't be expressed clearly as prose in `Asset Summary` — escalate
+to naming that as a concrete schema gap (per the Revisit trigger) rather
+than force-fitting an unclear description into the existing generic shape.
+
+**Proven in practice:** `asset.design.toggle-expand-collapse-motion`'s
+duration (150ms), easing (`ease-in-out`), and reduced-motion behavior
+(shortened to 50ms, not removed) were each resolved as one branch of a
+real breadth-sweep session, all three as clean multiple-choice answers.
+
+**Pressure scenario** — A motion recipe inherits its base timing from a
+shared foundation but overrides the easing curve for one specific
+component: does the composed record make that split (inherited timing,
+overridden easing) explicit, or does it risk collapsing into one
+undifferentiated "motion settings" description that hides which part was a
+deliberate override?
+
+### `alawas-design-compose-design-system`
+
+**Mandatory nomination override (WO `2026-08-22-038` Decision 1):** every
+token, semantic value, variant, or component-family property proposed for
+composition is always nominated — the standing three-part threshold does
+not gate entry here. All properties proposed in one composition pass are
+grilled as a single `breadth-sweep` session, one branch per property, one
+multiple-choice question per turn. No open-ended grill question is
+permitted; if a property genuinely has no clean small option set, name
+that as a gap rather than asking open-ended.
+
+**Gates** — (1) Creative-authority preservation: confirm every non-trivial
+naming, value, or organization choice is confirmed by the director, never
+silently selected by the composition step. (2) Option-only honesty:
+confirm every branch's question was posed as multiple-choice, with a
+named "something else" option when the real answer might not fit the
+offered choices, rather than silently forcing the nearest listed one.
+
+**Escalation** — Default: nominate every proposed property mandatorily,
+resolve each branch of the breadth-sweep session, then compose the
+foundation/token/theme/variant/component-family record, classifying
+properties as inherited, overridden, prohibited, or awaiting confirmation.
+Information value overrides the default when two properties conflict
+(e.g. a proposed token collides with an existing one under a different
+name) — escalate to naming the conflict as its own branch rather than
+silently picking one as canonical.
+
+**Proven in practice:** `asset.design.command-center-foundation`'s color,
+typography, and spacing tokens were composed under this skill before this
+mandatory-nomination override existed — confirmed via a single plain
+question rather than a structured breadth-sweep session. That composition
+stands as recorded (WO `2026-08-22-037`); it is not retroactively
+re-graded, but it is the concrete case that motivated this override.
+
+**Pressure scenario** — A director confirms consolidating two similar
+color tokens into one (as happened for `command-center-foundation`'s
+`#666`/`#555`), but the multiple-choice options offered didn't include
+"consolidate, but keep both names as aliases for backward compatibility":
+does the branch get re-asked with that option added, or does the session
+proceed on the assumption that the director would have said so if they
+wanted it?
+
+### `alawas-design-steward-experience-patterns`
+
+**Mandatory nomination override (WO `2026-08-22-038` Decision 1):** every
+user goal, flow state, accessibility expectation, or content-behavior
+property proposed for a pattern record is always nominated — the standing
+three-part threshold does not gate entry here. All properties proposed
+for one pattern are grilled as a single `breadth-sweep` session, one
+branch per property, one multiple-choice question per turn. No open-ended
+grill question is permitted; if a property genuinely has no clean small
+option set, name that as a gap rather than asking open-ended.
+
+**Gates** — (1) Evidence grounding: confirm each stewarded behavior is
+tied to real evidence or explicitly marked inference, never asserted as
+settled fact from the record alone. (2) Option-only honesty: confirm
+every branch's question was posed as multiple-choice, with a named
+"something else" option when the real answer might not fit the offered
+choices.
+
+**Escalation** — Default: nominate every proposed property mandatorily,
+resolve each branch of the breadth-sweep session (happy path, error,
+empty, loading, recovery states; accessibility expectations; content
+behavior), then steward the pattern record. Information value overrides
+the default when a proposed state reveals a user goal no existing pattern
+or Work Object covers — escalate to naming the gap to the conductor rather
+than quietly inventing a state to fill it.
+
+**Pressure scenario** — A pattern's error state and empty state are
+proposed as one combined branch because they look similar, but the
+director's multiple-choice answer for one implies a different recovery
+action than the other would need: does the session split them into two
+branches retroactively, or does it proceed with one answer applied to
+both and risk one of the two being wrong?

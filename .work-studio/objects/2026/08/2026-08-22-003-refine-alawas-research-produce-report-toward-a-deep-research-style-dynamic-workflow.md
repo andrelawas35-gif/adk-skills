@@ -7,6 +7,7 @@ status: active
 state: build
 consequence: meaningful
 sensitivity: ordinary
+domain: [research, governance]
 created_at: 2026-08-22T10:03:33Z
 updated_at: 2026-08-22T11:14:27Z
 next_action: Implement Decision 1 bounded iterative re-planning loop as a separate change

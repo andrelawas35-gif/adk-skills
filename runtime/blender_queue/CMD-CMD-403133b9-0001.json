@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-403133b9-0001",
+  "op": "material.set",
+  "params": {
+    "name": "magenta",
+    "base_color": [
+      0.7,
+      0.15,
+      0.45
+    ]
+  },
+  "created_at": "2026-08-26T07:54:03Z",
+  "delay_ms": 0
+}

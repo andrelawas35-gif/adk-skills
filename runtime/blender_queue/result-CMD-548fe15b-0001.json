@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "command_id": "CMD-548fe15b-0001",
+  "status": "ok",
+  "data": {
+    "name": "Camera"
+  },
+  "error": null,
+  "started_at": "2026-08-26T07:00:43Z",
+  "completed_at": "2026-08-26T07:00:43Z"
+}

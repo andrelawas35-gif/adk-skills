@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Director Console</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-title">Director Console</div>
+        <div id="workspacePath" class="brand-subtitle">Loading workspace...</div>
+      </div>
+      <div class="toolbar">
+        <button id="refreshButton" type="button" title="Refresh Scene Board">Refresh</button>
+        <button id="sceneBoardButton" type="button" title="Render Scene Board">Scene Board</button>
+      </div>
+      <nav id="sceneList" class="scene-list" aria-label="Scenes"></nav>
+    </aside>
+
+    <section class="content">
+      <header class="scene-header">
+        <div>
+          <div id="sceneId" class="scene-id">No scene selected</div>
+          <h1 id="sceneTitle">Director Console</h1>
+        </div>
+        <div id="sceneStatus" class="status-pill">idle</div>
+      </header>
+
+      <section class="workspace-grid">
+        <article class="panel scene-panel">
+          <div class="panel-title">Scene</div>
+          <div id="sceneThesis" class="thesis"></div>
+          <div id="screenplayLayers" class="layers"></div>
+          <div id="directorLayer" class="beats"></div>
+        </article>
+
+        <article class="panel direction-panel">
+          <div class="panel-title">Direction</div>
+          <textarea id="directionText" placeholder="Write a direction for this scene"></textarea>
+          <div class="direction-actions">
+            <button id="submitDirectionButton" type="button">Record Direction</button>
+            <span id="writeState" class="write-state">Ready</span>
+          </div>
+          <div id="evidenceList" class="evidence-list"></div>
+        </article>
+
+        <article class="panel gates-panel">
+          <div class="panel-title">Gates</div>
+          <div class="direction-actions">
+            <input id="gateWorkDir" placeholder="Path to pipeline work dir (containing shot_state.json)">
+            <button id="gateCheckButton" type="button">Check Gate</button>
+          </div>
+          <div id="gateStatus" class="write-state">No gate checked</div>
+          <div id="gateActions"></div>
+        </article>
+      </section>
+    </section>
+  </main>
+  <script src="./app.js"></script>
+</body>
+</html>

@@ -7,6 +7,7 @@ status: active
 state: verify
 consequence: meaningful
 sensitivity: ordinary
+domain: [architecture, engineering]
 created_at: 2026-08-21T13:31:29Z
 updated_at: 2026-08-21T13:56:23Z
 next_action: Director decision: commit the full registry (read-path + write-path) as-is, extend further (fork/backup/restore), or investigate the 11-vs-12 test-count discrepancy first

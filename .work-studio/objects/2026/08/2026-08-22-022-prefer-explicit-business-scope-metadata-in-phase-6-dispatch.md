@@ -7,6 +7,7 @@ status: active
 state: verify
 consequence: meaningful
 sensitivity: ordinary
+domain: [business, engineering]
 created_at: 2026-08-22T13:29:32Z
 updated_at: 2026-08-22T13:31:51Z
 next_action: Recommended next slice: add validator support for optional business_scope after resolving or isolating overlapping tools/ws edits.

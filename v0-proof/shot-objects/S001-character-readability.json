@@ -1,0 +1,23 @@
+{
+  "shot_id": "S001",
+  "intent": "Establish a hero prop asset clearly enough to serve as a 3D-reconstruction reference: silhouette and form must read against the background.",
+  "subject": "A market lamp prop -- oxidized brass housing, cracked glass panes, hanging chain -- centered, isolated for asset reference use.",
+  "camera": "Straight-on reference framing, neutral three-quarter angle, even coverage of the full object.",
+  "mood": "Clean, legible, reference-grade -- not moody or atmospheric.",
+  "preserve": [
+    "oxidized brass material language",
+    "cracked glass panes",
+    "hanging chain detail",
+    "compact market-lamp proportions"
+  ],
+  "change": [
+    "silhouette lost in shadow",
+    "form merging with a dark background",
+    "muddy low contrast obscuring edges"
+  ],
+  "avoid": [
+    "atmospheric or moody lighting that obscures form",
+    "dramatic rim lighting hiding geometry",
+    "the object so dark its shape is unreadable"
+  ]
+}
