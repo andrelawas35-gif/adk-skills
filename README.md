@@ -62,6 +62,29 @@ Codex adapters therefore read the lock and defer to its project-pinned copy at
 runtime; a broken pin stops with an explicit error instead of silently using
 the global copy.
 
+### Claude Code on the web / mobile
+
+Claude Code on the web runs each session in an ephemeral container, so a global
+`~/.claude/skills/` install does not survive between sessions. There are two
+ways to make these skills available on mobile:
+
+- **One project** — pin the Claude Code adapter into the repo at
+  `.claude/skills/` (committed, travels with the repo). Every web/mobile
+  session that opens the repo auto-discovers it.
+- **Every project** — install globally at session startup from the
+  environment's **setup script** so any repo opened in that environment
+  inherits the skills. Because the setup script runs on every startup, the
+  ephemerality is moot:
+
+  ```sh
+  curl -fsSL https://raw.githubusercontent.com/andrelawas35-gif/adk-skills/master/tools/install-global.sh | sh
+  ```
+
+  `tools/install-global.sh` clones this repo (or reuses an existing checkout)
+  and delegates to the checksum-verifying `install.sh --platform claude-code
+  --global`. Override the source ref with `ADK_REF` (e.g. a release tag for a
+  stable pin) or the clone URL with `ADK_REPO`.
+
 ### Verifying and testing
 
 ```sh
